@@ -75,7 +75,6 @@ private:
     }
 
     Task task = nullptr;
-    Tasks::size_type size = tasks_.size();
     if(started_ && !tasks_.empty()) {
       task = tasks_.front();
       tasks_.pop_front();

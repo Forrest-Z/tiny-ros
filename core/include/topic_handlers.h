@@ -84,7 +84,7 @@ public:
   }
 
 private:
-  uint16_t topic_id_;
+  uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
@@ -113,7 +113,7 @@ private:
   }
 
   boost::function<void(std::vector<uint8_t>& buffer)> write_fn_;
-  uint16_t topic_id_;
+  uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
@@ -135,7 +135,7 @@ public:
     destroy_signal_ = boost::shared_ptr<boost::signals2::signal<void(std::string&)> >
       (new boost::signals2::signal<void(std::string&)>);
   }
-  void setTopicId(uint16_t topic_id) {
+  void setTopicId(uint32_t topic_id) {
     topic_id_ = topic_id;
   }
 
@@ -156,7 +156,7 @@ public:
   boost::shared_ptr<boost::signals2::signal<void(std::string&)> > destroy_signal_;
   static std::map<std::string, ServiceServerPtr> services_;
   static boost::mutex services_mutex_;
-  uint16_t topic_id_;
+  uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
@@ -179,7 +179,7 @@ public:
       (new boost::signals2::signal<void(std::vector<uint8_t>&)>);
   }
 
-  void setTopicId(uint16_t topic_id) {
+  void setTopicId(uint32_t topic_id) {
     topic_id_ = topic_id;
   }
 
@@ -200,7 +200,7 @@ public:
   boost::signals2::connection client_connection_;
   boost::signals2::connection service_connection_;
   boost::signals2::connection destroy_connection_;
-  uint16_t topic_id_;
+  uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;

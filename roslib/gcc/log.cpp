@@ -11,10 +11,6 @@
 #include <limits.h>
 #include <stdio.h>
 #include <string>
-#ifdef WIN32
-#include <Windows.h>
-#include <tchar.h>
-#endif
 #include "tiny_ros/ros.h"
 #include "tiny_ros/ros/log.h"
 
@@ -62,12 +58,20 @@ void mtrace(int level, const char *chfr, ...) {
   char buffer[TINYROS_LOG_MAX_SIZE] = {0};
 
   if (!processname.empty()) {
+#ifdef WIN32
+    _snprintf(buffer, sizeof(buffer) - 1, "%s", processname.c_str());
+#else
     snprintf(buffer, sizeof(buffer) - 1, "%s", processname.c_str());
+#endif
   }
 
   va_list ap;
   va_start(ap, chfr);
+#ifdef WIN32
+  _vsnprintf(buffer + processname.size(), sizeof(buffer) - (processname.size() + 1), chfr, ap);
+#else
   vsnprintf(buffer + processname.size(), sizeof(buffer) - (processname.size() + 1), chfr, ap);
+#endif
   va_end(ap);
 
   if(level == tinyros_msgs::Log::ROSDEBUG) tinyros::nh()->logdebug(buffer);

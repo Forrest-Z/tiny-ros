@@ -32,7 +32,6 @@ public:
     this->topic_ = topic_name;
     this->call_resp = NULL;
     this->call_req = NULL;
-    this->id = 1;
   }
   virtual bool call(MReq & request, MRes & response, int duration = 3)
   {
@@ -102,7 +101,6 @@ public:
     return (negotiated_ && pub.negotiated_); 
   }
 
-  uint32_t id;
   MReq req;
   MRes resp;
   MReq * call_req;

@@ -49,7 +49,7 @@ public:
   tinyros::string topic_;
   Msg *msg_;
   // id_ and no_ are set by NodeHandle when we advertise
-  int id_;
+  uint32_t id_;
   NodeHandleBase_* nh_;
 
   // negotiated_ is set by NodeHandle when we negotiateTopics

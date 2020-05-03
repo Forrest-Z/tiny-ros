@@ -85,7 +85,7 @@ public class ServiceClient<MReq extends Msg, MRes extends Msg> extends Subscribe
     public java.lang.String getMsgMD5() {
         return this.resp.getMD5();
     }
-    public int getEndpointType() {
+    public long getEndpointType() {
         return TopicInfo.ID_SERVICE_CLIENT + TopicInfo.ID_SUBSCRIBER;
     }
 

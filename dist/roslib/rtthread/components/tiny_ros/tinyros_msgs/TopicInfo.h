@@ -12,7 +12,7 @@ namespace tinyros_msgs
   class TopicInfo : public tinyros::Msg
   {
     public:
-      typedef uint16_t _topic_id_type;
+      typedef uint32_t _topic_id_type;
       _topic_id_type topic_id;
       typedef tinyros::string _topic_name_type;
       _topic_name_type topic_name;
@@ -50,6 +50,8 @@ namespace tinyros_msgs
       int offset = 0;
       *(outbuffer + offset + 0) = (this->topic_id >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->topic_id >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->topic_id >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->topic_id >> (8 * 3)) & 0xFF;
       offset += sizeof(this->topic_id);
       uint32_t length_topic_name = this->topic_name.size();
       varToArr(outbuffer + offset, length_topic_name);
@@ -89,8 +91,10 @@ namespace tinyros_msgs
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      this->topic_id =  ((uint16_t) (*(inbuffer + offset)));
-      this->topic_id |= ((uint16_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      this->topic_id =  ((uint32_t) (*(inbuffer + offset)));
+      this->topic_id |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      this->topic_id |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      this->topic_id |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
       offset += sizeof(this->topic_id);
       uint32_t length_topic_name;
       arrToVar(length_topic_name, (inbuffer + offset));
@@ -160,7 +164,7 @@ namespace tinyros_msgs
     }
 
     virtual tinyros::string getType(){ return "tinyros_msgs/TopicInfo"; }
-    virtual tinyros::string getMD5(){ return "033d42208826b52fde17cbe06f6e856c"; }
+    virtual tinyros::string getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
 
   };
 

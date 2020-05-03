@@ -9,6 +9,10 @@
 #ifndef TINYROS_HARDWARE_H_
 #define TINYROS_HARDWARE_H_
 
+#include <stdint.h>
+#include <stddef.h>
+#include <string>
+
 namespace tinyros {
 
 class Hardware {

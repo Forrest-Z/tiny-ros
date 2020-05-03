@@ -3,7 +3,7 @@ package com.roslib.ros;
 import com.roslib.tinyros_msgs.TopicInfo;
 
 public class Subscriber<MsgT extends Msg> extends SubscriberT {
-    public int endpoint;
+    public long endpoint;
     private MsgT msg_;
     private CallbackSubT cb_;
 
@@ -32,7 +32,7 @@ public class Subscriber<MsgT extends Msg> extends SubscriberT {
     public java.lang.String getMsgMD5() {
         return this.msg_.getMD5();
     }
-    public int getEndpointType() {
+    public long getEndpointType() {
         return this.endpoint;
     }
 }

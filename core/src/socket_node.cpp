@@ -17,7 +17,7 @@
 #include <boost/log/utility/setup/filter_parser.hpp>
 #include <boost/log/utility/setup/settings.hpp>
 #include <boost/log/utility/setup/from_settings.hpp>
-
+#include "udp_socket_session.h"
 #include "tcp_server.h"
 
 #define LOG_ROTATION_SIZE  2*1024*1024 //2MB
@@ -58,16 +58,31 @@ static void init_log_environment() {
   logging::init_from_settings(setts);
 }
 
+using boost::asio::ip::udp;
+using boost::asio::ip::address_v4;
+
+static void udp_service_run(int server_port, int client_port) {
+  boost::asio::io_service io_service;
+  tinyros::UdpSocketSession udp_socket_session(
+      io_service,
+      udp::endpoint(address_v4::from_string("127.0.0.1"), server_port),
+      udp::endpoint(udp::v4(), client_port));
+  io_service.run();
+}
 
 int main(int argc, char* argv[]) {
-  int port = 11315;
+  int tcp_server_port = 11315;
+  int udp_server_port = 11316;
+  int udp_client_port = 11317;
 
   init_log_environment();
 
-  boost::asio::io_service io_service;
-  tinyros::TcpServer<> tcp_server(io_service, port);
+  boost::thread tid(boost::bind(udp_service_run, udp_server_port, udp_client_port));
+  tid.detach();
 
-  BOOST_LOG_TRIVIAL(info) << "Listening for tiny-ros TCP connections on port " << port;
+  boost::asio::io_service io_service;
+  tinyros::TcpServer<> tcp_server(io_service, tcp_server_port);
+  BOOST_LOG_TRIVIAL(info) << "tinyros: TCP listening for connections on port " << tcp_server_port;
   io_service.run();
   return 0;
 }

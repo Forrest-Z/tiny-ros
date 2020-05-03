@@ -23,7 +23,7 @@ public:
   virtual int getEndpointType() = 0;
 
   // id_ is set by NodeHandle when we advertise
-  int id_;
+  uint32_t id_;
 
   virtual tinyros::string getMsgType() = 0;
   virtual tinyros::string getMsgMD5() = 0;

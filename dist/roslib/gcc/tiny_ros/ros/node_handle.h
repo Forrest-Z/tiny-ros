@@ -22,35 +22,13 @@
 #include "tiny_ros/tinyros_msgs/Log.h"
 #include "tiny_ros/ros/hardware_linux.h"
 #include "tiny_ros/ros/hardware_windows.h"
-
-#define TINYROS_LOG_TOPIC "tinyros_log_11315"
-
-namespace tinyros {
-class SpinObject {
-public:
-  int id;
-  uint8_t *message_in;
-  SpinObject() { message_in = NULL; }
-  ~SpinObject() { if(message_in) free((void*)message_in); }
-};
-
-class NodeHandleBase_
-{
-public:
-  virtual int publish(int id, const Msg* msg, bool islog = false) = 0;
-  virtual int spin() = 0;
-  virtual void exit() = 0;
-  virtual bool ok() = 0;
-  virtual void spin_task(const std::shared_ptr<SpinObject> obj) = 0;
-  virtual void loghd_keepalive() = 0;
-};
-}
-
 #include "tiny_ros/ros/msg.h"
 #include "tiny_ros/ros/publisher.h"
 #include "tiny_ros/ros/subscriber.h"
 #include "tiny_ros/ros/service_server.h"
 #include "tiny_ros/ros/service_client.h"
+
+#define TINYROS_LOG_TOPIC "tinyros_log_11315"
 
 namespace tinyros
 {
@@ -65,14 +43,13 @@ const uint8_t MODE_SIZE_L         = 2;
 const uint8_t MODE_SIZE_L1        = 3;
 const uint8_t MODE_SIZE_H         = 4;
 const uint8_t MODE_SIZE_H1        = 5;
-const uint8_t MODE_SIZE_CHECKSUM  = 6;    // checksum for msg size received from size L and H
-const uint8_t MODE_TOPIC_L        = 7;    // waiting for topic id
-const uint8_t MODE_TOPIC_H        = 8;
-const uint8_t MODE_MESSAGE        = 9;
-const uint8_t MODE_MSG_CHECKSUM   = 10;    // checksum for msg and topic id
-
-const uint32_t TIMEOUT_MSG   = 50;     // 50 milliseconds to recieve all of message data
-const uint32_t TIMEOUT_SPIN  = 1000;   // 1000 milliseconds to spin timeout
+const uint8_t MODE_SIZE_CHECKSUM  = 6;
+const uint8_t MODE_TOPIC_L        = 7;
+const uint8_t MODE_TOPIC_L1       = 8;
+const uint8_t MODE_TOPIC_H        = 9;
+const uint8_t MODE_TOPIC_H1       = 10;
+const uint8_t MODE_MESSAGE        = 11;
+const uint8_t MODE_MSG_CHECKSUM   = 12;
 
 using tinyros_msgs::TopicInfo;
 
@@ -99,9 +76,9 @@ protected:
   
   std::mutex mutex_;
 
-  uint8_t *message_in;
-  uint8_t *message_tmp;
-  uint8_t *message_out;
+  uint8_t message_in[INPUT_SIZE];
+  uint8_t message_tmp[INPUT_SIZE];
+  uint8_t message_out[OUTPUT_SIZE];
 
   Publisher * publishers[MAX_PUBLISHERS];
   Subscriber_ * subscribers[MAX_SUBSCRIBERS];
@@ -117,12 +94,12 @@ private:
         
         int64_t time_end = (int64_t)tinyros::Time().now().toMSec();
         if (time_end > timeout_time) {
-          log_warn("subscriber topic: %s, time escape: %f(ms)", subscribers[obj->id]->topic_.c_str(), labs(time_end - time_start));
+          log_warn("subscriber topic: %s, time escape: %lld(ms)", subscribers[obj->id]->topic_.c_str(), (time_end - time_start));
         }
       }
   }
   
-  virtual void loghd_keepalive() {
+  virtual void keepalive() {
     uint8_t in[200];
 
     advertise(logpb_);
@@ -135,7 +112,11 @@ private:
           msg.data = process + "_log";
           publish(TopicInfo::ID_SESSION_ID, &msg, true);
         }
+#ifdef WIN32
+        Sleep(1000);
+#else
         sleep(1);
+#endif
       } else {
         loghd_.read(in, sizeof(in));
       }
@@ -147,9 +128,9 @@ public:
     : logpb_(TINYROS_LOG_TOPIC, new tinyros_msgs::Log)
     , loghd_keepalive_(false)
     , loghd_thread_pool_(1)
-    , spin_thread_pool_(5)
+    , spin_thread_pool_(3)
     , spin_log_thread_pool_(1)
-    , spin_srv_thread_pool_(5)
+    , spin_srv_thread_pool_(3)
     , topic_list("")
     , service_list("") {
 
@@ -158,22 +139,14 @@ public:
 
     for (unsigned int i = 0; i < MAX_SUBSCRIBERS; i++)
       subscribers[i] = NULL;
-
-    message_in = (uint8_t*)calloc(INPUT_SIZE, sizeof(uint8_t));
-    message_tmp = (uint8_t*)calloc(INPUT_SIZE, sizeof(uint8_t));
-    message_out = (uint8_t*)calloc(OUTPUT_SIZE, sizeof(uint8_t));
   }
 
   ~NodeHandle_() {
     exit();
-
-    if (message_in) free((void*)message_in);
-    if (message_tmp) free((void*)message_tmp);
-    if (message_out) free((void*)message_out);
   }
 
   /* Start a named port, which may be network server IP, initialize buffers */
-  bool initNode(std::string portName = "127.0.0.1") {
+  virtual bool initNode(std::string portName = "127.0.0.1") {
     bytes_ = 0;
     index_ = 0;
     topic_ = 0;
@@ -189,7 +162,7 @@ public:
 
     if(!loghd_keepalive_) {
       loghd_keepalive_ = true;
-      loghd_thread_pool_.schedule(std::bind(&NodeHandleBase_::loghd_keepalive, this));
+      loghd_thread_pool_.schedule(std::bind(&NodeHandleBase_::keepalive, this));
     }
     
     return hardware_.connected();
@@ -209,18 +182,15 @@ public:
 
 protected:
   //State machine variables for spin
+  uint32_t topic_;
   int mode_;
   int bytes_;
-  int topic_;
   int index_;
   int checksum_;
   bool spin_;
   int total_bytes_;
 
 public:
-  /* This function goes in your loop() function, it handles
-   *  serial input and callbacks for subscribers.
-   */
   virtual int spin() {
     int i, rv, len = 1;
     
@@ -264,13 +234,13 @@ public:
         checksum_ += message_tmp[i];
       }
       
-      if (mode_ == MODE_MESSAGE) {         /* message data being recieved */
+      if (mode_ == MODE_MESSAGE) {
         for (i = 0; i < rv; i++) {
           message_in[index_++] = message_tmp[i];
           bytes_--;
         }
 
-        if (bytes_ == 0) {                /* is message complete? if so, checksum */
+        if (bytes_ == 0) {
           len = 1;
           mode_ = MODE_MSG_CHECKSUM;
         } else {
@@ -286,7 +256,7 @@ public:
         } else {
           mode_ = MODE_FIRST_FF;
         }
-      } else if (mode_ == MODE_SIZE_L) {     /* bottom half of message size */
+      } else if (mode_ == MODE_SIZE_L) {
         bytes_ = message_tmp[0];
         index_ = 0;
         mode_++;
@@ -294,7 +264,7 @@ public:
       } else if (mode_ == MODE_SIZE_L1) {
         bytes_ += message_tmp[0] << 8;
         mode_++;
-      } else if (mode_ == MODE_SIZE_H) {     /* top half of message size */
+      } else if (mode_ == MODE_SIZE_H) {
         bytes_ += message_tmp[0] << 16;
         mode_++;
       } else if (mode_ == MODE_SIZE_H1) {
@@ -305,19 +275,25 @@ public:
         if ((checksum_ % 256) == 255)
           mode_++;
         else
-          mode_ = MODE_FIRST_FF;          /* Abandon the frame if the msg len is wrong */
-      } else if (mode_ == MODE_TOPIC_L) {    /* bottom half of topic id */
+          mode_ = MODE_FIRST_FF;
+      } else if (mode_ == MODE_TOPIC_L) {
         topic_ = message_tmp[0];
         mode_++;
-        checksum_ = message_tmp[0];               /* first byte included in checksum */
-      } else if (mode_ == MODE_TOPIC_H) {     /* top half of topic id */
+        checksum_ = message_tmp[0];
+      } else if (mode_ == MODE_TOPIC_L1) {
         topic_ += message_tmp[0] << 8;
+        mode_++;
+      } else if (mode_ == MODE_TOPIC_H) {
+        topic_ += message_tmp[0] << 16;
+        mode_++;
+      } else if (mode_ == MODE_TOPIC_H1) {
+        topic_ += message_tmp[0] << 24;
         mode_ = MODE_MESSAGE;
         if (bytes_ == 0)
           mode_ = MODE_MSG_CHECKSUM;
         else
           len = bytes_;
-      } else if (mode_ == MODE_MSG_CHECKSUM) {    /* do checksum */
+      } else if (mode_ == MODE_MSG_CHECKSUM) {
         mode_ = MODE_FIRST_FF;
         if ((checksum_ % 256) == 255) {
           if (topic_ == TopicInfo::ID_PUBLISHER) {
@@ -378,13 +354,8 @@ public:
     return hardware_.connected();
   }
 
-  /********************************************************************
-   * Topic Management
-   */
-
   /* Register a new publisher */
   bool advertise(Publisher & p) {
-    char buffer[512];
     std::unique_lock<std::mutex> lock(mutex_);
     for (int i = 0; i < MAX_PUBLISHERS; i++) {
       if (publishers[i] == NULL) { // empty slot
@@ -514,10 +485,10 @@ public:
     }
   }
 
-  virtual int publish(int id, const Msg * msg, bool islog = false) {
+  virtual int publish(uint32_t id, const Msg * msg, bool islog = false) {
     std::unique_lock<std::mutex> lock(mutex_);
     /* serialize message */
-    int l = msg->serialize(message_out + 9);
+    int l = msg->serialize(message_out + 11);
 
     /* setup the header */
     message_out[0] = 0xff;
@@ -527,14 +498,16 @@ public:
     message_out[4] = (uint8_t)((uint32_t)((l >> 16) & 0xFF));
     message_out[5] = (uint8_t)((uint32_t)((l >> 24) & 0xFF));
     message_out[6] = 255 - ((message_out[2] + message_out[3] + message_out[4] + message_out[5]) % 256);
-    message_out[7] = (uint8_t)((int16_t)id & 255);
-    message_out[8] = (uint8_t)((int16_t)id >> 8);
+    message_out[7] = (uint8_t)((uint32_t)id & 0xFF);
+    message_out[8] = (uint8_t)((uint32_t)((id >> 8) & 0xFF));
+    message_out[9] = (uint8_t)((uint32_t)((id >> 16) & 0xFF));
+    message_out[10] = (uint8_t)((uint32_t)((id >> 24) & 0xFF));
 
     /* calculate checksum */
     int chk = 0;
-    for (int i = 7; i < l + 9; i++)
+    for (int i = 7; i < l + 11; i++)
       chk += message_out[i];
-    l += 9;
+    l += 11;
     message_out[l++] = 255 - (chk % 256);
 
     if (l <= OUTPUT_SIZE) {
@@ -550,10 +523,6 @@ public:
       return -2;
     }
   }
-
-  /********************************************************************
-   * Logging
-   */
 
 private:
   void log(char byte, std::string msg)

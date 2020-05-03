@@ -11,7 +11,7 @@
 #define _TINYROS_PUBLISHER_H_
 
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
-#include "tiny_ros/ros/node_handle.h"
+#include "tiny_ros/ros/node_handle_base.h"
 #include "tiny_ros/ros/log.h"
 
 namespace tinyros
@@ -51,7 +51,7 @@ public:
   std::string topic_;
   Msg *msg_;
   // id_ and no_ are set by NodeHandle when we advertise
-  int id_;
+  uint32_t id_;
   NodeHandleBase_* nh_;
 
   // negotiated_ is set by NodeHandle when we negotiateTopics

@@ -15,7 +15,11 @@ static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
 
 int main(void) {
   tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
+#if 1
   tinyros::nh()->subscribe(sub);
+#else
+  tinyros::udp()->subscribe(sub);
+#endif
   while(true) {
 #ifdef WIN32
     Sleep(10*1000);

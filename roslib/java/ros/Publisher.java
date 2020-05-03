@@ -7,13 +7,13 @@ public class Publisher<MsgT extends Msg> {
     public MsgT msg_;
 
     // id_ and no_ are set by NodeHandle when we advertise
-    public int id_;
+    public long id_;
     public NodeHandle nh_;
 
     // negotiated_ is set by NodeHandle when we negotiateTopics
     public boolean negotiated_;
 
-    public int endpoint_;
+    public long endpoint_;
 
     public Publisher(java.lang.String topic_name, MsgT msg) {
         this.endpoint_ = TopicInfo.ID_PUBLISHER;
@@ -29,7 +29,7 @@ public class Publisher<MsgT extends Msg> {
         return 0;
     }
 
-    public int getEndpointType() {
+    public long getEndpointType() {
         return this.endpoint_;
     }
 

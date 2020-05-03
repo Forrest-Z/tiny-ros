@@ -11,13 +11,15 @@
 
 int main (int argc, char *argv[]) {
   tinyros::Publisher hello_pub ("tinyros_hello", new tinyros_hello::TinyrosHello());
+#if 1
   tinyros::nh()->advertise(hello_pub);
+#else
+  tinyros::udp()->advertise(hello_pub);
+#endif
   while (true) {
     tinyros_hello::TinyrosHello msg;
     msg.hello = "Hello, tiny-ros ^_^ ";
-    if (hello_pub.negotiated()) {
-      hello_pub.publish (&msg);
-    }
+    hello_pub.publish (&msg);
 #ifdef WIN32
     Sleep(1000);
 #else

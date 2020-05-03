@@ -28,11 +28,13 @@ public class NodeHandle {
 	private static final int MODE_SIZE_L1        = 3;
 	private static final int MODE_SIZE_H         = 4;
 	private static final int MODE_SIZE_H1        = 5;
-	private static final int MODE_SIZE_CHECKSUM  = 6;    // checksum for msg size received from size L and H
-	private static final int MODE_TOPIC_L        = 7;    // waiting for topic id
-	private static final int MODE_TOPIC_H        = 8;
-	private static final int MODE_MESSAGE        = 9;
-	private static final int MODE_MSG_CHECKSUM   = 10;    // checksum for msg and topic id
+	private static final int MODE_SIZE_CHECKSUM  = 6;
+	private static final int MODE_TOPIC_L        = 7;
+	private static final int MODE_TOPIC_L1       = 8;
+	private static final int MODE_TOPIC_H        = 9;
+	private static final int MODE_TOPIC_H1       = 10;
+	private static final int MODE_MESSAGE        = 11;
+	private static final int MODE_MSG_CHECKSUM   = 12;
 
 	private Hardware hardware_;
 
@@ -41,10 +43,10 @@ public class NodeHandle {
 	private long nsec_offset;
 
 	//State machine variables for spinOnce
+	private long topic_;
 	private int mode_;
 	private int bytes_;
 	private int total_bytes_;
-	private int topic_;
 	private int index_;
 	private int checksum_;
 
@@ -137,10 +139,10 @@ public class NodeHandle {
 
 			checksum_ += data;
 
-			if (mode_ == MODE_MESSAGE) { /* message data being recieved */
+			if (mode_ == MODE_MESSAGE) {
 				message_in[index_++] = (byte)(data & 0xFF);
 				bytes_--;
-				if (bytes_ == 0) { /* is message complete? if so, checksum */
+				if (bytes_ == 0) {
 					mode_ = MODE_MSG_CHECKSUM;
 				}
 			} else if (mode_ == MODE_FIRST_FF) {
@@ -153,7 +155,7 @@ public class NodeHandle {
 				} else {
 					mode_ = MODE_FIRST_FF;
 				}
-			} else if (mode_ == MODE_SIZE_L) { /* bottom half of message size */
+			} else if (mode_ == MODE_SIZE_L) {
 				bytes_ = data;
 				index_ = 0;
 				mode_++;
@@ -161,7 +163,7 @@ public class NodeHandle {
 			} else if (mode_ == MODE_SIZE_L1) {
 				bytes_ += data << 8;
 				mode_++;
-			} else if (mode_ == MODE_SIZE_H) {     /* top half of message size */
+			} else if (mode_ == MODE_SIZE_H) {
 				bytes_ += data << 16;
 				mode_++;
 			} else if (mode_ == MODE_SIZE_H1) {
@@ -172,19 +174,25 @@ public class NodeHandle {
 				if ((checksum_ % 256) == 255) {
 					mode_++;
 				} else {
-					mode_ = MODE_FIRST_FF; /* Abandon the frame if the msg len is wrong */
+					mode_ = MODE_FIRST_FF;
 				}
-			} else if (mode_ == MODE_TOPIC_L) {  /* bottom half of topic id */
+			} else if (mode_ == MODE_TOPIC_L) {
 				topic_ = data;
 				mode_++;
-				checksum_ = data;               /* first byte included in checksum */
-			} else if (mode_ == MODE_TOPIC_H) {/* top half of topic id */
+				checksum_ = data;
+			} else if (mode_ == MODE_TOPIC_L1) {
 				topic_ += data << 8;
+				mode_++;
+			} else if (mode_ == MODE_TOPIC_H) {
+				topic_ += data << 16;
+				mode_++;
+			} else if (mode_ == MODE_TOPIC_H1) {
+				topic_ += data << 24;
 				mode_ = MODE_MESSAGE;
 				if (bytes_ == 0) {
 					mode_ = MODE_MSG_CHECKSUM;
 				}
-			} else if (mode_ == MODE_MSG_CHECKSUM) {   /* do checksum */
+			} else if (mode_ == MODE_MSG_CHECKSUM) {
 				mode_ = MODE_FIRST_FF;
 				if ((checksum_ % 256) == 255)
 				{
@@ -216,9 +224,9 @@ public class NodeHandle {
 					} else {
 						byte[] message = new byte[total_bytes_];
 						System.arraycopy(message_in, 0, message, 0, total_bytes_);
-						if (!subscribers[topic_-100].srv_flag_) {
+						if (!subscribers[(int)(topic_-100)].srv_flag_) {
 							spin_thread_pool_.execute(new Runnable() {
-								int id = topic_ - 100;
+								int id = (int)(topic_ - 100);
 								byte[] data = message; 
 								@Override
 								public void run() {
@@ -229,7 +237,7 @@ public class NodeHandle {
 							});
 						} else {
 							spin_srv_thread_pool_.execute(new Runnable() {
-								int id = topic_ - 100;
+								int id = (int)(topic_ - 100);
 								byte[] data = message; 
 								@Override
 								public void run() {
@@ -246,9 +254,7 @@ public class NodeHandle {
 
 		return SPIN_OK;
 	}
-
-
-	/* Are we connected to the PC? */
+	
 	public boolean ok() {
 		return hardware_.connected();
 	}
@@ -271,10 +277,6 @@ public class NodeHandle {
 		sec_offset = time.sec;
 		nsec_offset = time.nsec;
 	}
-
-	/********************************************************************
-	 * Topic Management
-	 */
 
 	/* Register a new publisher */
 	public boolean advertise(Publisher p) {
@@ -382,10 +384,10 @@ public class NodeHandle {
 	}
 
 
-	public int publish(int id, com.roslib.ros.Msg msg) {
+	public int publish(long id, com.roslib.ros.Msg msg) {
 		/* serialize message */
 		lock.lock();
-		int l = msg.serialize(message_out, 9);
+		int l = msg.serialize(message_out, 11);
 
 		/* setup the header */
 		message_out[0] = (byte) 0xff;
@@ -395,16 +397,18 @@ public class NodeHandle {
 		message_out[4] = (byte)((l >> 16) & 0xFF);
 		message_out[5] = (byte)((l >> 24) & 0xFF);
 		message_out[6] = (byte)((255 - ((message_out[2] + message_out[3] + message_out[4] + message_out[5]) % 256)) & 0xFF);
-		message_out[7] = (byte)(id & 0xFF);
-		message_out[8] = (byte)((id >> 8) & 0xFF);
+		message_out[7] = (byte)((id >> 0 ) & 0xFF);
+		message_out[8] = (byte)((id >> 8 ) & 0xFF);
+		message_out[9] = (byte)((id >> 16) & 0xFF);
+		message_out[10] = (byte)((id >> 24) & 0xFF);
 
 		/* calculate checksum */
 		int chk = 0;
-		for (int i = 7; i < l + 9; i++) {
+		for (int i = 7; i < l + 11; i++) {
 			chk += message_out[i];
 		}
 
-		l += 9;
+		l += 11;
 
 		message_out[l++] = (byte)((255 - (chk % 256)) & 0xFF);
 

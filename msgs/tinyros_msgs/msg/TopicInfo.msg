@@ -1,17 +1,17 @@
 # special topic_ids
-uint16 ID_PUBLISHER=0
-uint16 ID_SUBSCRIBER=1
-uint16 ID_SERVICE_SERVER=2
-uint16 ID_SERVICE_CLIENT=4
-uint16 ID_ROSTOPIC_REQUEST=6
-uint16 ID_ROSSERVICE_REQUEST=7
-uint16 ID_LOG=8
-uint16 ID_TIME=9
-uint16 ID_NEGOTIATED=10
-uint16 ID_SESSION_ID=11
+uint32 ID_PUBLISHER=0
+uint32 ID_SUBSCRIBER=1
+uint32 ID_SERVICE_SERVER=2
+uint32 ID_SERVICE_CLIENT=4
+uint32 ID_ROSTOPIC_REQUEST=6
+uint32 ID_ROSSERVICE_REQUEST=7
+uint32 ID_LOG=8
+uint32 ID_TIME=9
+uint32 ID_NEGOTIATED=10
+uint32 ID_SESSION_ID=11
 
 # The endpoint ID for this topic
-uint16 topic_id
+uint32 topic_id
 
 string topic_name
 string message_type

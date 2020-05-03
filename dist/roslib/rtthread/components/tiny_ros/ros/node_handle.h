@@ -43,11 +43,13 @@ const uint8_t MODE_SIZE_L         = 2;
 const uint8_t MODE_SIZE_L1        = 3;
 const uint8_t MODE_SIZE_H         = 4;
 const uint8_t MODE_SIZE_H1        = 5;
-const uint8_t MODE_SIZE_CHECKSUM  = 6;    // checksum for msg size received from size L and H
-const uint8_t MODE_TOPIC_L        = 7;    // waiting for topic id
-const uint8_t MODE_TOPIC_H        = 8;
-const uint8_t MODE_MESSAGE        = 9;
-const uint8_t MODE_MSG_CHECKSUM   = 10;    // checksum for msg and topic id
+const uint8_t MODE_SIZE_CHECKSUM  = 6;
+const uint8_t MODE_TOPIC_L        = 7;
+const uint8_t MODE_TOPIC_L1       = 8;
+const uint8_t MODE_TOPIC_H        = 9;
+const uint8_t MODE_TOPIC_H1       = 10;
+const uint8_t MODE_MESSAGE        = 11;
+const uint8_t MODE_MSG_CHECKSUM   = 12;
 
 const int SPIN_OK = 0;
 const int SPIN_ERR = -1;
@@ -75,7 +77,7 @@ public:
     rt_mutex_detach(&main_loop_mutex_);
   }
 
-  virtual int publish(int id, const Msg* msg, bool islog = false) = 0;
+  virtual int publish(uint32_t id, const Msg* msg, bool islog = false) = 0;
   virtual int spin() = 0;
   virtual void exit() = 0;
   virtual bool ok() = 0;
@@ -137,7 +139,6 @@ public:
     exit();
   }
 
-  /* Start a named port, which may be network server IP, initialize buffers */
   bool initNode(tinyros::string portName = "127.0.0.1") {
     bytes_ = 0;
     index_ = 0;
@@ -154,7 +155,7 @@ public:
 
     if (!loghd_keepalive_) {
       rt_err_t result = RT_EOK;
-      result = rt_thread_init(&loghd_keepalive_thread_, "loghd", &NodeHandle::loghd_keepalive, this, &loghd_keepalive_stack_[0],
+      result = rt_thread_init(&loghd_keepalive_thread_, "loghd", &NodeHandle::keepalive, this, &loghd_keepalive_stack_[0],
           sizeof(loghd_keepalive_stack_), THREAD_LOG_KEEPALIVE_PRIORITY, THREAD_LOG_KEEPALIVE_TICK);
       RT_ASSERT(result == RT_EOK);
       result = rt_thread_startup(&loghd_keepalive_thread_);
@@ -165,7 +166,7 @@ public:
     return hardware_.connected();
   }
 
-  static void loghd_keepalive(void *pthis) {
+  static void keepalive(void *pthis) {
     uint8_t in[200];
     NodeHandle *nh = (NodeHandle *)pthis;
     nh->advertise(nh->logpb_);
@@ -195,18 +196,15 @@ public:
 
 protected:
   //State machine variables for spin
+  uint32_t topic_;
   int mode_;
   int bytes_;
-  int topic_;
   int index_;
   int checksum_;
   bool spin_;
   int total_bytes_;
 
 public:
-  /* This function goes in your loop() function, it handles
-   *  serial input and callbacks for subscribers.
-   */
   virtual int spin() {
     int i, rv, len = 1;
 
@@ -249,13 +247,13 @@ public:
         checksum_ += message_tmp[i];
       }
 
-      if (mode_ == MODE_MESSAGE) {         /* message data being recieved */
+      if (mode_ == MODE_MESSAGE) {
         for (i = 0; i < rv; i++) {
           message_in[index_++] = message_tmp[i];
           bytes_--;
         }
 
-        if (bytes_ == 0) {                /* is message complete? if so, checksum */
+        if (bytes_ == 0) {
           len = 1;
           mode_ = MODE_MSG_CHECKSUM;
         } else {
@@ -271,7 +269,7 @@ public:
         } else {
           mode_ = MODE_FIRST_FF;
         }
-      } else if (mode_ == MODE_SIZE_L) {     /* bottom half of message size */
+      } else if (mode_ == MODE_SIZE_L) {
         bytes_ = message_tmp[0];
         index_ = 0;
         mode_++;
@@ -279,7 +277,7 @@ public:
       } else if (mode_ == MODE_SIZE_L1) {
         bytes_ += message_tmp[0] << 8;
         mode_++;
-      } else if (mode_ == MODE_SIZE_H) {     /* top half of message size */
+      } else if (mode_ == MODE_SIZE_H) {
         bytes_ += message_tmp[0] << 16;
         mode_++;
       } else if (mode_ == MODE_SIZE_H1) {
@@ -290,19 +288,25 @@ public:
         if ((checksum_ % 256) == 255)
           mode_++;
         else
-          mode_ = MODE_FIRST_FF;          /* Abandon the frame if the msg len is wrong */
-      } else if (mode_ == MODE_TOPIC_L) {    /* bottom half of topic id */
+          mode_ = MODE_FIRST_FF;
+      } else if (mode_ == MODE_TOPIC_L) {
         topic_ = message_tmp[0];
         mode_++;
-        checksum_ = message_tmp[0];               /* first byte included in checksum */
-      } else if (mode_ == MODE_TOPIC_H) {     /* top half of topic id */
+        checksum_ = message_tmp[0];
+      } else if (mode_ == MODE_TOPIC_L1) {
         topic_ += message_tmp[0] << 8;
+        mode_++;
+      } else if (mode_ == MODE_TOPIC_H) {
+        topic_ += message_tmp[0] << 16;
+        mode_++;
+      } else if (mode_ == MODE_TOPIC_H1) {
+        topic_ += message_tmp[0] << 24;
         mode_ = MODE_MESSAGE;
         if (bytes_ == 0)
           mode_ = MODE_MSG_CHECKSUM;
         else
           len = bytes_;
-      } else if (mode_ == MODE_MSG_CHECKSUM) {    /* do checksum */
+      } else if (mode_ == MODE_MSG_CHECKSUM) {
         mode_ = MODE_FIRST_FF;
         if ((checksum_ % 256) == 255) {
           if (topic_ == TopicInfo::ID_PUBLISHER) {
@@ -331,8 +335,8 @@ public:
               }
             }
           } else {
-            if (((topic_-100) >= 0) && subscribers[topic_-100]) {
-              subscribers[topic_ - 100]->callback(message_in);
+            if ((((int)(topic_-100)) >= 0) && subscribers[(int)(topic_-100)]) {
+              subscribers[(int)(topic_-100)]->callback(message_in);
             }
           }
         }
@@ -346,10 +350,6 @@ public:
   virtual bool ok() {
     return hardware_.connected();
   }
-
-  /********************************************************************
-   * Topic Management
-   */
 
   /* Register a new publisher */
   bool advertise(Publisher & p) {
@@ -484,10 +484,10 @@ public:
     }
   }
 
-  virtual int publish(int id, const Msg * msg, bool islog = false) {
+  virtual int publish(uint32_t id, const Msg * msg, bool islog = false) {
     rt_mutex_take(&mutex_, RT_WAITING_FOREVER);
     /* serialize message */
-    int l = msg->serialize(message_out + 9);
+    int l = msg->serialize(message_out + 11);
 
     /* setup the header */
     message_out[0] = 0xff;
@@ -497,14 +497,16 @@ public:
     message_out[4] = (uint8_t)((uint32_t)((l >> 16) & 0xFF));
     message_out[5] = (uint8_t)((uint32_t)((l >> 24) & 0xFF));
     message_out[6] = 255 - ((message_out[2] + message_out[3] + message_out[4] + message_out[5]) % 256);
-    message_out[7] = (uint8_t)((int16_t)id & 255);
-    message_out[8] = (uint8_t)((int16_t)id >> 8);
+    message_out[7] = (uint8_t)((uint32_t)id & 0xFF);
+    message_out[8] = (uint8_t)((uint32_t)((id >> 8) & 0xFF));
+    message_out[9] = (uint8_t)((uint32_t)((id >> 16) & 0xFF));
+    message_out[10] = (uint8_t)((uint32_t)((id >> 24) & 0xFF));
 
     /* calculate checksum */
     int chk = 0;
-    for (int i = 7; i < l + 9; i++)
+    for (int i = 7; i < l + 11; i++)
       chk += message_out[i];
-    l += 9;
+    l += 11;
     message_out[l++] = 255 - (chk % 256);
 
     if (l <= OUTPUT_SIZE) {
@@ -520,10 +522,6 @@ public:
       return -2;
     }
   }
-
-  /********************************************************************
-   * Logging
-   */
 
 private:
   void log(char byte, const char* msg)
@@ -544,7 +542,6 @@ public:
   virtual void logerror(const char* msg) { log(tinyros_msgs::Log::ROSERROR, msg); }
   virtual void logfatal(const char* msg) { log(tinyros_msgs::Log::ROSFATAL, msg); }
 
-  /*********************************************************************/
 private:
   bool topic_list_recieved;
   tinyros::string topic_list;

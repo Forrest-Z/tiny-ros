@@ -3,22 +3,22 @@ package com.roslib.tinyros_msgs;
 import java.lang.*;
 
 public class TopicInfo implements com.roslib.ros.Msg {
-    public int topic_id;
+    public long topic_id;
     public java.lang.String topic_name;
     public java.lang.String message_type;
     public java.lang.String md5sum;
     public int buffer_size;
     public boolean negotiated;
-    public static final int ID_PUBLISHER = (int)(0);
-    public static final int ID_SUBSCRIBER = (int)(1);
-    public static final int ID_SERVICE_SERVER = (int)(2);
-    public static final int ID_SERVICE_CLIENT = (int)(4);
-    public static final int ID_ROSTOPIC_REQUEST = (int)(6);
-    public static final int ID_ROSSERVICE_REQUEST = (int)(7);
-    public static final int ID_LOG = (int)(8);
-    public static final int ID_TIME = (int)(9);
-    public static final int ID_NEGOTIATED = (int)(10);
-    public static final int ID_SESSION_ID = (int)(11);
+    public static final long ID_PUBLISHER = (long)(0);
+    public static final long ID_SUBSCRIBER = (long)(1);
+    public static final long ID_SERVICE_SERVER = (long)(2);
+    public static final long ID_SERVICE_CLIENT = (long)(4);
+    public static final long ID_ROSTOPIC_REQUEST = (long)(6);
+    public static final long ID_ROSSERVICE_REQUEST = (long)(7);
+    public static final long ID_LOG = (long)(8);
+    public static final long ID_TIME = (long)(9);
+    public static final long ID_NEGOTIATED = (long)(10);
+    public static final long ID_SESSION_ID = (long)(11);
 
     public TopicInfo() {
         this.topic_id = 0;
@@ -33,7 +33,9 @@ public class TopicInfo implements com.roslib.ros.Msg {
         int offset = start;
         outbuffer[offset + 0] = (byte)((this.topic_id >> (8 * 0)) & 0xFF);
         outbuffer[offset + 1] = (byte)((this.topic_id >> (8 * 1)) & 0xFF);
-        offset += 2;
+        outbuffer[offset + 2] = (byte)((this.topic_id >> (8 * 2)) & 0xFF);
+        outbuffer[offset + 3] = (byte)((this.topic_id >> (8 * 3)) & 0xFF);
+        offset += 4;
         int length_topic_name = this.topic_name.getBytes().length;
         outbuffer[offset + 0] = (byte)((length_topic_name >> (8 * 0)) & 0xFF);
         outbuffer[offset + 1] = (byte)((length_topic_name >> (8 * 1)) & 0xFF);
@@ -76,9 +78,11 @@ public class TopicInfo implements com.roslib.ros.Msg {
 
     public int deserialize(byte[] inbuffer, int start) {
         int offset = start;
-        this.topic_id   = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        this.topic_id |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        offset += 2;
+        this.topic_id   = (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+        this.topic_id |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+        this.topic_id |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+        this.topic_id |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+        offset += 4;
         int length_topic_name = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_topic_name |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
         length_topic_name |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
@@ -124,7 +128,7 @@ public class TopicInfo implements com.roslib.ros.Msg {
 
     public int serializedLength() {
         int length = 0;
-        length += 2;
+        length += 4;
         int length_topic_name = this.topic_name.getBytes().length;
         length += 4;
         length += length_topic_name;
@@ -140,7 +144,7 @@ public class TopicInfo implements com.roslib.ros.Msg {
     }
 
     public java.lang.String getType(){ return "tinyros_msgs/TopicInfo"; }
-    public java.lang.String getMD5(){ return "033d42208826b52fde17cbe06f6e856c"; }
+    public java.lang.String getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
     public long getID() { return 0; }
     public void setID(long id) { }
 }

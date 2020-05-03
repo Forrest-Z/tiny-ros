@@ -43,7 +43,7 @@ public class ServiceServer<MReq extends Msg, MRes extends Msg> extends Subscribe
         return this.req.getMD5();
     }
 
-    public int getEndpointType() {
+    public long getEndpointType() {
         return TopicInfo.ID_SERVICE_SERVER + TopicInfo.ID_SUBSCRIBER;
     }
 

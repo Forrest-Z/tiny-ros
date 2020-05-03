@@ -35,12 +35,16 @@ template<typename Socket>
 class Session : boost::noncopyable
 {
 public:
-  Session(boost::asio::io_service& io_service)
+  Session(boost::asio::io_service& io_service, bool isudp = false)
     : socket_(io_service)
     , active_(false)
+    , isudp_(isudp)
     , message_in_thread_(nullptr)
     , message_write_thread_(nullptr)
   {
+    if (isudp) {
+      session_id_ = "session_udp";
+    }
   }
 
   Socket& socket()
@@ -68,8 +72,12 @@ public:
     require_check_running_ = true;
  
     message_write_thread_ = new boost::thread(boost::bind(&Session::write_completion_cb, this));
-    message_in_thread_ = new boost::thread(boost::bind(&Session::read_message_sync, this));
-    require_check_thread_ = new boost::thread(boost::bind(&Session::request_topics, this));
+    if (isudp_) {
+      message_in_thread_ = new boost::thread(boost::bind(&Session::read_message_sync_udp, this));
+    } else {
+      message_in_thread_ = new boost::thread(boost::bind(&Session::read_message_sync, this));
+      require_check_thread_ = new boost::thread(boost::bind(&Session::request_topics, this));
+    }
   }
 
   void stop()
@@ -120,7 +128,7 @@ public:
         }
       }
       
-      std::map<uint16_t, ServiceClientPtr>::iterator it;
+      std::map<uint32_t, ServiceClientPtr>::iterator it;
       for(it = services_client_.begin(); it != services_client_.end(); ) {
         ServiceClientPtr client = it->second;
         client->client_connection_.disconnect();
@@ -177,6 +185,80 @@ public:
   }
 
 private:
+  void read_message_sync_udp() {
+    while (is_active()) {
+      uint8_t *message_in = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
+      int32_t rv = socket_.read_some(boost::asio::buffer(message_in, buffer_max));
+      if (buffer_max >= rv && rv > 0)  {
+        uint32_t topic = 0;
+        int bytes = 0, index= 0, checksum = 0;
+        do {
+          index = 0;
+          if (message_in[index++] != 0xff) {
+            break;
+          }
+
+          if (message_in[index++] != 0xb9) {
+            break;
+          }
+
+          bytes = message_in[index];
+          bytes += message_in[index + 1] << 8;
+          bytes += message_in[index + 2] << 16;
+          bytes += message_in[index + 3] << 24;
+          checksum = message_in[index];
+          checksum += message_in[index + 1];
+          checksum += message_in[index + 2];
+          checksum += message_in[index + 3];
+          checksum += message_in[index + 4];
+          index += 5;
+          
+          if((checksum % 256) != 255) {
+            break;
+          }
+
+          topic = message_in[index];
+          topic += message_in[index + 1] << 8;
+          topic += message_in[index + 2] << 16;
+          topic += message_in[index + 3] << 24;
+          checksum = message_in[index];
+          checksum += message_in[index + 1];
+          checksum += message_in[index + 2];
+          checksum += message_in[index + 3];
+          index += 4;
+
+          if (buffer_max < (index + bytes + 1)) {
+            break;
+          }
+
+          if(bytes > 0) {
+            for (int32_t i=0; i < bytes + 1; i++) {
+              checksum += message_in[index + i];
+            }
+          } else {
+            checksum += message_in[index];
+          }
+
+          if ((checksum % 256) == 255) {
+            tinyros::serialization::IStream stream(message_in + index, bytes);
+            if (callbacks_.count(topic) == 1) {
+              try {
+                callbacks_[topic](stream);
+              } catch(tinyros::serialization::StreamOverrunException e) {
+              }
+            } else {
+              BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
+                << " Received message with unrecognized topicId ("<<topic<<").";
+            }
+          } else {
+            BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
+              << " Rejecting message on topicId="<<topic<<", length=" <<bytes<<" with bad checksum.";
+          }
+        } while(0);
+      }
+    }
+  }
+  
   void read_message_sync() {
     const uint8_t MODE_FIRST_FF = 0;
     const uint8_t MODE_PROTOCOL_VER   = 1;
@@ -185,120 +267,123 @@ private:
     const uint8_t MODE_SIZE_L1        = 3;
     const uint8_t MODE_SIZE_H         = 4;
     const uint8_t MODE_SIZE_H1        = 5;
-    const uint8_t MODE_SIZE_CHECKSUM  = 6;    // checksum for msg size received from size L and H
-    const uint8_t MODE_TOPIC_L        = 7;    // waiting for topic id
-    const uint8_t MODE_TOPIC_H        = 8;
-    const uint8_t MODE_MESSAGE        = 9;
-    const uint8_t MODE_MSG_CHECKSUM   = 10;    // checksum for msg and topic id
+    const uint8_t MODE_SIZE_CHECKSUM  = 6;
+    const uint8_t MODE_TOPIC_L        = 7;
+    const uint8_t MODE_TOPIC_L1       = 8;
+    const uint8_t MODE_TOPIC_H        = 9;
+    const uint8_t MODE_TOPIC_H1       = 10;
+    const uint8_t MODE_MESSAGE        = 11;
+    const uint8_t MODE_MSG_CHECKSUM   = 12;
     
     uint8_t *message_in = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
     uint8_t *message_tmp = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
-    int mode_ = MODE_FIRST_FF;
-    int total_bytes_ = 0;
-    int bytes_ = 0;
-    int topic_ = 0;
-    int index_ = 0;
-    int checksum_ = 0;
+    uint32_t topic = 0;
+    int mode = MODE_FIRST_FF;
+    int total_bytes = 0;
+    int bytes = 0;
+    int index= 0;
+    int checksum = 0;
     int i, rv, len = 1;
     
     while (message_tmp && message_in && is_active()) {
       if (len > buffer_max) {
         len = 1;
-        mode_ = MODE_FIRST_FF;
+        mode = MODE_FIRST_FF;
         continue;
       }
       
       boost::system::error_code ec;
       rv = boost::asio::read(socket_, boost::asio::buffer(message_tmp, len), ec);
       if (ec == boost::asio::error::eof) {
-        BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "<< __FUNCTION__ << " Socket asio error, closing socket: " << ec;
+        BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "
+          << __FUNCTION__ << " Socket asio error, closing socket: " << ec;
         break;
       }
       
       if (rv > 0) {
-        if (mode_ != MODE_MESSAGE) {
+        if (mode != MODE_MESSAGE) {
           for (i = 0; i < rv; i++) {
-            checksum_ += message_tmp[i];
+            checksum += message_tmp[i];
           }
         }
         
-        if (mode_ == MODE_MESSAGE) {
+        if (mode == MODE_MESSAGE) {
           for (i = 0; i < rv; i++) {
-            checksum_ += message_tmp[i];
-            message_in[index_++] = message_tmp[i];
-            bytes_--;
+            checksum += message_tmp[i];
+            message_in[index++] = message_tmp[i];
+            bytes--;
           }
 
-          if (bytes_ == 0) {
+          if (bytes == 0) {
             len = 1;
-            mode_ = MODE_MSG_CHECKSUM;
+            mode = MODE_MSG_CHECKSUM;
           } else {
-            len = bytes_;
+            len = bytes;
           }
-        } else if (mode_ == MODE_FIRST_FF) {
+        } else if (mode == MODE_FIRST_FF) {
           if (message_tmp[0] == 0xff) {
-            mode_++;
+            mode++;
           }
-        } else if (mode_ == MODE_PROTOCOL_VER) {
+        } else if (mode == MODE_PROTOCOL_VER) {
           if (message_tmp[0] == PROTOCOL_VER) {
-            mode_++;
+            mode++;
           } else {
-            mode_ = MODE_FIRST_FF;
+            mode = MODE_FIRST_FF;
           }
-        } else if (mode_ == MODE_SIZE_L) {     /* bottom half of message size */
-          bytes_ = message_tmp[0];
-          index_ = 0;
-          mode_++;
-          checksum_ = message_tmp[0];
-        } else if (mode_ == MODE_SIZE_L1) {
-          bytes_ += message_tmp[0] << 8;
-          mode_++;
-        } else if (mode_ == MODE_SIZE_H) {     /* top half of message size */
-          bytes_ += message_tmp[0] << 16;
-          mode_++;
-        } else if (mode_ == MODE_SIZE_H1) {
-          bytes_ += message_tmp[0] << 24;
-          mode_++;
-        } else if (mode_ == MODE_SIZE_CHECKSUM) {
-          if ((checksum_ % 256) == 255) {
-            mode_++;
+        } else if (mode == MODE_SIZE_L) {
+          bytes = message_tmp[0];
+          index = 0;
+          mode++;
+          checksum = message_tmp[0];
+        } else if (mode == MODE_SIZE_L1) {
+          bytes += message_tmp[0] << 8;
+          mode++;
+        } else if (mode == MODE_SIZE_H) {
+          bytes += message_tmp[0] << 16;
+          mode++;
+        } else if (mode == MODE_SIZE_H1) {
+          bytes += message_tmp[0] << 24;
+          mode++;
+        } else if (mode == MODE_SIZE_CHECKSUM) {
+          if ((checksum % 256) == 255) {
+            mode++;
           } else {
-            BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " Abandon the frame if the msg len is wrong";
-            mode_ = MODE_FIRST_FF;
+            mode = MODE_FIRST_FF;
           }
-        } else if (mode_ == MODE_TOPIC_L) {    /* bottom half of topic id */
-          topic_ = message_tmp[0];
-          mode_++;
-          checksum_ = message_tmp[0];               /* first byte included in checksum */
-        } else if (mode_ == MODE_TOPIC_H) {     /* top half of topic id */
-          topic_ += message_tmp[0] << 8;
-          mode_ = MODE_MESSAGE;
-          total_bytes_ = bytes_;
-          if (bytes_ == 0)
-            mode_ = MODE_MSG_CHECKSUM;
+        } else if (mode == MODE_TOPIC_L) {
+          topic = message_tmp[0];
+          mode++;
+          checksum = message_tmp[0]; 
+        } else if (mode == MODE_TOPIC_L1) {
+          topic += message_tmp[0] << 8;
+          mode++;
+        } else if (mode == MODE_TOPIC_H) {
+          topic += message_tmp[0] << 16;
+          mode++;
+        } else if (mode == MODE_TOPIC_H1) {
+          topic += message_tmp[0] << 24;
+          mode = MODE_MESSAGE;
+          total_bytes = bytes;
+          if (bytes == 0)
+            mode = MODE_MSG_CHECKSUM;
           else
-            len = bytes_;
-        } else if (mode_ == MODE_MSG_CHECKSUM) {    /* do checksum */
-          mode_ = MODE_FIRST_FF;
-          if ((checksum_ % 256) == 255) {
-            tinyros::serialization::IStream stream(message_in, total_bytes_);
-            if (callbacks_.count(topic_) == 1) {
+            len = bytes;
+        } else if (mode == MODE_MSG_CHECKSUM) {
+          mode = MODE_FIRST_FF;
+          if ((checksum % 256) == 255) {
+            tinyros::serialization::IStream stream(message_in, total_bytes);
+            if (callbacks_.count(topic) == 1) {
               try {
-                callbacks_[topic_](stream);
+                callbacks_[topic](stream);
               } catch(tinyros::serialization::StreamOverrunException e) {
-                if (topic_ < 100) {
-                  BOOST_LOG_TRIVIAL(error) << "[" << session_id_<<"] "<< __FUNCTION__ << " Buffer overrun when attempting to parse setup message.";
-                  BOOST_LOG_TRIVIAL(error) << "[" << session_id_<<"] "<< __FUNCTION__ << " Is this firmware from a pre-Groovy rosserial?";
-                } else {
-                  BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " Buffer overrun when attempting to parse user message.";
-                }
               }
             } else {
-              BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " Received message with unrecognized topicId ("<<topic_<<").";
+              BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
+                << " Received message with unrecognized topicId ("<<topic<<").";
             }
           } else {
             BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
-              << " Rejecting message on topicId="<<topic_<<", length=" <<total_bytes_<<" with bad checksum.";
+              << " Rejecting message on topicId="<<topic<<", length=" <<total_bytes<<" with bad checksum.";
           }
         }
       }
@@ -315,10 +400,10 @@ private:
 
   //// SENDING MESSAGES ////
 
-  void write_message(Buffer& message, const uint16_t topic_id) {
+  void write_message(Buffer& message, const uint32_t topic_id) {
     if (!is_active()) return;
     
-    uint8_t overhead_bytes = 10;
+    uint8_t overhead_bytes = 12;
     uint32_t length = overhead_bytes + message.size();
     BufferPtr buffer_ptr(new Buffer(length));
 
@@ -551,7 +636,7 @@ private:
 
   void stop_service(std::string &topic_name) {
     BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< "stop_service topic_name: " << topic_name;
-    std::map<uint16_t, ServiceClientPtr>::iterator it;
+    std::map<uint32_t, ServiceClientPtr>::iterator it;
     for(it = services_client_.begin(); it != services_client_.end(); ) {
       ServiceClientPtr client = it->second;
       if (client->topic_name_ == topic_name) {
@@ -590,13 +675,15 @@ private:
   }
 
   void handle_negotiated(const tinyros_msgs::TopicInfo& topic_info) {
-    size_t length = tinyros::serialization::serializationLength(topic_info);
-    std::vector<uint8_t> message(length);
+    if (!isudp_) {
+      size_t length = tinyros::serialization::serializationLength(topic_info);
+      std::vector<uint8_t> message(length);
 
-    tinyros::serialization::OStream ostream(&message[0], length);
-    tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::write(ostream, topic_info);
+      tinyros::serialization::OStream ostream(&message[0], length);
+      tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::write(ostream, topic_info);
 
-    write_message(message, tinyros_msgs::TopicInfo::ID_NEGOTIATED);
+      write_message(message, tinyros_msgs::TopicInfo::ID_NEGOTIATED);
+    }
   }
 
   void handle_rostopic_request(tinyros::serialization::IStream& stream) {
@@ -648,12 +735,14 @@ private:
   boost::mutex active_mutex_;
   bool active_;
 
-  std::map<uint16_t, boost::function<void(tinyros::serialization::IStream&)> > callbacks_;
-  std::map<uint16_t, PublisherPtr> publishers_;
-  std::map<uint16_t, SubscriberPtr> subscribers_;
+  bool isudp_;
+
+  std::map<uint32_t, boost::function<void(tinyros::serialization::IStream&)> > callbacks_;
+  std::map<uint32_t, PublisherPtr> publishers_;
+  std::map<uint32_t, SubscriberPtr> subscribers_;
   std::vector<RostopicConnection> topic_connections_;
   std::vector<std::string> service_server_;
-  std::map<uint16_t, ServiceClientPtr> services_client_;
+  std::map<uint32_t, ServiceClientPtr> services_client_;
 
   std::string session_id_;
 
