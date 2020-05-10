@@ -14,13 +14,15 @@
 //////////////////////////////////////////////////////////
 void tinyros_example_publisher(void* parameter) {
   tinyros::Publisher hello_pub ("tinyros_hello", new tinyros_hello::TinyrosHello());
+#if 1
   tinyros::nh()->advertise(hello_pub);
+#else
+  tinyros::udp()->advertise(hello_pub);
+#endif
   while (true) {
     tinyros_hello::TinyrosHello msg;
     msg.hello = "Hello, tiny-ros ^_^ ";
-    if (hello_pub.negotiated()) {
-      hello_pub.publish (&msg);
-    }
+    hello_pub.publish (&msg);
     rt_thread_delay(1000);
   }
 }
@@ -32,12 +34,15 @@ static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
 }
 extern "C" void tinyros_example_subscriber(void* parameter) {
   tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
+#if 1
   tinyros::nh()->subscribe(sub);
+#else
+  tinyros::udp()->subscribe(sub);
+#endif
   while(true) {
     rt_thread_delay(10*1000);
   }
 }
-
 
 //////////////////////////////////////////////////////////
 static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::Test::Response & res) {

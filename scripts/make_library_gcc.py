@@ -719,8 +719,6 @@ def roslib_copy_roslib_files(path):
              'ros/duration.h',
              'ros/msg.h',
              'ros/log.h',
-             'ros/hardware_linux_udp.h',
-             'ros/hardware_windows_udp.h',
              'ros/node_handle_base.h',
              'ros/node_handle_udp.h',
              'ros/node_handle.h',
@@ -730,8 +728,8 @@ def roslib_copy_roslib_files(path):
              'ros/service_client.h',
              'ros/threadpool.h',
              'ros/hardware.h',
-             'ros/hardware_linux.h',
-             'ros/hardware_windows.h',
+             'ros/hardware_udp.h',
+             'ros/hardware_tcp.h',
              'ros/time.h']
 
     mydir = sys.argv[3] + "/roslib/gcc/"

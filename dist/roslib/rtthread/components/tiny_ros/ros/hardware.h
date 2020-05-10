@@ -14,7 +14,6 @@
 #include <rtthread.h>
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
-#include "tiny_ros/ros/hardware.h"
 #include "tiny_ros/ros/string.h"
 
 namespace tinyros {
@@ -46,19 +45,16 @@ public:
     // Create the socket.
     sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd_ < 0) {
-      rt_kprintf("ERROR opening socket.\n");
+      rt_kprintf("Hardware::init opening socket error %d:%s\n", errno, strerror(errno));
       return false;
     }
 
-    // Disable the Nagle (TCP No Delay) algorithm.
-    int flag = 1;
-    int rv = setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(flag));
-    if (rv == -1) {
-      rt_kprintf("Couldn't setsockopt(TCP_NODELAY)\n");
-      lwip_close(sockfd_);
-      sockfd_ = -1;
-      return false;
-    }
+    int opt = 1;
+    struct linger so_linger;
+    so_linger.l_onoff = 1;
+    so_linger.l_linger = 0;
+    setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, (const char *)&opt, sizeof(opt));
+    setsockopt(sockfd_, SOL_SOCKET, SO_LINGER, (const char *)&so_linger, sizeof(so_linger));
 
     struct hostent *host;
     struct sockaddr_in serv_addr;
@@ -68,13 +64,11 @@ public:
     serv_addr.sin_addr = *((struct in_addr *)host->h_addr);
     memset(&(serv_addr.sin_zero), 0, sizeof(serv_addr.sin_zero));
     if (connect(sockfd_, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr)) < 0) {
-      rt_kprintf("ERROR connecting!\n");
+      rt_kprintf("Hardware::init Couldn't connecting %d:%s\n", errno, strerror(errno));
       lwip_close(sockfd_);
       sockfd_ = -1;
       return false;
-    } 
-
-    rt_kprintf("Connected to server %s!\n", pName);
+    }
 
     connected_ = true;
     return connected_;
@@ -86,12 +80,12 @@ public:
       if (rv > 0) {
         return rv;
       } else if (rv == 0) {
-        rt_kprintf("elCommRead() socket close\n");
+        rt_kprintf("Hardware::read socket close %d:%s\n", errno, strerror(errno));
         this->close();
         return -1;
       } else {
         if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR))  {
-          rt_kprintf("elCommRead error %d: %s\n", errno, strerror(errno));
+          rt_kprintf("Hardware::read error %d:%s\n", errno, strerror(errno));
           this->close();
           return -1;
         }
@@ -109,23 +103,23 @@ public:
         if (rv > 0) {
           totalsent += rv;
         } else if (rv == 0) {
-          rt_kprintf("elCommWrite socket close\n");
+          rt_kprintf("Hardware::write socket close %d:%s\n", errno, strerror(errno));
           this->close();
           return false;
         } else {
           if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR)) {
-            rt_kprintf("elCommWrite error %d: %s\n", errno, strerror(errno));
+            rt_kprintf("Hardware::write error %d:%s\n", errno, strerror(errno));
             this->close();
             return false;
           } else {
-            rt_kprintf("write(): error writing - trying again - \n");
+            rt_kprintf("Hardware::write: error writing - trying again - %d:%s\n", errno, strerror(errno));
           }
         }
       } while (totalsent < len);
 
       return true;
     }
-    return true;
+    return false;
   }
 
   bool connected() {
@@ -133,12 +127,10 @@ public:
   }
 
   void close() {
-    if (connected_) {
-      connected_ = false;
-      if(sockfd_ > 0){
-        lwip_close(sockfd_);
-        sockfd_ = -1;
-      }
+    connected_ = false;
+    if(sockfd_ > 0){
+      lwip_close(sockfd_);
+      sockfd_ = -1;
     }
   }
 

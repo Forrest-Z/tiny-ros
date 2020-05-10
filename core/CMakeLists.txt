@@ -9,28 +9,18 @@ add_executable(tinyroscore
   ${SRC_LIST}
   ${ROSLIB_PATHS}/time.cpp
   ${ROSLIB_PATHS}/duration.cpp
+  ${ROSLIB_PATHS}/log.cpp
+  ${ROSLIB_PATHS}/ros.cpp
 )
 
 IF (CMAKE_SYSTEM_NAME MATCHES "CYGWIN")
   target_link_libraries(tinyroscore
-    libboost_log.dll.a
-    libboost_log_setup.dll.a
-    libboost_date_time.dll.a
-    libboost_system.a
-    libboost_filesystem.dll.a
-    libboost_thread.dll.a
     libpthread.a
   )
 ENDIF()
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
   target_link_libraries(tinyroscore
-    libboost_log.so
-    libboost_log_setup.so
-    libboost_date_time.so
-    libboost_system.so
-    libboost_filesystem.so
-    libboost_thread.so
     libpthread.so
   )
 ENDIF()

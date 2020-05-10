@@ -10,6 +10,8 @@
 #ifndef _TINYROS_STRING_H_
 #define _TINYROS_STRING_H_
 
+#include <string.h>
+
 namespace tinyros
 {
 class string

@@ -9,12 +9,13 @@
 
 #ifndef TINY_ROS_SERVER_SESSION_H
 #define TINY_ROS_SERVER_SESSION_H
-
 #include <map>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-#include <boost/function.hpp>
-#include <boost/log/trivial.hpp>
+#include <memory>
+#include <thread>
+#include <mutex>
+#include <deque>
+#include <functional>
+#include <condition_variable>
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
 #include "tiny_ros/roslib_msgs/Time.h"
@@ -25,18 +26,22 @@
 
 namespace tinyros
 {
+#define TINYROS_LOG_TOPIC "tinyros_log_11315"
+
 #define REQUEST_TOPICS_TIMER (1000*1000)
 
 typedef std::vector<uint8_t> Buffer;
-typedef boost::shared_ptr<Buffer> BufferPtr;
+typedef std::shared_ptr<Buffer> BufferPtr;
 typedef std::deque<BufferPtr> AsyncWritebuffer;
 
 template<typename Socket>
-class Session : boost::noncopyable
+class Session
 {
 public:
-  Session(boost::asio::io_service& io_service, bool isudp = false)
-    : socket_(io_service)
+  std::string session_id_;
+  
+  Session(Socket& socket, bool isudp = false)
+    : socket_(socket)
     , active_(false)
     , isudp_(isudp)
     , message_in_thread_(nullptr)
@@ -55,58 +60,61 @@ public:
   void start()
   {
     using namespace tinyros_msgs;
-    callbacks_[TopicInfo::ID_PUBLISHER] = boost::bind(&Session::setup_publisher, this, _1);
-    callbacks_[TopicInfo::ID_SUBSCRIBER] = boost::bind(&Session::setup_subscriber, this, _1);
-    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_PUBLISHER] = boost::bind(&Session::setup_service_server_publisher, this, _1);
-    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_SUBSCRIBER] = boost::bind(&Session::setup_service_server_subscriber, this, _1);
-    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_PUBLISHER] = boost::bind(&Session::setup_service_client_publisher, this, _1);
-    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_SUBSCRIBER] = boost::bind(&Session::setup_service_client_subscriber, this, _1);
-    callbacks_[TopicInfo::ID_ROSTOPIC_REQUEST] = boost::bind(&Session::handle_rostopic_request, this, _1);
-    callbacks_[TopicInfo::ID_ROSSERVICE_REQUEST] = boost::bind(&Session::handle_rosservice_request, this, _1);
-    callbacks_[TopicInfo::ID_LOG] = boost::bind(&Session::handle_log, this, _1);
-    callbacks_[TopicInfo::ID_TIME] = boost::bind(&Session::handle_time, this, _1);
-    callbacks_[TopicInfo::ID_SESSION_ID] = boost::bind(&Session::handle_session_id, this, _1);
+    callbacks_[TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_publisher, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_subscriber, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_server_publisher, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_server_subscriber, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_client_publisher, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_client_subscriber, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_ROSTOPIC_REQUEST] = std::bind(&Session::handle_rostopic_request, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_ROSSERVICE_REQUEST] = std::bind(&Session::handle_rosservice_request, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_LOG] = std::bind(&Session::handle_log, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_TIME] = std::bind(&Session::handle_time, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SESSION_ID] = std::bind(&Session::handle_session_id, this, std::placeholders::_1);
 
     active_ = true;
     
     require_check_running_ = true;
  
-    message_write_thread_ = new boost::thread(boost::bind(&Session::write_completion_cb, this));
+    message_write_thread_ = new std::thread(std::bind(&Session::write_completion_cb, this));
     if (isudp_) {
-      message_in_thread_ = new boost::thread(boost::bind(&Session::read_message_sync_udp, this));
+      message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync_udp, this));
     } else {
-      message_in_thread_ = new boost::thread(boost::bind(&Session::read_message_sync, this));
-      require_check_thread_ = new boost::thread(boost::bind(&Session::request_topics, this));
+      message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync, this));
+      require_check_thread_ = new std::thread(std::bind(&Session::request_topics, this));
     }
   }
 
   void stop()
   {
     {
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " begin.";
-      boost::unique_lock<boost::mutex> lock(active_mutex_);
+      std::unique_lock<std::mutex> lock(active_mutex_);
       if (!active_) {
-        BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " end.";
         return;
       }
+      printf("[%s] %s begin.\n", session_id_.c_str(), __FUNCTION__);
+      // Close the socket.
+      printf("[%s] %s Close the socket begin.\n", session_id_.c_str(), __FUNCTION__);
+      socket_.close();
+      printf("[%s] %s Close the socket end.\n", session_id_.c_str(), __FUNCTION__);
+    
       if (require_check_thread_) {
-        BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " require_check_thread interrupt begin.";
+        printf("[%s] %s require_check_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
         require_check_running_ = false;
-        require_check_thread_->interrupt();
-        require_check_thread_->timed_join(boost::posix_time::milliseconds(500));
+        require_check_thread_->join();
         delete require_check_thread_;
         require_check_thread_ = nullptr;
-        BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " require_check_thread interrupt end.";
+        printf("[%s] %s require_check_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
       }
       active_ = false;
     }
     
     {
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " topic_connections clear begin.";
-      boost::unique_lock<boost::mutex> lock(Rostopic::topics_mutex_);
+      printf("[%s] %s topic_connections clear begin.\n", session_id_.c_str(), __FUNCTION__);
+      std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
       for (uint32_t i=0; i<topic_connections_.size(); i++) {
         RostopicConnection connection = topic_connections_.at(i);
-        connection.connection_.disconnect();
+        connection.rostopic_->signal_->disconnect(connection.connection_);
         connection.rostopic_->ref_count_--;
 
         if (connection.rostopic_->ref_count_ <=0) {
@@ -114,31 +122,36 @@ public:
         }
       }
       topic_connections_.clear();
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " topic_connections clear end.";
+      printf("[%s] %s topic_connections clear end.\n", session_id_.c_str(), __FUNCTION__);
     }
 
     {
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " services clear begin.";
-      boost::unique_lock<boost::mutex> lock(ServiceServer::services_mutex_);
+      printf("[%s] %s services clear begin.\n", session_id_.c_str(), __FUNCTION__);
+      std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
       for (uint32_t i=0; i<service_server_.size(); i++) {
-        if (ServiceServer::services_.count(service_server_.at(i))) {
-          ServiceServerPtr service = ServiceServer::services_[service_server_.at(i)];
-          (*(service->destroy_signal_))(service_server_.at(i));
-          ServiceServer::services_.erase(service_server_.at(i));
+        if (ServiceServerCore::services_.count(service_server_.at(i))) {
+          ServiceServerPtr service = ServiceServerCore::services_[service_server_.at(i)];
+          service->destroy_signal_->emit(service_server_.at(i));
+          service->signal_->disconnect_all();
+          service->destroy_signal_->disconnect_all();
+          ServiceServerCore::services_.erase(service_server_.at(i));
         }
       }
       
       std::map<uint32_t, ServiceClientPtr>::iterator it;
       for(it = services_client_.begin(); it != services_client_.end(); ) {
         ServiceClientPtr client = it->second;
-        client->client_connection_.disconnect();
-        client->service_connection_.disconnect();
-        client->destroy_connection_.disconnect();
+        if (ServiceServerCore::services_.count(client->topic_name_)) {
+          ServiceServerPtr service = ServiceServerCore::services_[client->topic_name_];
+          client->signal_->disconnect(client->client_connection_);
+          service->signal_->disconnect(client->service_connection_);
+          service->destroy_signal_->disconnect(client->destroy_connection_);
+        }
         it++;
       }
       service_server_.clear();
       services_client_.clear();
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " services clear end.";
+      printf("[%s] %s services clear end.\n", session_id_.c_str(), __FUNCTION__);
     }
 
     // Reset the state of the session, dropping any publishers or subscribers
@@ -146,37 +159,30 @@ public:
     callbacks_.clear();
     subscribers_.clear();
     publishers_.clear();
-    
-    // Close the socket.
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " Close the socket begin.";
-    socket_.close();
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " Close the socket end.";
 
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " clear async_write_buffers begin.";
-    boost::unique_lock<boost::mutex> lock(async_write_mutex_);
+    printf("[%s] %s clear async_write_buffers begin.\n", session_id_.c_str(), __FUNCTION__);
+    std::unique_lock<std::mutex> lock(async_write_mutex_);
     async_write_buffers_.clear();
     async_write_cond_.notify_all();
     lock.unlock();
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " clear async_write_buffers end.";
+    printf("[%s] %s clear async_write_buffers end.\n", session_id_.c_str(), __FUNCTION__);
     
     if (message_write_thread_) {
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " message_write_thread interrupt begin.";
-      message_write_thread_->interrupt();
-      message_write_thread_->timed_join(boost::posix_time::milliseconds(500));
+      printf("[%s] %s message_write_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
+      message_write_thread_->join();
       delete message_write_thread_;
       message_write_thread_ = nullptr;
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " message_write_thread interrupt end.";
+      printf("[%s] %s message_write_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
     }
 
     if (message_in_thread_) {
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " message_in_thread interrupt begin.";
-      message_in_thread_->interrupt();
-      message_in_thread_->timed_join(boost::posix_time::milliseconds(500));
+      printf("[%s] %s message_in_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
+      message_in_thread_->join();
       delete message_in_thread_;
       message_in_thread_ = nullptr;
-      BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " message_in_thread interrupt end.";
+      printf("[%s] %s message_in_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
     }
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ << " end.";
+    printf("[%s] %s end.\n", session_id_.c_str(), __FUNCTION__);
   }
 
   bool is_active()
@@ -186,9 +192,9 @@ public:
 
 private:
   void read_message_sync_udp() {
+    uint8_t *message_in = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
     while (is_active()) {
-      uint8_t *message_in = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
-      int32_t rv = socket_.read_some(boost::asio::buffer(message_in, buffer_max));
+      int32_t rv = socket_.read_some(message_in, buffer_max, session_id_);
       if (buffer_max >= rv && rv > 0)  {
         uint32_t topic = 0;
         int bytes = 0, index= 0, checksum = 0;
@@ -247,15 +253,18 @@ private:
               } catch(tinyros::serialization::StreamOverrunException e) {
               }
             } else {
-              BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
-                << " Received message with unrecognized topicId ("<<topic<<").";
+              printf("[%s] %s Received message with unrecognized topicId (%d).\n", session_id_.c_str(), __FUNCTION__, topic);
             }
           } else {
-            BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
-              << " Rejecting message on topicId="<<topic<<", length=" <<bytes<<" with bad checksum.";
+            printf("[%s] %s Rejecting message on topicId(%d), bytes(%d) with bad checksum.\n", 
+              session_id_.c_str(), __FUNCTION__, topic, bytes);
           }
         } while(0);
       }
+    }
+
+    if (message_in) {
+      free(message_in);
     }
   }
   
@@ -292,11 +301,11 @@ private:
         continue;
       }
       
-      boost::system::error_code ec;
-      rv = boost::asio::read(socket_, boost::asio::buffer(message_tmp, len), ec);
-      if (ec == boost::asio::error::eof) {
-        BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "
-          << __FUNCTION__ << " Socket asio error, closing socket: " << ec;
+      if ((rv = socket_.read_some(message_tmp, len, session_id_)) < 0) {
+        if (is_active()) {
+          std::thread tid(std::bind(&Session::stop, this));
+          tid.detach();
+        }
         break;
       }
       
@@ -378,12 +387,11 @@ private:
               } catch(tinyros::serialization::StreamOverrunException e) {
               }
             } else {
-              BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
-                << " Received message with unrecognized topicId ("<<topic<<").";
+              printf("[%s] %s Received message with unrecognized topicId (%d).\n", session_id_.c_str(), __FUNCTION__, topic);
             }
           } else {
-            BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< __FUNCTION__ 
-              << " Rejecting message on topicId="<<topic<<", length=" <<total_bytes<<" with bad checksum.";
+            printf("[%s] %s Rejecting message on topicId(%d), bytes(%d) with bad checksum.\n", 
+              session_id_.c_str(), __FUNCTION__, topic, bytes);
           }
         }
       }
@@ -418,15 +426,15 @@ private:
 
     memcpy(stream.advance(message.size()), &message[0], message.size());
     stream << msg_checksum;
- 
-    boost::unique_lock<boost::mutex> lock(async_write_mutex_);
+
+    std::unique_lock<std::mutex> lock(async_write_mutex_);
     async_write_buffers_.push_back(buffer_ptr);
     async_write_cond_.notify_one();
   }
 
   void write_completion_cb() {
     while (is_active()) {
-      boost::unique_lock<boost::mutex> lock(async_write_mutex_);
+      std::unique_lock<std::mutex> lock(async_write_mutex_);
       if(async_write_buffers_.empty()) {
         async_write_cond_.wait(lock);
       }
@@ -439,21 +447,12 @@ private:
       lock.unlock();
 
       if (is_active() && buffer_ptr) {
-        boost::system::error_code error;
-        boost::asio::write(socket_, boost::asio::buffer(*buffer_ptr), error);
-        if (error) {
-          if (error == boost::system::errc::io_error) {
-            BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "<< __FUNCTION__ << " Socket write operation returned IO error.";
-          } else if (error == boost::system::errc::no_such_device) {
-            BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "<< __FUNCTION__ << " Socket write operation returned no device.";
-          } else {
-            BOOST_LOG_TRIVIAL(fatal) << "[" << session_id_<<"] "<< __FUNCTION__ << " Unknown error returned during write operation: " << error;
-          }
+        if ((socket_.write_some((uint8_t*)buffer_ptr->data(), (int)buffer_ptr->size(), session_id_)) < 0) {
           if (is_active()) {
-            boost::thread tid(boost::bind(&Session::stop, this));
+            std::thread tid(std::bind(&Session::stop, this));
             tid.detach();
-            break;
           }
+          break;
         }
       }
     }
@@ -493,19 +492,19 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!publishers_.count(topic_info.topic_id)) {
-      BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] " << "setup_publisher(topic_id:" 
-        << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-      PublisherPtr pub(new Publisher(topic_info));
-      callbacks_[topic_info.topic_id] = boost::bind(&Publisher::handle, pub, _1);
+      printf("[%s] setup_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      PublisherPtr pub(new PublisherCore(topic_info));
+      callbacks_[topic_info.topic_id] = std::bind(&PublisherCore::handle, pub, std::placeholders::_1);
       publishers_[topic_info.topic_id] = pub;
 
-      boost::unique_lock<boost::mutex> lock(Rostopic::topics_mutex_);
+      std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
       if (!Rostopic::topics_.count(topic_info.topic_name)) {
         Rostopic::topics_[topic_info.topic_name] = RostopicPtr(new Rostopic(topic_info));
       }
 
       // fake connection for stop
       RostopicConnection connection;
+      connection.connection_ = 0;
       connection.rostopic_ = Rostopic::topics_[topic_info.topic_name];
       connection.rostopic_->ref_count_++;
       topic_connections_.push_back(connection);
@@ -520,12 +519,11 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!subscribers_.count(topic_info.topic_id)) {
-      BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] "<< "setup_subscriber(topic_id:" 
-        << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-      SubscriberPtr sub(new Subscriber(topic_info, boost::bind(&Session::write_message, this, _1, topic_info.topic_id)));
+      printf("[%s] setup_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      SubscriberPtr sub(new SubscriberCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, topic_info.topic_id)));
       subscribers_[topic_info.topic_id] = sub;
 
-      boost::unique_lock<boost::mutex> lock(Rostopic::topics_mutex_);
+      std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
       if (!Rostopic::topics_.count(topic_info.topic_name)) {
         Rostopic::topics_[topic_info.topic_name] = RostopicPtr(new Rostopic(topic_info));
       }
@@ -533,7 +531,7 @@ private:
       RostopicConnection connection;
       connection.rostopic_ = Rostopic::topics_[topic_info.topic_name];
       connection.rostopic_->ref_count_++;
-      connection.connection_ = connection.rostopic_->signal_->connect(boost::bind(&Subscriber::handle, sub, _1));
+      connection.connection_ = connection.rostopic_->signal_->connect(std::bind(&SubscriberCore::handle, sub, std::placeholders::_1));
       topic_connections_.push_back(connection);
     }
     
@@ -546,14 +544,13 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
-    boost::unique_lock<boost::mutex> lock(ServiceServer::services_mutex_);
-    if (!ServiceServer::services_.count(topic_info.topic_name)) {
-      BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] "<< "setup_service_server_publisher(topic_id:" 
-        << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-      ServiceServerPtr srv(new ServiceServer(topic_info, boost::bind(&Session::write_message, this, _1, _2)));
-      callbacks_[topic_info.topic_id] = boost::bind(&ServiceServer::handle, srv, _1);
-      ServiceServer::services_[topic_info.topic_name] = srv;
-      ServiceServer::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
+    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
+    if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
+      printf("[%s] setup_service_server_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
+      callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
+      ServiceServerCore::services_[topic_info.topic_name] = srv;
+      ServiceServerCore::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
       service_server_.push_back(topic_info.topic_name);
     }
     
@@ -566,14 +563,13 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
-    boost::unique_lock<boost::mutex> lock(ServiceServer::services_mutex_);
-    if (!ServiceServer::services_.count(topic_info.topic_name)) {
-      BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] "<< "setup_service_server_subscriber(topic_id:"
-        << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-      ServiceServerPtr srv(new ServiceServer(topic_info, boost::bind(&Session::write_message, this, _1, _2)));
-      callbacks_[topic_info.topic_id] = boost::bind(&ServiceServer::handle, srv, _1);
-      ServiceServer::services_[topic_info.topic_name] = srv;
-      ServiceServer::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
+    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
+    if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
+      printf("[%s] setup_service_server_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
+      callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
+      ServiceServerCore::services_[topic_info.topic_name] = srv;
+      ServiceServerCore::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
       service_server_.push_back(topic_info.topic_name);
     }
     
@@ -586,18 +582,17 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
-    boost::unique_lock<boost::mutex> lock(ServiceServer::services_mutex_);
-    if (ServiceServer::services_.count(topic_info.topic_name)) {
+    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
+    if (ServiceServerCore::services_.count(topic_info.topic_name)) {
       if (!services_client_.count(topic_info.topic_id)) {
-        BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] " << "setup_service_client_publisher(topic_id:" 
-          << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-        ServiceServerPtr service = ServiceServer::services_[topic_info.topic_name];
-        ServiceClientPtr client(new ServiceClient(topic_info, boost::bind(&Session::write_message, this, _1, _2)));
+        printf("[%s] setup_service_client_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+        ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
+        ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
         client->setTopicId(topic_info.topic_id);
-        client->client_connection_ = client->signal_->connect(boost::bind(&ServiceServer::callback, service, _1));
-        client->service_connection_ = service->signal_->connect(boost::bind(&ServiceClient::callback, client, _1));
-        client->destroy_connection_ = service->destroy_signal_->connect(boost::bind(&Session::stop_service, this, _1));
-        callbacks_[topic_info.topic_id] = boost::bind(&ServiceClient::handle, client, _1);
+        client->client_connection_ = client->signal_->connect(std::bind(&ServiceServerCore::callback, service, std::placeholders::_1));
+        client->service_connection_ = service->signal_->connect(std::bind(&ServiceClientCore::callback, client, std::placeholders::_1));
+        client->destroy_connection_ = service->destroy_signal_->connect(std::bind(&Session::stop_service, this, std::placeholders::_1));
+        callbacks_[topic_info.topic_id] = std::bind(&ServiceClientCore::handle, client, std::placeholders::_1);
         services_client_[topic_info.topic_id] = client;
       }
       topic_info.negotiated = true;
@@ -612,18 +607,17 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
-    boost::unique_lock<boost::mutex> lock(ServiceServer::services_mutex_);
-    if (ServiceServer::services_.count(topic_info.topic_name)) {
+    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
+    if (ServiceServerCore::services_.count(topic_info.topic_name)) {
       if (!services_client_.count(topic_info.topic_id)) {
-        BOOST_LOG_TRIVIAL(info) << "[" << session_id_<<"] "<< "setup_service_client_subscriber(topic_id:" 
-          << topic_info.topic_id << ", topic_name:" << topic_info.topic_name << ")";
-        ServiceServerPtr service = ServiceServer::services_[topic_info.topic_name];
-        ServiceClientPtr client(new ServiceClient(topic_info, boost::bind(&Session::write_message, this, _1, _2)));
+        printf("[%s] setup_service_client_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+        ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
+        ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
         client->setTopicId(topic_info.topic_id);
-        client->client_connection_ = client->signal_->connect(boost::bind(&ServiceServer::callback, service, _1));
-        client->service_connection_ = service->signal_->connect(boost::bind(&ServiceClient::callback, client, _1));
-        client->destroy_connection_ = service->destroy_signal_->connect(boost::bind(&Session::stop_service, this, _1));
-        callbacks_[topic_info.topic_id] = boost::bind(&ServiceClient::handle, client, _1);
+        client->client_connection_ = client->signal_->connect(std::bind(&ServiceServerCore::callback, service, std::placeholders::_1));
+        client->service_connection_ = service->signal_->connect(std::bind(&ServiceClientCore::callback, client, std::placeholders::_1));
+        client->destroy_connection_ = service->destroy_signal_->connect(std::bind(&Session::stop_service, this, std::placeholders::_1));
+        callbacks_[topic_info.topic_id] = std::bind(&ServiceClientCore::handle, client, std::placeholders::_1);
         services_client_[topic_info.topic_id] = client;
       }
       topic_info.negotiated = true;
@@ -635,14 +629,12 @@ private:
   }
 
   void stop_service(std::string &topic_name) {
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_id_<<"] "<< "stop_service topic_name: " << topic_name;
+    printf("[%s] stop_service(topic_name: %s)\n", session_id_.c_str(), topic_name.c_str());
     std::map<uint32_t, ServiceClientPtr>::iterator it;
     for(it = services_client_.begin(); it != services_client_.end(); ) {
       ServiceClientPtr client = it->second;
       if (client->topic_name_ == topic_name) {
-        client->client_connection_.disconnect();
-        client->service_connection_.disconnect();
-        client->destroy_connection_.disconnect();
+        client->signal_->disconnect(client->client_connection_);
         callbacks_.erase(it->first);
         services_client_.erase(it++);
       } else {
@@ -652,13 +644,12 @@ private:
   }
 
   void handle_log(tinyros::serialization::IStream& stream) {
-    tinyros_msgs::Log l;
-    tinyros::serialization::Serializer<tinyros_msgs::Log>::read(stream, l);
-    if(l.level == tinyros_msgs::Log::ROSDEBUG) BOOST_LOG_TRIVIAL(debug) << l.msg;
-    else if(l.level == tinyros_msgs::Log::ROSINFO) BOOST_LOG_TRIVIAL(info) << l.msg;
-    else if(l.level == tinyros_msgs::Log::ROSWARN) BOOST_LOG_TRIVIAL(warning) << l.msg;
-    else if(l.level == tinyros_msgs::Log::ROSERROR) BOOST_LOG_TRIVIAL(error) << l.msg;
-    else if(l.level == tinyros_msgs::Log::ROSFATAL) BOOST_LOG_TRIVIAL(fatal) << l.msg;
+    uint32_t length = stream.getLength();
+    std::vector<uint8_t> message(length);
+    memcpy(&message[0], stream.getData(), length);
+    if (Rostopic::topics_.count(TINYROS_LOG_TOPIC)) {
+      Rostopic::topics_[TINYROS_LOG_TOPIC]->signal_->emit(message);
+    }
   }
 
   void handle_time(tinyros::serialization::IStream& stream) {
@@ -705,7 +696,7 @@ private:
   void handle_rosservice_request(tinyros::serialization::IStream& stream) {
     std::string service_list = "\n\nservice_list:\n";
     std::map<std::string, ServiceServerPtr>::iterator it;
-    for(it = ServiceServer::services_.begin(); it != ServiceServer::services_.end(); ) {
+    for(it = ServiceServerCore::services_.begin(); it != ServiceServerCore::services_.end(); ) {
       service_list += "          " + it->first + " [" + it->second->message_type_ + "]\n";
       it++;
     }
@@ -721,36 +712,34 @@ private:
   void handle_session_id(tinyros::serialization::IStream& stream) {
     roslib_msgs::String session_info;
     tinyros::serialization::Serializer<roslib_msgs::String>::read(stream, session_info);
-    BOOST_LOG_TRIVIAL(warning) << "[" << session_info.data <<"] "<< "Starting session...";
+    printf("[%s] Starting session...\n", session_info.data.c_str());
     session_id_ = session_info.data;
   }
 
-  boost::mutex async_write_mutex_;
-  boost::condition_variable async_write_cond_;
+  std::mutex async_write_mutex_;
+  std::condition_variable async_write_cond_;
   AsyncWritebuffer async_write_buffers_;
 
   Socket socket_;
   enum { buffer_max = 65*1024 };
   
-  boost::mutex active_mutex_;
+  std::mutex active_mutex_;
   bool active_;
 
   bool isudp_;
 
-  std::map<uint32_t, boost::function<void(tinyros::serialization::IStream&)> > callbacks_;
+  std::map<uint32_t, std::function<void(tinyros::serialization::IStream&)> > callbacks_;
   std::map<uint32_t, PublisherPtr> publishers_;
   std::map<uint32_t, SubscriberPtr> subscribers_;
   std::vector<RostopicConnection> topic_connections_;
   std::vector<std::string> service_server_;
   std::map<uint32_t, ServiceClientPtr> services_client_;
 
-  std::string session_id_;
+  std::thread* message_in_thread_;
 
-  boost::thread* message_in_thread_;
+  std::thread* message_write_thread_;
 
-  boost::thread* message_write_thread_;
-
-  boost::thread* require_check_thread_;
+  std::thread* require_check_thread_;
   bool require_check_running_;
 };
 }  // namespace

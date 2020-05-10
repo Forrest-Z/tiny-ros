@@ -19,85 +19,15 @@
 #include "tiny_ros/roslib_msgs/String.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
-
-namespace tinyros {
-#define TINYROS_LOG_TOPIC "tinyros_log_11315"
-
-const int THREAD_MAIN_LOOP_PRIORITY   = 1;
-const int THREAD_MAIN_LOOP_TICK       = 40;
-const int THREAD_MAIN_LOOP_STACK_SIZE = 4096; // bytes
-
-const int THREAD_LOG_KEEPALIVE_PRIORITY   = 20;
-const int THREAD_LOG_KEEPALIVE_TICK       = 10;
-const int THREAD_LOG_KEEPALIVE_STACK_SIZE = 1024; // bytes
-
-const int MAX_SUBSCRIBERS = 20;
-const int MAX_PUBLISHERS = 20;
-const int INPUT_SIZE = 200; // bytes
-const int OUTPUT_SIZE = 200; // bytes
-
-const uint8_t MODE_FIRST_FF       = 0;
-const uint8_t MODE_PROTOCOL_VER   = 1;
-const uint8_t PROTOCOL_VER        = 0xb9;
-const uint8_t MODE_SIZE_L         = 2;
-const uint8_t MODE_SIZE_L1        = 3;
-const uint8_t MODE_SIZE_H         = 4;
-const uint8_t MODE_SIZE_H1        = 5;
-const uint8_t MODE_SIZE_CHECKSUM  = 6;
-const uint8_t MODE_TOPIC_L        = 7;
-const uint8_t MODE_TOPIC_L1       = 8;
-const uint8_t MODE_TOPIC_H        = 9;
-const uint8_t MODE_TOPIC_H1       = 10;
-const uint8_t MODE_MESSAGE        = 11;
-const uint8_t MODE_MSG_CHECKSUM   = 12;
-
-const int SPIN_OK = 0;
-const int SPIN_ERR = -1;
-
-using tinyros_msgs::TopicInfo;
-
-class NodeHandleBase_
-{
-public:
-  struct rt_mutex mutex_;
-  struct rt_mutex srv_id_mutex_;
-  struct rt_mutex main_loop_mutex_;
-  bool main_loop_init_;
-
-  NodeHandleBase_() {
-    main_loop_init_ = false;
-    rt_mutex_init(&mutex_, "nh", RT_IPC_FLAG_FIFO);
-    rt_mutex_init(&srv_id_mutex_, "srv", RT_IPC_FLAG_FIFO);
-    rt_mutex_init(&main_loop_mutex_, "ml", RT_IPC_FLAG_FIFO);
-  }
-
-  ~NodeHandleBase_() {
-    rt_mutex_detach(&mutex_);
-    rt_mutex_detach(&srv_id_mutex_);
-    rt_mutex_detach(&main_loop_mutex_);
-  }
-
-  virtual int publish(uint32_t id, const Msg* msg, bool islog = false) = 0;
-  virtual int spin() = 0;
-  virtual void exit() = 0;
-  virtual bool ok() = 0;
-  virtual void logdebug(const char* msg) = 0;
-  virtual void loginfo(const char* msg) = 0;
-  virtual void logwarn(const char* msg) = 0;
-  virtual void logerror(const char* msg) = 0;
-  virtual void logfatal(const char* msg) = 0;
-};
-}
-
-#include "tiny_ros/ros/msg.h"
 #include "tiny_ros/ros/publisher.h"
 #include "tiny_ros/ros/subscriber.h"
 #include "tiny_ros/ros/service_server.h"
 #include "tiny_ros/ros/service_client.h"
 #include "tiny_ros/ros/hardware.h"
 
-namespace tinyros
-{
+namespace tinyros {
+using tinyros_msgs::TopicInfo;
+
 class NodeHandle : public NodeHandleBase_
 {
 public:
@@ -105,7 +35,6 @@ public:
   Hardware hardware_;
 
   Hardware loghd_;
-  Publisher logpb_;
   bool loghd_keepalive_;
   char loghd_keepalive_stack_[THREAD_LOG_KEEPALIVE_STACK_SIZE];
   struct rt_thread loghd_keepalive_thread_;
@@ -123,10 +52,13 @@ public:
   }
 private:
   NodeHandle():
-    logpb_(TINYROS_LOG_TOPIC, new tinyros_msgs::Log),
     loghd_keepalive_(false),
     topic_list(""),
     service_list("") {
+    rt_mutex_init(&mutex_, "nh", RT_IPC_FLAG_FIFO);
+    rt_mutex_init(&srv_id_mutex_, "srv", RT_IPC_FLAG_FIFO);
+    rt_mutex_init(&main_loop_mutex_, "ml", RT_IPC_FLAG_FIFO);
+
     for (unsigned int i = 0; i < MAX_PUBLISHERS; i++)
       publishers[i] = NULL;
 
@@ -137,9 +69,13 @@ private:
 public:
   ~NodeHandle() {
     exit();
+
+    rt_mutex_detach(&mutex_);
+    rt_mutex_detach(&srv_id_mutex_);
+    rt_mutex_detach(&main_loop_mutex_);
   }
 
-  bool initNode(tinyros::string portName = "127.0.0.1") {
+  virtual bool initNode(tinyros::string portName = "127.0.0.1") {
     bytes_ = 0;
     index_ = 0;
     topic_ = 0;
@@ -169,7 +105,6 @@ public:
   static void keepalive(void *pthis) {
     uint8_t in[200];
     NodeHandle *nh = (NodeHandle *)pthis;
-    nh->advertise(nh->logpb_);
     while(nh->loghd_keepalive_) {
       if (!nh->loghd_.connected()) {
         if (nh->loghd_.init(nh->port_name_)) {
@@ -404,7 +339,7 @@ public:
             negotiateTopics(subscribers[i]);
             negotiateTopics(publishers[j]);
             log_debug("advertiseService Subscribers[%d] topic_id: %d, topic_name: %s | Publishers[%d] topic_id: %d, topic_name: %s", 
-              i, srv.id_, srv.topic_.c_str(), j, srv.pub.id_, srv.pub.topic_.c_str());
+                i, srv.id_, srv.topic_.c_str(), j, srv.pub.id_, srv.pub.topic_.c_str());
             return true;
           }
         }
@@ -445,11 +380,7 @@ public:
     ti.message_type = p->msg_->getType();
     ti.md5sum = p->msg_->getMD5();
     ti.buffer_size = OUTPUT_SIZE;
-    if (p != &logpb_) {
-      publish(p->getEndpointType(), &ti);
-    } else {
-      publish(p->getEndpointType(), &ti, true);
-    }
+    publish(p->getEndpointType(), &ti);
   }
 
   void negotiateTopics(Subscriber_ * s) {
@@ -524,14 +455,12 @@ public:
   }
 
 private:
-  void log(char byte, const char* msg)
-  {
-    if (loghd_.connected()) 
-    {
+  void log(char byte, const char* msg) {
+    if (loghd_.connected()) {
       tinyros_msgs::Log l;
       l.level = byte;
       l.msg = msg;
-      logpb_.publish(&l, true);
+      publish(tinyros_msgs::TopicInfo::ID_LOG, &l, true);
     }
   }
 

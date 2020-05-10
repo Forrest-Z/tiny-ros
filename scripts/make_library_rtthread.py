@@ -718,12 +718,15 @@ def roslib_copy_roslib_files(path):
              'components/tiny_ros/ros/string.h',
              'components/tiny_ros/ros/duration.h',
              'components/tiny_ros/ros/msg.h',
+             'components/tiny_ros/ros/node_handle_base.h',
+             'components/tiny_ros/ros/node_handle_udp.h',
              'components/tiny_ros/ros/node_handle.h',
              'components/tiny_ros/ros/publisher.h',
              'components/tiny_ros/ros/subscriber.h',
              'components/tiny_ros/ros/service_server.h',
              'components/tiny_ros/ros/service_client.h',
              'components/tiny_ros/ros/hardware.h',
+             'components/tiny_ros/ros/hardware_udp.h',
              'components/tiny_ros/ros/time.h']
 
     mydir = sys.argv[3] + "/roslib/rtthread/"

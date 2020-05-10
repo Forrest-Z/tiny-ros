@@ -18,17 +18,13 @@
 #include "tiny_ros/ros/publisher.h"
 #include "tiny_ros/ros/subscriber.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
-#include "tiny_ros/ros/hardware_linux_udp.h"
-#include "tiny_ros/ros/hardware_windows_udp.h"
+#include "tiny_ros/ros/hardware_udp.h"
 
 namespace tinyros {
-template<class Hardware,
-         int INPUT_SIZE = 65*1024,
-         int OUTPUT_SIZE = 65*1024>
-class NodeHandleUdp_: public NodeHandleBase_
+class NodeHandleUdp: public NodeHandleBase_
 {
 private:
-  Hardware hardware_;
+  HardwareUdp hardware_;
   std::mutex mutex_;
   uint8_t message_in[INPUT_SIZE];
   uint8_t message_out[OUTPUT_SIZE];
@@ -136,12 +132,12 @@ private:
   }
 
 public:
-  NodeHandleUdp_()
+  NodeHandleUdp()
     : spin_thread_pool_(3)
     , negotiate_thread_pool_(1) {
   }
   
-  ~NodeHandleUdp_() {
+  ~NodeHandleUdp() {
     exit();
   }
    
@@ -166,6 +162,10 @@ public:
   
    /* Register a new publisher */
   bool advertise(Publisher & p) {
+    if (publishers_.size() >= MAX_PUBLISHERS) {
+      return false;
+    }
+    
     std::unique_lock<std::mutex> lock(mutex_);
     p.id_ = generate_id();
     p.nh_ = this;
@@ -179,6 +179,10 @@ public:
   /* Register a new subscriber */
   template<typename SubscriberT>
   bool subscribe(SubscriberT& s) {
+    if (subscribers_.size() >= MAX_SUBSCRIBERS) {
+      return false;
+    }
+    
     std::unique_lock<std::mutex> lock(mutex_);
     s.id_ = generate_id();
     s.negotiated_ = true;
@@ -259,7 +263,7 @@ public:
               obj->message_in = (uint8_t*)calloc(total_bytes, sizeof(uint8_t));
               memcpy(obj->message_in, message_in + index, total_bytes);
               spin_thread_pool_.schedule(std::bind(&NodeHandleBase_::spin_task, this, obj));
-            }
+            }
           }
         } while(0);
       }
@@ -302,12 +306,6 @@ public:
     }
 
 };
-
-#ifdef WIN32
-typedef NodeHandleUdp_<HardwareWindowsUdp> NodeHandleUdp;
-#else
-typedef NodeHandleUdp_<HardwareLinuxUdp> NodeHandleUdp;
-#endif
 
 NodeHandleUdp* udp();
 }

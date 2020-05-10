@@ -11,7 +11,7 @@
 #define _TINYROS_PUBLISHER_H_
 
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
-#include "tiny_ros/ros/node_handle.h"
+#include "tiny_ros/ros/node_handle_base.h"
 
 namespace tinyros
 {

@@ -9,81 +9,85 @@
 
 #ifndef TINY_ROS_UDP_STREAM_H
 #define TINY_ROS_UDP_STREAM_H
-
 #include <iostream>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-#include "session.h"
+#include <fcntl.h>
+#include <sys/socket.h>  
+#include <netinet/in.h>  
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
 
 namespace tinyros
 {
-
-using boost::asio::ip::udp;
-
-class UdpStream : public udp::socket
+class UdpStream
 {
 public:
-  explicit UdpStream(boost::asio::io_service& io_service) : udp::socket(io_service)
-  {
-  }
+  UdpStream() : sock_fd_(-1) { }
 
-  void open(udp::endpoint server_endpoint, udp::endpoint client_endpoint)
-  {
-    boost::system::error_code ec;
-    const protocol_type protocol = server_endpoint.protocol();
+  bool open(int server_port, int client_port, const std::string& session_id) {
+    sock_fd_ = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock_fd_ < 0) {
+      printf("[%s] UdpStream::open opening socket: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      return false;
+    }
 
-    udp::socket::open(protocol, ec);
-    boost::asio::detail::throw_error(ec, "open");
-    udp::socket::bind(server_endpoint, ec);
-    boost::asio::detail::throw_error(ec, "bind");
+    int opt = 1;
+    struct linger so_linger;
+    so_linger.l_onoff = 1;
+    so_linger.l_linger = 0;
+    setsockopt(sock_fd_, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, (const char *)&opt, sizeof(opt));
+    setsockopt(sock_fd_, SOL_SOCKET, SO_LINGER, (const char *)&so_linger, sizeof(so_linger));
 
-    client_endpoint_ = client_endpoint;
+    memset(&client_endpoint_, 0, sizeof(struct sockaddr_in));
+    client_endpoint_.sin_family = AF_INET;
+    client_endpoint_.sin_port = htons(client_port);
+    client_endpoint_.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+
+    memset(&server_endpoint_, 0, sizeof(struct sockaddr_in));
+    server_endpoint_.sin_family = AF_INET;
+    server_endpoint_.sin_port = htons(server_port);
+    server_endpoint_.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (bind(sock_fd_, (struct sockaddr*)&server_endpoint_, sizeof(server_endpoint_)) < 0) {
+      printf("[%s] UdpStream::open bind socket: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      ::close(sock_fd_);
+      sock_fd_ = -1;
+      return false;
+    }
+    return true;
   }
   
-  template <typename ConstBufferSequence>
-  std::size_t write_some(const ConstBufferSequence& buffers)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->get_service().send_to(
-        this->get_implementation(), buffers, client_endpoint_, 0, ec);
-    boost::asio::detail::throw_error(ec, "send_to");
-    return s;
-  }  
+  int read_some(uint8_t* data, int length, const std::string& session_id) {
+     struct sockaddr_in from;
+     socklen_t from_len = sizeof(from);
+     int rv = recvfrom(sock_fd_, data, length, 0, (struct sockaddr*)&from, &from_len);
+     if (rv < 0) {
+      printf("[%s] UdpStream::read_some: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+     }
+     return (rv > 0 ? rv : 0);
+  } 
 
-  template <typename ConstBufferSequence>
-  std::size_t write_some(const ConstBufferSequence& buffers,
-      boost::system::error_code& ec)
-  {
-    std::size_t s = this->get_service().send_to(
-        this->get_implementation(), buffers, client_endpoint_, 0, ec);
-    boost::asio::detail::throw_error(ec, "send_to");
+  int write_some(uint8_t* data, int length, const std::string& session_id) {
+    int s = sendto(sock_fd_, data, length, 0, (struct sockaddr *)&client_endpoint_, sizeof(client_endpoint_));
+    if(s <= 0) {
+      printf("[%s] UdpStream::write_some: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      return 0;
+    }
     return s;
   }
 
-  template <typename MutableBufferSequence>
-  std::size_t read_some(const MutableBufferSequence& buffers)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->get_service().receive_from(
-        this->get_implementation(), buffers, client_endpoint_, 0, ec);
-    boost::asio::detail::throw_error(ec, "receive_from");
-    return s;
-  }
-
-  template <typename MutableBufferSequence>
-  std::size_t read_some(const MutableBufferSequence& buffers,
-      boost::system::error_code& ec)
-  {
-    std::size_t s = this->get_service().receive_from(
-        this->get_implementation(), buffers, client_endpoint_, 0, ec);
-    boost::asio::detail::throw_error(ec, "receive_from");
-    return s;
+  void close() {
+    if (sock_fd_ > 0) {
+      ::close(sock_fd_);
+      sock_fd_ = -1;
+    }
   }
 
 private:
-  udp::endpoint client_endpoint_;
+  int sock_fd_;
+  struct sockaddr_in server_endpoint_;
+  struct sockaddr_in client_endpoint_;
 };
-
 }  // namespace
 
 #endif  // TINY_ROS_UDP_STREAM_H

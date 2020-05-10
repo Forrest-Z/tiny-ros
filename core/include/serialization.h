@@ -12,12 +12,6 @@
 #include "exception.h"
 #include <vector>
 #include <map>
-#include <boost/array.hpp>
-#include <boost/call_traits.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/not.hpp>
 #include <stdint.h>
 #include <cstring>
 
@@ -39,18 +33,18 @@ template<typename T>
 struct Serializer
 {
   template<typename Stream>
-  inline static void write(Stream& stream, typename boost::call_traits<T>::param_type t)
+  inline static void write(Stream& stream, T t)
   {
     stream.advance(t.serialize(stream.getData()));
   }
 
   template<typename Stream>
-  inline static void read(Stream& stream, typename boost::call_traits<T>::reference t)
+  inline static void read(Stream& stream, T& t)
   {
     stream.advance(t.deserialize(stream.getData()));
   }
 
-  inline static uint32_t serializedLength(typename boost::call_traits<T>::param_type t)
+  inline static uint32_t serializedLength(T t)
   {
     return t.serializedLength();
   }

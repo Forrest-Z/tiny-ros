@@ -9,28 +9,28 @@
 
 #ifndef TINY_ROS_TOPIC_HANDLERS_H
 #define TINY_ROS_TOPIC_HANDLERS_H
-
-#include <boost/signals2.hpp>
-#include <boost/thread.hpp>
+#include <thread>
+#include <memory>
+#include "signals.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 
 namespace tinyros
 {
 class Rostopic;
-class Publisher;
-class Subscriber;
-class ServiceServer;
-class ServiceClient;
+class PublisherCore;
+class SubscriberCore;
+class ServiceServerCore;
+class ServiceClientCore;
 
-typedef  boost::shared_ptr<Rostopic> RostopicPtr;
-typedef  boost::shared_ptr<Publisher> PublisherPtr;
-typedef  boost::shared_ptr<Subscriber> SubscriberPtr;
-typedef  boost::shared_ptr<ServiceServer> ServiceServerPtr;
-typedef  boost::shared_ptr<ServiceClient> ServiceClientPtr;
+typedef  std::shared_ptr<Rostopic> RostopicPtr;
+typedef  std::shared_ptr<PublisherCore> PublisherPtr;
+typedef  std::shared_ptr<SubscriberCore> SubscriberPtr;
+typedef  std::shared_ptr<ServiceServerCore> ServiceServerPtr;
+typedef  std::shared_ptr<ServiceClientCore> ServiceClientPtr;
 
 struct RostopicConnection {
   RostopicPtr rostopic_;
-  boost::signals2::connection connection_;
+  int connection_;
 };
 
 class Rostopic {
@@ -41,28 +41,27 @@ public:
     md5sum_ = topic_info.md5sum;
     buffer_size_ = topic_info.buffer_size;
     ref_count_ = 0;
-    signal_ = boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> >
-      (new boost::signals2::signal<void(std::vector<uint8_t>&)>);
+    signal_ = std::shared_ptr<Signal<std::vector<uint8_t>&> >(new Signal<std::vector<uint8_t>&>);
   }
 
 public:
   static std::map<std::string, RostopicPtr> topics_;
-  static boost::mutex topics_mutex_;
+  static std::mutex topics_mutex_;
 
 public:
-  boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> > signal_;
+  std::shared_ptr<Signal<std::vector<uint8_t>&> > signal_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
   int32_t buffer_size_;
   int32_t ref_count_;
 };
-boost::mutex Rostopic::topics_mutex_;
+std::mutex Rostopic::topics_mutex_;
 std::map<std::string, RostopicPtr> Rostopic::topics_;
 
-class Publisher {
+class PublisherCore {
 public:
-  Publisher(const tinyros_msgs::TopicInfo& topic_info) {
+  PublisherCore(const tinyros_msgs::TopicInfo& topic_info) {
     topic_id_ = topic_info.topic_id;
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
@@ -75,7 +74,7 @@ public:
     std::vector<uint8_t> message(length);
     memcpy(&message[0], stream.getData(), length);
     if (Rostopic::topics_.count(topic_name_)) {
-      (*(Rostopic::topics_[topic_name_]->signal_))(message);
+      Rostopic::topics_[topic_name_]->signal_->emit(message);
     }
   }
 
@@ -91,10 +90,10 @@ private:
   int32_t buffer_size_;
 };
 
-class Subscriber {
+class SubscriberCore {
 public:
-  Subscriber(tinyros_msgs::TopicInfo& topic_info,
-      boost::function<void(std::vector<uint8_t>& buffer)> write_fn)
+  SubscriberCore(tinyros_msgs::TopicInfo& topic_info,
+      std::function<void(std::vector<uint8_t>& buffer)> write_fn)
     : write_fn_(write_fn) {
     topic_id_ = topic_info.topic_id;
     topic_name_ = topic_info.topic_name;
@@ -112,7 +111,7 @@ private:
     write_fn_(message);
   }
 
-  boost::function<void(std::vector<uint8_t>& buffer)> write_fn_;
+  std::function<void(std::vector<uint8_t>& buffer)> write_fn_;
   uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
@@ -120,20 +119,18 @@ private:
   int32_t buffer_size_;
 };
 
-class ServiceServer {
+class ServiceServerCore {
 public:
-  ServiceServer(tinyros_msgs::TopicInfo& topic_info,
-      boost::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn)
+  ServiceServerCore(tinyros_msgs::TopicInfo& topic_info,
+      std::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn)
     : write_fn_(write_fn) {
     topic_id_ = -1;
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
     buffer_size_ = topic_info.buffer_size;
-    signal_ = boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> >
-      (new boost::signals2::signal<void(std::vector<uint8_t>&)>);
-    destroy_signal_ = boost::shared_ptr<boost::signals2::signal<void(std::string&)> >
-      (new boost::signals2::signal<void(std::string&)>);
+    signal_ = std::shared_ptr<Signal<std::vector<uint8_t>&> >(new Signal<std::vector<uint8_t>&>);
+    destroy_signal_ = std::shared_ptr<Signal<std::string&> >(new Signal<std::string&>);
   }
   void setTopicId(uint32_t topic_id) {
     topic_id_ = topic_id;
@@ -143,7 +140,7 @@ public:
     uint32_t length = stream.getLength();
     std::vector<uint8_t> message(length);
     memcpy(&message[0], stream.getData(), length);
-    (*signal_)(message);
+    signal_->emit(message);
   }
 
   void callback(std::vector<uint8_t>& message) {
@@ -151,32 +148,31 @@ public:
   }
 
 public:
-  boost::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn_;
-  boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> > signal_;
-  boost::shared_ptr<boost::signals2::signal<void(std::string&)> > destroy_signal_;
+  std::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn_;
+  std::shared_ptr<Signal<std::vector<uint8_t>&> > signal_;
+  std::shared_ptr<Signal<std::string&> > destroy_signal_;
   static std::map<std::string, ServiceServerPtr> services_;
-  static boost::mutex services_mutex_;
+  static std::mutex services_mutex_;
   uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
   int32_t buffer_size_;
 };
-boost::mutex ServiceServer::services_mutex_;
-std::map<std::string, ServiceServerPtr> ServiceServer::services_;
+std::mutex ServiceServerCore::services_mutex_;
+std::map<std::string, ServiceServerPtr> ServiceServerCore::services_;
 
-class ServiceClient {
+class ServiceClientCore {
 public:
-  ServiceClient(tinyros_msgs::TopicInfo& topic_info,
-      boost::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn)
+  ServiceClientCore(tinyros_msgs::TopicInfo& topic_info,
+      std::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn)
     : write_fn_(write_fn) {
     topic_id_ = -1;
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
     buffer_size_ = topic_info.buffer_size;
-    signal_ = boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> >
-      (new boost::signals2::signal<void(std::vector<uint8_t>&)>);
+    signal_ = std::shared_ptr<Signal<std::vector<uint8_t>&> >(new Signal<std::vector<uint8_t>&>);
   }
 
   void setTopicId(uint32_t topic_id) {
@@ -187,7 +183,7 @@ public:
     uint32_t length = stream.getLength();
     std::vector<uint8_t> message(length);
     memcpy(&message[0], stream.getData(), length);
-    (*signal_)(message);
+    signal_->emit(message);
   }
 
   void callback(std::vector<uint8_t>& message) {
@@ -195,11 +191,11 @@ public:
   }
 
 public:
-  boost::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn_;
-  boost::shared_ptr<boost::signals2::signal<void(std::vector<uint8_t>&)> > signal_;
-  boost::signals2::connection client_connection_;
-  boost::signals2::connection service_connection_;
-  boost::signals2::connection destroy_connection_;
+  std::function<void(std::vector<uint8_t>& buffer, const uint16_t topic_id)> write_fn_;
+  std::shared_ptr<Signal<std::vector<uint8_t>&> > signal_;
+  int client_connection_;
+  int service_connection_;
+  int destroy_connection_;
   uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;

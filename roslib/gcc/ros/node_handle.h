@@ -20,8 +20,7 @@
 #include "tiny_ros/roslib_msgs/String.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
-#include "tiny_ros/ros/hardware_linux.h"
-#include "tiny_ros/ros/hardware_windows.h"
+#include "tiny_ros/ros/hardware_tcp.h"
 #include "tiny_ros/ros/msg.h"
 #include "tiny_ros/ros/publisher.h"
 #include "tiny_ros/ros/subscriber.h"
@@ -32,41 +31,15 @@
 
 namespace tinyros
 {
-const int SPIN_OK = 0;
-const int SPIN_ERR = -1;
-
-const uint8_t MODE_FIRST_FF = 0;
-
-const uint8_t MODE_PROTOCOL_VER   = 1;
-const uint8_t PROTOCOL_VER        = 0xb9;
-const uint8_t MODE_SIZE_L         = 2;
-const uint8_t MODE_SIZE_L1        = 3;
-const uint8_t MODE_SIZE_H         = 4;
-const uint8_t MODE_SIZE_H1        = 5;
-const uint8_t MODE_SIZE_CHECKSUM  = 6;
-const uint8_t MODE_TOPIC_L        = 7;
-const uint8_t MODE_TOPIC_L1       = 8;
-const uint8_t MODE_TOPIC_H        = 9;
-const uint8_t MODE_TOPIC_H1       = 10;
-const uint8_t MODE_MESSAGE        = 11;
-const uint8_t MODE_MSG_CHECKSUM   = 12;
-
 using tinyros_msgs::TopicInfo;
 
-/* Node Handle */
-template<class Hardware,
-         int MAX_SUBSCRIBERS = 100,
-         int MAX_PUBLISHERS = 100,
-         int INPUT_SIZE = 65*1024,
-         int OUTPUT_SIZE = 65*1024>
-class NodeHandle_ : public NodeHandleBase_
+class NodeHandle : public NodeHandleBase_
 {
 protected:
   std::string port_name_;
-  Hardware hardware_;
+  HardwareTcp hardware_;
   
-  Hardware loghd_;
-  Publisher logpb_;
+  HardwareTcp loghd_;
   bool loghd_keepalive_;
   ThreadPool loghd_thread_pool_;
   
@@ -101,9 +74,6 @@ private:
   
   virtual void keepalive() {
     uint8_t in[200];
-
-    advertise(logpb_);
-
     while(loghd_keepalive_) {
       if (!loghd_.connected()) {
         if (loghd_.init(port_name_)) {
@@ -124,9 +94,8 @@ private:
   }
   
 public:
-  NodeHandle_()
-    : logpb_(TINYROS_LOG_TOPIC, new tinyros_msgs::Log)
-    , loghd_keepalive_(false)
+  NodeHandle()
+    : loghd_keepalive_(false)
     , loghd_thread_pool_(1)
     , spin_thread_pool_(3)
     , spin_log_thread_pool_(1)
@@ -141,7 +110,7 @@ public:
       subscribers[i] = NULL;
   }
 
-  ~NodeHandle_() {
+  ~NodeHandle() {
     exit();
   }
 
@@ -450,11 +419,7 @@ public:
     ti.message_type = p->msg_->getType();
     ti.md5sum = p->msg_->getMD5();
     ti.buffer_size = OUTPUT_SIZE;
-    if (p != &logpb_) {
-      publish(p->getEndpointType(), &ti);
-    } else {
-      publish(p->getEndpointType(), &ti, true);
-    }
+    publish(p->getEndpointType(), &ti);
   }
   
   void negotiateTopics(Subscriber_ * s) {
@@ -525,14 +490,12 @@ public:
   }
 
 private:
-  void log(char byte, std::string msg)
-  {
-    if (loghd_.connected()) 
-    {
+  void log(char byte, std::string msg) {
+    if (loghd_.connected()) {
       tinyros_msgs::Log l;
       l.level = byte;
       l.msg = msg;
-      logpb_.publish(&l, true);
+      publish(tinyros_msgs::TopicInfo::ID_LOG, &l, true);
     }
   }
 
@@ -587,14 +550,9 @@ public:
     }
 };
 
-#ifdef WIN32
-typedef NodeHandle_<HardwareWindows> NodeHandle;
-#else
-typedef NodeHandle_<HardwareLinux> NodeHandle;
-#endif
-
 NodeHandle* nh();
 
 }
 
 #endif
+
