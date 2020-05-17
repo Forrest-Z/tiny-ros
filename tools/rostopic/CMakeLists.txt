@@ -9,7 +9,15 @@ add_executable(tinyrostopic
   ${ROSLIB_PATHS}/log.cpp
 )
 
-target_link_libraries(tinyrostopic
-  libpthread.so
-)
+IF (CMAKE_SYSTEM_NAME MATCHES "CYGWIN")
+  target_link_libraries(tinyrostopic
+    libpthread.a
+  )
+ENDIF()
+
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  target_link_libraries(tinyrostopic
+    libpthread.so
+  )
+ENDIF()
 

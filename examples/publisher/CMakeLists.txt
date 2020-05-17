@@ -9,7 +9,15 @@ add_executable(ExamplePublisher
   ${ROSLIB_PATHS}/log.cpp
 )
 
-target_link_libraries(ExamplePublisher
-  libpthread.so
-)
+IF (CMAKE_SYSTEM_NAME MATCHES "CYGWIN")
+  target_link_libraries(ExamplePublisher
+    libpthread.a
+  )
+ENDIF()
+
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  target_link_libraries(ExamplePublisher
+    libpthread.so
+  )
+ENDIF()
 

@@ -137,8 +137,6 @@ public:
 #endif
       sockfd_ = -1;
     }
-    connected_ = false;
-    sock_binded_ = false;
   }
   
 private:

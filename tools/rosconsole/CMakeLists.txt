@@ -10,6 +10,15 @@ add_executable(tinyrosconsole
   ${SPDLOG_SRC_LIST}
 )
 
-target_link_libraries(tinyrosconsole
-  libpthread.so
-)
+IF (CMAKE_SYSTEM_NAME MATCHES "CYGWIN")
+  target_link_libraries(tinyrosconsole
+    libpthread.a
+  )
+ENDIF()
+
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  target_link_libraries(tinyrosconsole
+    libpthread.so
+  )
+ENDIF()
+
