@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include "common.h"
 
 namespace tinyros
 {
@@ -40,11 +41,11 @@ public:
       if (rv > 0) {
         totalsent += rv;
       } else if (rv == 0) {
-        printf("[%s] TcpStream::write_some socket close: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+        spdlog_error("[{0}] TcpStream::write_some socket close: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
         return -1;
       } else {
         if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR)) {
-          printf("[%s] TcpStream::write_some error: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+          spdlog_error("[{0}] TcpStream::write_some error: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
           return -1;
         }
       }
@@ -58,11 +59,11 @@ public:
     if (rv > 0) {
       return rv;
     } else if (rv == 0) {
-      printf("[%s] TcpStream::read_some socket close: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      spdlog_error("[{0}] TcpStream::read_some socket close: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
       return -1;
     } else {
       if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR))  {
-        printf("[%s] TcpStream::read_some error: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+        spdlog_error("[{0}] TcpStream::read_some error: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
         return -1;
       }
       return 0;

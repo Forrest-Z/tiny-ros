@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include "common.h"
 
 namespace tinyros
 {
@@ -28,7 +29,7 @@ public:
   bool open(int server_port, int client_port, const std::string& session_id) {
     sock_fd_ = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock_fd_ < 0) {
-      printf("[%s] UdpStream::open opening socket: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      spdlog_error("[{0}] UdpStream::open opening socket: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
       return false;
     }
 
@@ -49,7 +50,7 @@ public:
     server_endpoint_.sin_port = htons(server_port);
     server_endpoint_.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(sock_fd_, (struct sockaddr*)&server_endpoint_, sizeof(server_endpoint_)) < 0) {
-      printf("[%s] UdpStream::open bind socket: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      spdlog_error("[{0}] UdpStream::open bind socket: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
       ::close(sock_fd_);
       sock_fd_ = -1;
       return false;
@@ -62,7 +63,7 @@ public:
      socklen_t from_len = sizeof(from);
      int rv = recvfrom(sock_fd_, data, length, 0, (struct sockaddr*)&from, &from_len);
      if (rv < 0) {
-      printf("[%s] UdpStream::read_some: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      spdlog_error("[{0}] UdpStream::read_some: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
      }
      return (rv > 0 ? rv : 0);
   } 
@@ -70,7 +71,7 @@ public:
   int write_some(uint8_t* data, int length, const std::string& session_id) {
     int s = sendto(sock_fd_, data, length, 0, (struct sockaddr *)&client_endpoint_, sizeof(client_endpoint_));
     if(s <= 0) {
-      printf("[%s] UdpStream::write_some: %s(errno: %d)\n", session_id.c_str(), strerror(errno), errno);
+      spdlog_error("[{0}] UdpStream::write_some: {1}(errno: {2})", session_id.c_str(), strerror(errno), errno);
       return 0;
     }
     return s;

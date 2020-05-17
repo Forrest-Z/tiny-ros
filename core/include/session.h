@@ -14,6 +14,7 @@
 #include <thread>
 #include <mutex>
 #include <deque>
+#include <chrono>
 #include <functional>
 #include <condition_variable>
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
@@ -29,6 +30,8 @@ namespace tinyros
 #define TINYROS_LOG_TOPIC "tinyros_log_11315"
 
 #define REQUEST_TOPICS_TIMER (1000*1000)
+
+#define REQUEST_TOPICS_ALIVE_TIME (15) // seconds
 
 typedef std::vector<uint8_t> Buffer;
 typedef std::shared_ptr<Buffer> BufferPtr;
@@ -62,10 +65,10 @@ public:
     using namespace tinyros_msgs;
     callbacks_[TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_publisher, this, std::placeholders::_1);
     callbacks_[TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_subscriber, this, std::placeholders::_1);
-    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_server_publisher, this, std::placeholders::_1);
-    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_server_subscriber, this, std::placeholders::_1);
-    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_client_publisher, this, std::placeholders::_1);
-    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_client_subscriber, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_server, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_SERVER+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_server, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_PUBLISHER] = std::bind(&Session::setup_service_client, this, std::placeholders::_1);
+    callbacks_[TopicInfo::ID_SERVICE_CLIENT+TopicInfo::ID_SUBSCRIBER] = std::bind(&Session::setup_service_client, this, std::placeholders::_1);
     callbacks_[TopicInfo::ID_ROSTOPIC_REQUEST] = std::bind(&Session::handle_rostopic_request, this, std::placeholders::_1);
     callbacks_[TopicInfo::ID_ROSSERVICE_REQUEST] = std::bind(&Session::handle_rosservice_request, this, std::placeholders::_1);
     callbacks_[TopicInfo::ID_LOG] = std::bind(&Session::handle_log, this, std::placeholders::_1);
@@ -77,11 +80,11 @@ public:
     require_check_running_ = true;
  
     message_write_thread_ = new std::thread(std::bind(&Session::write_completion_cb, this));
+    require_check_thread_ = new std::thread(std::bind(&Session::request_topics, this));
     if (isudp_) {
       message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync_udp, this));
     } else {
       message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync, this));
-      require_check_thread_ = new std::thread(std::bind(&Session::request_topics, this));
     }
   }
 
@@ -92,41 +95,28 @@ public:
       if (!active_) {
         return;
       }
-      printf("[%s] %s begin.\n", session_id_.c_str(), __FUNCTION__);
-      // Close the socket.
-      printf("[%s] %s Close the socket begin.\n", session_id_.c_str(), __FUNCTION__);
-      socket_.close();
-      printf("[%s] %s Close the socket end.\n", session_id_.c_str(), __FUNCTION__);
+      
+      active_ = false;
+
+      // Reset the state of the session, dropping any publishers or subscribers
+      // we currently know about from this client.
+      callbacks_.clear();    // 1
+      subscribers_.clear();  // 2
+      publishers_.clear();   // 3
     
+      spdlog_warn("[{0}] {1} begin.", session_id_.c_str(), __FUNCTION__);
       if (require_check_thread_) {
-        printf("[%s] %s require_check_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
+        spdlog_warn("[{0}] {1} require_check_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
         require_check_running_ = false;
         require_check_thread_->join();
         delete require_check_thread_;
         require_check_thread_ = nullptr;
-        printf("[%s] %s require_check_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
+        spdlog_warn("[{0}] {1} require_check_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
       }
-      active_ = false;
-    }
-    
-    {
-      printf("[%s] %s topic_connections clear begin.\n", session_id_.c_str(), __FUNCTION__);
-      std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
-      for (uint32_t i=0; i<topic_connections_.size(); i++) {
-        RostopicConnection connection = topic_connections_.at(i);
-        connection.rostopic_->signal_->disconnect(connection.connection_);
-        connection.rostopic_->ref_count_--;
-
-        if (connection.rostopic_->ref_count_ <=0) {
-          Rostopic::topics_.erase(connection.rostopic_->topic_name_);
-        }
-      }
-      topic_connections_.clear();
-      printf("[%s] %s topic_connections clear end.\n", session_id_.c_str(), __FUNCTION__);
     }
 
     {
-      printf("[%s] %s services clear begin.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} services clear begin.", session_id_.c_str(), __FUNCTION__);
       std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
       for (uint32_t i=0; i<service_server_.size(); i++) {
         if (ServiceServerCore::services_.count(service_server_.at(i))) {
@@ -151,38 +141,38 @@ public:
       }
       service_server_.clear();
       services_client_.clear();
-      printf("[%s] %s services clear end.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} services clear end.", session_id_.c_str(), __FUNCTION__);
     }
 
-    // Reset the state of the session, dropping any publishers or subscribers
-    // we currently know about from this client.
-    callbacks_.clear();
-    subscribers_.clear();
-    publishers_.clear();
-
-    printf("[%s] %s clear async_write_buffers begin.\n", session_id_.c_str(), __FUNCTION__);
+    spdlog_warn("[{0}] {1} clear async_write_buffers begin.", session_id_.c_str(), __FUNCTION__);
     std::unique_lock<std::mutex> lock(async_write_mutex_);
     async_write_buffers_.clear();
     async_write_cond_.notify_all();
     lock.unlock();
-    printf("[%s] %s clear async_write_buffers end.\n", session_id_.c_str(), __FUNCTION__);
+    spdlog_warn("[{0}] {1} clear async_write_buffers end.", session_id_.c_str(), __FUNCTION__);
     
     if (message_write_thread_) {
-      printf("[%s] %s message_write_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} message_write_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
       message_write_thread_->join();
       delete message_write_thread_;
       message_write_thread_ = nullptr;
-      printf("[%s] %s message_write_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} message_write_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
     }
 
     if (message_in_thread_) {
-      printf("[%s] %s message_in_thread interrupt begin.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} message_in_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
       message_in_thread_->join();
       delete message_in_thread_;
       message_in_thread_ = nullptr;
-      printf("[%s] %s message_in_thread interrupt end.\n", session_id_.c_str(), __FUNCTION__);
+      spdlog_warn("[{0}] {1} message_in_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
     }
-    printf("[%s] %s end.\n", session_id_.c_str(), __FUNCTION__);
+    
+    // Close the socket.
+    spdlog_warn("[{0}] {1} Close the socket begin.", session_id_.c_str(), __FUNCTION__);
+    socket_.close();
+    spdlog_warn("[{0}] {1} Close the socket end.", session_id_.c_str(), __FUNCTION__);
+    
+    spdlog_warn("[{0}] {1} end.", session_id_.c_str(), __FUNCTION__);
   }
 
   bool is_active()
@@ -253,10 +243,10 @@ private:
               } catch(tinyros::serialization::StreamOverrunException e) {
               }
             } else {
-              printf("[%s] %s Received message with unrecognized topicId (%d).\n", session_id_.c_str(), __FUNCTION__, topic);
+              spdlog_warn("[{0}] {1} Received message with unrecognized topicId ({2}).", session_id_.c_str(), __FUNCTION__, topic);
             }
           } else {
-            printf("[%s] %s Rejecting message on topicId(%d), bytes(%d) with bad checksum.\n", 
+            spdlog_warn("[{0}] {1} Rejecting message on topicId({2}), bytes({3}) with bad checksum.", 
               session_id_.c_str(), __FUNCTION__, topic, bytes);
           }
         } while(0);
@@ -387,10 +377,10 @@ private:
               } catch(tinyros::serialization::StreamOverrunException e) {
               }
             } else {
-              printf("[%s] %s Received message with unrecognized topicId (%d).\n", session_id_.c_str(), __FUNCTION__, topic);
+              spdlog_warn("[{0}] {1} Received message with unrecognized topicId ({2}).", session_id_.c_str(), __FUNCTION__, topic);
             }
           } else {
-            printf("[%s] %s Rejecting message on topicId(%d), bytes(%d) with bad checksum.\n", 
+            spdlog_warn("[{0}] {1} Rejecting message on topicId({2}), bytes({3}) with bad checksum.", 
               session_id_.c_str(), __FUNCTION__, topic, bytes);
           }
         }
@@ -461,8 +451,34 @@ private:
   //// HELPERS ////
   void request_topics() {
     while(require_check_running_) {
-      std::vector<uint8_t> message(0);
-      write_message(message, tinyros_msgs::TopicInfo::ID_PUBLISHER);
+      if (!isudp_) {
+        std::vector<uint8_t> message(0);
+        write_message(message, tinyros_msgs::TopicInfo::ID_PUBLISHER);
+      } else {
+        std::map<uint32_t, PublisherPtr>::iterator pit;
+        for(pit = publishers_.begin(); pit != publishers_.end(); ) {
+          PublisherPtr pub = pit->second;
+          uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
+          if ((now - pub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
+            callbacks_.erase(pit->first);
+            publishers_.erase(pit++);
+          } else {
+            pit++;
+          }
+        }
+        
+        std::map<uint32_t, SubscriberPtr>::iterator sit;
+        for(sit = subscribers_.begin(); sit != subscribers_.end(); ) {
+          SubscriberPtr sub = sit->second;
+          uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
+          if ((now - sub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
+            subscribers_.erase(sit++);
+          } else {
+            sit++;
+          }
+        }
+      }
+      
       usleep(REQUEST_TOPICS_TIMER);
     }
   }
@@ -492,8 +508,9 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!publishers_.count(topic_info.topic_id)) {
-      printf("[%s] setup_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_publisher(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
       PublisherPtr pub(new PublisherCore(topic_info));
+      pub->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
       callbacks_[topic_info.topic_id] = std::bind(&PublisherCore::handle, pub, std::placeholders::_1);
       publishers_[topic_info.topic_id] = pub;
 
@@ -504,10 +521,11 @@ private:
 
       // fake connection for stop
       RostopicConnection connection;
-      connection.connection_ = 0;
       connection.rostopic_ = Rostopic::topics_[topic_info.topic_name];
       connection.rostopic_->ref_count_++;
-      topic_connections_.push_back(connection);
+      publishers_[topic_info.topic_id]->connection_ = connection;
+    } else {
+      publishers_[topic_info.topic_id]->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
     }
     
     topic_info.negotiated = true;
@@ -519,8 +537,9 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!subscribers_.count(topic_info.topic_id)) {
-      printf("[%s] setup_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_subscriber(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
       SubscriberPtr sub(new SubscriberCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, topic_info.topic_id)));
+      sub->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
       subscribers_[topic_info.topic_id] = sub;
 
       std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
@@ -531,8 +550,10 @@ private:
       RostopicConnection connection;
       connection.rostopic_ = Rostopic::topics_[topic_info.topic_name];
       connection.rostopic_->ref_count_++;
-      connection.connection_ = connection.rostopic_->signal_->connect(std::bind(&SubscriberCore::handle, sub, std::placeholders::_1));
-      topic_connections_.push_back(connection);
+      connection.id_ = connection.rostopic_->signal_->connect(std::bind(&SubscriberCore::handle, sub.get(), std::placeholders::_1));
+      subscribers_[topic_info.topic_id]->connection_ = connection;
+    } else {
+      subscribers_[topic_info.topic_id]->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
     }
     
     topic_info.negotiated = true;
@@ -540,13 +561,13 @@ private:
     handle_negotiated(topic_info);
   }
 
-  void setup_service_server_publisher(tinyros::serialization::IStream& stream) {
+  void setup_service_server(tinyros::serialization::IStream& stream) {
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
     std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
     if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
-      printf("[%s] setup_service_server_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_service_server(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
       ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
       callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
       ServiceServerCore::services_[topic_info.topic_name] = srv;
@@ -558,34 +579,15 @@ private:
     
     handle_negotiated(topic_info);
   }
-
-  void setup_service_server_subscriber(tinyros::serialization::IStream& stream) {
-    tinyros_msgs::TopicInfo topic_info;
-    tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
-
-    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
-    if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
-      printf("[%s] setup_service_server_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
-      ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
-      callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
-      ServiceServerCore::services_[topic_info.topic_name] = srv;
-      ServiceServerCore::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
-      service_server_.push_back(topic_info.topic_name);
-    }
-    
-    topic_info.negotiated = true;
-    
-    handle_negotiated(topic_info);
-  }
-
-  void setup_service_client_publisher(tinyros::serialization::IStream& stream) {
+  
+  void setup_service_client(tinyros::serialization::IStream& stream) {
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
 
     std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
     if (ServiceServerCore::services_.count(topic_info.topic_name)) {
       if (!services_client_.count(topic_info.topic_id)) {
-        printf("[%s] setup_service_client_publisher(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+        spdlog_info("[{0}] setup_service_client(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
         ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
         ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
         client->setTopicId(topic_info.topic_id);
@@ -600,36 +602,11 @@ private:
       topic_info.negotiated = false;
     }
     
-    handle_negotiated(topic_info);
-  }
-
-  void setup_service_client_subscriber(tinyros::serialization::IStream& stream) {
-    tinyros_msgs::TopicInfo topic_info;
-    tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
-
-    std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
-    if (ServiceServerCore::services_.count(topic_info.topic_name)) {
-      if (!services_client_.count(topic_info.topic_id)) {
-        printf("[%s] setup_service_client_subscriber(topic_id:%d, topic_name: %s)\n", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
-        ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
-        ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
-        client->setTopicId(topic_info.topic_id);
-        client->client_connection_ = client->signal_->connect(std::bind(&ServiceServerCore::callback, service, std::placeholders::_1));
-        client->service_connection_ = service->signal_->connect(std::bind(&ServiceClientCore::callback, client, std::placeholders::_1));
-        client->destroy_connection_ = service->destroy_signal_->connect(std::bind(&Session::stop_service, this, std::placeholders::_1));
-        callbacks_[topic_info.topic_id] = std::bind(&ServiceClientCore::handle, client, std::placeholders::_1);
-        services_client_[topic_info.topic_id] = client;
-      }
-      topic_info.negotiated = true;
-    } else {
-      topic_info.negotiated = false;
-    }
-      
     handle_negotiated(topic_info);
   }
 
   void stop_service(std::string &topic_name) {
-    printf("[%s] stop_service(topic_name: %s)\n", session_id_.c_str(), topic_name.c_str());
+    spdlog_warn("[{0}] stop_service(topic_name: {1})", session_id_.c_str(), topic_name.c_str());
     std::map<uint32_t, ServiceClientPtr>::iterator it;
     for(it = services_client_.begin(); it != services_client_.end(); ) {
       ServiceClientPtr client = it->second;
@@ -712,7 +689,7 @@ private:
   void handle_session_id(tinyros::serialization::IStream& stream) {
     roslib_msgs::String session_info;
     tinyros::serialization::Serializer<roslib_msgs::String>::read(stream, session_info);
-    printf("[%s] Starting session...\n", session_info.data.c_str());
+    spdlog_info("[{0}] Starting session...", session_info.data.c_str());
     session_id_ = session_info.data;
   }
 
@@ -731,7 +708,6 @@ private:
   std::map<uint32_t, std::function<void(tinyros::serialization::IStream&)> > callbacks_;
   std::map<uint32_t, PublisherPtr> publishers_;
   std::map<uint32_t, SubscriberPtr> subscribers_;
-  std::vector<RostopicConnection> topic_connections_;
   std::vector<std::string> service_server_;
   std::map<uint32_t, ServiceClientPtr> services_client_;
 

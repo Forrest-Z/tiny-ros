@@ -16,19 +16,13 @@
 #include <sys/stat.h> 
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/formatter_parser.hpp>
-#include <boost/log/utility/setup/filter_parser.hpp>
-#include <boost/log/utility/setup/settings.hpp>
-#include <boost/log/utility/setup/from_settings.hpp>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/rotating_file_sink.h"
 
-
-#define LOG_ROTATION_SIZE  10*1024*1024 //10MB
-
-#define LOG_MAX_SIZE0       200*1024*1024 //200MB
-
-#define LOG_MAX_SIZE1       50*1024*1024 //50MB
+#define LOG_ROTATION_SIZE    (10*1024*1024) //10MB
+#define LOG_ROTATION_FILES   (5)
 
 enum { LEVEL_DEBUG = 0 };
 enum { LEVEL_INFO = 1 };
@@ -103,64 +97,41 @@ static int create_dir(const char *dirname) {
 }
 
 static void messageCb(const tinyros_msgs::Log& l) {
-  if(l.level == tinyros_msgs::Log::ROSDEBUG && level_ <= LEVEL_DEBUG) BOOST_LOG_TRIVIAL(debug) << l.msg;
-  else if(l.level == tinyros_msgs::Log::ROSINFO && level_ <= LEVEL_INFO) BOOST_LOG_TRIVIAL(info) << l.msg;
-  else if(l.level == tinyros_msgs::Log::ROSWARN && level_ <= LEVEL_WARN) BOOST_LOG_TRIVIAL(warning) << l.msg;
-  else if(l.level == tinyros_msgs::Log::ROSERROR && level_ <= LEVEL_ERROR) BOOST_LOG_TRIVIAL(error) << l.msg;
-  else if(l.level == tinyros_msgs::Log::ROSFATAL && level_ <= LEVEL_FATAL) BOOST_LOG_TRIVIAL(fatal) << l.msg;
+  if(l.level == tinyros_msgs::Log::ROSDEBUG && level_ <= LEVEL_DEBUG) {
+    if (spdlog::get("logger")) spdlog::get("logger")->debug("{0}", l.msg);
+  } else if(l.level == tinyros_msgs::Log::ROSINFO && level_ <= LEVEL_INFO) {
+    if (spdlog::get("logger")) spdlog::get("logger")->info("{0}", l.msg); 
+  } else if(l.level == tinyros_msgs::Log::ROSWARN && level_ <= LEVEL_WARN) {
+    if (spdlog::get("logger")) spdlog::get("logger")->warn("{0}", l.msg);
+  } else if(l.level == tinyros_msgs::Log::ROSERROR && level_ <= LEVEL_ERROR) {
+    if (spdlog::get("logger")) spdlog::get("logger")->error("{0}", l.msg);
+  } else if(l.level == tinyros_msgs::Log::ROSFATAL && level_ <= LEVEL_FATAL) {
+    if (spdlog::get("logger")) spdlog::get("logger")->critical("{0}", l.msg);
+  }
 }
 
 static tinyros::Subscriber<tinyros_msgs::Log> sub(TINYROS_LOG_TOPIC, messageCb);
 
 static void init_log_environment() {
-  namespace logging = boost::log;
-  using namespace logging::trivial;
-
-  logging::settings setts;
-  logging::add_common_attributes();
-  logging::register_simple_formatter_factory<severity_level, char>("Severity");
-  logging::register_simple_filter_factory<severity_level, char>("Severity");
-
-  setts["Core"]["DisableLogging"] = false;
-  if (level_ == LEVEL_DEBUG) {
-    setts["Core"]["Filter"] = "%Severity% >= trace";
-  } else if (level_ == LEVEL_INFO) {
-    setts["Core"]["Filter"] = "%Severity% >= info";
-  } else if (level_ == LEVEL_WARN) {
-    setts["Core"]["Filter"] = "%Severity% >= warning";
-  } else if (level_ == LEVEL_ERROR) {
-    setts["Core"]["Filter"] = "%Severity% >= error";
-  } else if (level_ == LEVEL_FATAL) {
-    setts["Core"]["Filter"] = "%Severity% >= fatal";
+  std::shared_ptr<spdlog::sinks::sink> log_sink = nullptr;
+  if (option_ == OPTION_P) {
+    log_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
   } else {
-    setts["Core"]["Filter"] = "%Severity% >= trace";
-  }
-
-  if (option_ == OPTION_P) { // Sinks.console
-    setts["Sinks.console.Format"] = "[%TimeStamp%] [%Severity%] %Message%";
-    setts["Sinks.console.Destination"] = "Console";
-    setts["Sinks.console.Filter"] = "%Severity% >= debug";
-    setts["Sinks.console.Asynchronous"] = false;
-    setts["Sinks.console.AutoFlush"] = true;
-  } else { // Sinks.degug
-    setts["Sinks.degug.Filter"] = "%Severity% >= debug";
-    setts["Sinks.degug.Format"] = "[%TimeStamp%] [%Severity%] %Message%";
-    setts["Sinks.degug.Destination"] = "TextFile";
     if (option_ == OPTION_D) {
-      setts["Sinks.degug.FileName"] = param_ + "/log/%Y%m%d_%H%M%S.log";
-      setts["Sinks.degug.Target"] = param_ + "/log";
+      log_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt> (
+        param_ + "/tinyros_apps.log", LOG_ROTATION_SIZE, LOG_ROTATION_FILES);
     } else {
-      setts["Sinks.degug.FileName"] = param_;
-      setts["Sinks.degug.Target"] = param_.substr(0, param_.rfind("/"));
+      log_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(param_);
     }
-    setts["Sinks.degug.Asynchronous"] = false;
-    setts["Sinks.degug.AutoFlush"] = true;
-    setts["Sinks.degug.RotationSize"] = LOG_ROTATION_SIZE;
-    setts["Sinks.degug.MaxSize"] = LOG_MAX_SIZE0;
-    setts["Sinks.degug.ScanForFiles"] = "All";
   }
 
-  logging::init_from_settings(setts);
+  if (log_sink != nullptr) {
+    log_sink->set_level(spdlog::level::trace);
+    auto logger = std::make_shared<spdlog::logger>("logger", log_sink);
+    logger->flush_on(spdlog::level::trace);
+    logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+    spdlog::register_logger(logger);
+  }
 }
 
 int main(int argc, char *argv[]) {

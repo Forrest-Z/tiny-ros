@@ -29,8 +29,8 @@ typedef  std::shared_ptr<ServiceServerCore> ServiceServerPtr;
 typedef  std::shared_ptr<ServiceClientCore> ServiceClientPtr;
 
 struct RostopicConnection {
+  int id_;
   RostopicPtr rostopic_;
-  int connection_;
 };
 
 class Rostopic {
@@ -69,6 +69,14 @@ public:
     buffer_size_ = topic_info.buffer_size;
   }
 
+  ~PublisherCore() {
+    std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
+    connection_.rostopic_->ref_count_--;
+    if (connection_.rostopic_->ref_count_ <=0) {
+      Rostopic::topics_.erase(connection_.rostopic_->topic_name_);
+    }
+  }
+  
   void handle(tinyros::serialization::IStream stream) {
     uint32_t length = stream.getLength();
     std::vector<uint8_t> message(length);
@@ -78,16 +86,13 @@ public:
     }
   }
 
-  std::string get_topic() {
-    return topic_name_;
-  }
-
-private:
   uint32_t topic_id_;
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
   int32_t buffer_size_;
+  uint64_t alive_time_;
+  RostopicConnection connection_;
 };
 
 class SubscriberCore {
@@ -102,11 +107,15 @@ public:
     buffer_size_ = topic_info.buffer_size;
   }
 
-  std::string get_topic() {
-    return topic_name_;
+  ~SubscriberCore() {
+    std::unique_lock<std::mutex> lock(Rostopic::topics_mutex_);
+    connection_.rostopic_->signal_->disconnect(connection_.id_);
+    connection_.rostopic_->ref_count_--;
+    if (connection_.rostopic_->ref_count_ <=0) {
+      Rostopic::topics_.erase(connection_.rostopic_->topic_name_);
+    }
   }
-
-private:
+  
   void handle(std::vector<uint8_t>& message) {
     write_fn_(message);
   }
@@ -117,6 +126,8 @@ private:
   std::string message_type_;
   std::string md5sum_;
   int32_t buffer_size_;
+  uint64_t alive_time_;
+  RostopicConnection connection_;
 };
 
 class ServiceServerCore {

@@ -12,7 +12,8 @@
 #include <iostream>
 #include <sys/socket.h>  
 #include <netinet/in.h>  
-#include <arpa/inet.h> 
+#include <arpa/inet.h>
+#include "common.h"
 #include "tcp_stream.h"
 #include "session.h"
 
@@ -28,7 +29,7 @@ public:
     int listen_fd;
     struct sockaddr_in server_addr;
     if ((listen_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-      printf("TcpServer::start_accept create socket error: %s(errno: %d)\n", strerror(errno), errno);
+      spdlog_error("TcpServer::start_accept create socket error: {0}(errno: {1})", strerror(errno), errno);
       return;
     }
     
@@ -41,21 +42,23 @@ public:
     server_addr.sin_port = htons(port_);
 
     if (bind(listen_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
-      printf("TcpServer::start_accept bind socket error: %s(errno: %d)\n", strerror(errno), errno);
+      spdlog_error("TcpServer::start_accept bind socket error: {0}(errno: {1})", strerror(errno), errno);
       return;
     }
 
     if (listen(listen_fd, 100) == -1) {
-      printf("TcpServer::start_accept listen socket error: %s(errno: %d)\n", strerror(errno), errno);
+      spdlog_error("TcpServer::start_accept listen socket error: {0}(errno: {1})", strerror(errno), errno);
       return;
     }
+    
+    spdlog_info("TCP Listening for connections on port: {0:d}", port_);
 
     while (1) {
       int connect_fd;
       struct sockaddr_in client;
       socklen_t len = sizeof(client);
       if ((connect_fd = accept(listen_fd, (struct sockaddr *)&client, &len)) == -1) {
-        printf("TcpServer::start_accept accept socket error: %s(errno: %d)\n", strerror(errno), errno);
+        spdlog_error("TcpServer::start_accept accept socket error: {0}(errno: {1})", strerror(errno), errno);
         continue;
       }
 
