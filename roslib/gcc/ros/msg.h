@@ -9,9 +9,10 @@
 
 #ifndef _TINYROS_MSG_H_
 #define _TINYROS_MSG_H_
-
 #include <stdint.h>
 #include <stddef.h>
+#include <iostream>
+#include <sstream>
 #include <string>
 
 namespace tinyros
@@ -26,6 +27,7 @@ public:
   virtual int serializedLength() const = 0;
   virtual std::string getType() = 0;
   virtual std::string getMD5() = 0;
+  virtual std::string echo() = 0;
 
   /**
    * @brief This tricky function handles promoting a 32bit float to a 64bit

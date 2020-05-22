@@ -64,6 +64,7 @@ public static class TestRequest implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType() { return TEST; }
     public java.lang.String getMD5(){ return "26ee7a44335f1f7b55a5a7490460807d"; }
     public long getID() { return this.__id__; }
@@ -128,6 +129,7 @@ public static class TestResponse implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType() { return TEST; }
     public java.lang.String getMD5(){ return "e2f6296e6ea9df7406f4fac9fb52d44b"; }
     public long getID() { return this.__id__; }

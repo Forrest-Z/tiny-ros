@@ -60,6 +60,7 @@ public class Log implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "tinyros_msgs/Log"; }
     public java.lang.String getMD5(){ return "0bd74339b4d77cb15766d831a3d15eeb"; }
     public long getID() { return 0; }

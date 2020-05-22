@@ -143,6 +143,7 @@ public class TopicInfo implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "tinyros_msgs/TopicInfo"; }
     public java.lang.String getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
     public long getID() { return 0; }

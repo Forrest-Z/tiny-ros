@@ -70,6 +70,15 @@ namespace roslib_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_data; ss_data << "\"data\": " << data <<"";
+      string_echo += ss_data.str();
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "roslib_msgs/Int64"; }
     virtual std::string getMD5(){ return "898a143c1c8f3ff0cd8855677cf69dda"; }
 

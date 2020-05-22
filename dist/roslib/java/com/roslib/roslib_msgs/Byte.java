@@ -29,6 +29,7 @@ public class Byte implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/Byte"; }
     public java.lang.String getMD5(){ return "55d792c6822d37d33b994f1153c69f8a"; }
     public long getID() { return 0; }

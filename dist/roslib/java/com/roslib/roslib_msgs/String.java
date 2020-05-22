@@ -48,6 +48,7 @@ public class String implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/String"; }
     public java.lang.String getMD5(){ return "5803b93aeb3e71858cec3497cca77163"; }
     public long getID() { return 0; }

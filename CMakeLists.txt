@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 set(OUTPUT_PATHS ${PROJECT_SOURCE_DIR}/build/output)
 set(ROSLIB_PATHS ${OUTPUT_PATHS}/roslib/gcc/tiny_ros)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -O3")
 
 add_definitions(-DSPDLOG_COMPILED_LIB)
 
@@ -16,4 +16,3 @@ include_directories(
 add_subdirectory(core)
 add_subdirectory(tools)
 add_subdirectory(examples)
-

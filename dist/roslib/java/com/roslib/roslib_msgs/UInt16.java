@@ -31,6 +31,7 @@ public class UInt16 implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/UInt16"; }
     public java.lang.String getMD5(){ return "f7fc05ba72b1e0b94d9852ae4a5c54cb"; }
     public long getID() { return 0; }

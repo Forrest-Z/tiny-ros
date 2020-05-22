@@ -43,6 +43,7 @@ public class UInt64 implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/UInt64"; }
     public java.lang.String getMD5(){ return "5743ecd192777ee751f903f18c34befc"; }
     public long getID() { return 0; }

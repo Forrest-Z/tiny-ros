@@ -42,22 +42,25 @@ static std::string dir_ = "";
 
 
 static void print_usage() {
-	printf("\nUsage: tinyrosconsole [OPTION] [VAR=LOG_LEVEL]...\n");
-	printf("\nOPTION:\n");
-	printf(" -h : display this help and exit.\n");
-	printf(" -p : output log to screen.\n");
-	printf(" -f : output log to the specified file.\n");
-	printf(" -d : output log to the specified directory.\n");
-	printf("\nLOG_LEVEL:\n");
-	printf(" 0 : log level is debug.\n");
-	printf(" 1 : log level is info.\n");
-	printf(" 2 : log level is warn.\n");
-	printf(" 3 : log level is error.\n");
-	printf(" 4 : log level is fatal.\n");
-	printf("\nEXAMPLE:\n");
-	printf(" tinyrosconsole -p 0 : output log to screen with debug level\n");
-	printf(" tinyrosconsole -f 1 log.txt : output log to log.txt with info level\n");
-	printf(" tinyrosconsole -d 2 /userdata/atris_app : output log to folder \"/userdata/atris_app\" with warn level\n\n");
+  printf("\nUsage: tinyrosconsole [OPTION] [VAR=LOG_LEVEL]...\n");
+  printf("\nOPTION:\n");
+  printf(" -h : display this help and exit.\n");
+  printf(" -p : output log to screen.\n");
+  printf(" -f : output log to the specified file.\n");
+  printf(" -d : output log to the specified directory.\n");
+  printf("\nLOG_LEVEL:\n");
+  printf(" 0 : log level is debug.\n");
+  printf(" 1 : log level is info.\n");
+  printf(" 2 : log level is warn.\n");
+  printf(" 3 : log level is error.\n");
+  printf(" 4 : log level is fatal.\n");
+  printf("\nEXAMPLE:\n");
+  printf(" tinyrosconsole -p 0 : output log to screen with debug level\n");
+  printf(" tinyrosconsole -p 0 127.0.0.1: output log to screen with debug level & tinyroscore address\n");
+  printf(" tinyrosconsole -f 1 log.txt : output log to log.txt with info level\n");
+  printf(" tinyrosconsole -f 1 log.txt 127.0.0.1: output log to log.txt with info level & tinyroscore address\n");
+  printf(" tinyrosconsole -d 2 tinyros_logs : output log to folder \"tinyros_logs\" with warn level\n");
+  printf(" tinyrosconsole -d 2 tinyros_logs 127.0.0.1: output log to folder \"tinyros_logs\" with warn level & tinyroscore address\n\n");
 }
 
 
@@ -135,43 +138,54 @@ static void init_log_environment() {
 }
 
 int main(int argc, char *argv[]) {
-  if(argc >= 2){
-		if(!strcmp(argv[1], "-h")) {
+  std::string ip = "127.0.0.1";
+  
+  if(argc >= 2) {
+    if(!strcmp(argv[1], "-h")) {
       print_usage();
-			return 0;
-		}else if (!strcmp(argv[1], "-p")) {
-      if (argc != 3) {
+      return 0;
+    } else if (!strcmp(argv[1], "-p")) {
+      if (argc < 3) {
         print_usage();
-  			return 0;
+        return 0;
       } else {
         level_ = atoi(argv[2]);
         option_ = OPTION_P;
+        if (argc >= 4) {
+          ip = argv[3];
+        }
       }
-		} else if (!strcmp(argv[1], "-f")){
-      if (argc != 4) {
+    } else if (!strcmp(argv[1], "-f")){
+      if (argc < 4) {
         print_usage();
-  			return 0;
+        return 0;
       } else {
         level_ = atoi(argv[2]);
         param_ = argv[3];
         option_ = OPTION_F;
+        if (argc >= 5) {
+          ip = argv[4];
+        }
       }
-		} else if(!strcmp(argv[1], "-d")){
-      if (argc != 4) {
+    } else if(!strcmp(argv[1], "-d")){
+      if (argc < 4) {
         print_usage();
-  			return 0;
+        return 0;
       } else {
         level_ = atoi(argv[2]);
         param_ = argv[3];
         option_ = OPTION_D;
+        if (argc >= 5) {
+          ip = argv[4];
+        }
       }
-		} else {
+    } else {
       print_usage();
-  	  return 0;
+      return 0;
     }
-	} else {
-     print_usage();
-  	 return 0;
+  } else {
+    level_ = LEVEL_DEBUG;
+    option_ = OPTION_P;
   }
 
   if (level_ < LEVEL_DEBUG || level_ > LEVEL_FATAL) {
@@ -182,12 +196,13 @@ int main(int argc, char *argv[]) {
   if (option_ == OPTION_F || option_ == OPTION_D) {
     if (*(param_.begin()) != '/') {
       char buffer[1024];
-      getcwd(buffer, sizeof(buffer));
+      char* ret = getcwd(buffer, sizeof(buffer));
       param_ = std::string(buffer) + "/" + param_;
     }
   }
 
   init_log_environment();
+  tinyros::init(ip);
   tinyros::nh()->subscribe(sub);
   while(1) sleep(10);
 }

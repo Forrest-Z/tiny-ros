@@ -63,6 +63,17 @@ namespace roslib_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_data;
+      ss_data << "\"data.sec\": " << data.sec;
+      ss_data << ", \"data.nsec\": " << data.nsec << "";
+      string_echo += ss_data.str();
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "roslib_msgs/Time"; }
     virtual std::string getMD5(){ return "567be395da15eccf52480c0923393c65"; }
 

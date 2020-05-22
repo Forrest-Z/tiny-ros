@@ -26,6 +26,7 @@ public:
   virtual int serializedLength() const = 0;
   virtual tinyros::string getType() = 0;
   virtual tinyros::string getMD5() = 0;
+  virtual tinyros::string echo() { return ""; }
 
   /**
    * @brief This tricky function handles promoting a 32bit float to a 64bit

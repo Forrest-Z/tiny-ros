@@ -6,6 +6,7 @@
  * Date           Author       Notes
  * 2018-02-09     Pinkie.Fu    initial version
  */
+#include <signal.h>
 #include "udp_stream.h"
 #include "tcp_server.h"
 #include "session.h"
@@ -30,6 +31,10 @@ static void udp_service_run(int server_port, int client_port) {
 }
 
 int main(int argc, char* argv[]) {
+#ifdef __linux__
+  signal(SIGPIPE, SIG_IGN);
+#endif
+    
   int tcp_server_port = 11315;
   int udp_server_port = 11316;
   int udp_client_port = 11317;

@@ -199,12 +199,12 @@ public class NodeHandle {
 					if (topic_ == TopicInfo.ID_PUBLISHER) {
 						negotiateTopics();
 					} else if (topic_ == TopicInfo.ID_ROSTOPIC_REQUEST) {
-						com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
+						com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
 						msg.deserialize(message_in, 0);
 						topic_list = msg.data;
 						topic_list_recieved = true;
 					} else if (topic_ == TopicInfo.ID_ROSSERVICE_REQUEST) {
-						com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
+						com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
 						msg.deserialize(message_in, 0);
 						service_list = msg.data;
 						service_list_recieved = true;
@@ -434,7 +434,7 @@ public class NodeHandle {
 
 
 	public java.lang.String getTopicList(int timeout) {
-		com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
+		com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
 		publish(TopicInfo.ID_ROSTOPIC_REQUEST, msg);
 		long end_time = hardware_.time() + timeout;
 		topic_list_recieved = false;
@@ -448,7 +448,7 @@ public class NodeHandle {
 	}
 
 	public java.lang.String getServiceList(int timeout) {
-		com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
+		com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
 		publish(TopicInfo.ID_ROSSERVICE_REQUEST, msg);
 		long end_time = hardware_.time() + timeout;
 		service_list_recieved = false;

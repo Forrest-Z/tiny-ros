@@ -29,6 +29,7 @@ public class Bool implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/Bool"; }
     public java.lang.String getMD5(){ return "80a272e03c01d79e04a9cba6da3167d5"; }
     public long getID() { return 0; }

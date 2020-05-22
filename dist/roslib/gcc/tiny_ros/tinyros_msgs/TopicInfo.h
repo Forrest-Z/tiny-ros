@@ -165,6 +165,28 @@ namespace tinyros_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_topic_id; ss_topic_id << "\"topic_id\": " << topic_id <<", ";
+      string_echo += ss_topic_id.str();
+      string_echo += "\"topic_name\": \"";
+      string_echo += topic_name;
+      string_echo += "\", ";
+      string_echo += "\"message_type\": \"";
+      string_echo += message_type;
+      string_echo += "\", ";
+      string_echo += "\"md5sum\": \"";
+      string_echo += md5sum;
+      string_echo += "\", ";
+      std::stringstream ss_buffer_size; ss_buffer_size << "\"buffer_size\": " << buffer_size <<", ";
+      string_echo += ss_buffer_size.str();
+      std::stringstream ss_negotiated; ss_negotiated << "\"negotiated\": " << negotiated <<"";
+      string_echo += ss_negotiated.str();
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "tinyros_msgs/TopicInfo"; }
     virtual std::string getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
 

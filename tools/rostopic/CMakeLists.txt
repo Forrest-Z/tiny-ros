@@ -7,6 +7,7 @@ add_executable(tinyrostopic
   ${ROSLIB_PATHS}/time.cpp
   ${ROSLIB_PATHS}/duration.cpp
   ${ROSLIB_PATHS}/log.cpp
+  ${SPDLOG_SRC_LIST}
 )
 
 IF (CMAKE_SYSTEM_NAME MATCHES "CYGWIN")

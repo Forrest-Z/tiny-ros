@@ -77,6 +77,8 @@ public:
   virtual void logerror(const char* msg) {}
   virtual void logfatal(const char* msg) {}
 };
+
+void init(tinyros::string ip_addr = "127.0.0.1");
 }
 
 #endif /* TINYROS_NODE_HANDLE_BASE_H_ */

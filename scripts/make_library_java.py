@@ -41,7 +41,7 @@ def hashlib_md5sum(name, package, definition):
             value = value.strip().rstrip()
             str = str + "=" + value
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 def key_word_process(name):
@@ -58,7 +58,7 @@ def hashlib_md5sum_definition(definition):
     for line in definition:
         str += line;
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 #####################################################################
@@ -326,7 +326,7 @@ ROS_TO_EMBEDDED_TYPES = {
     'time'    :   ('com.roslib.ros.Time',  8, TimeDataType, []),
     'duration':   ('com.roslib.ros.Duration',  8, TimeDataType, []),
     'string'  :   ('java.lang.String',  0, StringDataType, []),
-    'Header'  :   ('com.roslib.std_msgs.Header',  0, MessageDataType, [])
+    'Header'  :   ('com.roslib.roslib_msgs.Header',  0, MessageDataType, [])
 }
 
 #####################################################################
@@ -454,6 +454,9 @@ class Message:
         f.write('    }\n')
         f.write('\n')
 
+    def _write_echo(self, f):
+        f.write('    public java.lang.String echo(){ return ""; }\n')
+
     def _write_std_includes(self, f):
         f.write('package com.roslib.%s;\n\n' % (self.package) )
         f.write('import java.lang.*;\n')
@@ -494,6 +497,7 @@ class Message:
         self._write_serializer(f)
         self._write_deserializer(f)
         self._write_serializedLength(f)
+        self._write_echo(f)
         self._write_getType(f)
         self._write_getMD5(f)
         self._write_getID(f)

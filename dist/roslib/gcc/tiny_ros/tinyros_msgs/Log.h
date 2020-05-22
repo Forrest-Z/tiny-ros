@@ -70,6 +70,18 @@ namespace tinyros_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_level; ss_level << "\"level\": " << (uint16_t)level <<", ";
+      string_echo += ss_level.str();
+      string_echo += "\"msg\": \"";
+      string_echo += msg;
+      string_echo += "\"";
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "tinyros_msgs/Log"; }
     virtual std::string getMD5(){ return "0bd74339b4d77cb15766d831a3d15eeb"; }
 

@@ -6,7 +6,7 @@
  * Date           Author       Notes
  * 2018-04-24     Pinkie.Fu    initial version
  */
-
+#include <signal.h>
 #include <thread>
 #include "tiny_ros/ros/node_handle.h"
 #include "tiny_ros/ros/node_handle_udp.h"
@@ -44,9 +44,19 @@ NodeHandle* nh(){
   if (!main_loop_init_){
     std::unique_lock<std::mutex> lock(main_loop_mutex_);
     if (!main_loop_init_) {
+#ifdef __linux__
+      signal(SIGPIPE, SIG_IGN);
+#endif
       main_loop_init_ = true;
       std::thread tid(std::bind(tinyros_main_loop, &g_nh));
       tid.detach();
+
+      /* make sure tinyros "spin" works first as possible */
+#ifdef WIN32
+      Sleep(200);
+#else
+      usleep(200*1000);
+#endif
     }
   }
   return &g_nh;
@@ -63,6 +73,11 @@ NodeHandleUdp* udp() {
     }
   }
   return &g_nh;
+}
+
+void init(std::string ip_addr) {
+  ip_addr_ = ip_addr;
+  tinyros::nh();
 }
 
 }

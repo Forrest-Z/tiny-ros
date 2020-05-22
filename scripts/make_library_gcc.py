@@ -50,7 +50,7 @@ def hashlib_md5sum(name, package, definition):
             value = value.strip().rstrip()
             str = str + "=" + value
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 def hashlib_md5sum_definition(definition):
@@ -59,7 +59,7 @@ def hashlib_md5sum_definition(definition):
     for line in definition:
         str += line;
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 #####################################################################
@@ -125,6 +125,30 @@ class PrimitiveDataType:
     def serializedLength(self, f):
         f.write('      length += sizeof(this->%s);\n' % self.name)
 
+    def echo(self, f, trailer):
+        if self.name.find('[') > 0:
+            tn = self.name[0:self.name.find('[')]
+            cn = self.name.replace("[","").replace("]","").split(".")[-1]
+            idx = self.name[self.name.find('[')+1:self.name.find(']')]
+            if self.type == 'int8_t':
+                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << (int16_t)%s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+            elif self.type == 'uint8_t':
+                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << (uint16_t)%s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+            elif self.type == 'char':
+                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": \\"" << %s <<"\\"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+            else:
+                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << %s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+            f.write('      string_echo += ss_%s.str();\n' % (cn))
+        else:
+            if self.type == 'int8_t':
+                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << (int16_t)%s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+            elif self.type == 'uint8_t':
+                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << (uint16_t)%s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+            elif self.type == 'char':
+                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": \\"" << %s <<"\\"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+            else:
+                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << %s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+            f.write('      string_echo += ss_%s.str();\n' % (self.name)) 
 
 class MessageDataType(PrimitiveDataType):
     """ For when our data type is another message. """
@@ -141,24 +165,19 @@ class MessageDataType(PrimitiveDataType):
     def serializedLength(self, f):
         f.write('      length += this->%s.serializedLength();\n' % self.name)
 
-
-class AVR_Float64DataType(PrimitiveDataType):
-    """ AVR C/C++ has no native 64-bit support, we automatically convert to 32-bit float. """
-
-    def make_initializer(self, f, trailer):
-        f.write('      %s(0)%s\n' % (self.name, trailer))
-
-    def make_declaration(self, f):
-        f.write('      typedef float _%s_type;\n      _%s_type %s;\n' % (self.name, self.name, self.name) )
-
-    def serialize(self, f):
-        f.write('      offset += serializeAvrFloat64(outbuffer + offset, this->%s);\n' % self.name)
-
-    def deserialize(self, f):
-        f.write('      offset += deserializeAvrFloat64(inbuffer + offset, &(this->%s));\n' % self.name)
-
-    def serializedLength(self, f):
-        f.write('      length += 8;\n')
+    def echo(self, f, trailer):
+        if self.name.find('[') > 0:
+            tn = self.name[0:self.name.find('[')]
+            cn = self.name.replace("[","").replace("]","").split(".")[-1]
+            idx = self.name[self.name.find('[')+1:self.name.find(']')]
+            f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": {";\n' % (cn, cn, tn, idx))
+            f.write('      string_echo += ss_%s.str();\n' % (cn))
+            f.write('      string_echo += this->%s.echo();\n' % self.name)
+            f.write('      string_echo += "}}%s";\n' % trailer)
+        else:
+            f.write('      string_echo += "\\"%s\\": {";\n' % self.name)
+            f.write('      string_echo += this->%s.echo();\n' % self.name)
+            f.write('      string_echo += "}%s";\n' % trailer)
 
 class StringDataType(PrimitiveDataType):
     def make_initializer(self, f, trailer):
@@ -193,6 +212,16 @@ class StringDataType(PrimitiveDataType):
         f.write('      length += 4;\n')
         f.write('      length += length_%s;\n' % cn)
 
+    def echo(self, f, trailer):
+        #f.write('      std::size_t %s_pos = %s.find("\\"");\n' % (self.name, self.name))
+        #f.write('      while(%s_pos != std::string::npos){\n' % self.name)
+        #f.write('          %s.replace(%s_pos, 1,"\\\\\\"");\n' % (self.name, self.name))
+        #f.write('          %s_pos = %s.find("\\"", %s_pos+2);\n' % (self.name, self.name, self.name))
+        #f.write('      }\n')
+        f.write('      string_echo += "\\"%s\\": \\"";\n' % self.name)
+        f.write('      string_echo += %s;\n' % self.name)
+        f.write('      string_echo += "\\"%s";\n' % trailer)
+
 class TimeDataType(PrimitiveDataType):
 
     def __init__(self, name, ty, bytes):
@@ -219,6 +248,11 @@ class TimeDataType(PrimitiveDataType):
         self.sec.serializedLength(f)
         self.nsec.serializedLength(f)
 
+    def echo(self, f, trailer):
+        f.write('      std::stringstream ss_%s;\n' % (self.name))
+        f.write('      ss_%s << "\\"%s.sec\\": " << %s.sec;\n' % (self.name, self.name, self.name))
+        f.write('      ss_%s << ", \\"%s.nsec\\": " << %s.nsec << "%s";\n' % (self.name, self.name, self.name, trailer))
+        f.write('      string_echo += ss_%s.str();\n' % (self.name))
 
 class ArrayDataType(PrimitiveDataType):
 
@@ -296,6 +330,29 @@ class ArrayDataType(PrimitiveDataType):
             f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
             c.serializedLength(f)
             f.write('      }\n')
+
+    def echo(self, f, trailer):
+        c = self.cls(self.name+"[i]", self.type, self.bytes)
+        if self.size == None:
+            f.write('      string_echo += "%s: [";\n' % (self.name))
+            f.write('      for( uint32_t i = 0; i < %s_length; i++){\n' % self.name)
+            f.write('      if( i == (%s_length - 1)) {\n' % self.name)
+            c.echo(f, '')
+            f.write('      } else {\n')
+            c.echo(f, ', ')
+            f.write('      }\n')
+            f.write('      }\n')
+            f.write('      string_echo += "]%s";\n' % (trailer))
+        else:
+            f.write('      string_echo += "%s: [";\n' % (self.name))
+            f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
+            f.write('      if( i == (%d - 1)) {\n' % self.size)
+            c.echo(f, '')
+            f.write('      } else {\n')
+            c.echo(f, ', ')
+            f.write('      }\n')
+            f.write('      }\n')
+            f.write('      string_echo += "]%s";\n' % (trailer))
 
 ROS_TO_EMBEDDED_TYPES = {
     'bool'    :   ('bool',              1, PrimitiveDataType, []),
@@ -446,6 +503,19 @@ class Message:
         f.write('    }\n')
         f.write('\n')
 
+    def _write_echo(self, f):
+        f.write('    virtual std::string echo()\n')
+        f.write('    {\n')
+        f.write('      std::string string_echo = "{";\n');
+        if self.data:
+            for d in self.data[:-1]:
+                d.echo(f, ', ')
+            self.data[-1].echo(f, '')
+        f.write('      string_echo += "}";\n');
+        f.write('      return string_echo;\n');
+        f.write('    }\n')
+        f.write('\n')
+
     def _write_std_includes(self, f):
         f.write('#include <stdint.h>\n')
         f.write('#include <string>\n')
@@ -491,6 +561,7 @@ class Message:
         self._write_serializer(f)
         self._write_deserializer(f)
         self._write_serializedLength(f)
+        self._write_echo(f)
         self._write_getType(f)
         self._write_getMD5(f)
         self._write_getID(f)
@@ -708,6 +779,80 @@ def messages_generate(path):
         raise Exception("Failed to generate libraries for: " + str(failed))
     print('\n')
 
+def MakeSubscribers(messages, output_path):
+    # generate for each message
+    for msg in messages:
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+        f = open(output_path + "/rostopic_subscribers.cpp", "w")
+        f.write('#ifndef _TINYROS_ROSTOPIC_SUBSCRIBERS_h\n')
+        f.write('#define _TINYROS_ROSTOPIC_SUBSCRIBERS_h\n')
+        f.write('\n')
+        f.write('#include "tiny_ros/ros.h"\n')
+        for i in messages:
+            f.write('#include "tiny_ros/%s.h"\n' % i)
+        f.write('\n')
+        f.write('namespace tinyros\n')
+        f.write('{\n')
+        f.write('template<typename MsgT>\n')
+        f.write('class EchoSubscriber: public tinyros::Subscriber_\n')
+        f.write('{\n')
+        f.write('public:\n')
+        f.write('MsgT msg;\n')
+        f.write('  virtual void callback(unsigned char* data)\n')
+        f.write('  {\n')
+        f.write('    MsgT tmsg;\n')
+        f.write('    tmsg.deserialize(data);\n')
+        f.write('    spdlog::get("logger")->info("{0}[{1}]->>{2}", topic_, getMsgType(), tmsg.echo());\n')
+        f.write('  }\n')
+        f.write('  virtual std::string getMsgType()\n')
+        f.write('  {\n')
+        f.write('    return this->msg.getType();\n')
+        f.write('  }\n')
+        f.write('  virtual std::string getMsgMD5()\n')
+        f.write('  {\n')
+        f.write('    return this->msg.getMD5();\n')
+        f.write('  }\n')
+        f.write('  virtual int getEndpointType()\n')
+        f.write('  {\n')
+        f.write('    return tinyros_msgs::TopicInfo::ID_SUBSCRIBER;\n')
+        f.write('  }\n')
+        f.write('};\n\n')
+        f.write('static std::map<std::string, tinyros::Subscriber_*> rostopic_subscribers = {\n')
+        for s in messages:
+	        pkg = s[0:s.find('/')]
+	        name = s[s.find('/')+1:]
+	        f.write('    {"%s", new EchoSubscriber<%s::%s>()},\n' % (s, pkg, name))
+        f.write('};\n\n')
+        f.write('}\n')
+        f.write('#endif\n\n')
+        f.close()
+        
+def subscribers_generate(path):
+    # gimme messages
+    failed = []
+    messages = list()
+    mydir = sys.argv[1] + "/msgs"
+    for d in sorted(os.listdir(mydir)):
+	    try:
+		    if os.path.exists(mydir + "/" + d +"/msg"):
+		        for f in os.listdir(mydir + "/" + d +"/msg"):
+		            messages.append(d + "/" + f[0:-4])
+	    except Exception as e:
+	        failed.append(d + " ("+str(e)+")")
+	        print('[%s]: Unable to append messages: %s\n' % (d, str(e)))
+	        print(traceback.format_exc())
+
+    MakeSubscribers(messages, sys.argv[3] + "/tools/rostopic")
+
+    print('\n')
+    if len(failed) > 0:
+        print('*** Warning, failed to generate subscribers for the following packages: ***')
+        for f in failed:
+            print('    %s'%f)
+        raise Exception("Failed to generate subscribers for: " + str(failed))
+    print('\n')
+
 def roslib_copy_roslib_files(path):
     if not os.path.exists(path+"ros"):
         os.makedirs(path+"ros")
@@ -776,6 +921,7 @@ print("\nExporting to %s" % path)
 roslib_copy_roslib_files(path+"/")
 roslib_copy_examples_files(path+"/")
 messages_generate(path+"/")
+subscribers_generate(path+"/")
 if os.path.exists(sys.argv[1] + "/build/CMake/msgs"):
     shutil.rmtree(sys.argv[1] + "/build/CMake/msgs")
 shutil.copytree(sys.argv[1] + "/msgs", sys.argv[1] + "/build/CMake/msgs")

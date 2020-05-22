@@ -50,7 +50,7 @@ def hashlib_md5sum(name, package, definition):
             value = value.strip().rstrip()
             str = str + "=" + value
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 def hashlib_md5sum_definition(definition):
@@ -59,7 +59,7 @@ def hashlib_md5sum_definition(definition):
     for line in definition:
         str += line;
     hl = hashlib.md5()
-    hl.update(str.encode(encoding='utf-8'))
+    hl.update(str)
     return hl.hexdigest()
 
 #####################################################################
@@ -140,25 +140,6 @@ class MessageDataType(PrimitiveDataType):
 
     def serializedLength(self, f):
         f.write('      length += this->%s.serializedLength();\n' % self.name)
-
-
-class AVR_Float64DataType(PrimitiveDataType):
-    """ AVR C/C++ has no native 64-bit support, we automatically convert to 32-bit float. """
-
-    def make_initializer(self, f, trailer):
-        f.write('      %s(0)%s\n' % (self.name, trailer))
-
-    def make_declaration(self, f):
-        f.write('      typedef float _%s_type;\n      _%s_type %s;\n' % (self.name, self.name, self.name) )
-
-    def serialize(self, f):
-        f.write('      offset += serializeAvrFloat64(outbuffer + offset, this->%s);\n' % self.name)
-
-    def deserialize(self, f):
-        f.write('      offset += deserializeAvrFloat64(inbuffer + offset, &(this->%s));\n' % self.name)
-
-    def serializedLength(self, f):
-        f.write('      length += 8;\n')
 
 class StringDataType(PrimitiveDataType):
     def make_initializer(self, f, trailer):

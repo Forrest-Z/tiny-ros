@@ -45,6 +45,15 @@ namespace roslib_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_data; ss_data << "\"data\": " << (uint16_t)data <<"";
+      string_echo += ss_data.str();
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "roslib_msgs/UInt8"; }
     virtual std::string getMD5(){ return "b8c6e02cc18bddcbace85025e42b55e5"; }
 

@@ -97,12 +97,6 @@ public:
       }
       
       active_ = false;
-
-      // Reset the state of the session, dropping any publishers or subscribers
-      // we currently know about from this client.
-      callbacks_.clear();    // 1
-      subscribers_.clear();  // 2
-      publishers_.clear();   // 3
     
       spdlog_warn("[{0}] {1} begin.", session_id_.c_str(), __FUNCTION__);
       if (require_check_thread_) {
@@ -113,9 +107,38 @@ public:
         require_check_thread_ = nullptr;
         spdlog_warn("[{0}] {1} require_check_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
       }
+
+      if (message_in_thread_) {
+        spdlog_warn("[{0}] {1} message_in_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
+        message_in_thread_->join();
+        delete message_in_thread_;
+        message_in_thread_ = nullptr;
+        spdlog_warn("[{0}] {1} message_in_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
+      }
+
+      spdlog_warn("[{0}] {1} clear async_write_buffers begin.", session_id_.c_str(), __FUNCTION__);
+      std::unique_lock<std::mutex> async_write_lock(async_write_mutex_);
+      async_write_buffers_.clear();
+      async_write_cond_.notify_all();
+      async_write_lock.unlock();
+      spdlog_warn("[{0}] {1} clear async_write_buffers end.", session_id_.c_str(), __FUNCTION__);
+  
+      if (message_write_thread_) {
+        spdlog_warn("[{0}] {1} message_write_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
+        message_write_thread_->join();
+        delete message_write_thread_;
+        message_write_thread_ = nullptr;
+        spdlog_warn("[{0}] {1} message_write_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
+      }
     }
 
     {
+      // Reset the state of the session, dropping any publishers or subscribers
+      // we currently know about from this client.
+      callbacks_.clear();    // 1
+      subscribers_.clear();  // 2
+      publishers_.clear();   // 3
+    
       spdlog_warn("[{0}] {1} services clear begin.", session_id_.c_str(), __FUNCTION__);
       std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
       for (uint32_t i=0; i<service_server_.size(); i++) {
@@ -142,29 +165,6 @@ public:
       service_server_.clear();
       services_client_.clear();
       spdlog_warn("[{0}] {1} services clear end.", session_id_.c_str(), __FUNCTION__);
-    }
-
-    spdlog_warn("[{0}] {1} clear async_write_buffers begin.", session_id_.c_str(), __FUNCTION__);
-    std::unique_lock<std::mutex> lock(async_write_mutex_);
-    async_write_buffers_.clear();
-    async_write_cond_.notify_all();
-    lock.unlock();
-    spdlog_warn("[{0}] {1} clear async_write_buffers end.", session_id_.c_str(), __FUNCTION__);
-    
-    if (message_write_thread_) {
-      spdlog_warn("[{0}] {1} message_write_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
-      message_write_thread_->join();
-      delete message_write_thread_;
-      message_write_thread_ = nullptr;
-      spdlog_warn("[{0}] {1} message_write_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
-    }
-
-    if (message_in_thread_) {
-      spdlog_warn("[{0}] {1} message_in_thread interrupt begin.", session_id_.c_str(), __FUNCTION__);
-      message_in_thread_->join();
-      delete message_in_thread_;
-      message_in_thread_ = nullptr;
-      spdlog_warn("[{0}] {1} message_in_thread interrupt end.", session_id_.c_str(), __FUNCTION__);
     }
     
     // Close the socket.
@@ -655,10 +655,10 @@ private:
   }
 
   void handle_rostopic_request(tinyros::serialization::IStream& stream) {
-    std::string topic_list = "\ntopic_list:\n";
+    std::string topic_list = "\n";
     std::map<std::string, RostopicPtr>::iterator it;
     for(it = Rostopic::topics_.begin(); it != Rostopic::topics_.end(); ) {
-      topic_list += "        " + it->first + " [" + it->second->message_type_ + "]\n";
+      topic_list += it->first + " [type:" + it->second->message_type_ + ", md5:" + it->second->md5sum_ + "]\n";
       it++;
     }
     roslib_msgs::String msg;

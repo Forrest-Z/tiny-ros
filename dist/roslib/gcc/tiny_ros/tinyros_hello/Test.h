@@ -73,6 +73,16 @@ static const char TEST[] = "tinyros_hello/Test";
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      string_echo += "\"input\": \"";
+      string_echo += input;
+      string_echo += "\"";
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return TEST; }
     virtual std::string getMD5(){ return "26ee7a44335f1f7b55a5a7490460807d"; }
     uint32_t getID() const { return this->__id__; }
@@ -139,6 +149,16 @@ static const char TEST[] = "tinyros_hello/Test";
       length += 4;
       length += length_output;
       return length;
+    }
+
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      string_echo += "\"output\": \"";
+      string_echo += output;
+      string_echo += "\"";
+      string_echo += "}";
+      return string_echo;
     }
 
     virtual std::string getType(){ return TEST; }

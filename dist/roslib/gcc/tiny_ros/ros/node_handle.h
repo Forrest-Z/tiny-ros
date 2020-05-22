@@ -525,9 +525,14 @@ public:
       {
         int64_t now = (int64_t)tinyros::Time().now().toMSec();
         if (now > to ) {
-          printf("Failed to get getTopicList: timeout expired");
+          printf("Failed to get getTopicList: timeout expired\n");
           return "";
         }
+#ifdef WIN32
+        Sleep(100);
+#else
+        usleep(100*1000);
+#endif
       }
       return topic_list;
     }
@@ -542,9 +547,14 @@ public:
       {
         int64_t now = (int64_t)tinyros::Time().now().toMSec();
         if (now > to) {
-          printf("Failed to get getServiceList: timeout expired");
+          printf("Failed to get getServiceList: timeout expired\n");
           return "";
         }
+#ifdef WIN32
+        Sleep(100);
+#else
+        usleep(100*1000);
+#endif
       }
       return service_list;
     }

@@ -97,6 +97,22 @@ namespace roslib_msgs
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      std::stringstream ss_seq; ss_seq << "\"seq\": " << seq <<", ";
+      string_echo += ss_seq.str();
+      std::stringstream ss_stamp;
+      ss_stamp << "\"stamp.sec\": " << stamp.sec;
+      ss_stamp << ", \"stamp.nsec\": " << stamp.nsec << ", ";
+      string_echo += ss_stamp.str();
+      string_echo += "\"frame_id\": \"";
+      string_echo += frame_id;
+      string_echo += "\"";
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "roslib_msgs/Header"; }
     virtual std::string getMD5(){ return "a4a17e29b1585e34437f51ffa30904c5"; }
 

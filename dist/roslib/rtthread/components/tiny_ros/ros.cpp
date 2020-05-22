@@ -43,6 +43,9 @@ NodeHandle* nh(){
       result = rt_thread_startup(&main_loop_thread_);
       RT_ASSERT(result == RT_EOK);
       nh->main_loop_init_ = true;
+
+      /*make sure tinyros "spin" works first as possible*/
+      rt_thread_delay(200);
     }
     rt_mutex_release(&nh->main_loop_mutex_);
   }
@@ -66,5 +69,11 @@ NodeHandleUdp* udp() {
   }
   return nh;
 }
+
+void init(tinyros::string ip_addr) {
+  ip_addr_ = ip_addr;
+  tinyros::nh();
+}
+
 }
 

@@ -29,6 +29,7 @@ public class UInt8 implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/UInt8"; }
     public java.lang.String getMD5(){ return "b8c6e02cc18bddcbace85025e42b55e5"; }
     public long getID() { return 0; }

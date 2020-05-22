@@ -56,6 +56,8 @@ public:
   virtual void spin_task(const std::shared_ptr<SpinObject> obj) {}
   virtual void keepalive() {}
 };
+
+void init(std::string ip_addr = "127.0.0.1");
 }
 #endif
 

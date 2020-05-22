@@ -57,6 +57,16 @@ namespace tinyros_hello
       return length;
     }
 
+    virtual std::string echo()
+    {
+      std::string string_echo = "{";
+      string_echo += "\"hello\": \"";
+      string_echo += hello;
+      string_echo += "\"";
+      string_echo += "}";
+      return string_echo;
+    }
+
     virtual std::string getType(){ return "tinyros_hello/TinyrosHello"; }
     virtual std::string getMD5(){ return "0c68e66a217802ad0c9f648b7a69d090"; }
 

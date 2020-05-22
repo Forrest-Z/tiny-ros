@@ -35,6 +35,7 @@ public class UInt32 implements com.roslib.ros.Msg {
         return length;
     }
 
+    public java.lang.String echo(){ return ""; }
     public java.lang.String getType(){ return "roslib_msgs/UInt32"; }
     public java.lang.String getMD5(){ return "804ce4269bf9198ee80342049fb08924"; }
     public long getID() { return 0; }
