@@ -1,7 +1,7 @@
 ## tiny-ros
 微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java
 
-<video src="doc/demo.mp4"></video>
+![demo](doc/demo.gif)
 
 
 
@@ -81,28 +81,34 @@ int main (int argc, char *argv[]) {
 
 ```
 package examples.publisher;
+
 import com.roslib.ros.NodeHandle;
 import com.roslib.ros.Publisher;
 import com.roslib.tinyros_hello.TinyrosHello;
+
 public class ExamplePublisher {
-    public static void main(String[] args) throws InterruptedException {
-        NodeHandle nh = new NodeHandle();
-        while (!nh.initNode("127.0.0.1")) {
-            System.out.println("Java: initNode failed.");
-            Thread.sleep(500);
-        }
-        TinyrosHello msg = new TinyrosHello();
-        Publisher<TinyrosHello> pub = new Publisher<>("tinyros_hello", msg);
-        nh.advertise(pub);
-        while(nh.ok()) {
-            if (pub.negotiated()) {
-                msg.hello = "Hello, tiny-ros ^_^";
-                pub.publish(msg);
-            }
-            nh.spinOnce();
-            Thread.sleep(500);
-        }
+  public static void main(String[] args) throws InterruptedException {
+    NodeHandle nh = new NodeHandle();
+    while (!nh.initNode("127.0.0.1")) {
+      System.out.println("Java: initNode failed.");
+      Thread.sleep(500);
     }
+
+    TinyrosHello msg = new TinyrosHello();
+    Publisher<TinyrosHello> pub = new Publisher<>("tinyros_hello", msg);
+
+    nh.advertise(pub);
+
+    while(nh.ok()) {
+      if (pub.negotiated()) {
+        msg.hello = "Hello, tiny-ros ^_^";
+        pub.publish(msg);
+      }
+
+      nh.spinOnce();
+      Thread.sleep(500);
+    }
+  }
 }
 ```
 
@@ -140,30 +146,34 @@ int main(void) {
 
 ```
 package examples.subscriber;
+
 import com.roslib.ros.CallbackSubT;
 import com.roslib.ros.Msg;
 import com.roslib.ros.NodeHandle;
 import com.roslib.ros.Subscriber;
 import com.roslib.tinyros_hello.TinyrosHello;
+
 public class ExampleSubscriber {
-    public static void main(String[] args) throws InterruptedException {
-        NodeHandle nh = new NodeHandle();
-        while (!nh.initNode("127.0.0.1")) {
-            System.out.println("initNode failed.");
-            Thread.sleep(500);
-        }
-        nh.subscribe(new Subscriber<TinyrosHello>("tinyros_hello", new CallbackSubT() {
-            @Override
-            public void callback(Msg msg) {
-                TinyrosHello m = (TinyrosHello)msg;
-                System.out.println(m.hello);
-            }
-        }, new TinyrosHello()));
-        while(nh.ok()) {
-            nh.spinOnce();
-            Thread.sleep(500);
-        }
+  public static void main(String[] args) throws InterruptedException {
+    NodeHandle nh = new NodeHandle();
+    while (!nh.initNode("127.0.0.1")) {
+      System.out.println("initNode failed.");
+      Thread.sleep(500);
     }
+
+    nh.subscribe(new Subscriber<TinyrosHello>("tinyros_hello", new CallbackSubT() {
+      @Override
+      public void callback(Msg msg) {
+        TinyrosHello m = (TinyrosHello)msg;
+        System.out.println(m.hello);
+      }
+    }, new TinyrosHello()));
+
+    while(nh.ok()) {
+      nh.spinOnce();
+      Thread.sleep(500);
+    }
+  }
 }
 ```
 
@@ -197,29 +207,34 @@ int main() {
 
 ```
 package examples.service;
+
 import com.roslib.ros.CallbackSrvT;
 import com.roslib.ros.Msg;
 import com.roslib.ros.NodeHandle;
 import com.roslib.ros.ServiceServer;
 import com.roslib.tinyros_hello.Test;
+
 public class ExampleService {
-    public static void main(String[] args) throws InterruptedException {
-        NodeHandle nh = new NodeHandle();
-        while (!nh.initNode("127.0.0.1")) {
-            System.out.println("Java: initNode failed.");
-            Thread.sleep(500);
-        }
-        nh.advertiseService(new ServiceServer<Test.TestRequest, Test.TestResponse>("test_srv", new CallbackSrvT() {
-            @Override
-            public void callback(Msg req, Msg res) {
-                ((Test.TestResponse)res).output = "Hello, tiny-ros ^_^";
-            }
-        }, new Test.TestRequest(), new Test.TestResponse()));
-        while(nh.ok()) {
-            nh.spinOnce();
-            Thread.sleep(500);
-        }
+  public static void main(String[] args) throws InterruptedException {
+    NodeHandle nh = new NodeHandle();
+    while (!nh.initNode("127.0.0.1")) {
+      System.out.println("Java: initNode failed.");
+      Thread.sleep(500);
     }
+
+    nh.advertiseService(new ServiceServer<Test.TestRequest,
+        Test.TestResponse>("test_srv", new CallbackSrvT() {
+      @Override
+      public void callback(Msg req, Msg res) {
+        ((Test.TestResponse) res).output = "Hello, tiny-ros ^_^";
+      }
+    }, new Test.TestRequest(), new Test.TestResponse()));
+
+    while (nh.ok()) {
+      nh.spinOnce();
+      Thread.sleep(500);
+    }
+  }
 }
 ```
 
@@ -258,37 +273,44 @@ int main() {
 
 ```
 package examples.service_client;
+
 import com.roslib.ros.NodeHandle;
 import com.roslib.ros.ServiceClient;
 import com.roslib.tinyros_hello.Test;
+
 public class ExampleServiceClient {
-	public static void main(String[] args) throws InterruptedException {
-		NodeHandle nh = new NodeHandle();
-        while (!nh.initNode("127.0.0.1")) {
-			System.out.println("initNode failed.");
-			Thread.sleep(500);
-		}
-		ServiceClient<Test.TestRequest, Test.TestResponse> client = new ServiceClient<Test.TestRequest, Test.TestResponse>(
-				"test_srv", new Test.TestRequest(), new Test.TestResponse());
-		nh.serviceClient(client);
-		new Thread(new Runnable(){  
-			ServiceClient<Test.TestRequest, Test.TestResponse> cl = client;
-			public void run(){  
-				while(true) {
-					Test.TestRequest req = new Test.TestRequest();
-					Test.TestResponse resp = new Test.TestResponse();
-					if (cl.call(req, resp, 5)) {
-						System.out.println("service responsed with \"" + resp.output + "\"");
-					} else {
-						System.out.println("Service call failed.");
-					}
-				}
-			}}).start(); 
-		while(nh.ok()) {
-			nh.spinOnce();
-			Thread.sleep(500);
-		}
-	}
+  public static void main(String[] args) throws InterruptedException {
+    NodeHandle nh = new NodeHandle();
+    while (!nh.initNode("127.0.0.1")) {
+      System.out.println("initNode failed.");
+      Thread.sleep(500);
+    }
+
+    ServiceClient<Test.TestRequest, Test.TestResponse> client = 
+        new ServiceClient<Test.TestRequest, Test.TestResponse>(
+        "test_srv", new Test.TestRequest(), new Test.TestResponse());
+
+    nh.serviceClient(client);
+
+    new Thread(new Runnable(){
+      ServiceClient<Test.TestRequest, Test.TestResponse> cl = client;
+      public void run(){
+        while(true) {
+          Test.TestRequest req = new Test.TestRequest();
+          Test.TestResponse resp = new Test.TestResponse();
+          if (cl.call(req, resp, 5)) {
+            System.out.println("service responsed with \"" + resp.output + "\"");
+          } else {
+            System.out.println("Service call failed.");
+          }
+        }
+      }}).start();
+
+    while(nh.ok()) {
+      nh.spinOnce();
+      Thread.sleep(500);
+    }
+  }
 }
 ```
 
