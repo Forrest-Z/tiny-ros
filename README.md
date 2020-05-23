@@ -1,7 +1,7 @@
 ## tiny-ros
 微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java
 
-![demo](doc/demo.gif)
+![](doc/demo.gif)
 
 
 
@@ -53,7 +53,7 @@ Tinyros分布式操作系统由tinyroscore实现，提供独立于分布式操�
 
 #### 1、C++实现：ExamplePublisher
 
-```
+```c++
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/TinyrosHello.h"
 int main (int argc, char *argv[]) {
@@ -79,7 +79,7 @@ int main (int argc, char *argv[]) {
 
 #### 2、Java实现：ExamplePublisher
 
-```
+```java
 package examples.publisher;
 
 import com.roslib.ros.NodeHandle;
@@ -118,7 +118,7 @@ public class ExamplePublisher {
 
 #### 1、C++实现：ExampleSubscriber
 
-```
+```c++
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/TinyrosHello.h"
 static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
@@ -144,7 +144,7 @@ int main(void) {
 
 #### 2、Java实现：ExampleSubscriber
 
-```
+```java
 package examples.subscriber;
 
 import com.roslib.ros.CallbackSubT;
@@ -183,7 +183,7 @@ public class ExampleSubscriber {
 
 #### 1、C++实现：ExampleService
 
-```
+```c++
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/Test.h"
 static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::Test::Response & res) {
@@ -205,7 +205,7 @@ int main() {
 
 #### 2、Java实现：ExampleService
 
-```
+```java
 package examples.service;
 
 import com.roslib.ros.CallbackSrvT;
@@ -244,7 +244,7 @@ public class ExampleService {
 
 #### 1、C++实现：ExampleServiceClient
 
-```
+```c++
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/Test.h"
 int main() {
@@ -271,7 +271,7 @@ int main() {
 
 2、Java实现：ExampleServiceClient
 
-```
+```java
 package examples.service_client;
 
 import com.roslib.ros.NodeHandle;
@@ -320,7 +320,7 @@ public class ExampleServiceClient {
 
 #### 1、tinyros_entries.h
 
-```
+```c++
 #ifndef _TINYROS_ENTRIES_H_
 #define _TINYROS_ENTRIES_H_
 #include <stdint.h>
@@ -342,7 +342,7 @@ void tinyros_example_service_client(void* parameter);
 
 #### 2、tinyros_entries.cpp
 
-```
+```c++
 #include "tinyros_entries.h"
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/Test.h"
@@ -419,7 +419,7 @@ extern "C" void tinyros_example_service_client(void* parameter) {
 
 #### 3、main.c
 
-```
+```c
 #include <rtthread.h>
 #include <lwip/sys.h>
 #include <lwip/api.h>
