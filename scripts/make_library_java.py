@@ -747,9 +747,9 @@ if path[-1] == "/":
     path = path[0:-1]
 print("\nExporting to %s" % path)
 
-roslib_copy_roslib_files(path+"/roslib/java/com/roslib/")
-roslib_copy_examples_files(path+"/roslib/java/")
-messages_generate(path+"/roslib/java/com/roslib")
+roslib_copy_roslib_files(path+"/com/roslib/")
+roslib_copy_examples_files(path+"/")
+messages_generate(path+"/com/roslib")
 if os.path.exists(sys.argv[1] + "/build/CMake/java_msgs"):
     shutil.rmtree(sys.argv[1] + "/build/CMake/java_msgs")
 shutil.copytree(sys.argv[1] + "/msgs", sys.argv[1] + "/build/CMake/java_msgs")

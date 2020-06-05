@@ -1,5 +1,5 @@
 # tiny-ros
-微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java
+微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java、Python
 
 ![](doc/demo.gif)
 
@@ -24,7 +24,7 @@ make clean清除项目，通过make重新编译安装。编译完成后目标文
 
 ## 支持平台
 
-Tinyros分布式操作系统由tinyroscore实现，提供独立于分布式操作系统由Java、C++11和RTThread C/C++三种语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
+Tinyros分布式操作系统由tinyroscore实现，提供独立于分布式操作系统由Java、C++11、Python和RTThread C/C++四种语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
 
 - Windows (msvc 2013+,  cygwin, Qt msvc2013+)
 - Linux, FreeBSD, OpenBSD，,Solaris
@@ -112,6 +112,32 @@ public class ExamplePublisher {
 }
 ```
 
+#### 3、Python实现：ExamplePublisher
+
+```python
+import sys
+import time
+import tinyros
+import tinyros_hello.msg.TinyrosHello
+
+def main():
+    tinyros.init("10.20.18.2")
+    pub = tinyros.Publisher("tinyros_hello", tinyros_hello.msg.TinyrosHello)
+
+    if 1:
+        tinyros.nh().advertise(pub)
+    else:
+        tinyros.udp().advertise(pub)
+    while True:
+        msg = tinyros_hello.msg.TinyrosHello()
+        msg.hello = 'Hello, tiny-ros ^_^ '
+        pub.publish(msg)
+        time.sleep(1)
+
+if __name__ == '__main__':
+    main()
+```
+
 
 
 ## 例子：ExampleSubscriber
@@ -177,6 +203,30 @@ public class ExampleSubscriber {
 }
 ```
 
+#### 3、Python实现：ExampleSubscriber
+
+```python
+import sys
+import time
+import tinyros
+import tinyros_hello.msg.TinyrosHello
+
+def subscriber_cb(received_msg):
+  print('%s' % received_msg.hello)
+
+def main():
+    tinyros.init("10.20.18.2")
+    if 1:
+        tinyros.nh().subscribe(tinyros.Subscriber("tinyros_hello", subscriber_cb, tinyros_hello.msg.TinyrosHello))
+    else:
+        tinyros.udp().subscribe(tinyros.Subscriber("tinyros_hello", subscriber_cb, tinyros_hello.msg.TinyrosHello))
+    while True:
+       time.sleep(10)
+
+if __name__ == '__main__':
+    main()
+```
+
 
 
 ## 例子：ExampleService
@@ -238,6 +288,28 @@ public class ExampleService {
 }
 ```
 
+#### 3、Python实现：ExampleService
+
+```python
+import sys
+import time
+import tinyros
+import tinyros_hello.srv.Test
+
+def service_cb(req, res):
+    res.output = "Hello, tiny-ros ^_^"
+
+def main():
+    tinyros.init("10.20.18.2")
+    tinyros.nh().advertiseService(tinyros.ServiceServer("test_srv", service_cb, \
+            tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response))
+    while True:
+       time.sleep(10)
+
+if __name__ == '__main__':
+    main()
+```
+
 
 
 ## 例子：ExampleServiceClient
@@ -269,7 +341,7 @@ int main() {
 }
 ```
 
-2、Java实现：ExampleServiceClient
+#### 2、Java实现：ExampleServiceClient
 
 ```java
 package examples.service_client;
@@ -312,6 +384,32 @@ public class ExampleServiceClient {
     }
   }
 }
+```
+
+#### 3、Python实现：ExampleServiceClient
+
+```python
+import sys
+import time
+import tinyros
+import tinyros_hello.srv.Test
+
+def main():
+    tinyros.init("10.20.18.2")
+    client = tinyros.ServiceClient("test_srv", tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response)
+    tinyros.nh().serviceClient(client)
+    while True:
+        req = tinyros_hello.srv.Test.Request()
+        res = tinyros_hello.srv.Test.Response()
+        req.input = "hello world!"
+        if client.call(req, res):
+            print('Service responsed with "%s"' % res.output)
+        else:
+            print("Service call failed.")
+        time.sleep(1)
+
+if __name__ == '__main__':
+    main()
 ```
 
 
