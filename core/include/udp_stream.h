@@ -37,7 +37,8 @@ public:
     struct linger so_linger;
     so_linger.l_onoff = 1;
     so_linger.l_linger = 0;
-    setsockopt(sock_fd_, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, (const char *)&opt, sizeof(opt));
+    setsockopt(sock_fd_, SOL_SOCKET, SO_BROADCAST, (const char *)&opt, sizeof(opt));
+    setsockopt(sock_fd_, SOL_SOCKET, SO_REUSEADDR, (const char *)&opt, sizeof(opt));
     setsockopt(sock_fd_, SOL_SOCKET, SO_LINGER, (const char *)&so_linger, sizeof(so_linger));
 
     memset(&client_endpoint_, 0, sizeof(struct sockaddr_in));
