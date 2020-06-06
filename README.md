@@ -121,7 +121,7 @@ import tinyros
 import tinyros_hello.msg.TinyrosHello
 
 def main():
-    tinyros.init("10.20.18.2")
+    tinyros.init("127.0.0.1")
     pub = tinyros.Publisher("tinyros_hello", tinyros_hello.msg.TinyrosHello)
 
     if 1:
@@ -215,7 +215,7 @@ def subscriber_cb(received_msg):
   print('%s' % received_msg.hello)
 
 def main():
-    tinyros.init("10.20.18.2")
+    tinyros.init("127.0.0.1")
     if 1:
         tinyros.nh().subscribe(tinyros.Subscriber("tinyros_hello", subscriber_cb, tinyros_hello.msg.TinyrosHello))
     else:
@@ -300,7 +300,7 @@ def service_cb(req, res):
     res.output = "Hello, tiny-ros ^_^"
 
 def main():
-    tinyros.init("10.20.18.2")
+    tinyros.init("127.0.0.1")
     tinyros.nh().advertiseService(tinyros.ServiceServer("test_srv", service_cb, \
             tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response))
     while True:
@@ -395,7 +395,7 @@ import tinyros
 import tinyros_hello.srv.Test
 
 def main():
-    tinyros.init("10.20.18.2")
+    tinyros.init("127.0.0.1")
     client = tinyros.ServiceClient("test_srv", tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response)
     tinyros.nh().serviceClient(client)
     while True:
