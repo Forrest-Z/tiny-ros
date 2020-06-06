@@ -848,7 +848,8 @@ def MakeLibrary(pkg_dir, package, output_path, build_dir):
 
     msg_import = open(messages_output_path + "/__init__.py", "w")
     for f in os.listdir(messages_output_path):
-        if f != "__init__.py" and f != "__init__.pyc":
+        suffix = f[f.rfind('.'):]
+        if f != "__init__.py" and suffix != ".pyc":
             msg_import.write('from .%s import *\n' % f[0:-3])
     msg_import.close()
   
@@ -863,7 +864,8 @@ def MakeLibrary(pkg_dir, package, output_path, build_dir):
 
     srv_import = open(services_output_path + "/__init__.py", "w")
     for f in os.listdir(services_output_path):
-        if f != "__init__.py" and f != "__init__.pyc":
+        suffix = f[f.rfind('.'):]
+        if f != "__init__.py" and suffix != ".pyc":
             srv_import.write('from .%s import *\n' % f[0:-3])
     srv_import.close()
     
