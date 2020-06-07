@@ -460,6 +460,7 @@ private:
           PublisherPtr pub = pit->second;
           uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
           if ((now - pub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
+            spdlog_info("[{0}] Publisher remove(topic_id: {1}, topic_name: {2})", session_id_.c_str(), pub->topic_id_, pub->topic_name_.c_str());
             callbacks_.erase(pit->first);
             publishers_.erase(pit++);
           } else {
@@ -472,6 +473,7 @@ private:
           SubscriberPtr sub = sit->second;
           uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
           if ((now - sub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
+            spdlog_info("[{0}] Subscriber remove(topic_id: {1}, topic_name: {2})", session_id_.c_str(), sub->topic_id_, sub->topic_name_.c_str());
             subscribers_.erase(sit++);
           } else {
             sit++;
