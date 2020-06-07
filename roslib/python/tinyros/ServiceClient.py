@@ -5,7 +5,7 @@ import tinyros
 import tinyros_msgs.msg
 
 class ServiceClient(tinyros.Subscriber):
-    __slots__ = ['data_req_class_', 'data_resp_class_', 'msg_req_', 'msg_resp_', 'pub_','call_req_', 'call_resp_', 'call_cond_', 'call_mutex_']
+    __slots__ = ['data_req_class_', 'data_resp_class_', 'msg_req_', 'msg_resp_', 'pub_','call_req_', 'call_resp_', 'call_cond_', 'call_mutex_','call_wait_']
 
     gg_mutex_ = threading.Lock()
 
@@ -23,6 +23,7 @@ class ServiceClient(tinyros.Subscriber):
         self.call_cond_ = threading.Condition()
         self.call_req_ = None
         self.call_resp_ = None
+        self.call_wait_ = True
         self.data_req_class_ = data_req_class
         self.data_resp_class_ = data_resp_class
         self.msg_req_ = self.data_req_class_()
@@ -41,6 +42,7 @@ class ServiceClient(tinyros.Subscriber):
         
         self.call_req_ = request
         self.call_resp_ = response
+        self.call_wait_ = True
 
         ServiceClient.gg_mutex_.acquire()
         self.call_req_.setID(ServiceClient.gg_id_)
@@ -54,10 +56,10 @@ class ServiceClient(tinyros.Subscriber):
             return False
         self.call_cond_.wait(duration)
         self.call_req_ = self.call_resp_ = None
+        result = not self.call_wait_
         self.call_cond_.release()
         self.call_mutex_.release()
-        return True
-
+        return result
 
     def callback(self, buff):
         self.call_cond_.acquire()
@@ -68,6 +70,7 @@ class ServiceClient(tinyros.Subscriber):
             req_id  = self.call_req_.getID()
             if resp_id == req_id:
                 self.call_resp_.deserialize(buff)
+                self.call_wait_ = False
                 self.call_cond_.notify_all();
         self.call_cond_.release()
 
