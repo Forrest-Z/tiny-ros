@@ -1,6 +1,5 @@
 import sys
 import socket
-python3 = True if sys.hexversion > 0x03000000 else False
 
 class Hardware(object):
     __slots__ = ['sockfd_', 'port_', 'connected_']
@@ -27,9 +26,6 @@ class Hardware(object):
             try:
                 _x = self.sockfd_.recv(length)
                 size = len(_x)
-                if python3 or type(_x) == unicode:
-                    _x = _x.encode('utf-8')
-                    size = len(_x)
                 return _x, size
             except Exception as ex: 
                 print('Hardware::read %s' % str(ex))
@@ -41,9 +37,6 @@ class Hardware(object):
             try:
                 _x = buff
                 size = len(_x)
-                if python3 or type(_x) == unicode:
-                    _x = _x.encode('utf-8')
-                    size = len(_x)
                 self.sockfd_.send(_x)
                 return size
             except Exception as ex: 

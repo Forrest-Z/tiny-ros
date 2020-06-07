@@ -1,6 +1,5 @@
 import sys
 import socket
-python3 = True if sys.hexversion > 0x03000000 else False
 
 class HardwareUdp(object):
     __slots__ = ['sock_send_', 'sock_recv_', 'server_port_', 'client_port_', 'connected_', 'sock_binded_']
@@ -34,9 +33,6 @@ class HardwareUdp(object):
             try:
                 _x, _addr = self.sock_recv_.recvfrom(length)
                 size = len(_x)
-                if python3 or type(_x) == unicode:
-                    _x = _x.encode('utf-8')
-                    size = len(_x)
                 return _x, size
             except Exception as ex: 
                 print('HardwareUdp::read %s' % str(ex))
@@ -50,9 +46,6 @@ class HardwareUdp(object):
             try:
                 _x = buff
                 size = len(_x)
-                if python3 or type(_x) == unicode:
-                    _x = _x.encode('utf-8')
-                    size = len(_x)
                 self.sock_send_.sendto(_x, self.server_port_)
                 return size
             except Exception as ex: 

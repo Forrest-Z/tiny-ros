@@ -90,12 +90,9 @@ class NodeHandleBase(object):
         buff.seek(7)
         x = buff.read()
         size = len(x)
-        if python3 or type(x) == unicode:
-            x = x.encode('utf-8')
-            size = len(x)
         chk = 0
         for i in range(0, size):
-            (data,) = struct_data.unpack(x[i])
+            (data,) = struct_data.unpack(x[i:i+1])
             chk += data
         chk = 255 - (chk % 256)
         buff.seek(l + 11)
@@ -208,8 +205,8 @@ class NodeHandle(NodeHandleBase):
         bytes = 0
         topic = 0
         need_len = 1
-        message_in = ''
         checksum = 0
+        message_in = b'' if python3 else ''
         
         struct_B = struct.Struct("<B")
 
@@ -237,12 +234,12 @@ class NodeHandle(NodeHandleBase):
                 return -1
             
             for i in range(0, rv):
-                (sum,) = struct_B.unpack(data[i])
+                (sum,) = struct_B.unpack(data[i:i+1])
                 checksum += sum
 
             if mode == NodeHandle.MODE_MESSAGE:
                 for i in range(0, rv):
-                    message_in = message_in + data[i]
+                    message_in = message_in + data[i:i+1]
                     bytes -= 1
                 if bytes == 0:
                     need_len = 1
@@ -250,30 +247,30 @@ class NodeHandle(NodeHandleBase):
                 else:
                     need_len = bytes
             elif mode == NodeHandle.MODE_FIRST_FF:
-                message_in = '' 
-                (sum,) = struct_B.unpack(data[0])
+                message_in = b'' if python3 else ''
+                (sum,) = struct_B.unpack(data[0:1])
                 if sum == 0xff:
                     mode += 1
             elif mode == NodeHandle.MODE_PROTOCOL_VER:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 if sum == NodeHandleBase.PROTOCOL_VER:
                     mode += 1
                 else:
                     mode = NodeHandle.MODE_FIRST_FF
             elif mode == self.MODE_SIZE_L:
-                (checksum,) = struct_B.unpack(data[0])
+                (checksum,) = struct_B.unpack(data[0:1])
                 bytes = checksum
                 mode += 1
             elif mode == NodeHandle.MODE_SIZE_L1:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 bytes += sum << 8
                 mode += 1
             elif mode == NodeHandle.MODE_SIZE_H:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 bytes += sum << 16
                 mode += 1
             elif mode == NodeHandle.MODE_SIZE_H1:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 bytes += sum << 24
                 mode += 1
             elif mode == NodeHandle.MODE_SIZE_CHECKSUM:
@@ -282,19 +279,19 @@ class NodeHandle(NodeHandleBase):
                 else:
                     mode = NodeHandle.MODE_FIRST_FF
             elif mode == NodeHandle.MODE_TOPIC_L:
-                (topic,) = struct_B.unpack(data[0])
+                (topic,) = struct_B.unpack(data[0:1])
                 mode += 1
                 checksum = topic
             elif mode == NodeHandle.MODE_TOPIC_L1:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 topic += sum << 8
                 mode += 1
             elif mode == NodeHandle.MODE_TOPIC_H:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 topic += sum << 16
                 mode += 1
             elif mode == NodeHandle.MODE_TOPIC_H1:
-                (sum,) = struct_B.unpack(data[0])
+                (sum,) = struct_B.unpack(data[0:1])
                 topic += sum << 24
                 mode = NodeHandle.MODE_MESSAGE
                 if bytes == 0:
@@ -472,42 +469,42 @@ class NodeHandleUdp(NodeHandleBase):
             (message_in, rv) = self.hardware_.read(NodeHandleBase.INPUT_SIZE)
             if NodeHandleBase.INPUT_SIZE >= rv and rv > 0:
                 topic = index = bytes = checksum = 0
-                (data,) = struct_B.unpack(message_in[index])
+                (data,) = struct_B.unpack(message_in[index:index+1])
                 if data != 0xff:
                     continue
                 
                 index += 1
-                (data,) = struct_B.unpack(message_in[index])
+                (data,) = struct_B.unpack(message_in[index:index+1])
                 if data != NodeHandleBase.PROTOCOL_VER:
                     continue
 
                 index += 1 
-                (data,) = struct_B.unpack(message_in[index])
+                (data,) = struct_B.unpack(message_in[index:index+1])
                 bytes = checksum = data
-                (data,) = struct_B.unpack(message_in[index + 1])
+                (data,) = struct_B.unpack(message_in[index + 1:index + 2])
                 bytes += data << 8
                 checksum += data
-                (data,) = struct_B.unpack(message_in[index + 2])
+                (data,) = struct_B.unpack(message_in[index + 2:index + 3])
                 bytes += data << 16
                 checksum += data
-                (data,) = struct_B.unpack(message_in[index + 3])
+                (data,) = struct_B.unpack(message_in[index + 3:index + 4])
                 bytes += data << 24
                 checksum += data
-                (data,) = struct_B.unpack(message_in[index + 4])
+                (data,) = struct_B.unpack(message_in[index + 4:index + 5])
                 checksum += data
                 index += 5
                 if (checksum % 256) != 255:
                     continue
                 
-                (data,) = struct_B.unpack(message_in[index])
+                (data,) = struct_B.unpack(message_in[index:index + 1])
                 topic = checksum = data
-                (data,) = struct_B.unpack(message_in[index + 1])
+                (data,) = struct_B.unpack(message_in[index + 1:index + 2])
                 topic += data << 8
                 checksum += data
-                (data,) = struct_B.unpack(message_in[index + 2])
+                (data,) = struct_B.unpack(message_in[index + 2:index + 3])
                 topic += data << 16
                 checksum += data
-                (data,) = struct_B.unpack(message_in[index + 3])
+                (data,) = struct_B.unpack(message_in[index + 3:index + 4])
                 topic += data << 24
                 checksum += data
                 index += 4
@@ -517,10 +514,10 @@ class NodeHandleUdp(NodeHandleBase):
                 
                 if bytes > 0:
                     for i in range(0, bytes + 1):
-                        (data,) = struct_B.unpack(message_in[index + i])
+                        (data,) = struct_B.unpack(message_in[index + i:index + i + 1])
                         checksum += data
                 else:
-                    (data,) = struct_B.unpack(message_in[index])
+                    (data,) = struct_B.unpack(message_in[index:index + 1])
                     checksum += data
                 if (checksum % 256) == 255:
                     try:
