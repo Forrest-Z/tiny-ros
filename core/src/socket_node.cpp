@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
   auto stdout_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
   auto rotating_file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>
-    (LOG_ROTATION_PATH "tinyroscore.log", LOG_ROTATION_SIZE, LOG_ROTATION_FILES);
+    (LOG_ROTATION_PATH "tinyrosdds.log", LOG_ROTATION_SIZE, LOG_ROTATION_FILES);
   stdout_sink->set_level(spdlog::level::warn);
   rotating_file_sink->set_level(spdlog::level::trace);
   spdlog::sinks_init_list sinks = {rotating_file_sink, stdout_sink};

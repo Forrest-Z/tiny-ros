@@ -12,7 +12,7 @@ export BASEDIR=$(PWD)
 target:
 	@echo -e "\nGenerating tiny-ros..."
 	@mkdir -p $(BASEDIR)/build/CMake
-	@python $(BASEDIR)/scripts/make_library_gcc.py $(BASEDIR) $(BASEDIR)/build/output/roslib/gcc/tiny_ros $(BASEDIR)
+	@python $(BASEDIR)/scripts/make_library_gcc.py $(BASEDIR) $(BASEDIR)/build/output/roslib/gcc $(BASEDIR)
 	@python $(BASEDIR)/scripts/make_library_rtthread.py $(BASEDIR) $(BASEDIR)/build/output/roslib/rtthread $(BASEDIR)
 	@python $(BASEDIR)/scripts/make_library_java.py $(BASEDIR) $(BASEDIR)/build/output/roslib/java $(BASEDIR)
 	@python $(BASEDIR)/scripts/make_library_python.py $(BASEDIR) $(BASEDIR)/build/output/roslib/python $(BASEDIR)

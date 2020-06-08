@@ -56,11 +56,11 @@ static void print_usage() {
   printf(" 4 : log level is fatal.\n");
   printf("\nEXAMPLE:\n");
   printf(" tinyrosconsole -p 0 : output log to screen with debug level\n");
-  printf(" tinyrosconsole -p 0 127.0.0.1: output log to screen with debug level & tinyroscore address\n");
+  printf(" tinyrosconsole -p 0 127.0.0.1: output log to screen with debug level & tinyrosdds address\n");
   printf(" tinyrosconsole -f 1 log.txt : output log to log.txt with info level\n");
-  printf(" tinyrosconsole -f 1 log.txt 127.0.0.1: output log to log.txt with info level & tinyroscore address\n");
+  printf(" tinyrosconsole -f 1 log.txt 127.0.0.1: output log to log.txt with info level & tinyrosdds address\n");
   printf(" tinyrosconsole -d 2 tinyros_logs : output log to folder \"tinyros_logs\" with warn level\n");
-  printf(" tinyrosconsole -d 2 tinyros_logs 127.0.0.1: output log to folder \"tinyros_logs\" with warn level & tinyroscore address\n\n");
+  printf(" tinyrosconsole -d 2 tinyros_logs 127.0.0.1: output log to folder \"tinyros_logs\" with warn level & tinyrosdds address\n\n");
 }
 
 

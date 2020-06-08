@@ -1,6 +1,7 @@
 # tiny-ros
 微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java、Python
 
+![](doc/tinyros.png)
 ![](doc/demo.gif)
 
 
@@ -24,7 +25,7 @@ make clean清除项目，通过make重新编译安装。编译完成后目标文
 
 ## 支持平台
 
-Tinyros分布式操作系统由tinyroscore实现，提供独立于分布式操作系统由Java、C++11、Python和RTThread C/C++四种语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
+Tinyros分布式操作系统提供由Java、C++11、Python和RTThread实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
 
 - Windows (msvc 2013+,  cygwin, Qt msvc2013+)
 - Linux, FreeBSD, OpenBSD，,Solaris
@@ -39,9 +40,7 @@ Tinyros分布式操作系统由tinyroscore实现，提供独立于分布式操�
 - 分布式操作系统和分布式应用开发库分开，开发分布式应用只需包含分布式应用开发库
 - 服务与消息类型定义同“[ROS](https://www.ros.org/)”一样，并兼容“[ROS](https://www.ros.org/)”已有服务和消息类型
 - 保持同“[ROS](https://www.ros.org/)”一样的编程风格：主题发布订阅提供subscribe、advertise和pulish接口；服务调用提供advertiseService、serviceClient和call接口
-- tinyroscore：有别于“[ROS](https://www.ros.org/)”的"[roscore](http://wiki.ros.org/roscore)"，tinyroscore基于弱中心实现：
-  - tinyroscore与其它设备的分布式应用节点没有启动先后顺序要求
-  - tinyroscore奔溃后重启，其它设备上的分布式应用节点不用重启也能继续正常通信
+- tinyrosdds：数据分发服务
 - tinyrostopic：提供list、echo命令行工具可以查看运行中的主题列表、查看指定主题的消息并录包
 - tinyrosconsole：Tinyros日志系统，可以把打印信息显示在屏幕、指定文件或者目录中
 - tinyrosservice：可以查看系统中运行的服务

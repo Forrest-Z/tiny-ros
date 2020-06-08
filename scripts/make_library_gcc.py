@@ -762,7 +762,7 @@ def messages_generate(path):
     # gimme messages
     failed = []
     mydir = sys.argv[1] + "/msgs"
-    builddir = sys.argv[1] + "/build/CMake/msgs"
+    builddir = sys.argv[1] + "/build/CMake/gcc_msgs"
     for d in sorted(os.listdir(mydir)):
 	    try:
 	        MakeLibrary(mydir + "/" + d, d, path, builddir + "/" + d)
@@ -918,10 +918,10 @@ if path[-1] == "/":
     path = path[0:-1]
 print("\nExporting to %s" % path)
 
-roslib_copy_roslib_files(path+"/")
-roslib_copy_examples_files(path+"/")
-messages_generate(path+"/")
-subscribers_generate(path+"/")
-if os.path.exists(sys.argv[1] + "/build/CMake/msgs"):
-    shutil.rmtree(sys.argv[1] + "/build/CMake/msgs")
-shutil.copytree(sys.argv[1] + "/msgs", sys.argv[1] + "/build/CMake/msgs")
+roslib_copy_roslib_files(path+"/tiny_ros/")
+roslib_copy_examples_files(path+"/tiny_ros/")
+messages_generate(path+"/tiny_ros/")
+subscribers_generate(path+"/tiny_ros/")
+if os.path.exists(sys.argv[1] + "/build/CMake/gcc_msgs"):
+    shutil.rmtree(sys.argv[1] + "/build/CMake/gcc_msgs")
+shutil.copytree(sys.argv[1] + "/msgs", sys.argv[1] + "/build/CMake/gcc_msgs")

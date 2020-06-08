@@ -23,11 +23,11 @@ static void print_usage() {
   printf(" tinyrostopic echo -b [options] /topic [options] : echo messages to \".bag\" file\n\n");
   printf("Example:\n");
   printf(" tinyrostopic list : list active topics\n");
-  printf(" tinyrostopic list 127.0.0.1: list active topics with tinyroscore address\n");
+  printf(" tinyrostopic list 127.0.0.1: list active topics with tinyrosdds address\n");
   printf(" tinyrostopic echo /topic : echo messages to screen with topic\n");
-  printf(" tinyrostopic echo /topic 127.0.0.1: echo messages to screen with topic & tinyroscore address\n");
+  printf(" tinyrostopic echo /topic 127.0.0.1: echo messages to screen with topic & tinyrosdds address\n");
   printf(" tinyrostopic echo -b topic.bag /topic: echo messages to \".bag\" file with topic\n");
-  printf(" tinyrostopic echo -b topic.bag /topic 127.0.0.1: echo messages to \".bag\" file with topic & tinyroscore address\n\n");
+  printf(" tinyrostopic echo -b topic.bag /topic 127.0.0.1: echo messages to \".bag\" file with topic & tinyrosdds address\n\n");
 }
 
 static std::vector<std::string> string_split(const std::string& s, const std::string& delim="\n") {
