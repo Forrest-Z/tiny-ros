@@ -1,6 +1,5 @@
 package com.roslib.ros;
 
-import java.lang.*;
 import com.roslib.ros.Duration;
 
 public class Time {
@@ -19,7 +18,7 @@ public class Time {
     }
 
     public double toSec() {
-        return (double)sec + 1e-9 * (double)nsec;
+        return sec + 1e-9 * nsec;
     }
 
     public void fromSec(double t) {
@@ -28,7 +27,7 @@ public class Time {
     }
 
     public long toNsec() {
-        return ((long) sec) * 1000000000 + nsec;
+        return (sec) * 1000000000 + nsec;
     }
 
     public Time fromNSec(long t) {

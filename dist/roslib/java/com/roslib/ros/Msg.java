@@ -8,8 +8,6 @@
  */
 package com.roslib.ros;
 
-import  java.lang.*;
-
 /* Base Message Type */
 public interface Msg {
     public int serialize(byte[] outbuffer, int start);

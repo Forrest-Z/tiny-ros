@@ -482,9 +482,9 @@ public:
   tinyros::string getTopicList(int timeout = 1000)
   {
     roslib_msgs::String msg;
+    topic_list_recieved = false;
     publish(TopicInfo::ID_ROSTOPIC_REQUEST, &msg);
     int64_t to = (int64_t)(tinyros::Time().now().toMSec() + timeout);
-    topic_list_recieved = false;
     while (!topic_list_recieved)
     {
       int64_t now = (int64_t)tinyros::Time().now().toMSec();
@@ -499,9 +499,9 @@ public:
   tinyros::string getServiceList(int timeout = 1000)
   {
     roslib_msgs::String msg;
+    service_list_recieved = false;
     publish(TopicInfo::ID_ROSSERVICE_REQUEST, &msg);
     int64_t to = (int64_t)(tinyros::Time().now().toMSec() + timeout);
-    service_list_recieved = false;
     while (!service_list_recieved)
     {
       int64_t now = (int64_t)tinyros::Time().now().toMSec();

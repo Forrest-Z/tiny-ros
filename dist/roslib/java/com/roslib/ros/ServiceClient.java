@@ -7,6 +7,7 @@ public class ServiceClient<MReq extends Msg, MRes extends Msg> extends Subscribe
     public MRes resp = null;
     public MReq call_req = null;
     public MRes call_resp = null;
+    public boolean call_wait = true;
     public Publisher pub;
     public static int gg_id = 1;
     public static Object gg_mutex = new Object();
@@ -39,6 +40,8 @@ public class ServiceClient<MReq extends Msg, MRes extends Msg> extends Subscribe
                     this.call_req.setID(gg_id++);
                 }
                 
+                call_wait = true;
+                
                 if (this.pub.publish(request) <= 0) {
                     this.call_req = null;
                     this.call_resp = null;
@@ -54,23 +57,24 @@ public class ServiceClient<MReq extends Msg, MRes extends Msg> extends Subscribe
                 this.call_req = null;
                 this.call_resp = null;
                 
-                return true;
+                return !call_wait;
             }
         }
     }
 
-    // these refer to the subscriber
+    @Override
     public void callback(byte[] data) {
         if (this.call_resp != null && this.call_req != null) {
             synchronized(mutex) {
                 if (this.call_resp != null && this.call_req != null) {
                     long req_id  = this.call_req.getID();
-                    long resp_id =  (int) ((data[0] & 0xFF) << (8 * 0));
-                    resp_id |= (int) ((data[1] & 0xFF) << (8 * 1));
-                    resp_id |= (int) ((data[2] & 0xFF) << (8 * 2));
-                    resp_id |= (int) ((data[3] & 0xFF) << (8 * 3));
+                    long resp_id =  (data[0] & 0xFF) << (8 * 0);
+                    resp_id |= (data[1] & 0xFF) << (8 * 1);
+                    resp_id |= (data[2] & 0xFF) << (8 * 2);
+                    resp_id |= (data[3] & 0xFF) << (8 * 3);
                     if (req_id == resp_id) {
                         this.call_resp.deserialize(data, 0);
+                        call_wait = false;
                         mutex.notifyAll();
                     }
                 }
@@ -78,17 +82,21 @@ public class ServiceClient<MReq extends Msg, MRes extends Msg> extends Subscribe
         }
     }
 
+    @Override
     public java.lang.String getMsgType() {
         return this.resp.getType();
     }
 
+    @Override
     public java.lang.String getMsgMD5() {
         return this.resp.getMD5();
     }
+    @Override
     public long getEndpointType() {
         return TopicInfo.ID_SERVICE_CLIENT + TopicInfo.ID_SUBSCRIBER;
     }
 
+    @Override
     public boolean negotiated() {
         return (this.negotiated_ && this.pub.negotiated_); 
     }

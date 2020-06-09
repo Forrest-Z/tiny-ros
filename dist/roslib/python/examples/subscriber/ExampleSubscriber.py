@@ -16,7 +16,7 @@ def main():
     else:
         tinyros.udp().subscribe(tinyros.Subscriber("tinyros_hello", subscriber_cb, tinyros_hello.msg.TinyrosHello))
     while True:
-       time.sleep(10)
+        time.sleep(10)
 
 if __name__ == '__main__':
     main()

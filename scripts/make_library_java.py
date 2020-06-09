@@ -698,12 +698,17 @@ def roslib_copy_roslib_files(path):
              'ros/CallbackSrvT.java',
              'ros/CallbackSubT.java',
              'ros/Hardware.java',
+             'ros/HardwareTCP.java',
+             'ros/HardwareUDP.java',
+             'ros/NodeHandleBase.java',
              'ros/NodeHandle.java',
+             'ros/NodeHandleUDP.java',
              'ros/Publisher.java',
              'ros/ServiceClient.java',
              'ros/ServiceServer.java',
              'ros/Subscriber.java',
              'ros/SubscriberT.java',
+             'ros/Tinyros.java',
              'ros/Time.java']
 
     mydir = sys.argv[3] + "/roslib/java/"

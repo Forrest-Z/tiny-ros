@@ -81,33 +81,28 @@ int main (int argc, char *argv[]) {
 ```java
 package examples.publisher;
 
-import com.roslib.ros.NodeHandle;
 import com.roslib.ros.Publisher;
+import com.roslib.ros.Tinyros;
 import com.roslib.tinyros_hello.TinyrosHello;
 
 public class ExamplePublisher {
-  public static void main(String[] args) throws InterruptedException {
-    NodeHandle nh = new NodeHandle();
-    while (!nh.initNode("127.0.0.1")) {
-      System.out.println("Java: initNode failed.");
-      Thread.sleep(500);
+
+    public static void main(String[] args) throws InterruptedException {
+        Tinyros.init("127.0.0.1");
+        
+        Publisher<TinyrosHello> pub =
+            new Publisher<TinyrosHello>("tinyros_hello", new TinyrosHello());
+        
+        Tinyros.nh().advertise(pub);
+        /*Tinyros.udp().advertise(pub);*/
+        
+        while(true) {
+            TinyrosHello msg = new TinyrosHello();
+            msg.hello = "UDP: Hello, tiny-ros ^_^";
+            pub.publish(msg);
+            Thread.sleep(1000);
+        }
     }
-
-    TinyrosHello msg = new TinyrosHello();
-    Publisher<TinyrosHello> pub = new Publisher<>("tinyros_hello", msg);
-
-    nh.advertise(pub);
-
-    while(nh.ok()) {
-      if (pub.negotiated()) {
-        msg.hello = "Hello, tiny-ros ^_^";
-        pub.publish(msg);
-      }
-
-      nh.spinOnce();
-      Thread.sleep(500);
-    }
-  }
 }
 ```
 
@@ -174,31 +169,31 @@ package examples.subscriber;
 
 import com.roslib.ros.CallbackSubT;
 import com.roslib.ros.Msg;
-import com.roslib.ros.NodeHandle;
 import com.roslib.ros.Subscriber;
+import com.roslib.ros.Tinyros;
 import com.roslib.tinyros_hello.TinyrosHello;
 
 public class ExampleSubscriber {
-  public static void main(String[] args) throws InterruptedException {
-    NodeHandle nh = new NodeHandle();
-    while (!nh.initNode("127.0.0.1")) {
-      System.out.println("initNode failed.");
-      Thread.sleep(500);
-    }
 
-    nh.subscribe(new Subscriber<TinyrosHello>("tinyros_hello", new CallbackSubT() {
-      @Override
-      public void callback(Msg msg) {
-        TinyrosHello m = (TinyrosHello)msg;
-        System.out.println(m.hello);
-      }
-    }, new TinyrosHello()));
+    public static void main(String[] args) throws InterruptedException {
+        Tinyros.init("127.0.0.1");
 
-    while(nh.ok()) {
-      nh.spinOnce();
-      Thread.sleep(500);
+        Subscriber<TinyrosHello> sub = new Subscriber<TinyrosHello>
+        ("tinyros_hello", new CallbackSubT() {
+            @Override
+            public void callback(Msg msg) {
+                TinyrosHello m = (TinyrosHello)msg;
+                System.out.println(m.hello);
+            }
+        }, new TinyrosHello());
+
+        Tinyros.nh().subscribe(sub);
+        /*Tinyros.udp().subscribe(sub);*/
+
+        while(true) {
+            Thread.sleep(10*1000);
+        }
     }
-  }
 }
 ```
 
@@ -239,7 +234,8 @@ static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::
   res.output = "Hello, tiny-ros ^_^";
 }
 int main() {
-  tinyros::ServiceServer<tinyros_hello::Test::Request, tinyros_hello::Test::Response> server("test_srv", &service_cb);
+  tinyros::ServiceServer<tinyros_hello::Test::Request, 
+    tinyros_hello::Test::Response> server("test_srv", &service_cb);
   tinyros::nh()->advertiseService(server);
   while(true) {
 #ifdef WIN32
@@ -259,31 +255,28 @@ package examples.service;
 
 import com.roslib.ros.CallbackSrvT;
 import com.roslib.ros.Msg;
-import com.roslib.ros.NodeHandle;
 import com.roslib.ros.ServiceServer;
+import com.roslib.ros.Tinyros;
 import com.roslib.tinyros_hello.Test;
 
 public class ExampleService {
-  public static void main(String[] args) throws InterruptedException {
-    NodeHandle nh = new NodeHandle();
-    while (!nh.initNode("127.0.0.1")) {
-      System.out.println("Java: initNode failed.");
-      Thread.sleep(500);
-    }
+    public static void main(String[] args) throws InterruptedException {
+        Tinyros.init("127.0.0.1");
 
-    nh.advertiseService(new ServiceServer<Test.TestRequest,
-        Test.TestResponse>("test_srv", new CallbackSrvT() {
-      @Override
-      public void callback(Msg req, Msg res) {
-        ((Test.TestResponse) res).output = "Hello, tiny-ros ^_^";
-      }
-    }, new Test.TestRequest(), new Test.TestResponse()));
+        ServiceServer<Test.TestRequest, Test.TestResponse> srv = new ServiceServer<Test.TestRequest, Test.TestResponse>
+        ("test_srv", new CallbackSrvT() {
+            @Override
+            public void callback(Msg req, Msg res) {
+                ((Test.TestResponse)res).output = "Hello, tiny-ros ^_^";
+            }
+        }, new Test.TestRequest(), new Test.TestResponse());
 
-    while (nh.ok()) {
-      nh.spinOnce();
-      Thread.sleep(500);
+        Tinyros.nh().advertiseService(srv);
+
+        while(true) {
+            Thread.sleep(10*1000);
+        }
     }
-  }
 }
 ```
 
@@ -345,43 +338,32 @@ int main() {
 ```java
 package examples.service_client;
 
-import com.roslib.ros.NodeHandle;
 import com.roslib.ros.ServiceClient;
+import com.roslib.ros.Tinyros;
 import com.roslib.tinyros_hello.Test;
 
 public class ExampleServiceClient {
-  public static void main(String[] args) throws InterruptedException {
-    NodeHandle nh = new NodeHandle();
-    while (!nh.initNode("127.0.0.1")) {
-      System.out.println("initNode failed.");
-      Thread.sleep(500);
-    }
 
-    ServiceClient<Test.TestRequest, Test.TestResponse> client = 
-        new ServiceClient<Test.TestRequest, Test.TestResponse>(
-        "test_srv", new Test.TestRequest(), new Test.TestResponse());
+    public static void main(String[] args) throws InterruptedException {
+        Tinyros.init("127.0.0.1");
 
-    nh.serviceClient(client);
+        ServiceClient<Test.TestRequest, Test.TestResponse> client =
+                new ServiceClient<Test.TestRequest, Test.TestResponse>(
+                        "test_srv", new Test.TestRequest(), new Test.TestResponse());
 
-    new Thread(new Runnable(){
-      ServiceClient<Test.TestRequest, Test.TestResponse> cl = client;
-      public void run(){
+        Tinyros.nh().serviceClient(client);
+
         while(true) {
-          Test.TestRequest req = new Test.TestRequest();
-          Test.TestResponse resp = new Test.TestResponse();
-          if (cl.call(req, resp, 5)) {
-            System.out.println("service responsed with \"" + resp.output + "\"");
-          } else {
-            System.out.println("Service call failed.");
-          }
+            Test.TestRequest req = new Test.TestRequest();
+            Test.TestResponse resp = new Test.TestResponse();
+            if (client.call(req, resp, 3)) {
+                System.out.println("service responsed with \"" + resp.output + "\"");
+            } else {
+                System.out.println("Service call failed.");
+            }
+            Thread.sleep(1000);
         }
-      }}).start();
-
-    while(nh.ok()) {
-      nh.spinOnce();
-      Thread.sleep(500);
     }
-  }
 }
 ```
 

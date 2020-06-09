@@ -5,12 +5,8 @@ import com.roslib.tinyros_msgs.TopicInfo;
 public class Publisher<MsgT extends Msg> {
     public java.lang.String topic_;
     public MsgT msg_;
-
-    // id_ and no_ are set by NodeHandle when we advertise
     public long id_;
-    public NodeHandle nh_;
-
-    // negotiated_ is set by NodeHandle when we negotiateTopics
+    public NodeHandleBase nh_;
     public boolean negotiated_;
 
     public long endpoint_;

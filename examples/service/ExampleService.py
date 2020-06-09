@@ -14,7 +14,7 @@ def main():
     tinyros.nh().advertiseService(tinyros.ServiceServer("test_srv", service_cb, \
             tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response))
     while True:
-       time.sleep(10)
+        time.sleep(10)
 
 if __name__ == '__main__':
     main()

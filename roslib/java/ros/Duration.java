@@ -8,8 +8,6 @@
  */
 package com.roslib.ros;
 
-import  java.lang.*;
-
 public class Duration {
     public long sec;
     public long nsec;
@@ -26,7 +24,7 @@ public class Duration {
     }
 
     public double toSec() {
-        return (double)sec + 1e-9 * (double)nsec;
+        return sec + 1e-9 * nsec;
     }
 
     void fromSec(double t) {

@@ -20,6 +20,7 @@ public class ServiceServer<MReq extends Msg, MRes extends Msg> extends Subscribe
     }
 
     // these refer to the subscriber
+    @Override
     public void callback(byte[] data) {
     	try {
         	Class<? extends Msg> clreq = this.req.getClass();
@@ -35,18 +36,22 @@ public class ServiceServer<MReq extends Msg, MRes extends Msg> extends Subscribe
 		}
     }
 
+    @Override
     public java.lang.String getMsgType() {
         return this.req.getType();
     }
 
+    @Override
     public java.lang.String getMsgMD5() {
         return this.req.getMD5();
     }
 
+    @Override
     public long getEndpointType() {
         return TopicInfo.ID_SERVICE_SERVER + TopicInfo.ID_SUBSCRIBER;
     }
 
+    @Override
     public boolean negotiated() {
         return (this.negotiated_ && this.pub.negotiated_); 
     }

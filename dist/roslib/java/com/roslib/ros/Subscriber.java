@@ -14,6 +14,7 @@ public class Subscriber<MsgT extends Msg> extends SubscriberT {
         this.endpoint = TopicInfo.ID_SUBSCRIBER;
     }
 
+    @Override
     public void callback(byte[] data) {
     	try {
         	Class<? extends Msg> cl = this.msg_.getClass();
@@ -25,13 +26,16 @@ public class Subscriber<MsgT extends Msg> extends SubscriberT {
 		}
     }
 
+    @Override
     public java.lang.String getMsgType() {
         return this.msg_.getType();
     }
 
+    @Override
     public java.lang.String getMsgMD5() {
         return this.msg_.getMD5();
     }
+    @Override
     public long getEndpointType() {
         return this.endpoint;
     }
