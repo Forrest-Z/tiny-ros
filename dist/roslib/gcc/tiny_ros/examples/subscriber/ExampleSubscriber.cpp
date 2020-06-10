@@ -14,6 +14,7 @@ static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
 }
 
 int main(void) {
+  tinyros::init("127.0.0.1");
   tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
 #if 1
   tinyros::nh()->subscribe(sub);

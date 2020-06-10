@@ -5,7 +5,7 @@ import threading
 import time
 import struct
 import tinyros
-import roslib_msgs.msg
+import std_msgs.msg
 import tinyros_msgs.msg
 import sys
 import signal
@@ -177,7 +177,7 @@ class NodeHandle(NodeHandleBase):
         self.name_ = name
 
         if self.hardware_.init(self.ip_):
-            msg = roslib_msgs.msg.String()
+            msg = std_msgs.msg.String()
             msg.data = name
             self.publish(tinyros_msgs.msg.TopicInfo.ID_SESSION_ID, msg)
 
@@ -193,7 +193,7 @@ class NodeHandle(NodeHandleBase):
             conn = self.loghd_.connected()
             if conn == False:
                 if self.loghd_.init(self.ip_):
-                    msg = roslib_msgs.msg.String()
+                    msg = std_msgs.msg.String()
                     msg.data = self.name_ + "_log"
                     self.publish(tinyros_msgs.msg.TopicInfo.ID_SESSION_ID, msg, True)
                 time.sleep(1)
@@ -304,10 +304,15 @@ class NodeHandle(NodeHandleBase):
                     if topic == tinyros_msgs.msg.TopicInfo.ID_PUBLISHER:
                         self.negotiateTopicsAll()
                     elif topic == tinyros_msgs.msg.TopicInfo.ID_ROSTOPIC_REQUEST:
-                        msg = roslib_msgs.msg.String()
+                        msg = std_msgs.msg.String()
                         msg.deserialize(message_in)
                         self.topic_list_ = msg.data
                         self.topic_list_recieved_ = True
+                    elif topic == tinyros_msgs.msg.TopicInfo.ID_ROSSERVICE_REQUEST:
+                        msg = std_msgs.msg.String()
+                        msg.deserialize(message_in)
+                        self.service_list_ = msg.data
+                        self.service_list_recieved_ = True
                     elif topic == tinyros_msgs.msg.TopicInfo.ID_NEGOTIATED:
                         ti = tinyros_msgs.msg.TopicInfo()
                         ti.deserialize(message_in)
@@ -440,6 +445,31 @@ class NodeHandle(NodeHandleBase):
     def logfatal(self, msg):
         self.log(tinyros_msgs.msg.Log.ROSFATAL, msg)
 
+    def getTopicList(self, timeout = 1000):
+        msg = std_msgs.msg.String()
+        self.topic_list_recieved_ = False
+        self.publish(tinyros_msgs.msg.TopicInfo.ID_ROSTOPIC_REQUEST, msg)
+        to = tinyros.Time.now().toMSec() + timeout
+        while not self.topic_list_recieved_:
+            now = tinyros.Time.now().toMSec()
+            if now > to:
+                print("Failed to get getTopicList: timeout expired")
+                return ''
+            time.sleep(0.1)
+        return self.topic_list_
+
+    def getServiceList(self, timeout = 1000):
+        msg = std_msgs.msg.String()
+        self.service_list_recieved_ = False
+        self.publish(tinyros_msgs.msg.TopicInfo.ID_ROSSERVICE_REQUEST, msg)
+        to = tinyros.Time.now().toMSec() + timeout
+        while not self.service_list_recieved_:
+            now = tinyros.Time.now().toMSec()
+            if now > to:
+                print("Failed to get getServiceList: timeout expired")
+                return ''
+            time.sleep(0.1)
+        return self.service_list_
 
 class NodeHandleUdp(NodeHandleBase):
     global_nh = None

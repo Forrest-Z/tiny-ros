@@ -7,7 +7,7 @@ import tinyros
 import tinyros_hello.msg.TinyrosHello
 
 def subscriber_cb(received_msg):
-  print('%s' % received_msg.hello)
+    print('%s' % received_msg.hello)
 
 def main():
     tinyros.init("127.0.0.1")

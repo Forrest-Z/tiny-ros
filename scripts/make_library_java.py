@@ -326,7 +326,7 @@ ROS_TO_EMBEDDED_TYPES = {
     'time'    :   ('com.roslib.ros.Time',  8, TimeDataType, []),
     'duration':   ('com.roslib.ros.Duration',  8, TimeDataType, []),
     'string'  :   ('java.lang.String',  0, StringDataType, []),
-    'Header'  :   ('com.roslib.roslib_msgs.Header',  0, MessageDataType, [])
+    'Header'  :   ('com.roslib.std_msgs.Header',  0, MessageDataType, [])
 }
 
 #####################################################################

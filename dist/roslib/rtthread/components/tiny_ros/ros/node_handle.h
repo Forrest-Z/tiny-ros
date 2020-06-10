@@ -15,8 +15,8 @@
 #include <rtthread.h>
 #include "tiny_ros/ros/time.h"
 #include "tiny_ros/ros/log.h"
-#include "tiny_ros/roslib_msgs/Time.h"
-#include "tiny_ros/roslib_msgs/String.h"
+#include "tiny_ros/std_msgs/Time.h"
+#include "tiny_ros/std_msgs/String.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
 #include "tiny_ros/ros/publisher.h"
@@ -83,7 +83,7 @@ public:
     mode_ = MODE_FIRST_FF;
     port_name_ = portName;
 
-    roslib_msgs::String msg;
+    std_msgs::String msg;
     if (hardware_.init(port_name_)) {
       msg.data = get_executable_name();
       publish(TopicInfo::ID_SESSION_ID, &msg);
@@ -108,7 +108,7 @@ public:
     while(nh->loghd_keepalive_) {
       if (!nh->loghd_.connected()) {
         if (nh->loghd_.init(nh->port_name_)) {
-          roslib_msgs::String msg;
+          std_msgs::String msg;
           tinyros::string process = get_executable_name();
           msg.data = process + "_log";
           nh->publish(TopicInfo::ID_SESSION_ID, &msg, true);
@@ -247,12 +247,12 @@ public:
           if (topic_ == TopicInfo::ID_PUBLISHER) {
             negotiateTopics();
           } else if (topic_ == TopicInfo::ID_ROSTOPIC_REQUEST) {
-            roslib_msgs::String msg;
+            std_msgs::String msg;
             msg.deserialize(message_in);
             topic_list = msg.data;
             topic_list_recieved = true;
           } else if (topic_ == TopicInfo::ID_ROSSERVICE_REQUEST) {
-            roslib_msgs::String msg;
+            std_msgs::String msg;
             msg.deserialize(message_in);
             service_list = msg.data;
             service_list_recieved = true;
@@ -481,7 +481,7 @@ private:
 public:
   tinyros::string getTopicList(int timeout = 1000)
   {
-    roslib_msgs::String msg;
+    std_msgs::String msg;
     topic_list_recieved = false;
     publish(TopicInfo::ID_ROSTOPIC_REQUEST, &msg);
     int64_t to = (int64_t)(tinyros::Time().now().toMSec() + timeout);
@@ -498,7 +498,7 @@ public:
 
   tinyros::string getServiceList(int timeout = 1000)
   {
-    roslib_msgs::String msg;
+    std_msgs::String msg;
     service_list_recieved = false;
     publish(TopicInfo::ID_ROSSERVICE_REQUEST, &msg);
     int64_t to = (int64_t)(tinyros::Time().now().toMSec() + timeout);

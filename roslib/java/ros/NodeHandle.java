@@ -96,7 +96,7 @@ public class NodeHandle extends NodeHandleBase{
     @Override
     public boolean initNode(java.lang.String portName) {
         port_name_ = portName;
-        com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+        com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
         if (hardware_.init(port_name_)) {
             msg.data = "Java";
             publish(TopicInfo.ID_SESSION_ID, msg);
@@ -111,7 +111,7 @@ public class NodeHandle extends NodeHandleBase{
                         while(loghd_keepalive_) {
                             if (!loghd_.connected()) {
                                 if (loghd_.init(port_name_)) {
-                                    com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+                                    com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
                                     msg.data = "Java_log" ;
                                     publish(TopicInfo.ID_SESSION_ID, msg, true);
                                 }
@@ -228,12 +228,12 @@ public class NodeHandle extends NodeHandleBase{
                     if (topic == TopicInfo.ID_PUBLISHER) {
                         negotiateTopics();
                     } else if (topic == TopicInfo.ID_ROSTOPIC_REQUEST) {
-                        com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+                        com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
                         msg.deserialize(message_in, 0);
                         topic_list = msg.data;
                         topic_list_recieved = true;
                     } else if (topic == TopicInfo.ID_ROSSERVICE_REQUEST) {
-                        com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+                        com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
                         msg.deserialize(message_in, 0);
                         service_list = msg.data;
                         service_list_recieved = true;
@@ -421,7 +421,7 @@ public class NodeHandle extends NodeHandleBase{
     }
 
     public java.lang.String getTopicList(int timeout) {
-        com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+        com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
         topic_list_recieved = false;
         topic_list = "";
         publish(TopicInfo.ID_ROSTOPIC_REQUEST, msg);
@@ -442,7 +442,7 @@ public class NodeHandle extends NodeHandleBase{
     }
 
     public java.lang.String getServiceList(int timeout) {
-        com.roslib.roslib_msgs.String msg = new com.roslib.roslib_msgs.String();
+        com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
         service_list_recieved = false;
         service_list = "";
         publish(TopicInfo.ID_ROSSERVICE_REQUEST, msg);

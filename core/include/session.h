@@ -19,8 +19,8 @@
 #include <condition_variable>
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
-#include "tiny_ros/roslib_msgs/Time.h"
-#include "tiny_ros/roslib_msgs/String.h"
+#include "tiny_ros/std_msgs/Time.h"
+#include "tiny_ros/std_msgs/String.h"
 #include "serialization.h"
 #include "topic_handlers.h"
 #include "serialization.h"
@@ -632,14 +632,14 @@ private:
   }
 
   void handle_time(tinyros::serialization::IStream& stream) {
-    roslib_msgs::Time time;
+    std_msgs::Time time;
     time.data = tinyros::Time::now();
 
     size_t length = tinyros::serialization::serializationLength(time);
     std::vector<uint8_t> message(length);
 
     tinyros::serialization::OStream ostream(&message[0], length);
-    tinyros::serialization::Serializer<roslib_msgs::Time>::write(ostream, time);
+    tinyros::serialization::Serializer<std_msgs::Time>::write(ostream, time);
 
     write_message(message, tinyros_msgs::TopicInfo::ID_TIME);
   }
@@ -663,12 +663,12 @@ private:
       topic_list += it->first + " [type:" + it->second->message_type_ + ", md5:" + it->second->md5sum_ + "]\n";
       it++;
     }
-    roslib_msgs::String msg;
+    std_msgs::String msg;
     msg.data = topic_list.c_str();
     size_t length = tinyros::serialization::serializationLength(msg);
     std::vector<uint8_t> message(length);
     tinyros::serialization::OStream ostream(&message[0], length);
-    tinyros::serialization::Serializer<roslib_msgs::String>::write(ostream, msg);
+    tinyros::serialization::Serializer<std_msgs::String>::write(ostream, msg);
     write_message(message, tinyros_msgs::TopicInfo::ID_ROSTOPIC_REQUEST);
   }
 
@@ -679,18 +679,18 @@ private:
       service_list += "          " + it->first + " [" + it->second->message_type_ + "]\n";
       it++;
     }
-    roslib_msgs::String msg;
+    std_msgs::String msg;
     msg.data = service_list.c_str();
     size_t length = tinyros::serialization::serializationLength(msg);
     std::vector<uint8_t> message(length);
     tinyros::serialization::OStream ostream(&message[0], length);
-    tinyros::serialization::Serializer<roslib_msgs::String>::write(ostream, msg);
+    tinyros::serialization::Serializer<std_msgs::String>::write(ostream, msg);
     write_message(message, tinyros_msgs::TopicInfo::ID_ROSSERVICE_REQUEST);
   }
 
   void handle_session_id(tinyros::serialization::IStream& stream) {
-    roslib_msgs::String session_info;
-    tinyros::serialization::Serializer<roslib_msgs::String>::read(stream, session_info);
+    std_msgs::String session_info;
+    tinyros::serialization::Serializer<std_msgs::String>::read(stream, session_info);
     spdlog_info("[{0}] Starting session...", session_info.data.c_str());
     session_id_ = session_info.data;
   }

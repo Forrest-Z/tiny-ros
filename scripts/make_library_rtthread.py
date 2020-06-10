@@ -295,7 +295,7 @@ ROS_TO_EMBEDDED_TYPES = {
     'time'    :   ('tinyros::Time',         8, TimeDataType, ['ros/time']),
     'duration':   ('tinyros::Duration',     8, TimeDataType, ['ros/duration']),
     'string'  :   ('tinyros::string',             0, StringDataType, []),
-    'Header'  :   ('roslib_msgs::Header',  0, MessageDataType, ['roslib_msgs/Header'])
+    'Header'  :   ('std_msgs::Header',  0, MessageDataType, ['std_msgs/Header'])
 }
 
 #####################################################################

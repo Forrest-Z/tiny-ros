@@ -10,6 +10,7 @@
 #include "tiny_ros/tinyros_hello/Test.h"
 
 int main() {
+  tinyros::init("127.0.0.1");
   tinyros::ServiceClient<tinyros_hello::Test::Request, tinyros_hello::Test::Response> client("test_srv");
   tinyros::nh()->serviceClient(client);
   while (true) {

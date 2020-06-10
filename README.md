@@ -12,7 +12,7 @@
 
 2、make 4.3 及以上
 
-2、使用C ++ 11编译器
+3、使用C ++ 11编译器
 
 ```
 $ git clone https://github.com/tinyros/tiny-ros.git
@@ -56,6 +56,7 @@ Tinyros分布式操作系统提供由Java、C++11、Python和RTThread实现的�
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/TinyrosHello.h"
 int main (int argc, char *argv[]) {
+  tinyros::init("127.0.0.1");
   tinyros::Publisher hello_pub ("tinyros_hello", new tinyros_hello::TinyrosHello());
 #if 1
   tinyros::nh()->advertise(hello_pub);
@@ -145,6 +146,7 @@ static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
   printf("%s\n", received_msg.hello.c_str());
 }
 int main(void) {
+  tinyros::init("127.0.0.1");
   tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
 #if 1
   tinyros::nh()->subscribe(sub);
@@ -206,7 +208,7 @@ import tinyros
 import tinyros_hello.msg.TinyrosHello
 
 def subscriber_cb(received_msg):
-  print('%s' % received_msg.hello)
+    print('%s' % received_msg.hello)
 
 def main():
     tinyros.init("127.0.0.1")
@@ -234,6 +236,7 @@ static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::
   res.output = "Hello, tiny-ros ^_^";
 }
 int main() {
+  tinyros::init("127.0.0.1");
   tinyros::ServiceServer<tinyros_hello::Test::Request, 
     tinyros_hello::Test::Response> server("test_srv", &service_cb);
   tinyros::nh()->advertiseService(server);
@@ -312,6 +315,7 @@ if __name__ == '__main__':
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/Test.h"
 int main() {
+  tinyros::init("127.0.0.1");
   tinyros::ServiceClient<tinyros_hello::Test::Request, tinyros_hello::Test::Response> client("test_srv");
   tinyros::nh()->serviceClient(client);
   while (true) {
