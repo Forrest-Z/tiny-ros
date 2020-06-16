@@ -195,7 +195,9 @@ public:
     spdlog_warn("[{0}] {1} end.", session_id_.c_str(), __FUNCTION__);
     
     std::unique_lock<std::mutex> sessions_lock(TcpServer_::sessions_mutex_);
+    SessionPtr session_ptr = nullptr;
     if (TcpServer_::sessions_.count(socket_.sock_fd_) == 1) {
+      session_ptr = TcpServer_::sessions_[socket_.sock_fd_];
       TcpServer_::sessions_.erase(socket_.sock_fd_);
     }
   }
