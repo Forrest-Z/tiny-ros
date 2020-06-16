@@ -62,9 +62,9 @@ class MultiArrayLayout(tinyros.Message):
         dim_length = len(self.dim)
         for i in range(0, dim_length):
             if i == (dim_length - 1): 
-                  string_echo += '{"dim%s": {'%i
-                  string_echo += self.dim[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"dim%s": {'%i
+                string_echo += self.dim[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"dim%s": {'%i
                 string_echo += self.dim[i].echo()

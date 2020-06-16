@@ -480,7 +480,7 @@ class ArrayDataType(PrimitiveDataType):
             f.write('%s%s_length = len(self.%s)\n' % (header, self.name, self.name))
             f.write('%sfor i in range(0, %s_length):\n' % (header, self.name))
             f.write('%s    if i == (%s_length - 1): \n' % (header, self.name))
-            c.echo(f, header + '          ', '')
+            c.echo(f, header + '        ', '')
             f.write('%s    else:\n' % (header))
             c.echo(f, header + '        ', ', ')
             f.write('%sstring_echo += \']%s\'\n' % (header, trailer))

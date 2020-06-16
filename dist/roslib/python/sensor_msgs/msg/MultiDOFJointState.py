@@ -150,8 +150,8 @@ class MultiDOFJointState(tinyros.Message):
         joint_names_length = len(self.joint_names)
         for i in range(0, joint_names_length):
             if i == (joint_names_length - 1): 
-                  string_echo += '"joint_names[i]": "%s"'%joint_names[i]
-                  string_echo += '"'
+                string_echo += '"joint_names[i]": "%s"'%joint_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"joint_names[i]": "%s"'%joint_names[i]
                 string_echo += '", '
@@ -160,9 +160,9 @@ class MultiDOFJointState(tinyros.Message):
         transforms_length = len(self.transforms)
         for i in range(0, transforms_length):
             if i == (transforms_length - 1): 
-                  string_echo += '{"transforms%s": {'%i
-                  string_echo += self.transforms[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"transforms%s": {'%i
+                string_echo += self.transforms[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"transforms%s": {'%i
                 string_echo += self.transforms[i].echo()
@@ -172,9 +172,9 @@ class MultiDOFJointState(tinyros.Message):
         twist_length = len(self.twist)
         for i in range(0, twist_length):
             if i == (twist_length - 1): 
-                  string_echo += '{"twist%s": {'%i
-                  string_echo += self.twist[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"twist%s": {'%i
+                string_echo += self.twist[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"twist%s": {'%i
                 string_echo += self.twist[i].echo()
@@ -184,9 +184,9 @@ class MultiDOFJointState(tinyros.Message):
         wrench_length = len(self.wrench)
         for i in range(0, wrench_length):
             if i == (wrench_length - 1): 
-                  string_echo += '{"wrench%s": {'%i
-                  string_echo += self.wrench[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"wrench%s": {'%i
+                string_echo += self.wrench[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"wrench%s": {'%i
                 string_echo += self.wrench[i].echo()

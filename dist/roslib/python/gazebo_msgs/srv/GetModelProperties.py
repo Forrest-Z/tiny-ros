@@ -453,8 +453,8 @@ class GetModelPropertiesResponse(tinyros.Message):
         body_names_length = len(self.body_names)
         for i in range(0, body_names_length):
             if i == (body_names_length - 1): 
-                  string_echo += '"body_names[i]": "%s"'%body_names[i]
-                  string_echo += '"'
+                string_echo += '"body_names[i]": "%s"'%body_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"body_names[i]": "%s"'%body_names[i]
                 string_echo += '", '
@@ -463,8 +463,8 @@ class GetModelPropertiesResponse(tinyros.Message):
         geom_names_length = len(self.geom_names)
         for i in range(0, geom_names_length):
             if i == (geom_names_length - 1): 
-                  string_echo += '"geom_names[i]": "%s"'%geom_names[i]
-                  string_echo += '"'
+                string_echo += '"geom_names[i]": "%s"'%geom_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"geom_names[i]": "%s"'%geom_names[i]
                 string_echo += '", '
@@ -473,8 +473,8 @@ class GetModelPropertiesResponse(tinyros.Message):
         joint_names_length = len(self.joint_names)
         for i in range(0, joint_names_length):
             if i == (joint_names_length - 1): 
-                  string_echo += '"joint_names[i]": "%s"'%joint_names[i]
-                  string_echo += '"'
+                string_echo += '"joint_names[i]": "%s"'%joint_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"joint_names[i]": "%s"'%joint_names[i]
                 string_echo += '", '
@@ -483,8 +483,8 @@ class GetModelPropertiesResponse(tinyros.Message):
         child_model_names_length = len(self.child_model_names)
         for i in range(0, child_model_names_length):
             if i == (child_model_names_length - 1): 
-                  string_echo += '"child_model_names[i]": "%s"'%child_model_names[i]
-                  string_echo += '"'
+                string_echo += '"child_model_names[i]": "%s"'%child_model_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"child_model_names[i]": "%s"'%child_model_names[i]
                 string_echo += '", '

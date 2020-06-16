@@ -230,8 +230,8 @@ class CameraInfo(tinyros.Message):
         D_length = len(self.D)
         for i in range(0, D_length):
             if i == (D_length - 1): 
-                  string_echo += '{"D%s": %s'%(i,D[i])
-                  string_echo += '}'
+                string_echo += '{"D%s": %s'%(i,D[i])
+                string_echo += '}'
             else:
                 string_echo += '{"D%s": %s'%(i,D[i])
                 string_echo += '}, '

@@ -72,9 +72,9 @@ class Mesh(tinyros.Message):
         triangles_length = len(self.triangles)
         for i in range(0, triangles_length):
             if i == (triangles_length - 1): 
-                  string_echo += '{"triangles%s": {'%i
-                  string_echo += self.triangles[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"triangles%s": {'%i
+                string_echo += self.triangles[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"triangles%s": {'%i
                 string_echo += self.triangles[i].echo()
@@ -84,9 +84,9 @@ class Mesh(tinyros.Message):
         vertices_length = len(self.vertices)
         for i in range(0, vertices_length):
             if i == (vertices_length - 1): 
-                  string_echo += '{"vertices%s": {'%i
-                  string_echo += self.vertices[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"vertices%s": {'%i
+                string_echo += self.vertices[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"vertices%s": {'%i
                 string_echo += self.vertices[i].echo()

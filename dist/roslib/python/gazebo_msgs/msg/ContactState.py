@@ -230,9 +230,9 @@ class ContactState(tinyros.Message):
         wrenches_length = len(self.wrenches)
         for i in range(0, wrenches_length):
             if i == (wrenches_length - 1): 
-                  string_echo += '{"wrenches%s": {'%i
-                  string_echo += self.wrenches[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"wrenches%s": {'%i
+                string_echo += self.wrenches[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"wrenches%s": {'%i
                 string_echo += self.wrenches[i].echo()
@@ -245,9 +245,9 @@ class ContactState(tinyros.Message):
         contact_positions_length = len(self.contact_positions)
         for i in range(0, contact_positions_length):
             if i == (contact_positions_length - 1): 
-                  string_echo += '{"contact_positions%s": {'%i
-                  string_echo += self.contact_positions[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"contact_positions%s": {'%i
+                string_echo += self.contact_positions[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"contact_positions%s": {'%i
                 string_echo += self.contact_positions[i].echo()
@@ -257,9 +257,9 @@ class ContactState(tinyros.Message):
         contact_normals_length = len(self.contact_normals)
         for i in range(0, contact_normals_length):
             if i == (contact_normals_length - 1): 
-                  string_echo += '{"contact_normals%s": {'%i
-                  string_echo += self.contact_normals[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"contact_normals%s": {'%i
+                string_echo += self.contact_normals[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"contact_normals%s": {'%i
                 string_echo += self.contact_normals[i].echo()
@@ -269,8 +269,8 @@ class ContactState(tinyros.Message):
         depths_length = len(self.depths)
         for i in range(0, depths_length):
             if i == (depths_length - 1): 
-                  string_echo += '{"depths%s": %s'%(i,depths[i])
-                  string_echo += '}'
+                string_echo += '{"depths%s": %s'%(i,depths[i])
+                string_echo += '}'
             else:
                 string_echo += '{"depths%s": %s'%(i,depths[i])
                 string_echo += '}, '

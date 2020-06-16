@@ -91,9 +91,9 @@ class GridCells(tinyros.Message):
         cells_length = len(self.cells)
         for i in range(0, cells_length):
             if i == (cells_length - 1): 
-                  string_echo += '{"cells%s": {'%i
-                  string_echo += self.cells[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"cells%s": {'%i
+                string_echo += self.cells[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"cells%s": {'%i
                 string_echo += self.cells[i].echo()

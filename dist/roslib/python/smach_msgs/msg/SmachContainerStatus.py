@@ -233,8 +233,8 @@ class SmachContainerStatus(tinyros.Message):
         initial_states_length = len(self.initial_states)
         for i in range(0, initial_states_length):
             if i == (initial_states_length - 1): 
-                  string_echo += '"initial_states[i]": "%s"'%initial_states[i]
-                  string_echo += '"'
+                string_echo += '"initial_states[i]": "%s"'%initial_states[i]
+                string_echo += '"'
             else:
                 string_echo += '"initial_states[i]": "%s"'%initial_states[i]
                 string_echo += '", '
@@ -243,8 +243,8 @@ class SmachContainerStatus(tinyros.Message):
         active_states_length = len(self.active_states)
         for i in range(0, active_states_length):
             if i == (active_states_length - 1): 
-                  string_echo += '"active_states[i]": "%s"'%active_states[i]
-                  string_echo += '"'
+                string_echo += '"active_states[i]": "%s"'%active_states[i]
+                string_echo += '"'
             else:
                 string_echo += '"active_states[i]": "%s"'%active_states[i]
                 string_echo += '", '

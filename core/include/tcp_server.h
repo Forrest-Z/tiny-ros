@@ -19,7 +19,7 @@
 
 namespace tinyros
 {
-class TcpServer
+class TcpServer: public TcpServer_
 {
 public:
   TcpServer(int port): port_(port) {
@@ -61,10 +61,11 @@ public:
         spdlog_error("TcpServer::start_accept accept socket error: {0}(errno: {1})", strerror(errno), errno);
         continue;
       }
-
+      
+      std::unique_lock<std::mutex> sessions_lock(TcpServer::sessions_mutex_);
       TcpStream stream(connect_fd);
-      Session<TcpStream>* new_session = new Session<TcpStream>(stream);
-      new_session->start();
+      TcpServer::sessions_[connect_fd] = SessionPtr(new Session<TcpStream>(stream));
+      TcpServer::sessions_[connect_fd]->start();
     }
   }
   

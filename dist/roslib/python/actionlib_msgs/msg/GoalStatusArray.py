@@ -58,9 +58,9 @@ class GoalStatusArray(tinyros.Message):
         status_list_length = len(self.status_list)
         for i in range(0, status_list_length):
             if i == (status_list_length - 1): 
-                  string_echo += '{"status_list%s": {'%i
-                  string_echo += self.status_list[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"status_list%s": {'%i
+                string_echo += self.status_list[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"status_list%s": {'%i
                 string_echo += self.status_list[i].echo()

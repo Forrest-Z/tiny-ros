@@ -60,8 +60,8 @@ class LaserEcho(tinyros.Message):
         echoes_length = len(self.echoes)
         for i in range(0, echoes_length):
             if i == (echoes_length - 1): 
-                  string_echo += '{"echoes%s": %s'%(i,echoes[i])
-                  string_echo += '}'
+                string_echo += '{"echoes%s": %s'%(i,echoes[i])
+                string_echo += '}'
             else:
                 string_echo += '{"echoes%s": %s'%(i,echoes[i])
                 string_echo += '}, '

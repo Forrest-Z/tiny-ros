@@ -114,9 +114,9 @@ class SetMapProjectionsResponse(tinyros.Message):
         projected_maps_info_length = len(self.projected_maps_info)
         for i in range(0, projected_maps_info_length):
             if i == (projected_maps_info_length - 1): 
-                  string_echo += '{"projected_maps_info%s": {'%i
-                  string_echo += self.projected_maps_info[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"projected_maps_info%s": {'%i
+                string_echo += self.projected_maps_info[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"projected_maps_info%s": {'%i
                 string_echo += self.projected_maps_info[i].echo()

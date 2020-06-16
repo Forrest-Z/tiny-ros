@@ -179,8 +179,8 @@ class JointState(tinyros.Message):
         name_length = len(self.name)
         for i in range(0, name_length):
             if i == (name_length - 1): 
-                  string_echo += '"name[i]": "%s"'%name[i]
-                  string_echo += '"'
+                string_echo += '"name[i]": "%s"'%name[i]
+                string_echo += '"'
             else:
                 string_echo += '"name[i]": "%s"'%name[i]
                 string_echo += '", '
@@ -189,8 +189,8 @@ class JointState(tinyros.Message):
         position_length = len(self.position)
         for i in range(0, position_length):
             if i == (position_length - 1): 
-                  string_echo += '{"position%s": %s'%(i,position[i])
-                  string_echo += '}'
+                string_echo += '{"position%s": %s'%(i,position[i])
+                string_echo += '}'
             else:
                 string_echo += '{"position%s": %s'%(i,position[i])
                 string_echo += '}, '
@@ -199,8 +199,8 @@ class JointState(tinyros.Message):
         velocity_length = len(self.velocity)
         for i in range(0, velocity_length):
             if i == (velocity_length - 1): 
-                  string_echo += '{"velocity%s": %s'%(i,velocity[i])
-                  string_echo += '}'
+                string_echo += '{"velocity%s": %s'%(i,velocity[i])
+                string_echo += '}'
             else:
                 string_echo += '{"velocity%s": %s'%(i,velocity[i])
                 string_echo += '}, '
@@ -209,8 +209,8 @@ class JointState(tinyros.Message):
         effort_length = len(self.effort)
         for i in range(0, effort_length):
             if i == (effort_length - 1): 
-                  string_echo += '{"effort%s": %s'%(i,effort[i])
-                  string_echo += '}'
+                string_echo += '{"effort%s": %s'%(i,effort[i])
+                string_echo += '}'
             else:
                 string_echo += '{"effort%s": %s'%(i,effort[i])
                 string_echo += '}, '

@@ -107,8 +107,8 @@ class JointTrajectory(tinyros.Message):
         joint_names_length = len(self.joint_names)
         for i in range(0, joint_names_length):
             if i == (joint_names_length - 1): 
-                  string_echo += '"joint_names[i]": "%s"'%joint_names[i]
-                  string_echo += '"'
+                string_echo += '"joint_names[i]": "%s"'%joint_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"joint_names[i]": "%s"'%joint_names[i]
                 string_echo += '", '
@@ -117,9 +117,9 @@ class JointTrajectory(tinyros.Message):
         points_length = len(self.points)
         for i in range(0, points_length):
             if i == (points_length - 1): 
-                  string_echo += '{"points%s": {'%i
-                  string_echo += self.points[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"points%s": {'%i
+                string_echo += self.points[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"points%s": {'%i
                 string_echo += self.points[i].echo()

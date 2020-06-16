@@ -67,8 +67,8 @@ class Int64MultiArray(tinyros.Message):
         data_length = len(self.data)
         for i in range(0, data_length):
             if i == (data_length - 1): 
-                  string_echo += '{"data%s": %s'%(i,data[i])
-                  string_echo += '}'
+                string_echo += '{"data%s": %s'%(i,data[i])
+                string_echo += '}'
             else:
                 string_echo += '{"data%s": %s'%(i,data[i])
                 string_echo += '}, '

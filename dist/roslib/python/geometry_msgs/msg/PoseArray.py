@@ -58,9 +58,9 @@ class PoseArray(tinyros.Message):
         poses_length = len(self.poses)
         for i in range(0, poses_length):
             if i == (poses_length - 1): 
-                  string_echo += '{"poses%s": {'%i
-                  string_echo += self.poses[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"poses%s": {'%i
+                string_echo += self.poses[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"poses%s": {'%i
                 string_echo += self.poses[i].echo()

@@ -191,9 +191,9 @@ class MultiEchoLaserScan(tinyros.Message):
         ranges_length = len(self.ranges)
         for i in range(0, ranges_length):
             if i == (ranges_length - 1): 
-                  string_echo += '{"ranges%s": {'%i
-                  string_echo += self.ranges[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"ranges%s": {'%i
+                string_echo += self.ranges[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"ranges%s": {'%i
                 string_echo += self.ranges[i].echo()
@@ -203,9 +203,9 @@ class MultiEchoLaserScan(tinyros.Message):
         intensities_length = len(self.intensities)
         for i in range(0, intensities_length):
             if i == (intensities_length - 1): 
-                  string_echo += '{"intensities%s": {'%i
-                  string_echo += self.intensities[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"intensities%s": {'%i
+                string_echo += self.intensities[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"intensities%s": {'%i
                 string_echo += self.intensities[i].echo()

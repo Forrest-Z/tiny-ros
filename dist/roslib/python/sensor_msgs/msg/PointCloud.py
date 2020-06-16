@@ -80,9 +80,9 @@ class PointCloud(tinyros.Message):
         points_length = len(self.points)
         for i in range(0, points_length):
             if i == (points_length - 1): 
-                  string_echo += '{"points%s": {'%i
-                  string_echo += self.points[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"points%s": {'%i
+                string_echo += self.points[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"points%s": {'%i
                 string_echo += self.points[i].echo()
@@ -92,9 +92,9 @@ class PointCloud(tinyros.Message):
         channels_length = len(self.channels)
         for i in range(0, channels_length):
             if i == (channels_length - 1): 
-                  string_echo += '{"channels%s": {'%i
-                  string_echo += self.channels[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"channels%s": {'%i
+                string_echo += self.channels[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"channels%s": {'%i
                 string_echo += self.channels[i].echo()

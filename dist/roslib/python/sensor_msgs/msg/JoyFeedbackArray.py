@@ -50,9 +50,9 @@ class JoyFeedbackArray(tinyros.Message):
         array_length = len(self.array)
         for i in range(0, array_length):
             if i == (array_length - 1): 
-                  string_echo += '{"array%s": {'%i
-                  string_echo += self.array[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"array%s": {'%i
+                string_echo += self.array[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"array%s": {'%i
                 string_echo += self.array[i].echo()

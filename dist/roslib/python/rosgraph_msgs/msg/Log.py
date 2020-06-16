@@ -258,8 +258,8 @@ class Log(tinyros.Message):
         topics_length = len(self.topics)
         for i in range(0, topics_length):
             if i == (topics_length - 1): 
-                  string_echo += '"topics[i]": "%s"'%topics[i]
-                  string_echo += '"'
+                string_echo += '"topics[i]": "%s"'%topics[i]
+                string_echo += '"'
             else:
                 string_echo += '"topics[i]": "%s"'%topics[i]
                 string_echo += '", '

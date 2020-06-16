@@ -339,8 +339,8 @@ class ODEJointProperties(tinyros.Message):
         damping_length = len(self.damping)
         for i in range(0, damping_length):
             if i == (damping_length - 1): 
-                  string_echo += '{"damping%s": %s'%(i,damping[i])
-                  string_echo += '}'
+                string_echo += '{"damping%s": %s'%(i,damping[i])
+                string_echo += '}'
             else:
                 string_echo += '{"damping%s": %s'%(i,damping[i])
                 string_echo += '}, '
@@ -349,8 +349,8 @@ class ODEJointProperties(tinyros.Message):
         hiStop_length = len(self.hiStop)
         for i in range(0, hiStop_length):
             if i == (hiStop_length - 1): 
-                  string_echo += '{"hiStop%s": %s'%(i,hiStop[i])
-                  string_echo += '}'
+                string_echo += '{"hiStop%s": %s'%(i,hiStop[i])
+                string_echo += '}'
             else:
                 string_echo += '{"hiStop%s": %s'%(i,hiStop[i])
                 string_echo += '}, '
@@ -359,8 +359,8 @@ class ODEJointProperties(tinyros.Message):
         loStop_length = len(self.loStop)
         for i in range(0, loStop_length):
             if i == (loStop_length - 1): 
-                  string_echo += '{"loStop%s": %s'%(i,loStop[i])
-                  string_echo += '}'
+                string_echo += '{"loStop%s": %s'%(i,loStop[i])
+                string_echo += '}'
             else:
                 string_echo += '{"loStop%s": %s'%(i,loStop[i])
                 string_echo += '}, '
@@ -369,8 +369,8 @@ class ODEJointProperties(tinyros.Message):
         erp_length = len(self.erp)
         for i in range(0, erp_length):
             if i == (erp_length - 1): 
-                  string_echo += '{"erp%s": %s'%(i,erp[i])
-                  string_echo += '}'
+                string_echo += '{"erp%s": %s'%(i,erp[i])
+                string_echo += '}'
             else:
                 string_echo += '{"erp%s": %s'%(i,erp[i])
                 string_echo += '}, '
@@ -379,8 +379,8 @@ class ODEJointProperties(tinyros.Message):
         cfm_length = len(self.cfm)
         for i in range(0, cfm_length):
             if i == (cfm_length - 1): 
-                  string_echo += '{"cfm%s": %s'%(i,cfm[i])
-                  string_echo += '}'
+                string_echo += '{"cfm%s": %s'%(i,cfm[i])
+                string_echo += '}'
             else:
                 string_echo += '{"cfm%s": %s'%(i,cfm[i])
                 string_echo += '}, '
@@ -389,8 +389,8 @@ class ODEJointProperties(tinyros.Message):
         stop_erp_length = len(self.stop_erp)
         for i in range(0, stop_erp_length):
             if i == (stop_erp_length - 1): 
-                  string_echo += '{"stop_erp%s": %s'%(i,stop_erp[i])
-                  string_echo += '}'
+                string_echo += '{"stop_erp%s": %s'%(i,stop_erp[i])
+                string_echo += '}'
             else:
                 string_echo += '{"stop_erp%s": %s'%(i,stop_erp[i])
                 string_echo += '}, '
@@ -399,8 +399,8 @@ class ODEJointProperties(tinyros.Message):
         stop_cfm_length = len(self.stop_cfm)
         for i in range(0, stop_cfm_length):
             if i == (stop_cfm_length - 1): 
-                  string_echo += '{"stop_cfm%s": %s'%(i,stop_cfm[i])
-                  string_echo += '}'
+                string_echo += '{"stop_cfm%s": %s'%(i,stop_cfm[i])
+                string_echo += '}'
             else:
                 string_echo += '{"stop_cfm%s": %s'%(i,stop_cfm[i])
                 string_echo += '}, '
@@ -409,8 +409,8 @@ class ODEJointProperties(tinyros.Message):
         fudge_factor_length = len(self.fudge_factor)
         for i in range(0, fudge_factor_length):
             if i == (fudge_factor_length - 1): 
-                  string_echo += '{"fudge_factor%s": %s'%(i,fudge_factor[i])
-                  string_echo += '}'
+                string_echo += '{"fudge_factor%s": %s'%(i,fudge_factor[i])
+                string_echo += '}'
             else:
                 string_echo += '{"fudge_factor%s": %s'%(i,fudge_factor[i])
                 string_echo += '}, '
@@ -419,8 +419,8 @@ class ODEJointProperties(tinyros.Message):
         fmax_length = len(self.fmax)
         for i in range(0, fmax_length):
             if i == (fmax_length - 1): 
-                  string_echo += '{"fmax%s": %s'%(i,fmax[i])
-                  string_echo += '}'
+                string_echo += '{"fmax%s": %s'%(i,fmax[i])
+                string_echo += '}'
             else:
                 string_echo += '{"fmax%s": %s'%(i,fmax[i])
                 string_echo += '}, '
@@ -429,8 +429,8 @@ class ODEJointProperties(tinyros.Message):
         vel_length = len(self.vel)
         for i in range(0, vel_length):
             if i == (vel_length - 1): 
-                  string_echo += '{"vel%s": %s'%(i,vel[i])
-                  string_echo += '}'
+                string_echo += '{"vel%s": %s'%(i,vel[i])
+                string_echo += '}'
             else:
                 string_echo += '{"vel%s": %s'%(i,vel[i])
                 string_echo += '}, '

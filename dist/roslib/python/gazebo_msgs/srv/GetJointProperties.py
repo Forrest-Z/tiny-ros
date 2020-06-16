@@ -290,8 +290,8 @@ class GetJointPropertiesResponse(tinyros.Message):
         damping_length = len(self.damping)
         for i in range(0, damping_length):
             if i == (damping_length - 1): 
-                  string_echo += '{"damping%s": %s'%(i,damping[i])
-                  string_echo += '}'
+                string_echo += '{"damping%s": %s'%(i,damping[i])
+                string_echo += '}'
             else:
                 string_echo += '{"damping%s": %s'%(i,damping[i])
                 string_echo += '}, '
@@ -300,8 +300,8 @@ class GetJointPropertiesResponse(tinyros.Message):
         position_length = len(self.position)
         for i in range(0, position_length):
             if i == (position_length - 1): 
-                  string_echo += '{"position%s": %s'%(i,position[i])
-                  string_echo += '}'
+                string_echo += '{"position%s": %s'%(i,position[i])
+                string_echo += '}'
             else:
                 string_echo += '{"position%s": %s'%(i,position[i])
                 string_echo += '}, '
@@ -310,8 +310,8 @@ class GetJointPropertiesResponse(tinyros.Message):
         rate_length = len(self.rate)
         for i in range(0, rate_length):
             if i == (rate_length - 1): 
-                  string_echo += '{"rate%s": %s'%(i,rate[i])
-                  string_echo += '}'
+                string_echo += '{"rate%s": %s'%(i,rate[i])
+                string_echo += '}'
             else:
                 string_echo += '{"rate%s": %s'%(i,rate[i])
                 string_echo += '}, '

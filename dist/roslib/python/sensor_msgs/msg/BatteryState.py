@@ -315,8 +315,8 @@ class BatteryState(tinyros.Message):
         cell_voltage_length = len(self.cell_voltage)
         for i in range(0, cell_voltage_length):
             if i == (cell_voltage_length - 1): 
-                  string_echo += '{"cell_voltage%s": %s'%(i,cell_voltage[i])
-                  string_echo += '}'
+                string_echo += '{"cell_voltage%s": %s'%(i,cell_voltage[i])
+                string_echo += '}'
             else:
                 string_echo += '{"cell_voltage%s": %s'%(i,cell_voltage[i])
                 string_echo += '}, '

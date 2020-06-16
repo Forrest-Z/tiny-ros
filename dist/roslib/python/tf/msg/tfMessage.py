@@ -51,9 +51,9 @@ class tfMessage(tinyros.Message):
         transforms_length = len(self.transforms)
         for i in range(0, transforms_length):
             if i == (transforms_length - 1): 
-                  string_echo += '{"transforms%s": {'%i
-                  string_echo += self.transforms[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"transforms%s": {'%i
+                string_echo += self.transforms[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"transforms%s": {'%i
                 string_echo += self.transforms[i].echo()

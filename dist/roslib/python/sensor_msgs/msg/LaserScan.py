@@ -211,8 +211,8 @@ class LaserScan(tinyros.Message):
         ranges_length = len(self.ranges)
         for i in range(0, ranges_length):
             if i == (ranges_length - 1): 
-                  string_echo += '{"ranges%s": %s'%(i,ranges[i])
-                  string_echo += '}'
+                string_echo += '{"ranges%s": %s'%(i,ranges[i])
+                string_echo += '}'
             else:
                 string_echo += '{"ranges%s": %s'%(i,ranges[i])
                 string_echo += '}, '
@@ -221,8 +221,8 @@ class LaserScan(tinyros.Message):
         intensities_length = len(self.intensities)
         for i in range(0, intensities_length):
             if i == (intensities_length - 1): 
-                  string_echo += '{"intensities%s": %s'%(i,intensities[i])
-                  string_echo += '}'
+                string_echo += '{"intensities%s": %s'%(i,intensities[i])
+                string_echo += '}'
             else:
                 string_echo += '{"intensities%s": %s'%(i,intensities[i])
                 string_echo += '}, '

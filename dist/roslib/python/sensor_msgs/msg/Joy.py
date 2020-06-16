@@ -99,8 +99,8 @@ class Joy(tinyros.Message):
         axes_length = len(self.axes)
         for i in range(0, axes_length):
             if i == (axes_length - 1): 
-                  string_echo += '{"axes%s": %s'%(i,axes[i])
-                  string_echo += '}'
+                string_echo += '{"axes%s": %s'%(i,axes[i])
+                string_echo += '}'
             else:
                 string_echo += '{"axes%s": %s'%(i,axes[i])
                 string_echo += '}, '
@@ -109,8 +109,8 @@ class Joy(tinyros.Message):
         buttons_length = len(self.buttons)
         for i in range(0, buttons_length):
             if i == (buttons_length - 1): 
-                  string_echo += '{"buttons%s": %s'%(i,buttons[i])
-                  string_echo += '}'
+                string_echo += '{"buttons%s": %s'%(i,buttons[i])
+                string_echo += '}'
             else:
                 string_echo += '{"buttons%s": %s'%(i,buttons[i])
                 string_echo += '}, '

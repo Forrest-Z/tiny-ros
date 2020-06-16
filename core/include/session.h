@@ -24,6 +24,22 @@
 #include "serialization.h"
 #include "topic_handlers.h"
 #include "serialization.h"
+#include "tcp_stream.h"
+
+namespace tinyros
+{
+template<typename Socket>
+class Session;
+typedef std::shared_ptr<Session<TcpStream> > SessionPtr;
+class TcpServer_
+{
+public:
+  static std::map<int, SessionPtr> sessions_;
+  static std::mutex sessions_mutex_;
+};
+std::mutex TcpServer_::sessions_mutex_;
+std::map<int, SessionPtr> TcpServer_::sessions_;
+}
 
 namespace tinyros
 {
@@ -53,6 +69,10 @@ public:
     if (isudp) {
       session_id_ = "session_udp";
     }
+  }
+
+  ~Session() {
+    spdlog_warn("[{0}] {1} session erase finished!", session_id_.c_str(), __FUNCTION__);
   }
 
   Socket& socket()
@@ -173,6 +193,11 @@ public:
     spdlog_warn("[{0}] {1} Close the socket end.", session_id_.c_str(), __FUNCTION__);
     
     spdlog_warn("[{0}] {1} end.", session_id_.c_str(), __FUNCTION__);
+    
+    std::unique_lock<std::mutex> sessions_lock(TcpServer_::sessions_mutex_);
+    if (TcpServer_::sessions_.count(socket_.sock_fd_) == 1) {
+      TcpServer_::sessions_.erase(socket_.sock_fd_);
+    }
   }
 
   bool is_active()

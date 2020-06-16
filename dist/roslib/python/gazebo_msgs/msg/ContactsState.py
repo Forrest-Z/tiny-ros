@@ -58,9 +58,9 @@ class ContactsState(tinyros.Message):
         states_length = len(self.states)
         for i in range(0, states_length):
             if i == (states_length - 1): 
-                  string_echo += '{"states%s": {'%i
-                  string_echo += self.states[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"states%s": {'%i
+                string_echo += self.states[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"states%s": {'%i
                 string_echo += self.states[i].echo()

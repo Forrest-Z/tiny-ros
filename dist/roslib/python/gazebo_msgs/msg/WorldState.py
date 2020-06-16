@@ -150,8 +150,8 @@ class WorldState(tinyros.Message):
         name_length = len(self.name)
         for i in range(0, name_length):
             if i == (name_length - 1): 
-                  string_echo += '"name[i]": "%s"'%name[i]
-                  string_echo += '"'
+                string_echo += '"name[i]": "%s"'%name[i]
+                string_echo += '"'
             else:
                 string_echo += '"name[i]": "%s"'%name[i]
                 string_echo += '", '
@@ -160,9 +160,9 @@ class WorldState(tinyros.Message):
         pose_length = len(self.pose)
         for i in range(0, pose_length):
             if i == (pose_length - 1): 
-                  string_echo += '{"pose%s": {'%i
-                  string_echo += self.pose[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"pose%s": {'%i
+                string_echo += self.pose[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"pose%s": {'%i
                 string_echo += self.pose[i].echo()
@@ -172,9 +172,9 @@ class WorldState(tinyros.Message):
         twist_length = len(self.twist)
         for i in range(0, twist_length):
             if i == (twist_length - 1): 
-                  string_echo += '{"twist%s": {'%i
-                  string_echo += self.twist[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"twist%s": {'%i
+                string_echo += self.twist[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"twist%s": {'%i
                 string_echo += self.twist[i].echo()
@@ -184,9 +184,9 @@ class WorldState(tinyros.Message):
         wrench_length = len(self.wrench)
         for i in range(0, wrench_length):
             if i == (wrench_length - 1): 
-                  string_echo += '{"wrench%s": {'%i
-                  string_echo += self.wrench[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"wrench%s": {'%i
+                string_echo += self.wrench[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"wrench%s": {'%i
                 string_echo += self.wrench[i].echo()

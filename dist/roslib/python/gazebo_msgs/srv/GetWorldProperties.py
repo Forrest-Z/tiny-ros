@@ -220,8 +220,8 @@ class GetWorldPropertiesResponse(tinyros.Message):
         model_names_length = len(self.model_names)
         for i in range(0, model_names_length):
             if i == (model_names_length - 1): 
-                  string_echo += '"model_names[i]": "%s"'%model_names[i]
-                  string_echo += '"'
+                string_echo += '"model_names[i]": "%s"'%model_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"model_names[i]": "%s"'%model_names[i]
                 string_echo += '", '

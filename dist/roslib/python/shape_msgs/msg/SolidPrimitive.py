@@ -89,8 +89,8 @@ class SolidPrimitive(tinyros.Message):
         dimensions_length = len(self.dimensions)
         for i in range(0, dimensions_length):
             if i == (dimensions_length - 1): 
-                  string_echo += '{"dimensions%s": %s'%(i,dimensions[i])
-                  string_echo += '}'
+                string_echo += '{"dimensions%s": %s'%(i,dimensions[i])
+                string_echo += '}'
             else:
                 string_echo += '{"dimensions%s": %s'%(i,dimensions[i])
                 string_echo += '}, '

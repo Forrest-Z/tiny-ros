@@ -177,8 +177,8 @@ class JointTrajectoryPoint(tinyros.Message):
         positions_length = len(self.positions)
         for i in range(0, positions_length):
             if i == (positions_length - 1): 
-                  string_echo += '{"positions%s": %s'%(i,positions[i])
-                  string_echo += '}'
+                string_echo += '{"positions%s": %s'%(i,positions[i])
+                string_echo += '}'
             else:
                 string_echo += '{"positions%s": %s'%(i,positions[i])
                 string_echo += '}, '
@@ -187,8 +187,8 @@ class JointTrajectoryPoint(tinyros.Message):
         velocities_length = len(self.velocities)
         for i in range(0, velocities_length):
             if i == (velocities_length - 1): 
-                  string_echo += '{"velocities%s": %s'%(i,velocities[i])
-                  string_echo += '}'
+                string_echo += '{"velocities%s": %s'%(i,velocities[i])
+                string_echo += '}'
             else:
                 string_echo += '{"velocities%s": %s'%(i,velocities[i])
                 string_echo += '}, '
@@ -197,8 +197,8 @@ class JointTrajectoryPoint(tinyros.Message):
         accelerations_length = len(self.accelerations)
         for i in range(0, accelerations_length):
             if i == (accelerations_length - 1): 
-                  string_echo += '{"accelerations%s": %s'%(i,accelerations[i])
-                  string_echo += '}'
+                string_echo += '{"accelerations%s": %s'%(i,accelerations[i])
+                string_echo += '}'
             else:
                 string_echo += '{"accelerations%s": %s'%(i,accelerations[i])
                 string_echo += '}, '
@@ -207,8 +207,8 @@ class JointTrajectoryPoint(tinyros.Message):
         effort_length = len(self.effort)
         for i in range(0, effort_length):
             if i == (effort_length - 1): 
-                  string_echo += '{"effort%s": %s'%(i,effort[i])
-                  string_echo += '}'
+                string_echo += '{"effort%s": %s'%(i,effort[i])
+                string_echo += '}'
             else:
                 string_echo += '{"effort%s": %s'%(i,effort[i])
                 string_echo += '}, '

@@ -74,7 +74,6 @@ public:
     ::close(sock_fd_);
   }
 
-private:
   int sock_fd_;
 };
 }  // namespace

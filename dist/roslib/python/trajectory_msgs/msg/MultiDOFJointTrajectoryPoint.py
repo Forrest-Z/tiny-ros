@@ -117,9 +117,9 @@ class MultiDOFJointTrajectoryPoint(tinyros.Message):
         transforms_length = len(self.transforms)
         for i in range(0, transforms_length):
             if i == (transforms_length - 1): 
-                  string_echo += '{"transforms%s": {'%i
-                  string_echo += self.transforms[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"transforms%s": {'%i
+                string_echo += self.transforms[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"transforms%s": {'%i
                 string_echo += self.transforms[i].echo()
@@ -129,9 +129,9 @@ class MultiDOFJointTrajectoryPoint(tinyros.Message):
         velocities_length = len(self.velocities)
         for i in range(0, velocities_length):
             if i == (velocities_length - 1): 
-                  string_echo += '{"velocities%s": {'%i
-                  string_echo += self.velocities[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"velocities%s": {'%i
+                string_echo += self.velocities[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"velocities%s": {'%i
                 string_echo += self.velocities[i].echo()
@@ -141,9 +141,9 @@ class MultiDOFJointTrajectoryPoint(tinyros.Message):
         accelerations_length = len(self.accelerations)
         for i in range(0, accelerations_length):
             if i == (accelerations_length - 1): 
-                  string_echo += '{"accelerations%s": {'%i
-                  string_echo += self.accelerations[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"accelerations%s": {'%i
+                string_echo += self.accelerations[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"accelerations%s": {'%i
                 string_echo += self.accelerations[i].echo()

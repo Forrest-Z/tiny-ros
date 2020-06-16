@@ -316,8 +316,8 @@ class SmachContainerStructure(tinyros.Message):
         children_length = len(self.children)
         for i in range(0, children_length):
             if i == (children_length - 1): 
-                  string_echo += '"children[i]": "%s"'%children[i]
-                  string_echo += '"'
+                string_echo += '"children[i]": "%s"'%children[i]
+                string_echo += '"'
             else:
                 string_echo += '"children[i]": "%s"'%children[i]
                 string_echo += '", '
@@ -326,8 +326,8 @@ class SmachContainerStructure(tinyros.Message):
         internal_outcomes_length = len(self.internal_outcomes)
         for i in range(0, internal_outcomes_length):
             if i == (internal_outcomes_length - 1): 
-                  string_echo += '"internal_outcomes[i]": "%s"'%internal_outcomes[i]
-                  string_echo += '"'
+                string_echo += '"internal_outcomes[i]": "%s"'%internal_outcomes[i]
+                string_echo += '"'
             else:
                 string_echo += '"internal_outcomes[i]": "%s"'%internal_outcomes[i]
                 string_echo += '", '
@@ -336,8 +336,8 @@ class SmachContainerStructure(tinyros.Message):
         outcomes_from_length = len(self.outcomes_from)
         for i in range(0, outcomes_from_length):
             if i == (outcomes_from_length - 1): 
-                  string_echo += '"outcomes_from[i]": "%s"'%outcomes_from[i]
-                  string_echo += '"'
+                string_echo += '"outcomes_from[i]": "%s"'%outcomes_from[i]
+                string_echo += '"'
             else:
                 string_echo += '"outcomes_from[i]": "%s"'%outcomes_from[i]
                 string_echo += '", '
@@ -346,8 +346,8 @@ class SmachContainerStructure(tinyros.Message):
         outcomes_to_length = len(self.outcomes_to)
         for i in range(0, outcomes_to_length):
             if i == (outcomes_to_length - 1): 
-                  string_echo += '"outcomes_to[i]": "%s"'%outcomes_to[i]
-                  string_echo += '"'
+                string_echo += '"outcomes_to[i]": "%s"'%outcomes_to[i]
+                string_echo += '"'
             else:
                 string_echo += '"outcomes_to[i]": "%s"'%outcomes_to[i]
                 string_echo += '", '
@@ -356,8 +356,8 @@ class SmachContainerStructure(tinyros.Message):
         container_outcomes_length = len(self.container_outcomes)
         for i in range(0, container_outcomes_length):
             if i == (container_outcomes_length - 1): 
-                  string_echo += '"container_outcomes[i]": "%s"'%container_outcomes[i]
-                  string_echo += '"'
+                string_echo += '"container_outcomes[i]": "%s"'%container_outcomes[i]
+                string_echo += '"'
             else:
                 string_echo += '"container_outcomes[i]": "%s"'%container_outcomes[i]
                 string_echo += '", '

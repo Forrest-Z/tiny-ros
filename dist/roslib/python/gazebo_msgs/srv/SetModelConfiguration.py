@@ -191,8 +191,8 @@ class SetModelConfigurationRequest(tinyros.Message):
         joint_names_length = len(self.joint_names)
         for i in range(0, joint_names_length):
             if i == (joint_names_length - 1): 
-                  string_echo += '"joint_names[i]": "%s"'%joint_names[i]
-                  string_echo += '"'
+                string_echo += '"joint_names[i]": "%s"'%joint_names[i]
+                string_echo += '"'
             else:
                 string_echo += '"joint_names[i]": "%s"'%joint_names[i]
                 string_echo += '", '
@@ -201,8 +201,8 @@ class SetModelConfigurationRequest(tinyros.Message):
         joint_positions_length = len(self.joint_positions)
         for i in range(0, joint_positions_length):
             if i == (joint_positions_length - 1): 
-                  string_echo += '{"joint_positions%s": %s'%(i,joint_positions[i])
-                  string_echo += '}'
+                string_echo += '{"joint_positions%s": %s'%(i,joint_positions[i])
+                string_echo += '}'
             else:
                 string_echo += '{"joint_positions%s": %s'%(i,joint_positions[i])
                 string_echo += '}, '

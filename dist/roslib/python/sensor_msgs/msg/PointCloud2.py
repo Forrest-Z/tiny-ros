@@ -171,9 +171,9 @@ class PointCloud2(tinyros.Message):
         fields_length = len(self.fields)
         for i in range(0, fields_length):
             if i == (fields_length - 1): 
-                  string_echo += '{"fields%s": {'%i
-                  string_echo += self.fields[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"fields%s": {'%i
+                string_echo += self.fields[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"fields%s": {'%i
                 string_echo += self.fields[i].echo()
@@ -189,8 +189,8 @@ class PointCloud2(tinyros.Message):
         data_length = len(self.data)
         for i in range(0, data_length):
             if i == (data_length - 1): 
-                  string_echo += '{"data%s": %s'%(i,data[i])
-                  string_echo += '}'
+                string_echo += '{"data%s": %s'%(i,data[i])
+                string_echo += '}'
             else:
                 string_echo += '{"data%s": %s'%(i,data[i])
                 string_echo += '}, '

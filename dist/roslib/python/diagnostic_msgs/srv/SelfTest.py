@@ -164,9 +164,9 @@ class SelfTestResponse(tinyros.Message):
         status_length = len(self.status)
         for i in range(0, status_length):
             if i == (status_length - 1): 
-                  string_echo += '{"status%s": {'%i
-                  string_echo += self.status[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"status%s": {'%i
+                string_echo += self.status[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"status%s": {'%i
                 string_echo += self.status[i].echo()

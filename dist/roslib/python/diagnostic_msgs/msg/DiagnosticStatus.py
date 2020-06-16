@@ -173,9 +173,9 @@ class DiagnosticStatus(tinyros.Message):
         values_length = len(self.values)
         for i in range(0, values_length):
             if i == (values_length - 1): 
-                  string_echo += '{"values%s": {'%i
-                  string_echo += self.values[i].echo()
-                  string_echo += '}}'
+                string_echo += '{"values%s": {'%i
+                string_echo += self.values[i].echo()
+                string_echo += '}}'
             else:
                 string_echo += '{"values%s": {'%i
                 string_echo += self.values[i].echo()
