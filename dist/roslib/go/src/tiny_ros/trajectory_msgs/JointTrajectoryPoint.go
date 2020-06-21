@@ -20,7 +20,7 @@ func NewJointTrajectoryPoint() (*JointTrajectoryPoint) {
     newJointTrajectoryPoint.Go_velocities = []float64{}
     newJointTrajectoryPoint.Go_accelerations = []float64{}
     newJointTrajectoryPoint.Go_effort = []float64{}
-    newJointTrajectoryPoint.Go_time_from_start = ros.NewTime()
+    newJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
     return newJointTrajectoryPoint
 }
 

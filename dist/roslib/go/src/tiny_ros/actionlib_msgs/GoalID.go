@@ -11,7 +11,7 @@ type GoalID struct {
 
 func NewGoalID() (*GoalID) {
     newGoalID := new(GoalID)
-    newGoalID.Go_stamp = ros.NewTime()
+    newGoalID.Go_stamp = tinyros.NewTime()
     newGoalID.Go_id = ""
     return newGoalID
 }

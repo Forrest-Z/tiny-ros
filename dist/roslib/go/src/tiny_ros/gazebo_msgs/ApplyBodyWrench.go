@@ -23,8 +23,8 @@ func NewApplyBodyWrenchRequest() (*ApplyBodyWrenchRequest) {
     newApplyBodyWrenchRequest.Go_reference_frame = ""
     newApplyBodyWrenchRequest.Go_reference_point = geometry_msgs.NewPoint()
     newApplyBodyWrenchRequest.Go_wrench = geometry_msgs.NewWrench()
-    newApplyBodyWrenchRequest.Go_start_time = ros.NewTime()
-    newApplyBodyWrenchRequest.Go_duration = ros.NewTime()
+    newApplyBodyWrenchRequest.Go_start_time = tinyros.NewTime()
+    newApplyBodyWrenchRequest.Go_duration = tinyros.NewDuration()
     newApplyBodyWrenchRequest.__id__ = 0
     return newApplyBodyWrenchRequest
 }

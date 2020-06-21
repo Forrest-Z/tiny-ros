@@ -18,9 +18,9 @@ func NewLookupTransformGoal() (*LookupTransformGoal) {
     newLookupTransformGoal := new(LookupTransformGoal)
     newLookupTransformGoal.Go_target_frame = ""
     newLookupTransformGoal.Go_source_frame = ""
-    newLookupTransformGoal.Go_source_time = ros.NewTime()
-    newLookupTransformGoal.Go_timeout = ros.NewTime()
-    newLookupTransformGoal.Go_target_time = ros.NewTime()
+    newLookupTransformGoal.Go_source_time = tinyros.NewTime()
+    newLookupTransformGoal.Go_timeout = tinyros.NewDuration()
+    newLookupTransformGoal.Go_target_time = tinyros.NewTime()
     newLookupTransformGoal.Go_fixed_frame = ""
     newLookupTransformGoal.Go_advanced = false
     return newLookupTransformGoal

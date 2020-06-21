@@ -10,7 +10,7 @@ type Duration struct {
 
 func NewDuration() (*Duration) {
     newDuration := new(Duration)
-    newDuration.Go_data = ros.NewTime()
+    newDuration.Go_data = tinyros.NewDuration()
     return newDuration
 }
 

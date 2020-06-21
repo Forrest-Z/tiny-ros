@@ -242,10 +242,10 @@ class TimeDataType(PrimitiveDataType):
         self.nsec = PrimitiveDataType(self.cls, name+'.Go_nsec','uint32',4)
 
     def make_initializer(self, f, trailer):
-        if self.type == 'ros.Duration':
-            f.write('    new%s.Go_%s = ros.NewDuration()\n' % (self.cls, self.name))
+        if self.type == 'tinyros.Duration':
+            f.write('    new%s.Go_%s = tinyros.NewDuration()\n' % (self.cls, self.name))
         else:
-            f.write('    new%s.Go_%s = ros.NewTime()\n' % (self.cls, self.name))
+            f.write('    new%s.Go_%s = tinyros.NewTime()\n' % (self.cls, self.name))
 
     def make_declaration(self, f):
         f.write('    Go_%s %s `json:"%s"`\n' % (self.name, self.type, self.name) )

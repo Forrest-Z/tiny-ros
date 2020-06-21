@@ -10,7 +10,7 @@ type Time struct {
 
 func NewTime() (*Time) {
     newTime := new(Time)
-    newTime.Go_data = ros.NewTime()
+    newTime.Go_data = tinyros.NewTime()
     return newTime
 }
 

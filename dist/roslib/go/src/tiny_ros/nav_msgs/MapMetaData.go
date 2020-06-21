@@ -17,7 +17,7 @@ type MapMetaData struct {
 
 func NewMapMetaData() (*MapMetaData) {
     newMapMetaData := new(MapMetaData)
-    newMapMetaData.Go_map_load_time = ros.NewTime()
+    newMapMetaData.Go_map_load_time = tinyros.NewTime()
     newMapMetaData.Go_resolution = 0.0
     newMapMetaData.Go_width = 0
     newMapMetaData.Go_height = 0

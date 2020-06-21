@@ -26,17 +26,17 @@ func NewTopicStatistics() (*TopicStatistics) {
     newTopicStatistics.Go_topic = ""
     newTopicStatistics.Go_node_pub = ""
     newTopicStatistics.Go_node_sub = ""
-    newTopicStatistics.Go_window_start = ros.NewTime()
-    newTopicStatistics.Go_window_stop = ros.NewTime()
+    newTopicStatistics.Go_window_start = tinyros.NewTime()
+    newTopicStatistics.Go_window_stop = tinyros.NewTime()
     newTopicStatistics.Go_delivered_msgs = 0
     newTopicStatistics.Go_dropped_msgs = 0
     newTopicStatistics.Go_traffic = 0
-    newTopicStatistics.Go_period_mean = ros.NewTime()
-    newTopicStatistics.Go_period_stddev = ros.NewTime()
-    newTopicStatistics.Go_period_max = ros.NewTime()
-    newTopicStatistics.Go_stamp_age_mean = ros.NewTime()
-    newTopicStatistics.Go_stamp_age_stddev = ros.NewTime()
-    newTopicStatistics.Go_stamp_age_max = ros.NewTime()
+    newTopicStatistics.Go_period_mean = tinyros.NewDuration()
+    newTopicStatistics.Go_period_stddev = tinyros.NewDuration()
+    newTopicStatistics.Go_period_max = tinyros.NewDuration()
+    newTopicStatistics.Go_stamp_age_mean = tinyros.NewDuration()
+    newTopicStatistics.Go_stamp_age_stddev = tinyros.NewDuration()
+    newTopicStatistics.Go_stamp_age_max = tinyros.NewDuration()
     return newTopicStatistics
 }
 

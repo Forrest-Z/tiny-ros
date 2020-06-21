@@ -14,7 +14,7 @@ type TimeReference struct {
 func NewTimeReference() (*TimeReference) {
     newTimeReference := new(TimeReference)
     newTimeReference.Go_header = std_msgs.NewHeader()
-    newTimeReference.Go_time_ref = ros.NewTime()
+    newTimeReference.Go_time_ref = tinyros.NewTime()
     newTimeReference.Go_source = ""
     return newTimeReference
 }

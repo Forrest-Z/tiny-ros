@@ -65,6 +65,13 @@ func (self *NodeHandleTCP) Go_publish(id uint32, msg Msg) (int) {
     return self.publish(id, msg, false);
 }
 
+func NewNodeHandleTCP() (*NodeHandleTCP) {
+    newNodeHandleTCP := new(NodeHandleTCP)
+    newNodeHandleTCP.hardware_ = NewHardwareTCP()
+    newNodeHandleTCP.loghd_ = NewHardwareTCP()
+    return newNodeHandleTCP
+}
+
 
 /////////////////////////////////////////////////////////
 
@@ -76,6 +83,13 @@ func (self *NodeHandleUDP) Go_publish(id uint32, msg Msg) (int) {
     return self.publish(id, msg, false);
 }
 
+func NewNodeHandleUDP() (*NodeHandleUDP) {
+    newNodeHandleUDP := new(NodeHandleUDP)
+    newNodeHandleUDP.hardware_ = NewHardwareUDP()
+    newNodeHandleUDP.loghd_ = nil
+    return newNodeHandleUDP
+}
+
 /////////////////////////////////////////////////////////
 var (
    go_nh *NodeHandleTCP
@@ -84,9 +98,7 @@ var (
 
 func Go_nh() (*NodeHandleTCP) {
     if go_nh == nil {
-        go_nh = new(NodeHandleTCP)
-        go_nh.hardware_ = NewHardwareTCP()
-        go_nh.loghd_ = NewHardwareTCP()
+        go_nh = NewNodeHandleTCP()
         go_nh.hardware_.init("127.0.0.1")
     }
     return go_nh
@@ -94,9 +106,7 @@ func Go_nh() (*NodeHandleTCP) {
 
 func Go_udp() (*NodeHandleUDP) {
     if go_udp == nil {
-        go_udp = new(NodeHandleUDP)
-        go_udp.hardware_ = NewHardwareUDP()
-        go_udp.loghd_ = nil
+        go_udp = NewNodeHandleUDP()
         go_udp.hardware_.init("127.0.0.1")
     }
     return go_udp

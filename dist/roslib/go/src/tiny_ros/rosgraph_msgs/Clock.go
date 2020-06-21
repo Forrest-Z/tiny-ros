@@ -10,7 +10,7 @@ type Clock struct {
 
 func NewClock() (*Clock) {
     newClock := new(Clock)
-    newClock.Go_clock = ros.NewTime()
+    newClock.Go_clock = tinyros.NewTime()
     return newClock
 }
 

@@ -13,7 +13,7 @@ type Header struct {
 func NewHeader() (*Header) {
     newHeader := new(Header)
     newHeader.Go_seq = 0
-    newHeader.Go_stamp = ros.NewTime()
+    newHeader.Go_stamp = tinyros.NewTime()
     newHeader.Go_frame_id = ""
     return newHeader
 }

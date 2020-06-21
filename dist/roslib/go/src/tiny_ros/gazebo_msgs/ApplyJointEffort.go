@@ -19,8 +19,8 @@ func NewApplyJointEffortRequest() (*ApplyJointEffortRequest) {
     newApplyJointEffortRequest := new(ApplyJointEffortRequest)
     newApplyJointEffortRequest.Go_joint_name = ""
     newApplyJointEffortRequest.Go_effort = 0.0
-    newApplyJointEffortRequest.Go_start_time = ros.NewTime()
-    newApplyJointEffortRequest.Go_duration = ros.NewTime()
+    newApplyJointEffortRequest.Go_start_time = tinyros.NewTime()
+    newApplyJointEffortRequest.Go_duration = tinyros.NewDuration()
     newApplyJointEffortRequest.__id__ = 0
     return newApplyJointEffortRequest
 }

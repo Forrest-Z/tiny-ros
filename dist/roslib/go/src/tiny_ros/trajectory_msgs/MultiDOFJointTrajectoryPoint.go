@@ -18,7 +18,7 @@ func NewMultiDOFJointTrajectoryPoint() (*MultiDOFJointTrajectoryPoint) {
     newMultiDOFJointTrajectoryPoint.Go_transforms = []geometry_msgs.Transform{}
     newMultiDOFJointTrajectoryPoint.Go_velocities = []geometry_msgs.Twist{}
     newMultiDOFJointTrajectoryPoint.Go_accelerations = []geometry_msgs.Twist{}
-    newMultiDOFJointTrajectoryPoint.Go_time_from_start = ros.NewTime()
+    newMultiDOFJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
     return newMultiDOFJointTrajectoryPoint
 }
 
