@@ -62,7 +62,7 @@ Time Time::now()
   Time time;
   int64_t ms = rt_tick_get();
   time.sec = ms/1000;
-  time.nsec = ms%1000 * 10000000;
+  time.nsec = ms%1000 * 1000000;
   return time;
 }
 

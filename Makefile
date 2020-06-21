@@ -17,6 +17,7 @@ target:
 	@python $(BASEDIR)/scripts/make_library_rtthread.py $(BASEDIR) $(BASEDIR)/build/output/roslib/rtthread $(BASEDIR)
 	@python $(BASEDIR)/scripts/make_library_java.py $(BASEDIR) $(BASEDIR)/build/output/roslib/java $(BASEDIR)
 	@python $(BASEDIR)/scripts/make_library_python.py $(BASEDIR) $(BASEDIR)/build/output/roslib/python $(BASEDIR)
+	@python $(BASEDIR)/scripts/make_library_go.py $(BASEDIR) $(BASEDIR)/build/output/roslib/go $(BASEDIR)
 	@rm -rf ${BASEDIR}/build/output/bin/python-packages
 	@cp -rf $(BASEDIR)/build/output/roslib/python ${BASEDIR}/build/output/bin/python-packages
 	@cd $(BASEDIR)/build/CMake; cmake $(BASEDIR); make
