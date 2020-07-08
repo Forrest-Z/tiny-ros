@@ -2,9 +2,10 @@ package map_msgs
 
 import (
     "encoding/binary"
-    "nav_msgs/OccupancyGrid"
+    "tiny_ros/nav_msgs"
     "math"
 )
+
 
 
 type GetMapROIRequest struct {
@@ -23,6 +24,14 @@ func NewGetMapROIRequest() (*GetMapROIRequest) {
     newGetMapROIRequest.Go_l_y = 0.0
     newGetMapROIRequest.__id__ = 0
     return newGetMapROIRequest
+}
+
+func (self *GetMapROIRequest) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_l_x = 0.0
+    self.Go_l_y = 0.0
+    self.__id__ = 0
 }
 
 func (self *GetMapROIRequest) Go_serialize(buff []byte) (int) {
@@ -49,10 +58,10 @@ func (self *GetMapROIRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetMapROIRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     bits_x := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_x = math.Float64frombits(bits_x)
@@ -87,9 +96,10 @@ func (self *GetMapROIRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type GetMapROIResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_sub_map nav_msgs.OccupancyGrid `json:"sub_map"`
+    Go_sub_map *nav_msgs.OccupancyGrid `json:"sub_map"`
 }
 
 func NewGetMapROIResponse() (*GetMapROIResponse) {
@@ -97,6 +107,11 @@ func NewGetMapROIResponse() (*GetMapROIResponse) {
     newGetMapROIResponse.Go_sub_map = nav_msgs.NewOccupancyGrid()
     newGetMapROIResponse.__id__ = 0
     return newGetMapROIResponse
+}
+
+func (self *GetMapROIResponse) Go_initialize() {
+    self.Go_sub_map = nav_msgs.NewOccupancyGrid()
+    self.__id__ = 0
 }
 
 func (self *GetMapROIResponse) Go_serialize(buff []byte) (int) {
@@ -112,10 +127,10 @@ func (self *GetMapROIResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetMapROIResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_sub_map.Go_deserialize(buff[offset:])
     return offset

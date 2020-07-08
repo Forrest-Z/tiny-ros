@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type ChannelFloat32 struct {
     Go_name string `json:"name"`
     Go_values []float32 `json:"values"`
@@ -15,6 +16,11 @@ func NewChannelFloat32() (*ChannelFloat32) {
     newChannelFloat32.Go_name = ""
     newChannelFloat32.Go_values = []float32{}
     return newChannelFloat32
+}
+
+func (self *ChannelFloat32) Go_initialize() {
+    self.Go_name = ""
+    self.Go_values = []float32{}
 }
 
 func (self *ChannelFloat32) Go_serialize(buff []byte) (int) {
@@ -43,17 +49,17 @@ func (self *ChannelFloat32) Go_serialize(buff []byte) (int) {
 
 func (self *ChannelFloat32) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_name = string(buff[offset:(offset+length_name)])
     offset += length_name
-    length_values := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_values |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_values |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_values |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_values := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_values |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_values |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_values |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_values = make([]float32, length_values, length_values)
     for i := 0; i < length_values; i++ {

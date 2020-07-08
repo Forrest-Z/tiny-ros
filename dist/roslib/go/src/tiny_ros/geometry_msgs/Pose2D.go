@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Pose2D struct {
     Go_x float64 `json:"x"`
     Go_y float64 `json:"y"`
@@ -17,6 +18,12 @@ func NewPose2D() (*Pose2D) {
     newPose2D.Go_y = 0.0
     newPose2D.Go_theta = 0.0
     return newPose2D
+}
+
+func (self *Pose2D) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_theta = 0.0
 }
 
 func (self *Pose2D) Go_serialize(buff []byte) (int) {

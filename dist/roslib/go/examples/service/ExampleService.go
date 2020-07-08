@@ -1,30 +1,24 @@
-/*
- * File      : ExampleService.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-#include "tiny_ros/ros.h"
-#include "tiny_ros/tinyros_hello/Test.h"
+package main
 
-static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::Test::Response & res) {
-  res.output = "Hello, tiny-ros ^_^";
+import (
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func service_cb(req tinyros.Msg, resp tinyros.Msg) {
+    tresp := resp.(*tinyros_hello.TestResponse)
+    tresp.Go_output = "Hello, tiny-ros ^_^"
 }
 
-int main() {
-  tinyros::init("127.0.0.1");
-  tinyros::ServiceServer<tinyros_hello::Test::Request, tinyros_hello::Test::Response> server("test_srv", &service_cb);
-  tinyros::nh()->advertiseService(server);
-  while(true) {
-#ifdef WIN32
-    Sleep(10*1000);
-#else
-    sleep(10);
-#endif
-  }
-  
-  return 0;
-}
+func main() {
+    tinyros.Go_init("127.0.0.1")
+    
+    server := tinyros.NewServiceServer("test_srv", service_cb, tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
 
+    tinyros.Go_nh().Go_advertiseService(server)
+    
+    for {
+        time.Sleep(10 * time.Second)
+    }
+}

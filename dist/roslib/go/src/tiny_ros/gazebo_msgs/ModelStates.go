@@ -1,9 +1,9 @@
 package gazebo_msgs
 
 import (
-    "geometry_msgs/Pose"
-    "geometry_msgs/Twist"
+    "tiny_ros/geometry_msgs"
 )
+
 
 type ModelStates struct {
     Go_name []string `json:"name"`
@@ -17,6 +17,12 @@ func NewModelStates() (*ModelStates) {
     newModelStates.Go_pose = []geometry_msgs.Pose{}
     newModelStates.Go_twist = []geometry_msgs.Twist{}
     return newModelStates
+}
+
+func (self *ModelStates) Go_initialize() {
+    self.Go_name = []string{}
+    self.Go_pose = []geometry_msgs.Pose{}
+    self.Go_twist = []geometry_msgs.Twist{}
 }
 
 func (self *ModelStates) Go_serialize(buff []byte) (int) {
@@ -60,34 +66,34 @@ func (self *ModelStates) Go_serialize(buff []byte) (int) {
 
 func (self *ModelStates) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_name = make([]string, length_name, length_name)
     for i := 0; i < length_name; i++ {
-        length_namei := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_namei |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_namei |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_namei |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_namei |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_namei |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_name[i] = string(buff[offset:(offset+length_namei)])
         offset += length_namei
     }
-    length_pose := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_pose |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_pose |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_pose |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_pose := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_pose |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_pose |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_pose |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_pose = make([]geometry_msgs.Pose, length_pose, length_pose)
     for i := 0; i < length_pose; i++ {
         offset += self.Go_pose[i].Go_deserialize(buff[offset:])
     }
-    length_twist := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_twist |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_twist |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_twist |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_twist := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_twist |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_twist |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_twist |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_twist = make([]geometry_msgs.Twist, length_twist, length_twist)
     for i := 0; i < length_twist; i++ {

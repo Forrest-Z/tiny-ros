@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type LaserScan struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_angle_min float32 `json:"angle_min"`
     Go_angle_max float32 `json:"angle_max"`
     Go_angle_increment float32 `json:"angle_increment"`
@@ -32,6 +33,19 @@ func NewLaserScan() (*LaserScan) {
     newLaserScan.Go_ranges = []float32{}
     newLaserScan.Go_intensities = []float32{}
     return newLaserScan
+}
+
+func (self *LaserScan) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_angle_min = 0.0
+    self.Go_angle_max = 0.0
+    self.Go_angle_increment = 0.0
+    self.Go_time_increment = 0.0
+    self.Go_scan_time = 0.0
+    self.Go_range_min = 0.0
+    self.Go_range_max = 0.0
+    self.Go_ranges = []float32{}
+    self.Go_intensities = []float32{}
 }
 
 func (self *LaserScan) Go_serialize(buff []byte) (int) {
@@ -107,10 +121,10 @@ func (self *LaserScan) Go_deserialize(buff []byte) (int) {
     bits_range_max := binary.LittleEndian.Uint32(buff[offset:])
     self.Go_range_max = math.Float32frombits(bits_range_max)
     offset += 4
-    length_ranges := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_ranges |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_ranges |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_ranges |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_ranges := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_ranges |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_ranges |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_ranges |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_ranges = make([]float32, length_ranges, length_ranges)
     for i := 0; i < length_ranges; i++ {
@@ -118,10 +132,10 @@ func (self *LaserScan) Go_deserialize(buff []byte) (int) {
         self.Go_ranges[i] = math.Float32frombits(bits_rangesi)
         offset += 4
     }
-    length_intensities := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_intensities |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_intensities |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_intensities |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_intensities := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_intensities |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_intensities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_intensities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_intensities = make([]float32, length_intensities, length_intensities)
     for i := 0; i < length_intensities; i++ {

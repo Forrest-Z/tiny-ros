@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type ODEPhysics struct {
     Go_auto_disable_bodies bool `json:"auto_disable_bodies"`
     Go_sor_pgs_precon_iters uint32 `json:"sor_pgs_precon_iters"`
@@ -33,9 +34,26 @@ func NewODEPhysics() (*ODEPhysics) {
     return newODEPhysics
 }
 
+func (self *ODEPhysics) Go_initialize() {
+    self.Go_auto_disable_bodies = false
+    self.Go_sor_pgs_precon_iters = 0
+    self.Go_sor_pgs_iters = 0
+    self.Go_sor_pgs_w = 0.0
+    self.Go_sor_pgs_rms_error_tol = 0.0
+    self.Go_contact_surface_layer = 0.0
+    self.Go_contact_max_correcting_vel = 0.0
+    self.Go_cfm = 0.0
+    self.Go_erp = 0.0
+    self.Go_max_contacts = 0
+}
+
 func (self *ODEPhysics) Go_serialize(buff []byte) (int) {
     offset := 0
-    buff[offset + 0] = byte((self.Go_auto_disable_bodies >> (8 * 0)) & 0xFF)
+    if self.Go_auto_disable_bodies {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     buff[offset + 0] = byte((self.Go_sor_pgs_precon_iters >> (8 * 0)) & 0xFF)
     buff[offset + 1] = byte((self.Go_sor_pgs_precon_iters >> (8 * 1)) & 0xFF)
@@ -75,17 +93,21 @@ func (self *ODEPhysics) Go_serialize(buff []byte) (int) {
 
 func (self *ODEPhysics) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_auto_disable_bodies = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_auto_disable_bodies = true
+    } else {
+        self.Go_auto_disable_bodies = false
+    }
     offset += 1
-    self.Go_sor_pgs_precon_iters = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_sor_pgs_precon_iters |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_sor_pgs_precon_iters |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_sor_pgs_precon_iters |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_sor_pgs_precon_iters = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_sor_pgs_precon_iters |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_sor_pgs_precon_iters |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_sor_pgs_precon_iters |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_sor_pgs_iters = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_sor_pgs_iters |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_sor_pgs_iters |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_sor_pgs_iters |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_sor_pgs_iters = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_sor_pgs_iters |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_sor_pgs_iters |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_sor_pgs_iters |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     bits_sor_pgs_w := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_sor_pgs_w = math.Float64frombits(bits_sor_pgs_w)
@@ -105,10 +127,10 @@ func (self *ODEPhysics) Go_deserialize(buff []byte) (int) {
     bits_erp := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_erp = math.Float64frombits(bits_erp)
     offset += 8
-    self.Go_max_contacts = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_max_contacts |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_max_contacts |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_max_contacts |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_max_contacts = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_max_contacts |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_max_contacts |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_max_contacts |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

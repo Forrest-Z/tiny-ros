@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Pose"
 )
 
+
 type PoseStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_pose geometry_msgs.Pose `json:"pose"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_pose *Pose `json:"pose"`
 }
 
 func NewPoseStamped() (*PoseStamped) {
     newPoseStamped := new(PoseStamped)
     newPoseStamped.Go_header = std_msgs.NewHeader()
-    newPoseStamped.Go_pose = geometry_msgs.NewPose()
+    newPoseStamped.Go_pose = NewPose()
     return newPoseStamped
+}
+
+func (self *PoseStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_pose = NewPose()
 }
 
 func (self *PoseStamped) Go_serialize(buff []byte) (int) {

@@ -1,21 +1,26 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Pose"
     "encoding/binary"
     "math"
 )
 
+
 type PoseWithCovariance struct {
-    Go_pose geometry_msgs.Pose `json:"pose"`
+    Go_pose *Pose `json:"pose"`
     Go_covariance [36]float64 `json:"covariance"`
 }
 
 func NewPoseWithCovariance() (*PoseWithCovariance) {
     newPoseWithCovariance := new(PoseWithCovariance)
-    newPoseWithCovariance.Go_pose = geometry_msgs.NewPose()
+    newPoseWithCovariance.Go_pose = NewPose()
     newPoseWithCovariance.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     return newPoseWithCovariance
+}
+
+func (self *PoseWithCovariance) Go_initialize() {
+    self.Go_pose = NewPose()
+    self.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *PoseWithCovariance) Go_serialize(buff []byte) (int) {

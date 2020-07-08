@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type Joy struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_axes []float32 `json:"axes"`
     Go_buttons []int32 `json:"buttons"`
 }
@@ -18,6 +19,12 @@ func NewJoy() (*Joy) {
     newJoy.Go_axes = []float32{}
     newJoy.Go_buttons = []int32{}
     return newJoy
+}
+
+func (self *Joy) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_axes = []float32{}
+    self.Go_buttons = []int32{}
 }
 
 func (self *Joy) Go_serialize(buff []byte) (int) {
@@ -53,10 +60,10 @@ func (self *Joy) Go_serialize(buff []byte) (int) {
 func (self *Joy) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_axes := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_axes |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_axes |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_axes |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_axes := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_axes |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_axes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_axes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_axes = make([]float32, length_axes, length_axes)
     for i := 0; i < length_axes; i++ {
@@ -64,17 +71,17 @@ func (self *Joy) Go_deserialize(buff []byte) (int) {
         self.Go_axes[i] = math.Float32frombits(bits_axesi)
         offset += 4
     }
-    length_buttons := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_buttons |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_buttons |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_buttons |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_buttons := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_buttons |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_buttons |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_buttons |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_buttons = make([]int32, length_buttons, length_buttons)
     for i := 0; i < length_buttons; i++ {
-        self.Go_buttons[i] = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-        self.Go_buttons[i] |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-        self.Go_buttons[i] |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-        self.Go_buttons[i] |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+        self.Go_buttons[i] = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+        self.Go_buttons[i] |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+        self.Go_buttons[i] |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+        self.Go_buttons[i] |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
     }
     return offset

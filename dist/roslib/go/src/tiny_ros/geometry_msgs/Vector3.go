@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Vector3 struct {
     Go_x float64 `json:"x"`
     Go_y float64 `json:"y"`
@@ -17,6 +18,12 @@ func NewVector3() (*Vector3) {
     newVector3.Go_y = 0.0
     newVector3.Go_z = 0.0
     return newVector3
+}
+
+func (self *Vector3) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_z = 0.0
 }
 
 func (self *Vector3) Go_serialize(buff []byte) (int) {

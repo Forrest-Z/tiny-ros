@@ -4,11 +4,12 @@ import (
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
-    "geometry_msgs/Point"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type GridCells struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_cell_width float32 `json:"cell_width"`
     Go_cell_height float32 `json:"cell_height"`
     Go_cells []geometry_msgs.Point `json:"cells"`
@@ -21,6 +22,13 @@ func NewGridCells() (*GridCells) {
     newGridCells.Go_cell_height = 0.0
     newGridCells.Go_cells = []geometry_msgs.Point{}
     return newGridCells
+}
+
+func (self *GridCells) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_cell_width = 0.0
+    self.Go_cell_height = 0.0
+    self.Go_cells = []geometry_msgs.Point{}
 }
 
 func (self *GridCells) Go_serialize(buff []byte) (int) {
@@ -53,10 +61,10 @@ func (self *GridCells) Go_deserialize(buff []byte) (int) {
     bits_cell_height := binary.LittleEndian.Uint32(buff[offset:])
     self.Go_cell_height = math.Float32frombits(bits_cell_height)
     offset += 4
-    length_cells := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_cells |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_cells |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_cells |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_cells := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_cells |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_cells |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_cells |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_cells = make([]geometry_msgs.Point, length_cells, length_cells)
     for i := 0; i < length_cells; i++ {

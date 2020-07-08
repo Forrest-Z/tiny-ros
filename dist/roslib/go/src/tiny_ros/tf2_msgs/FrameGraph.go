@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type FrameGraphRequest struct {
     __id__ uint32 `json:"__id__"`
 }
@@ -12,6 +13,10 @@ func NewFrameGraphRequest() (*FrameGraphRequest) {
     newFrameGraphRequest := new(FrameGraphRequest)
     newFrameGraphRequest.__id__ = 0
     return newFrameGraphRequest
+}
+
+func (self *FrameGraphRequest) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *FrameGraphRequest) Go_serialize(buff []byte) (int) {
@@ -26,10 +31,10 @@ func (self *FrameGraphRequest) Go_serialize(buff []byte) (int) {
 
 func (self *FrameGraphRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -48,6 +53,7 @@ func (self *FrameGraphRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type FrameGraphResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_frame_yaml string `json:"frame_yaml"`
@@ -58,6 +64,11 @@ func NewFrameGraphResponse() (*FrameGraphResponse) {
     newFrameGraphResponse.Go_frame_yaml = ""
     newFrameGraphResponse.__id__ = 0
     return newFrameGraphResponse
+}
+
+func (self *FrameGraphResponse) Go_initialize() {
+    self.Go_frame_yaml = ""
+    self.__id__ = 0
 }
 
 func (self *FrameGraphResponse) Go_serialize(buff []byte) (int) {
@@ -80,15 +91,15 @@ func (self *FrameGraphResponse) Go_serialize(buff []byte) (int) {
 
 func (self *FrameGraphResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_frame_yaml := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_frame_yaml |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_frame_yaml |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_frame_yaml |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_frame_yaml := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_frame_yaml |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_frame_yaml |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_frame_yaml |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_frame_yaml = string(buff[offset:(offset+length_frame_yaml)])
     offset += length_frame_yaml

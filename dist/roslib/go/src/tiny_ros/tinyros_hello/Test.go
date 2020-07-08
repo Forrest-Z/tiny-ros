@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type TestRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_input string `json:"input"`
@@ -14,6 +15,11 @@ func NewTestRequest() (*TestRequest) {
     newTestRequest.Go_input = ""
     newTestRequest.__id__ = 0
     return newTestRequest
+}
+
+func (self *TestRequest) Go_initialize() {
+    self.Go_input = ""
+    self.__id__ = 0
 }
 
 func (self *TestRequest) Go_serialize(buff []byte) (int) {
@@ -36,15 +42,15 @@ func (self *TestRequest) Go_serialize(buff []byte) (int) {
 
 func (self *TestRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_input := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_input |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_input |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_input |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_input := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_input |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_input |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_input |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_input = string(buff[offset:(offset+length_input)])
     offset += length_input
@@ -68,6 +74,7 @@ func (self *TestRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type TestResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_output string `json:"output"`
@@ -78,6 +85,11 @@ func NewTestResponse() (*TestResponse) {
     newTestResponse.Go_output = ""
     newTestResponse.__id__ = 0
     return newTestResponse
+}
+
+func (self *TestResponse) Go_initialize() {
+    self.Go_output = ""
+    self.__id__ = 0
 }
 
 func (self *TestResponse) Go_serialize(buff []byte) (int) {
@@ -100,15 +112,15 @@ func (self *TestResponse) Go_serialize(buff []byte) (int) {
 
 func (self *TestResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_output := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_output |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_output |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_output |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_output := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_output |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_output |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_output |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_output = string(buff[offset:(offset+length_output)])
     offset += length_output

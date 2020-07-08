@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Quaternion struct {
     Go_x float64 `json:"x"`
     Go_y float64 `json:"y"`
@@ -19,6 +20,13 @@ func NewQuaternion() (*Quaternion) {
     newQuaternion.Go_z = 0.0
     newQuaternion.Go_w = 0.0
     return newQuaternion
+}
+
+func (self *Quaternion) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_z = 0.0
+    self.Go_w = 0.0
 }
 
 func (self *Quaternion) Go_serialize(buff []byte) (int) {

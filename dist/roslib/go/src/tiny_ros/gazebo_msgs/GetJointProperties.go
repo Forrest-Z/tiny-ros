@@ -6,6 +6,7 @@ import (
 )
 
 
+
 type GetJointPropertiesRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_joint_name string `json:"joint_name"`
@@ -16,6 +17,11 @@ func NewGetJointPropertiesRequest() (*GetJointPropertiesRequest) {
     newGetJointPropertiesRequest.Go_joint_name = ""
     newGetJointPropertiesRequest.__id__ = 0
     return newGetJointPropertiesRequest
+}
+
+func (self *GetJointPropertiesRequest) Go_initialize() {
+    self.Go_joint_name = ""
+    self.__id__ = 0
 }
 
 func (self *GetJointPropertiesRequest) Go_serialize(buff []byte) (int) {
@@ -38,15 +44,15 @@ func (self *GetJointPropertiesRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetJointPropertiesRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_joint_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_joint_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_joint_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_joint_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_joint_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_joint_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_joint_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_joint_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_joint_name = string(buff[offset:(offset+length_joint_name)])
     offset += length_joint_name
@@ -70,6 +76,13 @@ func (self *GetJointPropertiesRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+func Go_REVOLUTE() (uint8) { return  0                 }
+func Go_CONTINUOUS() (uint8) { return  1                 }
+func Go_PRISMATIC() (uint8) { return  2                 }
+func Go_FIXED() (uint8) { return  3                 }
+func Go_BALL() (uint8) { return  4                 }
+func Go_UNIVERSAL() (uint8) { return  5                 }
+
 type GetJointPropertiesResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_type uint8 `json:"type"`
@@ -80,12 +93,6 @@ type GetJointPropertiesResponse struct {
     Go_status_message string `json:"status_message"`
 }
 
-func (self *GetJointPropertiesResponse) Go_REVOLUTE() (uint8) { return  0                 }
-func (self *GetJointPropertiesResponse) Go_CONTINUOUS() (uint8) { return  1                 }
-func (self *GetJointPropertiesResponse) Go_PRISMATIC() (uint8) { return  2                 }
-func (self *GetJointPropertiesResponse) Go_FIXED() (uint8) { return  3                 }
-func (self *GetJointPropertiesResponse) Go_BALL() (uint8) { return  4                 }
-func (self *GetJointPropertiesResponse) Go_UNIVERSAL() (uint8) { return  5                 }
 func NewGetJointPropertiesResponse() (*GetJointPropertiesResponse) {
     newGetJointPropertiesResponse := new(GetJointPropertiesResponse)
     newGetJointPropertiesResponse.Go_type = 0
@@ -96,6 +103,16 @@ func NewGetJointPropertiesResponse() (*GetJointPropertiesResponse) {
     newGetJointPropertiesResponse.Go_status_message = ""
     newGetJointPropertiesResponse.__id__ = 0
     return newGetJointPropertiesResponse
+}
+
+func (self *GetJointPropertiesResponse) Go_initialize() {
+    self.Go_type = 0
+    self.Go_damping = []float64{}
+    self.Go_position = []float64{}
+    self.Go_rate = []float64{}
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
 }
 
 func (self *GetJointPropertiesResponse) Go_serialize(buff []byte) (int) {
@@ -140,7 +157,11 @@ func (self *GetJointPropertiesResponse) Go_serialize(buff []byte) (int) {
         binary.LittleEndian.PutUint64(buff[offset:], bits_ratei)
         offset += 8
     }
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -155,17 +176,17 @@ func (self *GetJointPropertiesResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_type = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_type = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_damping := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_damping |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_damping |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_damping |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_damping := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_damping |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_damping |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_damping |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_damping = make([]float64, length_damping, length_damping)
     for i := 0; i < length_damping; i++ {
@@ -173,10 +194,10 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
         self.Go_damping[i] = math.Float64frombits(bits_dampingi)
         offset += 8
     }
-    length_position := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_position |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_position |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_position |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_position := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_position |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_position |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_position |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_position = make([]float64, length_position, length_position)
     for i := 0; i < length_position; i++ {
@@ -184,10 +205,10 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
         self.Go_position[i] = math.Float64frombits(bits_positioni)
         offset += 8
     }
-    length_rate := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_rate |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_rate |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_rate |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_rate := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_rate |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_rate |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_rate |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_rate = make([]float64, length_rate, length_rate)
     for i := 0; i < length_rate; i++ {
@@ -195,12 +216,16 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
         self.Go_rate[i] = math.Float64frombits(bits_ratei)
         offset += 8
     }
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

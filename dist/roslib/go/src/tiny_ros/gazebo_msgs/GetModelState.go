@@ -1,9 +1,9 @@
 package gazebo_msgs
 
 import (
-    "geometry_msgs/Pose"
-    "geometry_msgs/Twist"
+    "tiny_ros/geometry_msgs"
 )
+
 
 
 type GetModelStateRequest struct {
@@ -18,6 +18,12 @@ func NewGetModelStateRequest() (*GetModelStateRequest) {
     newGetModelStateRequest.Go_relative_entity_name = ""
     newGetModelStateRequest.__id__ = 0
     return newGetModelStateRequest
+}
+
+func (self *GetModelStateRequest) Go_initialize() {
+    self.Go_model_name = ""
+    self.Go_relative_entity_name = ""
+    self.__id__ = 0
 }
 
 func (self *GetModelStateRequest) Go_serialize(buff []byte) (int) {
@@ -48,22 +54,22 @@ func (self *GetModelStateRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetModelStateRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_model_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_model_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_model_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_model_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_model_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_model_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_model_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_model_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_model_name = string(buff[offset:(offset+length_model_name)])
     offset += length_model_name
-    length_relative_entity_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_relative_entity_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_relative_entity_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_relative_entity_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_relative_entity_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_relative_entity_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_relative_entity_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_relative_entity_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_relative_entity_name = string(buff[offset:(offset+length_relative_entity_name)])
     offset += length_relative_entity_name
@@ -90,10 +96,11 @@ func (self *GetModelStateRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type GetModelStateResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_pose geometry_msgs.Pose `json:"pose"`
-    Go_twist geometry_msgs.Twist `json:"twist"`
+    Go_pose *geometry_msgs.Pose `json:"pose"`
+    Go_twist *geometry_msgs.Twist `json:"twist"`
     Go_success bool `json:"success"`
     Go_status_message string `json:"status_message"`
 }
@@ -108,6 +115,14 @@ func NewGetModelStateResponse() (*GetModelStateResponse) {
     return newGetModelStateResponse
 }
 
+func (self *GetModelStateResponse) Go_initialize() {
+    self.Go_pose = geometry_msgs.NewPose()
+    self.Go_twist = geometry_msgs.NewTwist()
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
+}
+
 func (self *GetModelStateResponse) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -117,7 +132,11 @@ func (self *GetModelStateResponse) Go_serialize(buff []byte) (int) {
     offset += 4
     offset += self.Go_pose.Go_serialize(buff[offset:])
     offset += self.Go_twist.Go_serialize(buff[offset:])
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -132,19 +151,23 @@ func (self *GetModelStateResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetModelStateResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_pose.Go_deserialize(buff[offset:])
     offset += self.Go_twist.Go_deserialize(buff[offset:])
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

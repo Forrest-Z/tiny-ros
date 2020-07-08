@@ -2,19 +2,24 @@ package actionlib_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "actionlib_msgs/GoalStatus"
 )
 
+
 type GoalStatusArray struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status_list []actionlib_msgs.GoalStatus `json:"status_list"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status_list []GoalStatus `json:"status_list"`
 }
 
 func NewGoalStatusArray() (*GoalStatusArray) {
     newGoalStatusArray := new(GoalStatusArray)
     newGoalStatusArray.Go_header = std_msgs.NewHeader()
-    newGoalStatusArray.Go_status_list = []actionlib_msgs.GoalStatus{}
+    newGoalStatusArray.Go_status_list = []GoalStatus{}
     return newGoalStatusArray
+}
+
+func (self *GoalStatusArray) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status_list = []GoalStatus{}
 }
 
 func (self *GoalStatusArray) Go_serialize(buff []byte) (int) {
@@ -35,12 +40,12 @@ func (self *GoalStatusArray) Go_serialize(buff []byte) (int) {
 func (self *GoalStatusArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_status_list := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_list |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_list |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_list |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_list := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_list |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_list |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_list |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status_list = make([]actionlib_msgs.GoalStatus, length_status_list, length_status_list)
+    self.Go_status_list = make([]GoalStatus, length_status_list, length_status_list)
     for i := 0; i < length_status_list; i++ {
         offset += self.Go_status_list[i].Go_deserialize(buff[offset:])
     }

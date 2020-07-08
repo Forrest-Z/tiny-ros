@@ -2,14 +2,18 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "sensor_msgs/NavSatStatus"
     "encoding/binary"
     "math"
 )
 
+func Go_COVARIANCE_TYPE_UNKNOWN() (uint8) { return  0 }
+func Go_COVARIANCE_TYPE_APPROXIMATED() (uint8) { return  1 }
+func Go_COVARIANCE_TYPE_DIAGONAL_KNOWN() (uint8) { return  2 }
+func Go_COVARIANCE_TYPE_KNOWN() (uint8) { return  3 }
+
 type NavSatFix struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status sensor_msgs.NavSatStatus `json:"status"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status *NavSatStatus `json:"status"`
     Go_latitude float64 `json:"latitude"`
     Go_longitude float64 `json:"longitude"`
     Go_altitude float64 `json:"altitude"`
@@ -17,20 +21,26 @@ type NavSatFix struct {
     Go_position_covariance_type uint8 `json:"position_covariance_type"`
 }
 
-func (self *NavSatFix) Go_COVARIANCE_TYPE_UNKNOWN() (uint8) { return  0 }
-func (self *NavSatFix) Go_COVARIANCE_TYPE_APPROXIMATED() (uint8) { return  1 }
-func (self *NavSatFix) Go_COVARIANCE_TYPE_DIAGONAL_KNOWN() (uint8) { return  2 }
-func (self *NavSatFix) Go_COVARIANCE_TYPE_KNOWN() (uint8) { return  3 }
 func NewNavSatFix() (*NavSatFix) {
     newNavSatFix := new(NavSatFix)
     newNavSatFix.Go_header = std_msgs.NewHeader()
-    newNavSatFix.Go_status = sensor_msgs.NewNavSatStatus()
+    newNavSatFix.Go_status = NewNavSatStatus()
     newNavSatFix.Go_latitude = 0.0
     newNavSatFix.Go_longitude = 0.0
     newNavSatFix.Go_altitude = 0.0
     newNavSatFix.Go_position_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     newNavSatFix.Go_position_covariance_type = 0
     return newNavSatFix
+}
+
+func (self *NavSatFix) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = NewNavSatStatus()
+    self.Go_latitude = 0.0
+    self.Go_longitude = 0.0
+    self.Go_altitude = 0.0
+    self.Go_position_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_position_covariance_type = 0
 }
 
 func (self *NavSatFix) Go_serialize(buff []byte) (int) {
@@ -74,7 +84,7 @@ func (self *NavSatFix) Go_deserialize(buff []byte) (int) {
         self.Go_position_covariance[i] = math.Float64frombits(bits_position_covariancei)
         offset += 8
     }
-    self.Go_position_covariance_type = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_position_covariance_type = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
     return offset
 }

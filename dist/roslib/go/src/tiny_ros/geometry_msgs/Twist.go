@@ -1,19 +1,24 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Vector3"
 )
 
+
 type Twist struct {
-    Go_linear geometry_msgs.Vector3 `json:"linear"`
-    Go_angular geometry_msgs.Vector3 `json:"angular"`
+    Go_linear *Vector3 `json:"linear"`
+    Go_angular *Vector3 `json:"angular"`
 }
 
 func NewTwist() (*Twist) {
     newTwist := new(Twist)
-    newTwist.Go_linear = geometry_msgs.NewVector3()
-    newTwist.Go_angular = geometry_msgs.NewVector3()
+    newTwist.Go_linear = NewVector3()
+    newTwist.Go_angular = NewVector3()
     return newTwist
+}
+
+func (self *Twist) Go_initialize() {
+    self.Go_linear = NewVector3()
+    self.Go_angular = NewVector3()
 }
 
 func (self *Twist) Go_serialize(buff []byte) (int) {

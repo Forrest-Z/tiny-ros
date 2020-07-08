@@ -3,21 +3,27 @@ package tinyros_msgs
 import (
 )
 
+func Go_ROSDEBUG() (uint8) { return 0 }
+func Go_ROSINFO() (uint8) { return 1 }
+func Go_ROSWARN() (uint8) { return 2 }
+func Go_ROSERROR() (uint8) { return 3 }
+func Go_ROSFATAL() (uint8) { return 4 }
+
 type Log struct {
     Go_level uint8 `json:"level"`
     Go_msg string `json:"msg"`
 }
 
-func (self *Log) Go_ROSDEBUG() (uint8) { return 0 }
-func (self *Log) Go_ROSINFO() (uint8) { return 1 }
-func (self *Log) Go_ROSWARN() (uint8) { return 2 }
-func (self *Log) Go_ROSERROR() (uint8) { return 3 }
-func (self *Log) Go_ROSFATAL() (uint8) { return 4 }
 func NewLog() (*Log) {
     newLog := new(Log)
     newLog.Go_level = 0
     newLog.Go_msg = ""
     return newLog
+}
+
+func (self *Log) Go_initialize() {
+    self.Go_level = 0
+    self.Go_msg = ""
 }
 
 func (self *Log) Go_serialize(buff []byte) (int) {
@@ -37,12 +43,12 @@ func (self *Log) Go_serialize(buff []byte) (int) {
 
 func (self *Log) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_level = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_level = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_msg := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_msg |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_msg |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_msg |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_msg := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_msg |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_msg |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_msg |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_msg = string(buff[offset:(offset+length_msg)])
     offset += length_msg

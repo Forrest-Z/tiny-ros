@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type ProjectedMapInfo struct {
     Go_frame_id string `json:"frame_id"`
     Go_x float64 `json:"x"`
@@ -25,6 +26,16 @@ func NewProjectedMapInfo() (*ProjectedMapInfo) {
     newProjectedMapInfo.Go_min_z = 0.0
     newProjectedMapInfo.Go_max_z = 0.0
     return newProjectedMapInfo
+}
+
+func (self *ProjectedMapInfo) Go_initialize() {
+    self.Go_frame_id = ""
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_width = 0.0
+    self.Go_height = 0.0
+    self.Go_min_z = 0.0
+    self.Go_max_z = 0.0
 }
 
 func (self *ProjectedMapInfo) Go_serialize(buff []byte) (int) {
@@ -60,10 +71,10 @@ func (self *ProjectedMapInfo) Go_serialize(buff []byte) (int) {
 
 func (self *ProjectedMapInfo) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_frame_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_frame_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_frame_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_frame_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_frame_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_frame_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_frame_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_frame_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_frame_id = string(buff[offset:(offset+length_frame_id)])
     offset += length_frame_id

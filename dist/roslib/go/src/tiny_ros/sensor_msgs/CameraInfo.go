@@ -4,11 +4,11 @@ import (
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
-    "sensor_msgs/RegionOfInterest"
 )
 
+
 type CameraInfo struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_height uint32 `json:"height"`
     Go_width uint32 `json:"width"`
     Go_distortion_model string `json:"distortion_model"`
@@ -18,7 +18,7 @@ type CameraInfo struct {
     Go_P [12]float64 `json:"P"`
     Go_binning_x uint32 `json:"binning_x"`
     Go_binning_y uint32 `json:"binning_y"`
-    Go_roi sensor_msgs.RegionOfInterest `json:"roi"`
+    Go_roi *RegionOfInterest `json:"roi"`
 }
 
 func NewCameraInfo() (*CameraInfo) {
@@ -33,8 +33,22 @@ func NewCameraInfo() (*CameraInfo) {
     newCameraInfo.Go_P = [12]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     newCameraInfo.Go_binning_x = 0
     newCameraInfo.Go_binning_y = 0
-    newCameraInfo.Go_roi = sensor_msgs.NewRegionOfInterest()
+    newCameraInfo.Go_roi = NewRegionOfInterest()
     return newCameraInfo
+}
+
+func (self *CameraInfo) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_height = 0
+    self.Go_width = 0
+    self.Go_distortion_model = ""
+    self.Go_D = []float64{}
+    self.Go_K = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_R = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_P = [12]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_binning_x = 0
+    self.Go_binning_y = 0
+    self.Go_roi = NewRegionOfInterest()
 }
 
 func (self *CameraInfo) Go_serialize(buff []byte) (int) {
@@ -101,27 +115,27 @@ func (self *CameraInfo) Go_serialize(buff []byte) (int) {
 func (self *CameraInfo) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    self.Go_height = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_height |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_height |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_height |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_height = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_height |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_height |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_height |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_width = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_width |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_width |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_width |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_width = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_width |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_width |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_width |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_distortion_model := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_distortion_model |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_distortion_model |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_distortion_model |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_distortion_model := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_distortion_model |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_distortion_model |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_distortion_model |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_distortion_model = string(buff[offset:(offset+length_distortion_model)])
     offset += length_distortion_model
-    length_D := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_D |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_D |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_D |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_D := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_D |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_D |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_D |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_D = make([]float64, length_D, length_D)
     for i := 0; i < length_D; i++ {
@@ -144,15 +158,15 @@ func (self *CameraInfo) Go_deserialize(buff []byte) (int) {
         self.Go_P[i] = math.Float64frombits(bits_Pi)
         offset += 8
     }
-    self.Go_binning_x = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_binning_x |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_binning_x |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_binning_x |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_binning_x = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_binning_x |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_binning_x |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_binning_x |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_binning_y = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_binning_y |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_binning_y |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_binning_y |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_binning_y = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_binning_y |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_binning_y |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_binning_y |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_roi.Go_deserialize(buff[offset:])
     return offset

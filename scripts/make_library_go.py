@@ -123,7 +123,7 @@ class EnumerationType:
         self.value = value
 
     def make_declaration(self, f):
-        f.write('func (self *%s) Go_%s() (%s) { return %s }\n' % (self.cls, self.name, self.type, self.value))
+        f.write('func Go_%s() (%s) { return %s }\n' % (self.name, self.type, self.value))
 
 class PrimitiveDataType:
     def __init__(self, cls, name, ty, bytes):
@@ -132,8 +132,11 @@ class PrimitiveDataType:
         self.type = ty
         self.bytes = bytes
 
-    def make_initializer(self, f, trailer):
+    def make_constructor(self, f, trailer):
         f.write('    new%s.Go_%s = %s\n' % (self.cls, self.name, primitive_default_value(self.type)))
+
+    def make_initializer(self, f, trailer):
+        f.write('    self.Go_%s = %s\n' % (self.name, primitive_default_value(self.type)))
 
     def make_declaration(self, f):
         f.write('    Go_%s %s `json:"%s"`\n' % (self.name, self.type, self.name) )
@@ -146,6 +149,15 @@ class PrimitiveDataType:
         elif self.type == 'float64':
             f.write('%s    bits_%s := math.Float64bits(self.Go_%s)\n' % (header, cn, self.name) )
             f.write('%s    binary.LittleEndian.PutUint64(buff[offset:], bits_%s)\n' % (header, cn) )
+        elif self.type == 'bool':
+            f.write('%s    if self.Go_%s {\n' % (header, self.name) )
+            f.write('%s        buff[offset] = byte(0x01)\n' % (header) )
+            f.write('%s    } else {\n' % (header) )
+            f.write('%s        buff[offset] = byte(0x00)\n' % (header) )
+            f.write('%s    }\n' % (header) )
+        elif self.type == 'int8':
+            for i in range(self.bytes):
+                f.write('%s    buff[offset + %d] = byte(uint8(self.Go_%s >> (8 * %d)) & 0xFF)\n' % (header, i, self.name, i))
         else:
             for i in range(self.bytes):
                 f.write('%s    buff[offset + %d] = byte((self.Go_%s >> (8 * %d)) & 0xFF)\n' % (header, i, self.name, i))
@@ -159,10 +171,16 @@ class PrimitiveDataType:
         elif self.type == 'float64':
             f.write('%s    bits_%s := binary.LittleEndian.Uint64(buff[offset:])\n' % (header, cn))
             f.write('%s    self.Go_%s = math.Float64frombits(bits_%s)\n' % (header, self.name, cn)) 
+        elif self.type == 'bool':
+            f.write('%s    if (buff[offset] & 0xFF) != 0 {\n' % (header) )
+            f.write('%s        self.Go_%s = true\n' % (header, self.name) )
+            f.write('%s    } else {\n' % (header) )
+            f.write('%s        self.Go_%s = false\n' % (header, self.name) )
+            f.write('%s    }\n' % (header) )
         else:
-            f.write('%s    self.Go_%s = %s((buff[offset + 0] & 0xFF) << (8 * 0))\n' % (header, self.name, self.type) )
+            f.write('%s    self.Go_%s = %s(buff[offset + 0] & 0xFF) << (8 * 0)\n' % (header, self.name, self.type) )
             for i in range(self.bytes-1):
-                f.write('%s    self.Go_%s |= %s((buff[offset + %d] & 0xFF) << (8 * %d))\n' % (header, self.name, self.type, i+1, i+1) )
+                f.write('%s    self.Go_%s |= %s(buff[offset + %d] & 0xFF) << (8 * %d)\n' % (header, self.name, self.type, i+1, i+1) )
         f.write('%s    offset += %s\n' % (header, self.bytes) )
 
     def serializedLength(self, f, header):
@@ -172,7 +190,10 @@ class PrimitiveDataType:
         pass
 
 class MessageDataType(PrimitiveDataType):
-    def make_initializer(self, f, trailer):
+    def make_declaration(self, f):
+        f.write('    Go_%s *%s `json:"%s"`\n' % (self.name, self.type, self.name) )
+    
+    def make_constructor(self, f, trailer):
         try:
             type_package, type_name = self.type.split(".")
         except:
@@ -182,6 +203,17 @@ class MessageDataType(PrimitiveDataType):
             f.write('    new%s.Go_%s = %s.New%s()\n' % (self.cls, self.name, type_package, type_name))
         else:
             f.write('    new%s.Go_%s = New%s()\n' % (self.cls, self.name, type_name))
+    
+    def make_initializer(self, f, trailer):
+        try:
+            type_package, type_name = self.type.split(".")
+        except:
+            type_package = None
+            type_name = self.type
+        if type_package != None:
+            f.write('    self.Go_%s = %s.New%s()\n' % (self.name, type_package, type_name))
+        else:
+            f.write('    self.Go_%s = New%s()\n' % (self.name, type_name))
 
     def serialize(self, f, header):
         f.write('%s    offset += self.Go_%s.Go_serialize(buff[offset:])\n' % (header, self.name))
@@ -196,8 +228,11 @@ class MessageDataType(PrimitiveDataType):
         pass
 
 class StringDataType(PrimitiveDataType):
-    def make_initializer(self, f, trailer):
+    def make_constructor(self, f, trailer):
         f.write('    new%s.Go_%s = ""\n' % (self.cls, self.name))
+ 
+    def make_initializer(self, f, trailer):
+        f.write('    self.Go_%s = ""\n' % (self.name))
 
     def make_declaration(self, f):
         f.write('    Go_%s %s `json:"%s"`\n' % (self.name, self.type, self.name) )
@@ -215,10 +250,10 @@ class StringDataType(PrimitiveDataType):
 
     def deserialize(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('%s    length_%s := int((buff[offset + 0] & 0xFF) << (8 * 0))\n' % (header, cn))
-        f.write('%s    length_%s |= int((buff[offset + 1] & 0xFF) << (8 * 1))\n' % (header, cn))
-        f.write('%s    length_%s |= int((buff[offset + 2] & 0xFF) << (8 * 2))\n' % (header, cn))
-        f.write('%s    length_%s |= int((buff[offset + 3] & 0xFF) << (8 * 3))\n' % (header, cn))
+        f.write('%s    length_%s := int(buff[offset + 0] & 0xFF) << (8 * 0)\n' % (header, cn))
+        f.write('%s    length_%s |= int(buff[offset + 1] & 0xFF) << (8 * 1)\n' % (header, cn))
+        f.write('%s    length_%s |= int(buff[offset + 2] & 0xFF) << (8 * 2)\n' % (header, cn))
+        f.write('%s    length_%s |= int(buff[offset + 3] & 0xFF) << (8 * 3)\n' % (header, cn))
         f.write('%s    offset += 4\n' % header)
         f.write('%s    self.Go_%s = string(buff[offset:(offset+length_%s)])\n' % (header, self.name, cn))
         f.write('%s    offset += length_%s\n' % (header, cn))
@@ -241,14 +276,20 @@ class TimeDataType(PrimitiveDataType):
         self.sec = PrimitiveDataType(self.cls, name+'.Go_sec','uint32',4)
         self.nsec = PrimitiveDataType(self.cls, name+'.Go_nsec','uint32',4)
 
-    def make_initializer(self, f, trailer):
+    def make_constructor(self, f, trailer):
         if self.type == 'tinyros.Duration':
             f.write('    new%s.Go_%s = tinyros.NewDuration()\n' % (self.cls, self.name))
         else:
             f.write('    new%s.Go_%s = tinyros.NewTime()\n' % (self.cls, self.name))
 
+    def make_initializer(self, f, trailer):
+        if self.type == 'tinyros.Duration':
+            f.write('    self.Go_%s = tinyros.NewDuration()\n' % (self.name))
+        else:
+            f.write('    self.Go_%s = tinyros.NewTime()\n' % (self.name))
+
     def make_declaration(self, f):
-        f.write('    Go_%s %s `json:"%s"`\n' % (self.name, self.type, self.name) )
+        f.write('    Go_%s *%s `json:"%s"`\n' % (self.name, self.type, self.name) )
 
     def serialize(self, f, header):
         self.sec.serialize(f, header)
@@ -275,11 +316,17 @@ class ArrayDataType(PrimitiveDataType):
         self.cls = cls
         self.cls1 = cls1
 
-    def make_initializer(self, f, trailer):
+    def make_constructor(self, f, trailer):
         if self.size == None:
             f.write('    new%s.Go_%s = %s\n' % (self.cls, self.name, primitive_default_value(self.type + "[]")))
         else:
             f.write('    new%s.Go_%s = %s\n' % (self.cls, self.name, primitive_default_value(self.type + "[" + str(self.size) + "]")))
+
+    def make_initializer(self, f, trailer):
+        if self.size == None:
+            f.write('    self.Go_%s = %s\n' % (self.name, primitive_default_value(self.type + "[]")))
+        else:
+            f.write('    self.Go_%s = %s\n' % (self.name, primitive_default_value(self.type + "[" + str(self.size) + "]")))
 
     def make_declaration(self, f):
         if self.size == None:
@@ -309,10 +356,10 @@ class ArrayDataType(PrimitiveDataType):
         c = self.cls1(self.cls, self.name+"[i]", self.type, self.bytes)
         if self.size == None:
             # deserialize length
-            f.write('%s    length_%s := int((buff[offset + 0] & 0xFF) << (8 * 0))\n' % (header, self.name))
-            f.write('%s    length_%s |= int((buff[offset + 1] & 0xFF) << (8 * 1))\n' % (header, self.name))
-            f.write('%s    length_%s |= int((buff[offset + 2] & 0xFF) << (8 * 2))\n' % (header, self.name))
-            f.write('%s    length_%s |= int((buff[offset + 3] & 0xFF) << (8 * 3))\n' % (header, self.name))
+            f.write('%s    length_%s := int(buff[offset + 0] & 0xFF) << (8 * 0)\n' % (header, self.name))
+            f.write('%s    length_%s |= int(buff[offset + 1] & 0xFF) << (8 * 1)\n' % (header, self.name))
+            f.write('%s    length_%s |= int(buff[offset + 2] & 0xFF) << (8 * 2)\n' % (header, self.name))
+            f.write('%s    length_%s |= int(buff[offset + 3] & 0xFF) << (8 * 3)\n' % (header, self.name))
             f.write('%s    offset += 4\n' % header)
             f.write('%s    self.Go_%s = make([]%s, length_%s, length_%s)\n' % (header, self.name, self.type, self.name, self.name))
             f.write('%s    for i := 0; i < length_%s; i++ {\n' % (header, self.name))
@@ -354,8 +401,8 @@ ROS_TO_EMBEDDED_TYPES = {
     'uint64'  :   ('uint64',          8, PrimitiveDataType, []),
     'float32' :   ('float32',             4, PrimitiveDataType, ['encoding/binary', 'math']),
     'float64' :   ('float64',            8, PrimitiveDataType, ['encoding/binary', 'math']),
-    'time'    :   ('tinyros.Time',         8, TimeDataType, ['tiny_ros/tinyros']),
-    'duration':   ('tinyros.Duration',     8, TimeDataType, ['tiny_ros/tinyros']),
+    'time'    :   ('tinyros.Time',         8, TimeDataType, ['tiny_ros/tinyros/time']),
+    'duration':   ('tinyros.Duration',     8, TimeDataType, ['tiny_ros/tinyros/time']),
     'string'  :   ('string',             0, StringDataType, []),
     'Header'  :   ('std_msgs.Header',  0, MessageDataType, ['tiny_ros/std_msgs'])
 }
@@ -370,7 +417,6 @@ class Message:
         self.name = name            # name of message/class
         self.package = package      # package we reside in
         self.includes = list()      # other files we must include
-
         self.data = list()          # data types for code generation
         self.enums = list()
         self.md5 = hashlib_md5sum(name, package, definition)
@@ -426,10 +472,13 @@ class Message:
             except:
                 if type_package == None:
                     type_package = self.package
-                if type_package+"/"+type_name not in self.includes:
-                    self.includes.append(type_package+"/"+type_name)
+                if "tiny_ros/" + type_package not in self.includes:
+                    self.includes.append("tiny_ros/" + type_package)
                 cls = MessageDataType
-                code_type = type_package + "." + type_name
+                if type_package == self.package:
+                    code_type = type_name
+                else:
+                    code_type = type_package + "." + type_name
                 size = 0
             if type_array:
                 self.data.append( ArrayDataType(self.name, name, code_type, size, cls, type_array_size ) )
@@ -437,6 +486,9 @@ class Message:
                 self.data.append( cls(self.name, name, code_type, size) )
 
     def _write_id(self, f):
+        f.write('')
+
+    def _write_id_constructor(self, f):
         f.write('')
 
     def _write_id_initializer(self, f):
@@ -493,27 +545,37 @@ class Message:
 
     def _write_msg_includes(self,f):
         for i in self.includes:
-            f.write('    "%s"\n' % i)
+            if i != "tiny_ros/" + self.package:
+                f.write('    "%s"\n' % i)
 
     def _write_constructor(self, f):
         f.write('func New%s() (*%s) {\n' % (self.name, self.name))
         f.write('    new%s := new(%s)\n' % (self.name, self.name))
         if self.data:
             for d in self.data[:-1]:
-                d.make_initializer(f, ',')
-            self.data[-1].make_initializer(f, '')
-        self._write_id_initializer(f)
+                d.make_constructor(f, ',')
+            self.data[-1].make_constructor(f, '')
+        self._write_id_constructor(f)
         f.write('    return new%s\n' % self.name)
         f.write('}\n\n')
 
+    def _write_initializer(self, f):
+        f.write('func (self *%s) Go_initialize() {\n' % (self.name))
+        if self.data:
+            for d in self.data[:-1]:
+                d.make_initializer(f, ',')
+            self.data[-1].make_initializer(f, '')
+        self._write_id_initializer(f)
+        f.write('}\n\n')
+
     def _write_data(self, f):
-        f.write('type %s struct {\n' % self.name)
+        for e in self.enums:
+            e.make_declaration(f)
+        f.write('\ntype %s struct {\n' % self.name)
         self._write_id(f)
         for d in self.data:
             d.make_declaration(f)
         f.write('}\n\n')
-        for e in self.enums:
-            e.make_declaration(f)
    
     def _write_getType(self, f):
         f.write('func (self *%s) Go_getType() (string) { return "%s/%s" }\n'%(self.name, self.package, self.name))
@@ -524,6 +586,7 @@ class Message:
     def _write_impl(self, f):
         self._write_data(f)
         self._write_constructor(f)
+        self._write_initializer(f)
         self._write_serializer(f)
         self._write_deserializer(f)
         self._write_serializedLength(f)
@@ -567,7 +630,8 @@ class Service:
         includes.extend(self.resp.includes)
         includes = list(set(includes))
         for inc in includes:
-            f.write('    "%s"\n' % inc)
+            if inc != "tiny_ros/" + self.package:
+                f.write('    "%s"\n' % inc)
         f.write(')\n\n')
 
         def write_id(out):
@@ -576,13 +640,23 @@ class Service:
         self.req._write_id = _write_id
         self.resp._write_id = _write_id
 
-        def write_id_initializer_req(out):
+        def write_id_constructor_req(out):
             out.write('    new%sRequest.__id__ = 0\n' % (self.name))
+        _write_id_constructor_req = lambda out: write_id_constructor_req(out)
+        self.req._write_id_constructor = _write_id_constructor_req
+        
+        def write_id_constructor_resp(out):
+            out.write('    new%sResponse.__id__ = 0\n' % (self.name))
+        _write_id_constructor_resp = lambda out: write_id_constructor_resp(out)
+        self.resp._write_id_constructor = _write_id_constructor_resp
+
+        def write_id_initializer_req(out):
+            out.write('    self.__id__ = 0\n')
         _write_id_initializer_req = lambda out: write_id_initializer_req(out)
         self.req._write_id_initializer = _write_id_initializer_req
         
         def write_id_initializer_resp(out):
-            out.write('    new%sResponse.__id__ = 0\n' % (self.name))
+            out.write('    self.__id__ = 0\n')
         _write_id_initializer_resp = lambda out: write_id_initializer_resp(out)
         self.resp._write_id_initializer = _write_id_initializer_resp
 
@@ -597,10 +671,10 @@ class Service:
         self.resp._write_id_serializer = _write_id_serializer
 
         def write_id_deserializer(out):
-            out.write('    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))\n')
-            out.write('    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))\n')
-            out.write('    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))\n')
-            out.write('    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))\n')
+            out.write('    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)\n')
+            out.write('    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)\n')
+            out.write('    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)\n')
+            out.write('    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)\n')
             out.write('    offset += 4\n')
         _write_id_deserializer = lambda out: write_id_deserializer(out)
         self.req._write_id_deserializer = _write_id_deserializer
@@ -730,11 +804,18 @@ def messages_generate(path):
 def roslib_copy_roslib_files(path):
     if not os.path.exists(path+"tinyros"):
         os.makedirs(path+"tinyros")
+    if not os.path.exists(path+"tinyros/time"):
+        os.makedirs(path+"tinyros/time")
     files = ['tinyros/Msg.go',
-             'tinyros/Duration.go',
+             'tinyros/time/Time.go',
+             'tinyros/time/Duration.go',
              'tinyros/Hardware.go',
              'tinyros/NodeHandle.go',
-             'tinyros/Time.go']
+             'tinyros/Publisher.go',
+             'tinyros/Subscriber.go',
+             'tinyros/ServiceClient.go',
+             'tinyros/ThreadPool.go',
+             'tinyros/ServiceServer.go']
 
     mydir = sys.argv[3] + "/roslib/go/"
     for f in files:

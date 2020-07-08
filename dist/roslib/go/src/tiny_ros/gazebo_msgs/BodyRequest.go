@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type BodyRequestRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_body_name string `json:"body_name"`
@@ -14,6 +15,11 @@ func NewBodyRequestRequest() (*BodyRequestRequest) {
     newBodyRequestRequest.Go_body_name = ""
     newBodyRequestRequest.__id__ = 0
     return newBodyRequestRequest
+}
+
+func (self *BodyRequestRequest) Go_initialize() {
+    self.Go_body_name = ""
+    self.__id__ = 0
 }
 
 func (self *BodyRequestRequest) Go_serialize(buff []byte) (int) {
@@ -36,15 +42,15 @@ func (self *BodyRequestRequest) Go_serialize(buff []byte) (int) {
 
 func (self *BodyRequestRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_body_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_body_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_body_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_body_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_body_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_body_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_body_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_body_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_body_name = string(buff[offset:(offset+length_body_name)])
     offset += length_body_name
@@ -68,6 +74,7 @@ func (self *BodyRequestRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type BodyRequestResponse struct {
     __id__ uint32 `json:"__id__"`
 }
@@ -76,6 +83,10 @@ func NewBodyRequestResponse() (*BodyRequestResponse) {
     newBodyRequestResponse := new(BodyRequestResponse)
     newBodyRequestResponse.__id__ = 0
     return newBodyRequestResponse
+}
+
+func (self *BodyRequestResponse) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *BodyRequestResponse) Go_serialize(buff []byte) (int) {
@@ -90,10 +101,10 @@ func (self *BodyRequestResponse) Go_serialize(buff []byte) (int) {
 
 func (self *BodyRequestResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

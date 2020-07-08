@@ -3,12 +3,16 @@ package std_msgs
 import (
 )
 
+
 type Empty struct {
 }
 
 func NewEmpty() (*Empty) {
     newEmpty := new(Empty)
     return newEmpty
+}
+
+func (self *Empty) Go_initialize() {
 }
 
 func (self *Empty) Go_serialize(buff []byte) (int) {

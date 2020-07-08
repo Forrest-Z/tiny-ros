@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Float64 struct {
     Go_data float64 `json:"data"`
 }
@@ -13,6 +14,10 @@ func NewFloat64() (*Float64) {
     newFloat64 := new(Float64)
     newFloat64.Go_data = 0.0
     return newFloat64
+}
+
+func (self *Float64) Go_initialize() {
+    self.Go_data = 0.0
 }
 
 func (self *Float64) Go_serialize(buff []byte) (int) {

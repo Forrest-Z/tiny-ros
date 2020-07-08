@@ -3,12 +3,16 @@ package tf2_msgs
 import (
 )
 
+
 type LookupTransformFeedback struct {
 }
 
 func NewLookupTransformFeedback() (*LookupTransformFeedback) {
     newLookupTransformFeedback := new(LookupTransformFeedback)
     return newLookupTransformFeedback
+}
+
+func (self *LookupTransformFeedback) Go_initialize() {
 }
 
 func (self *LookupTransformFeedback) Go_serialize(buff []byte) (int) {

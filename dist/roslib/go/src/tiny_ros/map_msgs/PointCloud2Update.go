@@ -2,23 +2,30 @@ package map_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "sensor_msgs/PointCloud2"
+    "tiny_ros/sensor_msgs"
 )
 
+func Go_ADD() (uint32) { return 0 }
+func Go_DELETE() (uint32) { return 1 }
+
 type PointCloud2Update struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_type uint32 `json:"type"`
-    Go_points sensor_msgs.PointCloud2 `json:"points"`
+    Go_points *sensor_msgs.PointCloud2 `json:"points"`
 }
 
-func (self *PointCloud2Update) Go_ADD() (uint32) { return 0 }
-func (self *PointCloud2Update) Go_DELETE() (uint32) { return 1 }
 func NewPointCloud2Update() (*PointCloud2Update) {
     newPointCloud2Update := new(PointCloud2Update)
     newPointCloud2Update.Go_header = std_msgs.NewHeader()
     newPointCloud2Update.Go_type = 0
     newPointCloud2Update.Go_points = sensor_msgs.NewPointCloud2()
     return newPointCloud2Update
+}
+
+func (self *PointCloud2Update) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_type = 0
+    self.Go_points = sensor_msgs.NewPointCloud2()
 }
 
 func (self *PointCloud2Update) Go_serialize(buff []byte) (int) {
@@ -36,10 +43,10 @@ func (self *PointCloud2Update) Go_serialize(buff []byte) (int) {
 func (self *PointCloud2Update) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    self.Go_type = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_type |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_type |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_type |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_type = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_type |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_type |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_type |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_points.Go_deserialize(buff[offset:])
     return offset

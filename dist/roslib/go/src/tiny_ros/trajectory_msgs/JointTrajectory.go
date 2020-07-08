@@ -2,21 +2,27 @@ package trajectory_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "trajectory_msgs/JointTrajectoryPoint"
 )
 
+
 type JointTrajectory struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_joint_names []string `json:"joint_names"`
-    Go_points []trajectory_msgs.JointTrajectoryPoint `json:"points"`
+    Go_points []JointTrajectoryPoint `json:"points"`
 }
 
 func NewJointTrajectory() (*JointTrajectory) {
     newJointTrajectory := new(JointTrajectory)
     newJointTrajectory.Go_header = std_msgs.NewHeader()
     newJointTrajectory.Go_joint_names = []string{}
-    newJointTrajectory.Go_points = []trajectory_msgs.JointTrajectoryPoint{}
+    newJointTrajectory.Go_points = []JointTrajectoryPoint{}
     return newJointTrajectory
+}
+
+func (self *JointTrajectory) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_joint_names = []string{}
+    self.Go_points = []JointTrajectoryPoint{}
 }
 
 func (self *JointTrajectory) Go_serialize(buff []byte) (int) {
@@ -53,27 +59,27 @@ func (self *JointTrajectory) Go_serialize(buff []byte) (int) {
 func (self *JointTrajectory) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_joint_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_joint_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_joint_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_joint_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_joint_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_joint_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_joint_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_joint_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_joint_names = make([]string, length_joint_names, length_joint_names)
     for i := 0; i < length_joint_names; i++ {
-        length_joint_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_joint_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_joint_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_joint_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_joint_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_joint_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_joint_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_joint_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_joint_names[i] = string(buff[offset:(offset+length_joint_namesi)])
         offset += length_joint_namesi
     }
-    length_points := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_points |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_points |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_points |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_points := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_points |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_points |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_points |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_points = make([]trajectory_msgs.JointTrajectoryPoint, length_points, length_points)
+    self.Go_points = make([]JointTrajectoryPoint, length_points, length_points)
     for i := 0; i < length_points; i++ {
         offset += self.Go_points[i].Go_deserialize(buff[offset:])
     }

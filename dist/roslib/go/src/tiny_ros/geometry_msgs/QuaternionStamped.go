@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Quaternion"
 )
 
+
 type QuaternionStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_quaternion geometry_msgs.Quaternion `json:"quaternion"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_quaternion *Quaternion `json:"quaternion"`
 }
 
 func NewQuaternionStamped() (*QuaternionStamped) {
     newQuaternionStamped := new(QuaternionStamped)
     newQuaternionStamped.Go_header = std_msgs.NewHeader()
-    newQuaternionStamped.Go_quaternion = geometry_msgs.NewQuaternion()
+    newQuaternionStamped.Go_quaternion = NewQuaternion()
     return newQuaternionStamped
+}
+
+func (self *QuaternionStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_quaternion = NewQuaternion()
 }
 
 func (self *QuaternionStamped) Go_serialize(buff []byte) (int) {

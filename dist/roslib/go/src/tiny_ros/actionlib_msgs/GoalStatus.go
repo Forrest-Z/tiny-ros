@@ -1,31 +1,37 @@
 package actionlib_msgs
 
 import (
-    "actionlib_msgs/GoalID"
 )
 
+func Go_PENDING() (uint8) { return  0    }
+func Go_ACTIVE() (uint8) { return  1    }
+func Go_PREEMPTED() (uint8) { return  2    }
+func Go_SUCCEEDED() (uint8) { return  3    }
+func Go_ABORTED() (uint8) { return  4    }
+func Go_REJECTED() (uint8) { return  5    }
+func Go_PREEMPTING() (uint8) { return  6    }
+func Go_RECALLING() (uint8) { return  7    }
+func Go_RECALLED() (uint8) { return  8    }
+func Go_LOST() (uint8) { return  9    }
+
 type GoalStatus struct {
-    Go_goal_id actionlib_msgs.GoalID `json:"goal_id"`
+    Go_goal_id *GoalID `json:"goal_id"`
     Go_status uint8 `json:"status"`
     Go_text string `json:"text"`
 }
 
-func (self *GoalStatus) Go_PENDING() (uint8) { return  0    }
-func (self *GoalStatus) Go_ACTIVE() (uint8) { return  1    }
-func (self *GoalStatus) Go_PREEMPTED() (uint8) { return  2    }
-func (self *GoalStatus) Go_SUCCEEDED() (uint8) { return  3    }
-func (self *GoalStatus) Go_ABORTED() (uint8) { return  4    }
-func (self *GoalStatus) Go_REJECTED() (uint8) { return  5    }
-func (self *GoalStatus) Go_PREEMPTING() (uint8) { return  6    }
-func (self *GoalStatus) Go_RECALLING() (uint8) { return  7    }
-func (self *GoalStatus) Go_RECALLED() (uint8) { return  8    }
-func (self *GoalStatus) Go_LOST() (uint8) { return  9    }
 func NewGoalStatus() (*GoalStatus) {
     newGoalStatus := new(GoalStatus)
-    newGoalStatus.Go_goal_id = actionlib_msgs.NewGoalID()
+    newGoalStatus.Go_goal_id = NewGoalID()
     newGoalStatus.Go_status = 0
     newGoalStatus.Go_text = ""
     return newGoalStatus
+}
+
+func (self *GoalStatus) Go_initialize() {
+    self.Go_goal_id = NewGoalID()
+    self.Go_status = 0
+    self.Go_text = ""
 }
 
 func (self *GoalStatus) Go_serialize(buff []byte) (int) {
@@ -47,12 +53,12 @@ func (self *GoalStatus) Go_serialize(buff []byte) (int) {
 func (self *GoalStatus) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_goal_id.Go_deserialize(buff[offset:])
-    self.Go_status = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_status = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_text := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_text |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_text |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_text |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_text := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_text |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_text |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_text |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_text = string(buff[offset:(offset+length_text)])
     offset += length_text

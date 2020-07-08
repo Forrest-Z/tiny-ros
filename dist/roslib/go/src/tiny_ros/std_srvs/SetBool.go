@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type SetBoolRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_data bool `json:"data"`
@@ -16,6 +17,11 @@ func NewSetBoolRequest() (*SetBoolRequest) {
     return newSetBoolRequest
 }
 
+func (self *SetBoolRequest) Go_initialize() {
+    self.Go_data = false
+    self.__id__ = 0
+}
+
 func (self *SetBoolRequest) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -23,19 +29,27 @@ func (self *SetBoolRequest) Go_serialize(buff []byte) (int) {
     buff[offset + 2] = byte((self.__id__ >> (8 * 2)) & 0xFF)
     buff[offset + 3] = byte((self.__id__ >> (8 * 3)) & 0xFF)
     offset += 4
-    buff[offset + 0] = byte((self.Go_data >> (8 * 0)) & 0xFF)
+    if self.Go_data {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     return offset
 }
 
 func (self *SetBoolRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_data = true
+    } else {
+        self.Go_data = false
+    }
     offset += 1
     return offset
 }
@@ -55,6 +69,7 @@ func (self *SetBoolRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type SetBoolResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_success bool `json:"success"`
@@ -69,6 +84,12 @@ func NewSetBoolResponse() (*SetBoolResponse) {
     return newSetBoolResponse
 }
 
+func (self *SetBoolResponse) Go_initialize() {
+    self.Go_success = false
+    self.Go_message = ""
+    self.__id__ = 0
+}
+
 func (self *SetBoolResponse) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -76,7 +97,11 @@ func (self *SetBoolResponse) Go_serialize(buff []byte) (int) {
     buff[offset + 2] = byte((self.__id__ >> (8 * 2)) & 0xFF)
     buff[offset + 3] = byte((self.__id__ >> (8 * 3)) & 0xFF)
     offset += 4
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_message := len(self.Go_message)
     buff[offset + 0] = byte((length_message >> (8 * 0)) & 0xFF)
@@ -91,17 +116,21 @@ func (self *SetBoolResponse) Go_serialize(buff []byte) (int) {
 
 func (self *SetBoolResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_message = string(buff[offset:(offset+length_message)])
     offset += length_message

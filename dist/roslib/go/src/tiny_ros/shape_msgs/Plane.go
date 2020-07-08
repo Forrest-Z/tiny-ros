@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Plane struct {
     Go_coef [4]float64 `json:"coef"`
 }
@@ -13,6 +14,10 @@ func NewPlane() (*Plane) {
     newPlane := new(Plane)
     newPlane.Go_coef = [4]float64{0.0, 0.0, 0.0, 0.0}
     return newPlane
+}
+
+func (self *Plane) Go_initialize() {
+    self.Go_coef = [4]float64{0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *Plane) Go_serialize(buff []byte) (int) {

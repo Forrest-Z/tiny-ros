@@ -3,6 +3,7 @@ package std_msgs
 import (
 )
 
+
 type MultiArrayDimension struct {
     Go_label string `json:"label"`
     Go_size uint32 `json:"size"`
@@ -15,6 +16,12 @@ func NewMultiArrayDimension() (*MultiArrayDimension) {
     newMultiArrayDimension.Go_size = 0
     newMultiArrayDimension.Go_stride = 0
     return newMultiArrayDimension
+}
+
+func (self *MultiArrayDimension) Go_initialize() {
+    self.Go_label = ""
+    self.Go_size = 0
+    self.Go_stride = 0
 }
 
 func (self *MultiArrayDimension) Go_serialize(buff []byte) (int) {
@@ -42,22 +49,22 @@ func (self *MultiArrayDimension) Go_serialize(buff []byte) (int) {
 
 func (self *MultiArrayDimension) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_label := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_label |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_label |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_label |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_label := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_label |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_label |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_label |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_label = string(buff[offset:(offset+length_label)])
     offset += length_label
-    self.Go_size = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_size |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_size |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_size |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_size = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_size |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_size |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_size |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stride = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stride |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stride |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stride |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stride = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stride |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stride |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stride |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

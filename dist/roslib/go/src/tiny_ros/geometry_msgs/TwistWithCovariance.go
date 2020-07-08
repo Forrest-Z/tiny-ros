@@ -1,21 +1,26 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Twist"
     "encoding/binary"
     "math"
 )
 
+
 type TwistWithCovariance struct {
-    Go_twist geometry_msgs.Twist `json:"twist"`
+    Go_twist *Twist `json:"twist"`
     Go_covariance [36]float64 `json:"covariance"`
 }
 
 func NewTwistWithCovariance() (*TwistWithCovariance) {
     newTwistWithCovariance := new(TwistWithCovariance)
-    newTwistWithCovariance.Go_twist = geometry_msgs.NewTwist()
+    newTwistWithCovariance.Go_twist = NewTwist()
     newTwistWithCovariance.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     return newTwistWithCovariance
+}
+
+func (self *TwistWithCovariance) Go_initialize() {
+    self.Go_twist = NewTwist()
+    self.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *TwistWithCovariance) Go_serialize(buff []byte) (int) {

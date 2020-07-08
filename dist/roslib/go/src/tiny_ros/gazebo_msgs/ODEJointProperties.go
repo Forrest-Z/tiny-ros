@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type ODEJointProperties struct {
     Go_damping []float64 `json:"damping"`
     Go_hiStop []float64 `json:"hiStop"`
@@ -31,6 +32,19 @@ func NewODEJointProperties() (*ODEJointProperties) {
     newODEJointProperties.Go_fmax = []float64{}
     newODEJointProperties.Go_vel = []float64{}
     return newODEJointProperties
+}
+
+func (self *ODEJointProperties) Go_initialize() {
+    self.Go_damping = []float64{}
+    self.Go_hiStop = []float64{}
+    self.Go_loStop = []float64{}
+    self.Go_erp = []float64{}
+    self.Go_cfm = []float64{}
+    self.Go_stop_erp = []float64{}
+    self.Go_stop_cfm = []float64{}
+    self.Go_fudge_factor = []float64{}
+    self.Go_fmax = []float64{}
+    self.Go_vel = []float64{}
 }
 
 func (self *ODEJointProperties) Go_serialize(buff []byte) (int) {
@@ -150,10 +164,10 @@ func (self *ODEJointProperties) Go_serialize(buff []byte) (int) {
 
 func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_damping := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_damping |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_damping |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_damping |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_damping := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_damping |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_damping |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_damping |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_damping = make([]float64, length_damping, length_damping)
     for i := 0; i < length_damping; i++ {
@@ -161,10 +175,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_damping[i] = math.Float64frombits(bits_dampingi)
         offset += 8
     }
-    length_hiStop := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_hiStop |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_hiStop |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_hiStop |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_hiStop := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_hiStop |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_hiStop |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_hiStop |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_hiStop = make([]float64, length_hiStop, length_hiStop)
     for i := 0; i < length_hiStop; i++ {
@@ -172,10 +186,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_hiStop[i] = math.Float64frombits(bits_hiStopi)
         offset += 8
     }
-    length_loStop := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_loStop |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_loStop |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_loStop |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_loStop := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_loStop |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_loStop |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_loStop |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_loStop = make([]float64, length_loStop, length_loStop)
     for i := 0; i < length_loStop; i++ {
@@ -183,10 +197,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_loStop[i] = math.Float64frombits(bits_loStopi)
         offset += 8
     }
-    length_erp := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_erp |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_erp |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_erp |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_erp := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_erp |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_erp |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_erp |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_erp = make([]float64, length_erp, length_erp)
     for i := 0; i < length_erp; i++ {
@@ -194,10 +208,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_erp[i] = math.Float64frombits(bits_erpi)
         offset += 8
     }
-    length_cfm := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_cfm |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_cfm |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_cfm |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_cfm := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_cfm |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_cfm |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_cfm |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_cfm = make([]float64, length_cfm, length_cfm)
     for i := 0; i < length_cfm; i++ {
@@ -205,10 +219,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_cfm[i] = math.Float64frombits(bits_cfmi)
         offset += 8
     }
-    length_stop_erp := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_stop_erp |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_stop_erp |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_stop_erp |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_stop_erp := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_stop_erp |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_stop_erp |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_stop_erp |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_stop_erp = make([]float64, length_stop_erp, length_stop_erp)
     for i := 0; i < length_stop_erp; i++ {
@@ -216,10 +230,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_stop_erp[i] = math.Float64frombits(bits_stop_erpi)
         offset += 8
     }
-    length_stop_cfm := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_stop_cfm |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_stop_cfm |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_stop_cfm |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_stop_cfm := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_stop_cfm |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_stop_cfm |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_stop_cfm |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_stop_cfm = make([]float64, length_stop_cfm, length_stop_cfm)
     for i := 0; i < length_stop_cfm; i++ {
@@ -227,10 +241,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_stop_cfm[i] = math.Float64frombits(bits_stop_cfmi)
         offset += 8
     }
-    length_fudge_factor := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_fudge_factor |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_fudge_factor |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_fudge_factor |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_fudge_factor := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_fudge_factor |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_fudge_factor |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_fudge_factor |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_fudge_factor = make([]float64, length_fudge_factor, length_fudge_factor)
     for i := 0; i < length_fudge_factor; i++ {
@@ -238,10 +252,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_fudge_factor[i] = math.Float64frombits(bits_fudge_factori)
         offset += 8
     }
-    length_fmax := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_fmax |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_fmax |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_fmax |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_fmax := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_fmax |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_fmax |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_fmax |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_fmax = make([]float64, length_fmax, length_fmax)
     for i := 0; i < length_fmax; i++ {
@@ -249,10 +263,10 @@ func (self *ODEJointProperties) Go_deserialize(buff []byte) (int) {
         self.Go_fmax[i] = math.Float64frombits(bits_fmaxi)
         offset += 8
     }
-    length_vel := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_vel |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_vel |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_vel |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_vel := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_vel |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_vel |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_vel |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_vel = make([]float64, length_vel, length_vel)
     for i := 0; i < length_vel; i++ {

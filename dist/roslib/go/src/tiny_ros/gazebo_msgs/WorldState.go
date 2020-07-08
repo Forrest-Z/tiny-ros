@@ -2,13 +2,12 @@ package gazebo_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Pose"
-    "geometry_msgs/Twist"
-    "geometry_msgs/Wrench"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type WorldState struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_name []string `json:"name"`
     Go_pose []geometry_msgs.Pose `json:"pose"`
     Go_twist []geometry_msgs.Twist `json:"twist"`
@@ -23,6 +22,14 @@ func NewWorldState() (*WorldState) {
     newWorldState.Go_twist = []geometry_msgs.Twist{}
     newWorldState.Go_wrench = []geometry_msgs.Wrench{}
     return newWorldState
+}
+
+func (self *WorldState) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_name = []string{}
+    self.Go_pose = []geometry_msgs.Pose{}
+    self.Go_twist = []geometry_msgs.Twist{}
+    self.Go_wrench = []geometry_msgs.Wrench{}
 }
 
 func (self *WorldState) Go_serialize(buff []byte) (int) {
@@ -77,43 +84,43 @@ func (self *WorldState) Go_serialize(buff []byte) (int) {
 func (self *WorldState) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_name = make([]string, length_name, length_name)
     for i := 0; i < length_name; i++ {
-        length_namei := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_namei |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_namei |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_namei |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_namei |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_namei |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_name[i] = string(buff[offset:(offset+length_namei)])
         offset += length_namei
     }
-    length_pose := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_pose |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_pose |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_pose |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_pose := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_pose |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_pose |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_pose |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_pose = make([]geometry_msgs.Pose, length_pose, length_pose)
     for i := 0; i < length_pose; i++ {
         offset += self.Go_pose[i].Go_deserialize(buff[offset:])
     }
-    length_twist := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_twist |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_twist |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_twist |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_twist := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_twist |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_twist |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_twist |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_twist = make([]geometry_msgs.Twist, length_twist, length_twist)
     for i := 0; i < length_twist; i++ {
         offset += self.Go_twist[i].Go_deserialize(buff[offset:])
     }
-    length_wrench := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_wrench |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_wrench |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_wrench |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_wrench := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_wrench |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_wrench |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_wrench |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_wrench = make([]geometry_msgs.Wrench, length_wrench, length_wrench)
     for i := 0; i < length_wrench; i++ {

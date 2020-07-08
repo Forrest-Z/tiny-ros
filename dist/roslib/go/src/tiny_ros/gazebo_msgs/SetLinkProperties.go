@@ -1,16 +1,17 @@
 package gazebo_msgs
 
 import (
-    "geometry_msgs/Pose"
     "encoding/binary"
+    "tiny_ros/geometry_msgs"
     "math"
 )
+
 
 
 type SetLinkPropertiesRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_link_name string `json:"link_name"`
-    Go_com geometry_msgs.Pose `json:"com"`
+    Go_com *geometry_msgs.Pose `json:"com"`
     Go_gravity_mode bool `json:"gravity_mode"`
     Go_mass float64 `json:"mass"`
     Go_ixx float64 `json:"ixx"`
@@ -37,6 +38,20 @@ func NewSetLinkPropertiesRequest() (*SetLinkPropertiesRequest) {
     return newSetLinkPropertiesRequest
 }
 
+func (self *SetLinkPropertiesRequest) Go_initialize() {
+    self.Go_link_name = ""
+    self.Go_com = geometry_msgs.NewPose()
+    self.Go_gravity_mode = false
+    self.Go_mass = 0.0
+    self.Go_ixx = 0.0
+    self.Go_ixy = 0.0
+    self.Go_ixz = 0.0
+    self.Go_iyy = 0.0
+    self.Go_iyz = 0.0
+    self.Go_izz = 0.0
+    self.__id__ = 0
+}
+
 func (self *SetLinkPropertiesRequest) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -53,7 +68,11 @@ func (self *SetLinkPropertiesRequest) Go_serialize(buff []byte) (int) {
     copy(buff[offset:(offset+length_link_name)], self.Go_link_name)
     offset += length_link_name
     offset += self.Go_com.Go_serialize(buff[offset:])
-    buff[offset + 0] = byte((self.Go_gravity_mode >> (8 * 0)) & 0xFF)
+    if self.Go_gravity_mode {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     bits_mass := math.Float64bits(self.Go_mass)
     binary.LittleEndian.PutUint64(buff[offset:], bits_mass)
@@ -81,20 +100,24 @@ func (self *SetLinkPropertiesRequest) Go_serialize(buff []byte) (int) {
 
 func (self *SetLinkPropertiesRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_link_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_link_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_link_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_link_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_link_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_link_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_link_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_link_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_link_name = string(buff[offset:(offset+length_link_name)])
     offset += length_link_name
     offset += self.Go_com.Go_deserialize(buff[offset:])
-    self.Go_gravity_mode = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_gravity_mode = true
+    } else {
+        self.Go_gravity_mode = false
+    }
     offset += 1
     bits_mass := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_mass = math.Float64frombits(bits_mass)
@@ -146,6 +169,7 @@ func (self *SetLinkPropertiesRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type SetLinkPropertiesResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_success bool `json:"success"`
@@ -160,6 +184,12 @@ func NewSetLinkPropertiesResponse() (*SetLinkPropertiesResponse) {
     return newSetLinkPropertiesResponse
 }
 
+func (self *SetLinkPropertiesResponse) Go_initialize() {
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
+}
+
 func (self *SetLinkPropertiesResponse) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -167,7 +197,11 @@ func (self *SetLinkPropertiesResponse) Go_serialize(buff []byte) (int) {
     buff[offset + 2] = byte((self.__id__ >> (8 * 2)) & 0xFF)
     buff[offset + 3] = byte((self.__id__ >> (8 * 3)) & 0xFF)
     offset += 4
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -182,17 +216,21 @@ func (self *SetLinkPropertiesResponse) Go_serialize(buff []byte) (int) {
 
 func (self *SetLinkPropertiesResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type GetModelPropertiesRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_model_name string `json:"model_name"`
@@ -14,6 +15,11 @@ func NewGetModelPropertiesRequest() (*GetModelPropertiesRequest) {
     newGetModelPropertiesRequest.Go_model_name = ""
     newGetModelPropertiesRequest.__id__ = 0
     return newGetModelPropertiesRequest
+}
+
+func (self *GetModelPropertiesRequest) Go_initialize() {
+    self.Go_model_name = ""
+    self.__id__ = 0
 }
 
 func (self *GetModelPropertiesRequest) Go_serialize(buff []byte) (int) {
@@ -36,15 +42,15 @@ func (self *GetModelPropertiesRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetModelPropertiesRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_model_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_model_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_model_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_model_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_model_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_model_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_model_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_model_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_model_name = string(buff[offset:(offset+length_model_name)])
     offset += length_model_name
@@ -67,6 +73,7 @@ func (self *GetModelPropertiesRequest) Go_setID(id uint32) { self.__id__ = id }
 
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 type GetModelPropertiesResponse struct {
     __id__ uint32 `json:"__id__"`
@@ -94,6 +101,19 @@ func NewGetModelPropertiesResponse() (*GetModelPropertiesResponse) {
     newGetModelPropertiesResponse.Go_status_message = ""
     newGetModelPropertiesResponse.__id__ = 0
     return newGetModelPropertiesResponse
+}
+
+func (self *GetModelPropertiesResponse) Go_initialize() {
+    self.Go_parent_model_name = ""
+    self.Go_canonical_body_name = ""
+    self.Go_body_names = []string{}
+    self.Go_geom_names = []string{}
+    self.Go_joint_names = []string{}
+    self.Go_child_model_names = []string{}
+    self.Go_is_static = false
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
 }
 
 func (self *GetModelPropertiesResponse) Go_serialize(buff []byte) (int) {
@@ -183,9 +203,17 @@ func (self *GetModelPropertiesResponse) Go_serialize(buff []byte) (int) {
         copy(buff[offset:(offset+length_child_model_namesi)], self.Go_child_model_names[i])
         offset += length_child_model_namesi
     }
-    buff[offset + 0] = byte((self.Go_is_static >> (8 * 0)) & 0xFF)
+    if self.Go_is_static {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -200,93 +228,101 @@ func (self *GetModelPropertiesResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetModelPropertiesResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_parent_model_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_parent_model_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_parent_model_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_parent_model_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_parent_model_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_parent_model_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_parent_model_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_parent_model_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_parent_model_name = string(buff[offset:(offset+length_parent_model_name)])
     offset += length_parent_model_name
-    length_canonical_body_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_canonical_body_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_canonical_body_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_canonical_body_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_canonical_body_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_canonical_body_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_canonical_body_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_canonical_body_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_canonical_body_name = string(buff[offset:(offset+length_canonical_body_name)])
     offset += length_canonical_body_name
-    length_body_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_body_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_body_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_body_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_body_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_body_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_body_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_body_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_body_names = make([]string, length_body_names, length_body_names)
     for i := 0; i < length_body_names; i++ {
-        length_body_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_body_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_body_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_body_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_body_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_body_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_body_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_body_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_body_names[i] = string(buff[offset:(offset+length_body_namesi)])
         offset += length_body_namesi
     }
-    length_geom_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_geom_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_geom_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_geom_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_geom_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_geom_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_geom_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_geom_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_geom_names = make([]string, length_geom_names, length_geom_names)
     for i := 0; i < length_geom_names; i++ {
-        length_geom_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_geom_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_geom_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_geom_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_geom_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_geom_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_geom_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_geom_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_geom_names[i] = string(buff[offset:(offset+length_geom_namesi)])
         offset += length_geom_namesi
     }
-    length_joint_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_joint_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_joint_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_joint_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_joint_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_joint_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_joint_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_joint_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_joint_names = make([]string, length_joint_names, length_joint_names)
     for i := 0; i < length_joint_names; i++ {
-        length_joint_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_joint_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_joint_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_joint_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_joint_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_joint_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_joint_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_joint_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_joint_names[i] = string(buff[offset:(offset+length_joint_namesi)])
         offset += length_joint_namesi
     }
-    length_child_model_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_child_model_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_child_model_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_child_model_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_child_model_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_child_model_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_child_model_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_child_model_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_child_model_names = make([]string, length_child_model_names, length_child_model_names)
     for i := 0; i < length_child_model_names; i++ {
-        length_child_model_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_child_model_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_child_model_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_child_model_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_child_model_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_child_model_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_child_model_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_child_model_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_child_model_names[i] = string(buff[offset:(offset+length_child_model_namesi)])
         offset += length_child_model_namesi
     }
-    self.Go_is_static = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_is_static = true
+    } else {
+        self.Go_is_static = false
+    }
     offset += 1
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type FluidPressure struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_fluid_pressure float64 `json:"fluid_pressure"`
     Go_variance float64 `json:"variance"`
 }
@@ -18,6 +19,12 @@ func NewFluidPressure() (*FluidPressure) {
     newFluidPressure.Go_fluid_pressure = 0.0
     newFluidPressure.Go_variance = 0.0
     return newFluidPressure
+}
+
+func (self *FluidPressure) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_fluid_pressure = 0.0
+    self.Go_variance = 0.0
 }
 
 func (self *FluidPressure) Go_serialize(buff []byte) (int) {

@@ -4,8 +4,9 @@ import (
     "tiny_ros/std_msgs"
 )
 
+
 type Image struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_height uint32 `json:"height"`
     Go_width uint32 `json:"width"`
     Go_encoding string `json:"encoding"`
@@ -24,6 +25,16 @@ func NewImage() (*Image) {
     newImage.Go_step = 0
     newImage.Go_data = []uint8{}
     return newImage
+}
+
+func (self *Image) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_height = 0
+    self.Go_width = 0
+    self.Go_encoding = ""
+    self.Go_is_bigendian = 0
+    self.Go_step = 0
+    self.Go_data = []uint8{}
 }
 
 func (self *Image) Go_serialize(buff []byte) (int) {
@@ -70,38 +81,38 @@ func (self *Image) Go_serialize(buff []byte) (int) {
 func (self *Image) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    self.Go_height = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_height |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_height |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_height |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_height = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_height |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_height |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_height |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_width = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_width |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_width |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_width |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_width = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_width |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_width |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_width |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_encoding := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_encoding |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_encoding |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_encoding |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_encoding := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_encoding |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_encoding |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_encoding |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_encoding = string(buff[offset:(offset+length_encoding)])
     offset += length_encoding
-    self.Go_is_bigendian = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_is_bigendian = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    self.Go_step = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_step |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_step |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_step |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_step = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_step |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_step |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_step |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]uint8, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+        self.Go_data[i] = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
         offset += 1
     }
     return offset

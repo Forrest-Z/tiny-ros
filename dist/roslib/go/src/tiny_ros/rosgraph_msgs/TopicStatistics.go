@@ -1,24 +1,25 @@
 package rosgraph_msgs
 
 import (
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
+
 
 type TopicStatistics struct {
     Go_topic string `json:"topic"`
     Go_node_pub string `json:"node_pub"`
     Go_node_sub string `json:"node_sub"`
-    Go_window_start tinyros.Time `json:"window_start"`
-    Go_window_stop tinyros.Time `json:"window_stop"`
+    Go_window_start *tinyros.Time `json:"window_start"`
+    Go_window_stop *tinyros.Time `json:"window_stop"`
     Go_delivered_msgs int32 `json:"delivered_msgs"`
     Go_dropped_msgs int32 `json:"dropped_msgs"`
     Go_traffic int32 `json:"traffic"`
-    Go_period_mean tinyros.Duration `json:"period_mean"`
-    Go_period_stddev tinyros.Duration `json:"period_stddev"`
-    Go_period_max tinyros.Duration `json:"period_max"`
-    Go_stamp_age_mean tinyros.Duration `json:"stamp_age_mean"`
-    Go_stamp_age_stddev tinyros.Duration `json:"stamp_age_stddev"`
-    Go_stamp_age_max tinyros.Duration `json:"stamp_age_max"`
+    Go_period_mean *tinyros.Duration `json:"period_mean"`
+    Go_period_stddev *tinyros.Duration `json:"period_stddev"`
+    Go_period_max *tinyros.Duration `json:"period_max"`
+    Go_stamp_age_mean *tinyros.Duration `json:"stamp_age_mean"`
+    Go_stamp_age_stddev *tinyros.Duration `json:"stamp_age_stddev"`
+    Go_stamp_age_max *tinyros.Duration `json:"stamp_age_max"`
 }
 
 func NewTopicStatistics() (*TopicStatistics) {
@@ -38,6 +39,23 @@ func NewTopicStatistics() (*TopicStatistics) {
     newTopicStatistics.Go_stamp_age_stddev = tinyros.NewDuration()
     newTopicStatistics.Go_stamp_age_max = tinyros.NewDuration()
     return newTopicStatistics
+}
+
+func (self *TopicStatistics) Go_initialize() {
+    self.Go_topic = ""
+    self.Go_node_pub = ""
+    self.Go_node_sub = ""
+    self.Go_window_start = tinyros.NewTime()
+    self.Go_window_stop = tinyros.NewTime()
+    self.Go_delivered_msgs = 0
+    self.Go_dropped_msgs = 0
+    self.Go_traffic = 0
+    self.Go_period_mean = tinyros.NewDuration()
+    self.Go_period_stddev = tinyros.NewDuration()
+    self.Go_period_max = tinyros.NewDuration()
+    self.Go_stamp_age_mean = tinyros.NewDuration()
+    self.Go_stamp_age_stddev = tinyros.NewDuration()
+    self.Go_stamp_age_max = tinyros.NewDuration()
 }
 
 func (self *TopicStatistics) Go_serialize(buff []byte) (int) {
@@ -166,121 +184,121 @@ func (self *TopicStatistics) Go_serialize(buff []byte) (int) {
 
 func (self *TopicStatistics) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_topic := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_topic |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_topic |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_topic |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_topic := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_topic |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_topic |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_topic |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_topic = string(buff[offset:(offset+length_topic)])
     offset += length_topic
-    length_node_pub := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_node_pub |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_node_pub |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_node_pub |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_node_pub := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_node_pub |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_node_pub |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_node_pub |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_node_pub = string(buff[offset:(offset+length_node_pub)])
     offset += length_node_pub
-    length_node_sub := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_node_sub |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_node_sub |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_node_sub |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_node_sub := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_node_sub |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_node_sub |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_node_sub |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_node_sub = string(buff[offset:(offset+length_node_sub)])
     offset += length_node_sub
-    self.Go_window_start.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_window_start.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_window_start.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_window_start.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_window_start.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_window_start.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_window_start.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_window_start.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_window_start.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_window_start.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_window_start.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_window_start.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_window_start.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_window_start.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_window_start.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_window_start.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_window_stop.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_window_stop.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_window_stop.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_window_stop.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_window_stop.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_window_stop.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_window_stop.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_window_stop.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_window_stop.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_window_stop.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_window_stop.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_window_stop.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_window_stop.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_window_stop.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_window_stop.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_window_stop.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_delivered_msgs = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_delivered_msgs |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_delivered_msgs |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_delivered_msgs |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_delivered_msgs = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_delivered_msgs |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_delivered_msgs |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_delivered_msgs |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_dropped_msgs = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_dropped_msgs |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_dropped_msgs |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_dropped_msgs |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_dropped_msgs = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_dropped_msgs |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_dropped_msgs |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_dropped_msgs |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_traffic = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_traffic |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_traffic |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_traffic |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_traffic = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_traffic |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_traffic |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_traffic |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_mean.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_mean.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_mean.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_mean.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_mean.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_mean.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_mean.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_mean.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_mean.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_mean.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_mean.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_mean.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_mean.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_mean.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_mean.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_mean.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_stddev.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_stddev.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_stddev.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_stddev.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_stddev.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_stddev.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_stddev.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_stddev.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_stddev.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_stddev.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_stddev.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_stddev.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_stddev.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_stddev.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_stddev.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_stddev.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_max.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_max.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_max.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_max.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_max.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_max.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_max.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_max.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_period_max.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_period_max.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_period_max.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_period_max.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_period_max.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_period_max.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_period_max.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_period_max.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_mean.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_mean.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_mean.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_mean.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_mean.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_mean.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_mean.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_mean.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_mean.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_mean.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_mean.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_mean.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_mean.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_mean.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_mean.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_mean.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_stddev.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_stddev.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_stddev.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_stddev.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_stddev.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_stddev.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_stddev.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_stddev.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_stddev.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_stddev.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_stddev.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_stddev.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_stddev.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_stddev.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_stddev.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_stddev.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_max.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_max.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_max.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_max.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_max.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_max.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_max.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_max.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp_age_max.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp_age_max.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp_age_max.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp_age_max.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp_age_max.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp_age_max.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp_age_max.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp_age_max.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

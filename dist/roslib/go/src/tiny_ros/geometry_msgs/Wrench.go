@@ -1,19 +1,24 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Vector3"
 )
 
+
 type Wrench struct {
-    Go_force geometry_msgs.Vector3 `json:"force"`
-    Go_torque geometry_msgs.Vector3 `json:"torque"`
+    Go_force *Vector3 `json:"force"`
+    Go_torque *Vector3 `json:"torque"`
 }
 
 func NewWrench() (*Wrench) {
     newWrench := new(Wrench)
-    newWrench.Go_force = geometry_msgs.NewVector3()
-    newWrench.Go_torque = geometry_msgs.NewVector3()
+    newWrench.Go_force = NewVector3()
+    newWrench.Go_torque = NewVector3()
     return newWrench
+}
+
+func (self *Wrench) Go_initialize() {
+    self.Go_force = NewVector3()
+    self.Go_torque = NewVector3()
 }
 
 func (self *Wrench) Go_serialize(buff []byte) (int) {

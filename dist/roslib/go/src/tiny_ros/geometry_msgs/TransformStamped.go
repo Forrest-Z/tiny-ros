@@ -2,21 +2,27 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Transform"
 )
 
+
 type TransformStamped struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_child_frame_id string `json:"child_frame_id"`
-    Go_transform geometry_msgs.Transform `json:"transform"`
+    Go_transform *Transform `json:"transform"`
 }
 
 func NewTransformStamped() (*TransformStamped) {
     newTransformStamped := new(TransformStamped)
     newTransformStamped.Go_header = std_msgs.NewHeader()
     newTransformStamped.Go_child_frame_id = ""
-    newTransformStamped.Go_transform = geometry_msgs.NewTransform()
+    newTransformStamped.Go_transform = NewTransform()
     return newTransformStamped
+}
+
+func (self *TransformStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_child_frame_id = ""
+    self.Go_transform = NewTransform()
 }
 
 func (self *TransformStamped) Go_serialize(buff []byte) (int) {
@@ -37,10 +43,10 @@ func (self *TransformStamped) Go_serialize(buff []byte) (int) {
 func (self *TransformStamped) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_child_frame_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_child_frame_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_child_frame_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_child_frame_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_child_frame_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_child_frame_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_child_frame_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_child_frame_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_child_frame_id = string(buff[offset:(offset+length_child_frame_id)])
     offset += length_child_frame_id

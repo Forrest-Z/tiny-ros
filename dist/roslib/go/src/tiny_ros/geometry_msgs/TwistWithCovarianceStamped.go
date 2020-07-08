@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/TwistWithCovariance"
 )
 
+
 type TwistWithCovarianceStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_twist geometry_msgs.TwistWithCovariance `json:"twist"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_twist *TwistWithCovariance `json:"twist"`
 }
 
 func NewTwistWithCovarianceStamped() (*TwistWithCovarianceStamped) {
     newTwistWithCovarianceStamped := new(TwistWithCovarianceStamped)
     newTwistWithCovarianceStamped.Go_header = std_msgs.NewHeader()
-    newTwistWithCovarianceStamped.Go_twist = geometry_msgs.NewTwistWithCovariance()
+    newTwistWithCovarianceStamped.Go_twist = NewTwistWithCovariance()
     return newTwistWithCovarianceStamped
+}
+
+func (self *TwistWithCovarianceStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_twist = NewTwistWithCovariance()
 }
 
 func (self *TwistWithCovarianceStamped) Go_serialize(buff []byte) (int) {

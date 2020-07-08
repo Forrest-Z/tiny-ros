@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type Illuminance struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_illuminance float64 `json:"illuminance"`
     Go_variance float64 `json:"variance"`
 }
@@ -18,6 +19,12 @@ func NewIlluminance() (*Illuminance) {
     newIlluminance.Go_illuminance = 0.0
     newIlluminance.Go_variance = 0.0
     return newIlluminance
+}
+
+func (self *Illuminance) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_illuminance = 0.0
+    self.Go_variance = 0.0
 }
 
 func (self *Illuminance) Go_serialize(buff []byte) (int) {

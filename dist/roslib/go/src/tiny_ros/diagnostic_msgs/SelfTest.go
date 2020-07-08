@@ -1,8 +1,8 @@
 package diagnostic_msgs
 
 import (
-    "diagnostic_msgs/DiagnosticStatus"
 )
+
 
 
 type SelfTestRequest struct {
@@ -13,6 +13,10 @@ func NewSelfTestRequest() (*SelfTestRequest) {
     newSelfTestRequest := new(SelfTestRequest)
     newSelfTestRequest.__id__ = 0
     return newSelfTestRequest
+}
+
+func (self *SelfTestRequest) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *SelfTestRequest) Go_serialize(buff []byte) (int) {
@@ -27,10 +31,10 @@ func (self *SelfTestRequest) Go_serialize(buff []byte) (int) {
 
 func (self *SelfTestRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -49,20 +53,28 @@ func (self *SelfTestRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type SelfTestResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_id string `json:"id"`
     Go_passed byte `json:"passed"`
-    Go_status []diagnostic_msgs.DiagnosticStatus `json:"status"`
+    Go_status []DiagnosticStatus `json:"status"`
 }
 
 func NewSelfTestResponse() (*SelfTestResponse) {
     newSelfTestResponse := new(SelfTestResponse)
     newSelfTestResponse.Go_id = ""
     newSelfTestResponse.Go_passed = 0
-    newSelfTestResponse.Go_status = []diagnostic_msgs.DiagnosticStatus{}
+    newSelfTestResponse.Go_status = []DiagnosticStatus{}
     newSelfTestResponse.__id__ = 0
     return newSelfTestResponse
+}
+
+func (self *SelfTestResponse) Go_initialize() {
+    self.Go_id = ""
+    self.Go_passed = 0
+    self.Go_status = []DiagnosticStatus{}
+    self.__id__ = 0
 }
 
 func (self *SelfTestResponse) Go_serialize(buff []byte) (int) {
@@ -96,26 +108,26 @@ func (self *SelfTestResponse) Go_serialize(buff []byte) (int) {
 
 func (self *SelfTestResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_id = string(buff[offset:(offset+length_id)])
     offset += length_id
-    self.Go_passed = byte((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_passed = byte(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_status := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status = make([]diagnostic_msgs.DiagnosticStatus, length_status, length_status)
+    self.Go_status = make([]DiagnosticStatus, length_status, length_status)
     for i := 0; i < length_status; i++ {
         offset += self.Go_status[i].Go_deserialize(buff[offset:])
     }

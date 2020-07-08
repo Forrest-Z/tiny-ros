@@ -2,19 +2,24 @@ package diagnostic_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "diagnostic_msgs/DiagnosticStatus"
 )
 
+
 type DiagnosticArray struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status []diagnostic_msgs.DiagnosticStatus `json:"status"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status []DiagnosticStatus `json:"status"`
 }
 
 func NewDiagnosticArray() (*DiagnosticArray) {
     newDiagnosticArray := new(DiagnosticArray)
     newDiagnosticArray.Go_header = std_msgs.NewHeader()
-    newDiagnosticArray.Go_status = []diagnostic_msgs.DiagnosticStatus{}
+    newDiagnosticArray.Go_status = []DiagnosticStatus{}
     return newDiagnosticArray
+}
+
+func (self *DiagnosticArray) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = []DiagnosticStatus{}
 }
 
 func (self *DiagnosticArray) Go_serialize(buff []byte) (int) {
@@ -35,12 +40,12 @@ func (self *DiagnosticArray) Go_serialize(buff []byte) (int) {
 func (self *DiagnosticArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_status := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status = make([]diagnostic_msgs.DiagnosticStatus, length_status, length_status)
+    self.Go_status = make([]DiagnosticStatus, length_status, length_status)
     for i := 0; i < length_status; i++ {
         offset += self.Go_status[i].Go_deserialize(buff[offset:])
     }

@@ -4,31 +4,31 @@ import (
     "math"
 )
 
-type Dutaion struct {
+type Duration struct {
     Go_sec uint32 `json:"sec"`
     Go_nsec uint32 `json:"nsec"`
 }
 
-func NewDutaion() (*Dutaion) {
-    newDutaion := new(Dutaion)
-    newDutaion.Go_sec = 0
-    newDutaion.Go_nsec = 0
-    return newDutaion
+func NewDuration() (*Duration) {
+    newDuration := new(Duration)
+    newDuration.Go_sec = 0
+    newDuration.Go_nsec = 0
+    return newDuration
 }
 
-func (self *Dutaion) Go_toMSec() (float64) { 
+func (self *Duration) Go_toMSec() (float64) { 
     return float64(self.Go_sec) * 1000 + 1e-6 * float64(self.Go_nsec)
 }
 
-func (self *Dutaion) Go_toSec() (float64) { 
+func (self *Duration) Go_toSec() (float64) { 
     return float64(self.Go_sec)  + 1e-9 * float64(self.Go_nsec)
 }
 
-func (self *Dutaion) Go_fromSec(t float64) {
+func (self *Duration) Go_fromSec(t float64) {
     self.Go_sec = uint32(math.Floor(t))
     self.Go_nsec = uint32(math.Floor((t - float64(self.Go_sec)) * 1e9 + 0.5))
 }
 
-func (self *Dutaion) Go_toNsec() (uint64) {
+func (self *Duration) Go_toNsec() (uint64) {
     return uint64(self.Go_sec * 1e9 + self.Go_nsec)
 }

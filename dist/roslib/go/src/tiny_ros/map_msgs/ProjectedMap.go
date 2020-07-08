@@ -1,13 +1,14 @@
 package map_msgs
 
 import (
-    "nav_msgs/OccupancyGrid"
+    "tiny_ros/nav_msgs"
     "encoding/binary"
     "math"
 )
 
+
 type ProjectedMap struct {
-    Go_map nav_msgs.OccupancyGrid `json:"map"`
+    Go_map *nav_msgs.OccupancyGrid `json:"map"`
     Go_min_z float64 `json:"min_z"`
     Go_max_z float64 `json:"max_z"`
 }
@@ -18,6 +19,12 @@ func NewProjectedMap() (*ProjectedMap) {
     newProjectedMap.Go_min_z = 0.0
     newProjectedMap.Go_max_z = 0.0
     return newProjectedMap
+}
+
+func (self *ProjectedMap) Go_initialize() {
+    self.Go_map = nav_msgs.NewOccupancyGrid()
+    self.Go_min_z = 0.0
+    self.Go_max_z = 0.0
 }
 
 func (self *ProjectedMap) Go_serialize(buff []byte) (int) {

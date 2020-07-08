@@ -3,12 +3,16 @@ package nav_msgs
 import (
 )
 
+
 type GetMapFeedback struct {
 }
 
 func NewGetMapFeedback() (*GetMapFeedback) {
     newGetMapFeedback := new(GetMapFeedback)
     return newGetMapFeedback
+}
+
+func (self *GetMapFeedback) Go_initialize() {
 }
 
 func (self *GetMapFeedback) Go_serialize(buff []byte) (int) {

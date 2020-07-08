@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/PoseWithCovariance"
 )
 
+
 type PoseWithCovarianceStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_pose geometry_msgs.PoseWithCovariance `json:"pose"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_pose *PoseWithCovariance `json:"pose"`
 }
 
 func NewPoseWithCovarianceStamped() (*PoseWithCovarianceStamped) {
     newPoseWithCovarianceStamped := new(PoseWithCovarianceStamped)
     newPoseWithCovarianceStamped.Go_header = std_msgs.NewHeader()
-    newPoseWithCovarianceStamped.Go_pose = geometry_msgs.NewPoseWithCovariance()
+    newPoseWithCovarianceStamped.Go_pose = NewPoseWithCovariance()
     return newPoseWithCovarianceStamped
+}
+
+func (self *PoseWithCovarianceStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_pose = NewPoseWithCovariance()
 }
 
 func (self *PoseWithCovarianceStamped) Go_serialize(buff []byte) (int) {

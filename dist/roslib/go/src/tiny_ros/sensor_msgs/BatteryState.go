@@ -6,8 +6,30 @@ import (
     "math"
 )
 
+func Go_POWER_SUPPLY_STATUS_UNKNOWN() (uint8) { return  0 }
+func Go_POWER_SUPPLY_STATUS_CHARGING() (uint8) { return  1 }
+func Go_POWER_SUPPLY_STATUS_DISCHARGING() (uint8) { return  2 }
+func Go_POWER_SUPPLY_STATUS_NOT_CHARGING() (uint8) { return  3 }
+func Go_POWER_SUPPLY_STATUS_FULL() (uint8) { return  4 }
+func Go_POWER_SUPPLY_HEALTH_UNKNOWN() (uint8) { return  0 }
+func Go_POWER_SUPPLY_HEALTH_GOOD() (uint8) { return  1 }
+func Go_POWER_SUPPLY_HEALTH_OVERHEAT() (uint8) { return  2 }
+func Go_POWER_SUPPLY_HEALTH_DEAD() (uint8) { return  3 }
+func Go_POWER_SUPPLY_HEALTH_OVERVOLTAGE() (uint8) { return  4 }
+func Go_POWER_SUPPLY_HEALTH_UNSPEC_FAILURE() (uint8) { return  5 }
+func Go_POWER_SUPPLY_HEALTH_COLD() (uint8) { return  6 }
+func Go_POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE() (uint8) { return  7 }
+func Go_POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE() (uint8) { return  8 }
+func Go_POWER_SUPPLY_TECHNOLOGY_UNKNOWN() (uint8) { return  0 }
+func Go_POWER_SUPPLY_TECHNOLOGY_NIMH() (uint8) { return  1 }
+func Go_POWER_SUPPLY_TECHNOLOGY_LION() (uint8) { return  2 }
+func Go_POWER_SUPPLY_TECHNOLOGY_LIPO() (uint8) { return  3 }
+func Go_POWER_SUPPLY_TECHNOLOGY_LIFE() (uint8) { return  4 }
+func Go_POWER_SUPPLY_TECHNOLOGY_NICD() (uint8) { return  5 }
+func Go_POWER_SUPPLY_TECHNOLOGY_LIMN() (uint8) { return  6 }
+
 type BatteryState struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_voltage float32 `json:"voltage"`
     Go_current float32 `json:"current"`
     Go_charge float32 `json:"charge"`
@@ -23,27 +45,6 @@ type BatteryState struct {
     Go_serial_number string `json:"serial_number"`
 }
 
-func (self *BatteryState) Go_POWER_SUPPLY_STATUS_UNKNOWN() (uint8) { return  0 }
-func (self *BatteryState) Go_POWER_SUPPLY_STATUS_CHARGING() (uint8) { return  1 }
-func (self *BatteryState) Go_POWER_SUPPLY_STATUS_DISCHARGING() (uint8) { return  2 }
-func (self *BatteryState) Go_POWER_SUPPLY_STATUS_NOT_CHARGING() (uint8) { return  3 }
-func (self *BatteryState) Go_POWER_SUPPLY_STATUS_FULL() (uint8) { return  4 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_UNKNOWN() (uint8) { return  0 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_GOOD() (uint8) { return  1 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_OVERHEAT() (uint8) { return  2 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_DEAD() (uint8) { return  3 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_OVERVOLTAGE() (uint8) { return  4 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_UNSPEC_FAILURE() (uint8) { return  5 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_COLD() (uint8) { return  6 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE() (uint8) { return  7 }
-func (self *BatteryState) Go_POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE() (uint8) { return  8 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_UNKNOWN() (uint8) { return  0 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_NIMH() (uint8) { return  1 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_LION() (uint8) { return  2 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_LIPO() (uint8) { return  3 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_LIFE() (uint8) { return  4 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_NICD() (uint8) { return  5 }
-func (self *BatteryState) Go_POWER_SUPPLY_TECHNOLOGY_LIMN() (uint8) { return  6 }
 func NewBatteryState() (*BatteryState) {
     newBatteryState := new(BatteryState)
     newBatteryState.Go_header = std_msgs.NewHeader()
@@ -61,6 +62,23 @@ func NewBatteryState() (*BatteryState) {
     newBatteryState.Go_location = ""
     newBatteryState.Go_serial_number = ""
     return newBatteryState
+}
+
+func (self *BatteryState) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_voltage = 0.0
+    self.Go_current = 0.0
+    self.Go_charge = 0.0
+    self.Go_capacity = 0.0
+    self.Go_design_capacity = 0.0
+    self.Go_percentage = 0.0
+    self.Go_power_supply_status = 0
+    self.Go_power_supply_health = 0
+    self.Go_power_supply_technology = 0
+    self.Go_present = false
+    self.Go_cell_voltage = []float32{}
+    self.Go_location = ""
+    self.Go_serial_number = ""
 }
 
 func (self *BatteryState) Go_serialize(buff []byte) (int) {
@@ -90,7 +108,11 @@ func (self *BatteryState) Go_serialize(buff []byte) (int) {
     offset += 1
     buff[offset + 0] = byte((self.Go_power_supply_technology >> (8 * 0)) & 0xFF)
     offset += 1
-    buff[offset + 0] = byte((self.Go_present >> (8 * 0)) & 0xFF)
+    if self.Go_present {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_cell_voltage := len(self.Go_cell_voltage)
     buff[offset + 0] = byte((length_cell_voltage >> (8 * 0)) & 0xFF)
@@ -143,18 +165,22 @@ func (self *BatteryState) Go_deserialize(buff []byte) (int) {
     bits_percentage := binary.LittleEndian.Uint32(buff[offset:])
     self.Go_percentage = math.Float32frombits(bits_percentage)
     offset += 4
-    self.Go_power_supply_status = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_power_supply_status = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    self.Go_power_supply_health = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_power_supply_health = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    self.Go_power_supply_technology = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_power_supply_technology = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    self.Go_present = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_present = true
+    } else {
+        self.Go_present = false
+    }
     offset += 1
-    length_cell_voltage := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_cell_voltage |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_cell_voltage |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_cell_voltage |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_cell_voltage := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_cell_voltage |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_cell_voltage |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_cell_voltage |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_cell_voltage = make([]float32, length_cell_voltage, length_cell_voltage)
     for i := 0; i < length_cell_voltage; i++ {
@@ -162,17 +188,17 @@ func (self *BatteryState) Go_deserialize(buff []byte) (int) {
         self.Go_cell_voltage[i] = math.Float32frombits(bits_cell_voltagei)
         offset += 4
     }
-    length_location := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_location |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_location |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_location |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_location := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_location |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_location |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_location |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_location = string(buff[offset:(offset+length_location)])
     offset += length_location
-    length_serial_number := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_serial_number |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_serial_number |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_serial_number |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_serial_number := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_serial_number |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_serial_number |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_serial_number |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_serial_number = string(buff[offset:(offset+length_serial_number)])
     offset += length_serial_number

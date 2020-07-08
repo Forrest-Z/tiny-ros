@@ -1,8 +1,9 @@
 package map_msgs
 
 import (
-    "sensor_msgs/PointCloud2"
+    "tiny_ros/sensor_msgs"
 )
+
 
 
 type GetPointMapRequest struct {
@@ -13,6 +14,10 @@ func NewGetPointMapRequest() (*GetPointMapRequest) {
     newGetPointMapRequest := new(GetPointMapRequest)
     newGetPointMapRequest.__id__ = 0
     return newGetPointMapRequest
+}
+
+func (self *GetPointMapRequest) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *GetPointMapRequest) Go_serialize(buff []byte) (int) {
@@ -27,10 +32,10 @@ func (self *GetPointMapRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetPointMapRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -49,9 +54,10 @@ func (self *GetPointMapRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type GetPointMapResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_map sensor_msgs.PointCloud2 `json:"map"`
+    Go_map *sensor_msgs.PointCloud2 `json:"map"`
 }
 
 func NewGetPointMapResponse() (*GetPointMapResponse) {
@@ -59,6 +65,11 @@ func NewGetPointMapResponse() (*GetPointMapResponse) {
     newGetPointMapResponse.Go_map = sensor_msgs.NewPointCloud2()
     newGetPointMapResponse.__id__ = 0
     return newGetPointMapResponse
+}
+
+func (self *GetPointMapResponse) Go_initialize() {
+    self.Go_map = sensor_msgs.NewPointCloud2()
+    self.__id__ = 0
 }
 
 func (self *GetPointMapResponse) Go_serialize(buff []byte) (int) {
@@ -74,10 +85,10 @@ func (self *GetPointMapResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetPointMapResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_map.Go_deserialize(buff[offset:])
     return offset

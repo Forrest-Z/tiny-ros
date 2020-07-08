@@ -1,20 +1,24 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Vector3"
-    "geometry_msgs/Quaternion"
 )
 
+
 type Transform struct {
-    Go_translation geometry_msgs.Vector3 `json:"translation"`
-    Go_rotation geometry_msgs.Quaternion `json:"rotation"`
+    Go_translation *Vector3 `json:"translation"`
+    Go_rotation *Quaternion `json:"rotation"`
 }
 
 func NewTransform() (*Transform) {
     newTransform := new(Transform)
-    newTransform.Go_translation = geometry_msgs.NewVector3()
-    newTransform.Go_rotation = geometry_msgs.NewQuaternion()
+    newTransform.Go_translation = NewVector3()
+    newTransform.Go_rotation = NewQuaternion()
     return newTransform
+}
+
+func (self *Transform) Go_initialize() {
+    self.Go_translation = NewVector3()
+    self.Go_rotation = NewQuaternion()
 }
 
 func (self *Transform) Go_serialize(buff []byte) (int) {

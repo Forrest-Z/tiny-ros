@@ -1,23 +1,27 @@
 package nav_msgs
 
 import (
-    "nav_msgs/GetMapActionGoal"
-    "nav_msgs/GetMapActionResult"
-    "nav_msgs/GetMapActionFeedback"
 )
 
+
 type GetMapAction struct {
-    Go_action_goal nav_msgs.GetMapActionGoal `json:"action_goal"`
-    Go_action_result nav_msgs.GetMapActionResult `json:"action_result"`
-    Go_action_feedback nav_msgs.GetMapActionFeedback `json:"action_feedback"`
+    Go_action_goal *GetMapActionGoal `json:"action_goal"`
+    Go_action_result *GetMapActionResult `json:"action_result"`
+    Go_action_feedback *GetMapActionFeedback `json:"action_feedback"`
 }
 
 func NewGetMapAction() (*GetMapAction) {
     newGetMapAction := new(GetMapAction)
-    newGetMapAction.Go_action_goal = nav_msgs.NewGetMapActionGoal()
-    newGetMapAction.Go_action_result = nav_msgs.NewGetMapActionResult()
-    newGetMapAction.Go_action_feedback = nav_msgs.NewGetMapActionFeedback()
+    newGetMapAction.Go_action_goal = NewGetMapActionGoal()
+    newGetMapAction.Go_action_result = NewGetMapActionResult()
+    newGetMapAction.Go_action_feedback = NewGetMapActionFeedback()
     return newGetMapAction
+}
+
+func (self *GetMapAction) Go_initialize() {
+    self.Go_action_goal = NewGetMapActionGoal()
+    self.Go_action_result = NewGetMapActionResult()
+    self.Go_action_feedback = NewGetMapActionFeedback()
 }
 
 func (self *GetMapAction) Go_serialize(buff []byte) (int) {

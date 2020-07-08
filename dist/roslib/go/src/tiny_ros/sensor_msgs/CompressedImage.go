@@ -4,8 +4,9 @@ import (
     "tiny_ros/std_msgs"
 )
 
+
 type CompressedImage struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_format string `json:"format"`
     Go_data []uint8 `json:"data"`
 }
@@ -16,6 +17,12 @@ func NewCompressedImage() (*CompressedImage) {
     newCompressedImage.Go_format = ""
     newCompressedImage.Go_data = []uint8{}
     return newCompressedImage
+}
+
+func (self *CompressedImage) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_format = ""
+    self.Go_data = []uint8{}
 }
 
 func (self *CompressedImage) Go_serialize(buff []byte) (int) {
@@ -45,21 +52,21 @@ func (self *CompressedImage) Go_serialize(buff []byte) (int) {
 func (self *CompressedImage) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_format := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_format |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_format |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_format |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_format := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_format |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_format |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_format |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_format = string(buff[offset:(offset+length_format)])
     offset += length_format
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]uint8, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+        self.Go_data[i] = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
         offset += 1
     }
     return offset

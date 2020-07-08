@@ -6,6 +6,7 @@ import (
 )
 
 
+
 type GetWorldPropertiesRequest struct {
     __id__ uint32 `json:"__id__"`
 }
@@ -14,6 +15,10 @@ func NewGetWorldPropertiesRequest() (*GetWorldPropertiesRequest) {
     newGetWorldPropertiesRequest := new(GetWorldPropertiesRequest)
     newGetWorldPropertiesRequest.__id__ = 0
     return newGetWorldPropertiesRequest
+}
+
+func (self *GetWorldPropertiesRequest) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *GetWorldPropertiesRequest) Go_serialize(buff []byte) (int) {
@@ -28,10 +33,10 @@ func (self *GetWorldPropertiesRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetWorldPropertiesRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -49,6 +54,7 @@ func (self *GetWorldPropertiesRequest) Go_setID(id uint32) { self.__id__ = id }
 
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 type GetWorldPropertiesResponse struct {
     __id__ uint32 `json:"__id__"`
@@ -68,6 +74,15 @@ func NewGetWorldPropertiesResponse() (*GetWorldPropertiesResponse) {
     newGetWorldPropertiesResponse.Go_status_message = ""
     newGetWorldPropertiesResponse.__id__ = 0
     return newGetWorldPropertiesResponse
+}
+
+func (self *GetWorldPropertiesResponse) Go_initialize() {
+    self.Go_sim_time = 0.0
+    self.Go_model_names = []string{}
+    self.Go_rendering_enabled = false
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
 }
 
 func (self *GetWorldPropertiesResponse) Go_serialize(buff []byte) (int) {
@@ -96,9 +111,17 @@ func (self *GetWorldPropertiesResponse) Go_serialize(buff []byte) (int) {
         copy(buff[offset:(offset+length_model_namesi)], self.Go_model_names[i])
         offset += length_model_namesi
     }
-    buff[offset + 0] = byte((self.Go_rendering_enabled >> (8 * 0)) & 0xFF)
+    if self.Go_rendering_enabled {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -113,37 +136,45 @@ func (self *GetWorldPropertiesResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetWorldPropertiesResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     bits_sim_time := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_sim_time = math.Float64frombits(bits_sim_time)
     offset += 8
-    length_model_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_model_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_model_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_model_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_model_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_model_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_model_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_model_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_model_names = make([]string, length_model_names, length_model_names)
     for i := 0; i < length_model_names; i++ {
-        length_model_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_model_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_model_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_model_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_model_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_model_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_model_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_model_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_model_names[i] = string(buff[offset:(offset+length_model_namesi)])
         offset += length_model_namesi
     }
-    self.Go_rendering_enabled = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_rendering_enabled = true
+    } else {
+        self.Go_rendering_enabled = false
+    }
     offset += 1
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

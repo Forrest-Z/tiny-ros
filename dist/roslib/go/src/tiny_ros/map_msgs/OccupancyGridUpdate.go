@@ -4,8 +4,9 @@ import (
     "tiny_ros/std_msgs"
 )
 
+
 type OccupancyGridUpdate struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_x int32 `json:"x"`
     Go_y int32 `json:"y"`
     Go_width uint32 `json:"width"`
@@ -22,6 +23,15 @@ func NewOccupancyGridUpdate() (*OccupancyGridUpdate) {
     newOccupancyGridUpdate.Go_height = 0
     newOccupancyGridUpdate.Go_data = []int8{}
     return newOccupancyGridUpdate
+}
+
+func (self *OccupancyGridUpdate) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_x = 0
+    self.Go_y = 0
+    self.Go_width = 0
+    self.Go_height = 0
+    self.Go_data = []int8{}
 }
 
 func (self *OccupancyGridUpdate) Go_serialize(buff []byte) (int) {
@@ -54,7 +64,7 @@ func (self *OccupancyGridUpdate) Go_serialize(buff []byte) (int) {
     buff[offset + 3] = byte((length_data >> (8 * 3)) & 0xFF)
     offset += 4
     for i := 0; i < length_data; i++ {
-        buff[offset + 0] = byte((self.Go_data[i] >> (8 * 0)) & 0xFF)
+        buff[offset + 0] = byte(uint8(self.Go_data[i] >> (8 * 0)) & 0xFF)
         offset += 1
     }
     return offset
@@ -63,34 +73,34 @@ func (self *OccupancyGridUpdate) Go_serialize(buff []byte) (int) {
 func (self *OccupancyGridUpdate) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    self.Go_x = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_x |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_x |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_x |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_x = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_x |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_x |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_x |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_y = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_y |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_y |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_y |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_y = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_y |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_y |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_y |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_width = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_width |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_width |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_width |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_width = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_width |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_width |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_width |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_height = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_height |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_height |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_height |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_height = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_height |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_height |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_height |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]int8, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = int8((buff[offset + 0] & 0xFF) << (8 * 0))
+        self.Go_data[i] = int8(buff[offset + 0] & 0xFF) << (8 * 0)
         offset += 1
     }
     return offset

@@ -1,5 +1,5 @@
 # tiny-ros
-微小分布式操作系统，支持Windows、RTThread、Windows、Ubuntu、MacOS或无操作系统。支持编程语言C/C++、Java、Python
+微小分布式操作系统，支持Windows、Linux、MacOS、Android、MCU RTThread或无操作系统。分布式应用的开发支持C/C++、Java、Python、Go编程语言。
 
 ![](doc/tinyros.png)
 ![](doc/demo.gif)
@@ -133,6 +133,37 @@ if __name__ == '__main__':
     main()
 ```
 
+#### 4、Go实现：ExamplePublisher
+
+```go
+package main
+
+import (
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func main() {
+    tinyros.Go_init("127.0.0.1")
+    
+    pub := tinyros.NewPublisher("tinyros_hello", tinyros_hello.NewTinyrosHello())
+    
+    if true {
+        tinyros.Go_nh().Go_advertise(pub)
+    } else {
+        tinyros.Go_udp().Go_advertise(pub)
+    }
+    
+    for {
+        msg := tinyros_hello.NewTinyrosHello()
+        msg.Go_hello = "Hello, tiny-ros ^_^"
+        pub.Go_publish(msg)
+        time.Sleep(1 * time.Second)
+    }
+}
+```
+
 
 
 ## 例子：ExampleSubscriber
@@ -223,6 +254,40 @@ if __name__ == '__main__':
     main()
 ```
 
+#### 4、Go实现：ExampleSubscriber
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func subscriber_cb(msg tinyros.Msg) {
+    tmsg := msg.(*tinyros_hello.TinyrosHello)
+    fmt.Println(tmsg.Go_hello)
+}
+
+func main() {
+    tinyros.Go_init("127.0.0.1")
+
+    sub := tinyros.NewSubscriber("tinyros_hello", subscriber_cb, tinyros_hello.NewTinyrosHello())
+
+    if true {
+        tinyros.Go_nh().Go_subscribe(sub)
+    } else {
+        tinyros.Go_udp().Go_subscribe(sub)
+    }
+    
+    for {
+        time.Sleep(10 * time.Second)
+    }
+}
+```
+
 
 
 ## 例子：ExampleService
@@ -303,6 +368,35 @@ def main():
 
 if __name__ == '__main__':
     main()
+```
+
+#### 4、Go实现：ExampleService
+
+```go
+package main
+
+import (
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func service_cb(req tinyros.Msg, resp tinyros.Msg) {
+    tresp := resp.(*tinyros_hello.TestResponse)
+    tresp.Go_output = "Hello, tiny-ros ^_^"
+}
+
+func main() {
+    tinyros.Go_init("127.0.0.1")
+    
+    server := tinyros.NewServiceServer("test_srv", service_cb, tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
+
+    tinyros.Go_nh().Go_advertiseService(server)
+    
+    for {
+        time.Sleep(10 * time.Second)
+    }
+}
 ```
 
 
@@ -395,6 +489,39 @@ def main():
 
 if __name__ == '__main__':
     main()
+```
+
+#### 4、Go实现：ExampleServiceClient
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func main() {
+    tinyros.Go_init("127.0.0.1")
+    
+    client := tinyros.NewServiceClient("test_srv", tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
+
+    tinyros.Go_nh().Go_serviceClient(client)
+
+    for {
+        req := tinyros_hello.NewTestRequest()
+        resp := tinyros_hello.NewTestResponse()
+        req.Go_input = "hello world!"
+        if client.Go_call(req, resp) {
+            fmt.Println("Service responsed with\"", resp.Go_output, "\"")
+        } else {
+            fmt.Println("Service call failed.")
+        }
+        time.Sleep(time.Second)
+    }
+}
 ```
 
 

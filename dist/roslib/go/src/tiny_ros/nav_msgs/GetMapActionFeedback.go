@@ -2,22 +2,28 @@ package nav_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "actionlib_msgs/GoalStatus"
-    "nav_msgs/GetMapFeedback"
+    "tiny_ros/actionlib_msgs"
 )
 
+
 type GetMapActionFeedback struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status actionlib_msgs.GoalStatus `json:"status"`
-    Go_feedback nav_msgs.GetMapFeedback `json:"feedback"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status *actionlib_msgs.GoalStatus `json:"status"`
+    Go_feedback *GetMapFeedback `json:"feedback"`
 }
 
 func NewGetMapActionFeedback() (*GetMapActionFeedback) {
     newGetMapActionFeedback := new(GetMapActionFeedback)
     newGetMapActionFeedback.Go_header = std_msgs.NewHeader()
     newGetMapActionFeedback.Go_status = actionlib_msgs.NewGoalStatus()
-    newGetMapActionFeedback.Go_feedback = nav_msgs.NewGetMapFeedback()
+    newGetMapActionFeedback.Go_feedback = NewGetMapFeedback()
     return newGetMapActionFeedback
+}
+
+func (self *GetMapActionFeedback) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = actionlib_msgs.NewGoalStatus()
+    self.Go_feedback = NewGetMapFeedback()
 }
 
 func (self *GetMapActionFeedback) Go_serialize(buff []byte) (int) {

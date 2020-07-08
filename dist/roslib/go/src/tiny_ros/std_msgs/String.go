@@ -3,6 +3,7 @@ package std_msgs
 import (
 )
 
+
 type String struct {
     Go_data string `json:"data"`
 }
@@ -11,6 +12,10 @@ func NewString() (*String) {
     newString := new(String)
     newString.Go_data = ""
     return newString
+}
+
+func (self *String) Go_initialize() {
+    self.Go_data = ""
 }
 
 func (self *String) Go_serialize(buff []byte) (int) {
@@ -28,10 +33,10 @@ func (self *String) Go_serialize(buff []byte) (int) {
 
 func (self *String) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = string(buff[offset:(offset+length_data)])
     offset += length_data

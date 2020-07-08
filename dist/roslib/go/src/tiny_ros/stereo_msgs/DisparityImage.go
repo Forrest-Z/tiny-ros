@@ -2,18 +2,18 @@ package stereo_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "sensor_msgs/Image"
+    "tiny_ros/sensor_msgs"
     "encoding/binary"
     "math"
-    "sensor_msgs/RegionOfInterest"
 )
 
+
 type DisparityImage struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_image sensor_msgs.Image `json:"image"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_image *sensor_msgs.Image `json:"image"`
     Go_f float32 `json:"f"`
     Go_T float32 `json:"T"`
-    Go_valid_window sensor_msgs.RegionOfInterest `json:"valid_window"`
+    Go_valid_window *sensor_msgs.RegionOfInterest `json:"valid_window"`
     Go_min_disparity float32 `json:"min_disparity"`
     Go_max_disparity float32 `json:"max_disparity"`
     Go_delta_d float32 `json:"delta_d"`
@@ -30,6 +30,17 @@ func NewDisparityImage() (*DisparityImage) {
     newDisparityImage.Go_max_disparity = 0.0
     newDisparityImage.Go_delta_d = 0.0
     return newDisparityImage
+}
+
+func (self *DisparityImage) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_image = sensor_msgs.NewImage()
+    self.Go_f = 0.0
+    self.Go_T = 0.0
+    self.Go_valid_window = sensor_msgs.NewRegionOfInterest()
+    self.Go_min_disparity = 0.0
+    self.Go_max_disparity = 0.0
+    self.Go_delta_d = 0.0
 }
 
 func (self *DisparityImage) Go_serialize(buff []byte) (int) {

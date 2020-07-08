@@ -2,22 +2,28 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Point32"
-    "sensor_msgs/ChannelFloat32"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type PointCloud struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_points []geometry_msgs.Point32 `json:"points"`
-    Go_channels []sensor_msgs.ChannelFloat32 `json:"channels"`
+    Go_channels []ChannelFloat32 `json:"channels"`
 }
 
 func NewPointCloud() (*PointCloud) {
     newPointCloud := new(PointCloud)
     newPointCloud.Go_header = std_msgs.NewHeader()
     newPointCloud.Go_points = []geometry_msgs.Point32{}
-    newPointCloud.Go_channels = []sensor_msgs.ChannelFloat32{}
+    newPointCloud.Go_channels = []ChannelFloat32{}
     return newPointCloud
+}
+
+func (self *PointCloud) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_points = []geometry_msgs.Point32{}
+    self.Go_channels = []ChannelFloat32{}
 }
 
 func (self *PointCloud) Go_serialize(buff []byte) (int) {
@@ -47,21 +53,21 @@ func (self *PointCloud) Go_serialize(buff []byte) (int) {
 func (self *PointCloud) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_points := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_points |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_points |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_points |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_points := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_points |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_points |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_points |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_points = make([]geometry_msgs.Point32, length_points, length_points)
     for i := 0; i < length_points; i++ {
         offset += self.Go_points[i].Go_deserialize(buff[offset:])
     }
-    length_channels := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_channels |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_channels |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_channels |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_channels := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_channels |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_channels |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_channels |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_channels = make([]sensor_msgs.ChannelFloat32, length_channels, length_channels)
+    self.Go_channels = make([]ChannelFloat32, length_channels, length_channels)
     for i := 0; i < length_channels; i++ {
         offset += self.Go_channels[i].Go_deserialize(buff[offset:])
     }

@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type JointState struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_name []string `json:"name"`
     Go_position []float64 `json:"position"`
     Go_velocity []float64 `json:"velocity"`
@@ -22,6 +23,14 @@ func NewJointState() (*JointState) {
     newJointState.Go_velocity = []float64{}
     newJointState.Go_effort = []float64{}
     return newJointState
+}
+
+func (self *JointState) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_name = []string{}
+    self.Go_position = []float64{}
+    self.Go_velocity = []float64{}
+    self.Go_effort = []float64{}
 }
 
 func (self *JointState) Go_serialize(buff []byte) (int) {
@@ -82,25 +91,25 @@ func (self *JointState) Go_serialize(buff []byte) (int) {
 func (self *JointState) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_name = make([]string, length_name, length_name)
     for i := 0; i < length_name; i++ {
-        length_namei := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_namei |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_namei |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_namei |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_namei |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_namei |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_name[i] = string(buff[offset:(offset+length_namei)])
         offset += length_namei
     }
-    length_position := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_position |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_position |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_position |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_position := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_position |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_position |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_position |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_position = make([]float64, length_position, length_position)
     for i := 0; i < length_position; i++ {
@@ -108,10 +117,10 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
         self.Go_position[i] = math.Float64frombits(bits_positioni)
         offset += 8
     }
-    length_velocity := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_velocity |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_velocity |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_velocity |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_velocity := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_velocity |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_velocity |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_velocity |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_velocity = make([]float64, length_velocity, length_velocity)
     for i := 0; i < length_velocity; i++ {
@@ -119,10 +128,10 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
         self.Go_velocity[i] = math.Float64frombits(bits_velocityi)
         offset += 8
     }
-    length_effort := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_effort |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_effort |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_effort |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_effort := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_effort |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_effort |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_effort |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_effort = make([]float64, length_effort, length_effort)
     for i := 0; i < length_effort; i++ {

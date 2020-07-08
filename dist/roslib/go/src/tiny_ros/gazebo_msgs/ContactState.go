@@ -1,18 +1,18 @@
 package gazebo_msgs
 
 import (
-    "geometry_msgs/Wrench"
-    "geometry_msgs/Vector3"
+    "tiny_ros/geometry_msgs"
     "encoding/binary"
     "math"
 )
+
 
 type ContactState struct {
     Go_info string `json:"info"`
     Go_collision1_name string `json:"collision1_name"`
     Go_collision2_name string `json:"collision2_name"`
     Go_wrenches []geometry_msgs.Wrench `json:"wrenches"`
-    Go_total_wrench geometry_msgs.Wrench `json:"total_wrench"`
+    Go_total_wrench *geometry_msgs.Wrench `json:"total_wrench"`
     Go_contact_positions []geometry_msgs.Vector3 `json:"contact_positions"`
     Go_contact_normals []geometry_msgs.Vector3 `json:"contact_normals"`
     Go_depths []float64 `json:"depths"`
@@ -29,6 +29,17 @@ func NewContactState() (*ContactState) {
     newContactState.Go_contact_normals = []geometry_msgs.Vector3{}
     newContactState.Go_depths = []float64{}
     return newContactState
+}
+
+func (self *ContactState) Go_initialize() {
+    self.Go_info = ""
+    self.Go_collision1_name = ""
+    self.Go_collision2_name = ""
+    self.Go_wrenches = []geometry_msgs.Wrench{}
+    self.Go_total_wrench = geometry_msgs.NewWrench()
+    self.Go_contact_positions = []geometry_msgs.Vector3{}
+    self.Go_contact_normals = []geometry_msgs.Vector3{}
+    self.Go_depths = []float64{}
 }
 
 func (self *ContactState) Go_serialize(buff []byte) (int) {
@@ -101,59 +112,59 @@ func (self *ContactState) Go_serialize(buff []byte) (int) {
 
 func (self *ContactState) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_info := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_info |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_info |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_info |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_info := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_info |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_info |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_info |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_info = string(buff[offset:(offset+length_info)])
     offset += length_info
-    length_collision1_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_collision1_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_collision1_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_collision1_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_collision1_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_collision1_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_collision1_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_collision1_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_collision1_name = string(buff[offset:(offset+length_collision1_name)])
     offset += length_collision1_name
-    length_collision2_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_collision2_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_collision2_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_collision2_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_collision2_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_collision2_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_collision2_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_collision2_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_collision2_name = string(buff[offset:(offset+length_collision2_name)])
     offset += length_collision2_name
-    length_wrenches := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_wrenches |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_wrenches |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_wrenches |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_wrenches := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_wrenches |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_wrenches |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_wrenches |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_wrenches = make([]geometry_msgs.Wrench, length_wrenches, length_wrenches)
     for i := 0; i < length_wrenches; i++ {
         offset += self.Go_wrenches[i].Go_deserialize(buff[offset:])
     }
     offset += self.Go_total_wrench.Go_deserialize(buff[offset:])
-    length_contact_positions := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_contact_positions |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_contact_positions |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_contact_positions |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_contact_positions := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_contact_positions |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_contact_positions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_contact_positions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_contact_positions = make([]geometry_msgs.Vector3, length_contact_positions, length_contact_positions)
     for i := 0; i < length_contact_positions; i++ {
         offset += self.Go_contact_positions[i].Go_deserialize(buff[offset:])
     }
-    length_contact_normals := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_contact_normals |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_contact_normals |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_contact_normals |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_contact_normals := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_contact_normals |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_contact_normals |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_contact_normals |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_contact_normals = make([]geometry_msgs.Vector3, length_contact_normals, length_contact_normals)
     for i := 0; i < length_contact_normals; i++ {
         offset += self.Go_contact_normals[i].Go_deserialize(buff[offset:])
     }
-    length_depths := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_depths |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_depths |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_depths |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_depths := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_depths |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_depths |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_depths |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_depths = make([]float64, length_depths, length_depths)
     for i := 0; i < length_depths; i++ {

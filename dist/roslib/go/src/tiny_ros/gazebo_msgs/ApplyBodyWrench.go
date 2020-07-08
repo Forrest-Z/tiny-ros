@@ -1,20 +1,20 @@
 package gazebo_msgs
 
 import (
-    "tiny_ros/tinyros"
-    "geometry_msgs/Wrench"
-    "geometry_msgs/Point"
+    "tiny_ros/tinyros/time"
+    "tiny_ros/geometry_msgs"
 )
+
 
 
 type ApplyBodyWrenchRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_body_name string `json:"body_name"`
     Go_reference_frame string `json:"reference_frame"`
-    Go_reference_point geometry_msgs.Point `json:"reference_point"`
-    Go_wrench geometry_msgs.Wrench `json:"wrench"`
-    Go_start_time tinyros.Time `json:"start_time"`
-    Go_duration tinyros.Duration `json:"duration"`
+    Go_reference_point *geometry_msgs.Point `json:"reference_point"`
+    Go_wrench *geometry_msgs.Wrench `json:"wrench"`
+    Go_start_time *tinyros.Time `json:"start_time"`
+    Go_duration *tinyros.Duration `json:"duration"`
 }
 
 func NewApplyBodyWrenchRequest() (*ApplyBodyWrenchRequest) {
@@ -27,6 +27,16 @@ func NewApplyBodyWrenchRequest() (*ApplyBodyWrenchRequest) {
     newApplyBodyWrenchRequest.Go_duration = tinyros.NewDuration()
     newApplyBodyWrenchRequest.__id__ = 0
     return newApplyBodyWrenchRequest
+}
+
+func (self *ApplyBodyWrenchRequest) Go_initialize() {
+    self.Go_body_name = ""
+    self.Go_reference_frame = ""
+    self.Go_reference_point = geometry_msgs.NewPoint()
+    self.Go_wrench = geometry_msgs.NewWrench()
+    self.Go_start_time = tinyros.NewTime()
+    self.Go_duration = tinyros.NewDuration()
+    self.__id__ = 0
 }
 
 func (self *ApplyBodyWrenchRequest) Go_serialize(buff []byte) (int) {
@@ -79,46 +89,46 @@ func (self *ApplyBodyWrenchRequest) Go_serialize(buff []byte) (int) {
 
 func (self *ApplyBodyWrenchRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_body_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_body_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_body_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_body_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_body_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_body_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_body_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_body_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_body_name = string(buff[offset:(offset+length_body_name)])
     offset += length_body_name
-    length_reference_frame := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_reference_frame |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_reference_frame |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_reference_frame |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_reference_frame := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_reference_frame |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_reference_frame |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_reference_frame |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_reference_frame = string(buff[offset:(offset+length_reference_frame)])
     offset += length_reference_frame
     offset += self.Go_reference_point.Go_deserialize(buff[offset:])
     offset += self.Go_wrench.Go_deserialize(buff[offset:])
-    self.Go_start_time.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_start_time.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_start_time.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_start_time.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_start_time.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_start_time.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_start_time.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_start_time.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_start_time.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_start_time.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_start_time.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_start_time.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_start_time.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_start_time.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_start_time.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_start_time.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_duration.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_duration.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_duration.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_duration.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_duration.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_duration.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_duration.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_duration.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_duration.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_duration.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_duration.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_duration.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_duration.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_duration.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_duration.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_duration.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -149,6 +159,7 @@ func (self *ApplyBodyWrenchRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type ApplyBodyWrenchResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_success bool `json:"success"`
@@ -163,6 +174,12 @@ func NewApplyBodyWrenchResponse() (*ApplyBodyWrenchResponse) {
     return newApplyBodyWrenchResponse
 }
 
+func (self *ApplyBodyWrenchResponse) Go_initialize() {
+    self.Go_success = false
+    self.Go_status_message = ""
+    self.__id__ = 0
+}
+
 func (self *ApplyBodyWrenchResponse) Go_serialize(buff []byte) (int) {
     offset := 0
     buff[offset + 0] = byte((self.__id__ >> (8 * 0)) & 0xFF)
@@ -170,7 +187,11 @@ func (self *ApplyBodyWrenchResponse) Go_serialize(buff []byte) (int) {
     buff[offset + 2] = byte((self.__id__ >> (8 * 2)) & 0xFF)
     buff[offset + 3] = byte((self.__id__ >> (8 * 3)) & 0xFF)
     offset += 4
-    buff[offset + 0] = byte((self.Go_success >> (8 * 0)) & 0xFF)
+    if self.Go_success {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     length_status_message := len(self.Go_status_message)
     buff[offset + 0] = byte((length_status_message >> (8 * 0)) & 0xFF)
@@ -185,17 +206,21 @@ func (self *ApplyBodyWrenchResponse) Go_serialize(buff []byte) (int) {
 
 func (self *ApplyBodyWrenchResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_success = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_success = true
+    } else {
+        self.Go_success = false
+    }
     offset += 1
-    length_status_message := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_status_message |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_status_message |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_status_message |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_status_message := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_status_message |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_status_message |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_status_message |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_status_message = string(buff[offset:(offset+length_status_message)])
     offset += length_status_message

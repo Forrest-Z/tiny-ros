@@ -3,23 +3,29 @@ package tf2_msgs
 import (
 )
 
+func Go_NO_ERROR() (uint8) { return  0 }
+func Go_LOOKUP_ERROR() (uint8) { return  1 }
+func Go_CONNECTIVITY_ERROR() (uint8) { return  2 }
+func Go_EXTRAPOLATION_ERROR() (uint8) { return  3 }
+func Go_INVALID_ARGUMENT_ERROR() (uint8) { return  4 }
+func Go_TIMEOUT_ERROR() (uint8) { return  5 }
+func Go_TRANSFORM_ERROR() (uint8) { return  6 }
+
 type TF2Error struct {
     Go_error uint8 `json:"error"`
     Go_error_string string `json:"error_string"`
 }
 
-func (self *TF2Error) Go_NO_ERROR() (uint8) { return  0 }
-func (self *TF2Error) Go_LOOKUP_ERROR() (uint8) { return  1 }
-func (self *TF2Error) Go_CONNECTIVITY_ERROR() (uint8) { return  2 }
-func (self *TF2Error) Go_EXTRAPOLATION_ERROR() (uint8) { return  3 }
-func (self *TF2Error) Go_INVALID_ARGUMENT_ERROR() (uint8) { return  4 }
-func (self *TF2Error) Go_TIMEOUT_ERROR() (uint8) { return  5 }
-func (self *TF2Error) Go_TRANSFORM_ERROR() (uint8) { return  6 }
 func NewTF2Error() (*TF2Error) {
     newTF2Error := new(TF2Error)
     newTF2Error.Go_error = 0
     newTF2Error.Go_error_string = ""
     return newTF2Error
+}
+
+func (self *TF2Error) Go_initialize() {
+    self.Go_error = 0
+    self.Go_error_string = ""
 }
 
 func (self *TF2Error) Go_serialize(buff []byte) (int) {
@@ -39,12 +45,12 @@ func (self *TF2Error) Go_serialize(buff []byte) (int) {
 
 func (self *TF2Error) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_error = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_error = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_error_string := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_error_string |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_error_string |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_error_string |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_error_string := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_error_string |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_error_string |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_error_string |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_error_string = string(buff[offset:(offset+length_error_string)])
     offset += length_error_string

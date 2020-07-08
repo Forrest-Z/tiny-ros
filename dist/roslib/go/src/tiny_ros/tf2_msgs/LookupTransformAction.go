@@ -1,23 +1,27 @@
 package tf2_msgs
 
 import (
-    "tf2_msgs/LookupTransformActionGoal"
-    "tf2_msgs/LookupTransformActionResult"
-    "tf2_msgs/LookupTransformActionFeedback"
 )
 
+
 type LookupTransformAction struct {
-    Go_action_goal tf2_msgs.LookupTransformActionGoal `json:"action_goal"`
-    Go_action_result tf2_msgs.LookupTransformActionResult `json:"action_result"`
-    Go_action_feedback tf2_msgs.LookupTransformActionFeedback `json:"action_feedback"`
+    Go_action_goal *LookupTransformActionGoal `json:"action_goal"`
+    Go_action_result *LookupTransformActionResult `json:"action_result"`
+    Go_action_feedback *LookupTransformActionFeedback `json:"action_feedback"`
 }
 
 func NewLookupTransformAction() (*LookupTransformAction) {
     newLookupTransformAction := new(LookupTransformAction)
-    newLookupTransformAction.Go_action_goal = tf2_msgs.NewLookupTransformActionGoal()
-    newLookupTransformAction.Go_action_result = tf2_msgs.NewLookupTransformActionResult()
-    newLookupTransformAction.Go_action_feedback = tf2_msgs.NewLookupTransformActionFeedback()
+    newLookupTransformAction.Go_action_goal = NewLookupTransformActionGoal()
+    newLookupTransformAction.Go_action_result = NewLookupTransformActionResult()
+    newLookupTransformAction.Go_action_feedback = NewLookupTransformActionFeedback()
     return newLookupTransformAction
+}
+
+func (self *LookupTransformAction) Go_initialize() {
+    self.Go_action_goal = NewLookupTransformActionGoal()
+    self.Go_action_result = NewLookupTransformActionResult()
+    self.Go_action_feedback = NewLookupTransformActionFeedback()
 }
 
 func (self *LookupTransformAction) Go_serialize(buff []byte) (int) {

@@ -1,16 +1,16 @@
 package trajectory_msgs
 
 import (
-    "geometry_msgs/Transform"
-    "geometry_msgs/Twist"
-    "tiny_ros/tinyros"
+    "tiny_ros/geometry_msgs"
+    "tiny_ros/tinyros/time"
 )
+
 
 type MultiDOFJointTrajectoryPoint struct {
     Go_transforms []geometry_msgs.Transform `json:"transforms"`
     Go_velocities []geometry_msgs.Twist `json:"velocities"`
     Go_accelerations []geometry_msgs.Twist `json:"accelerations"`
-    Go_time_from_start tinyros.Duration `json:"time_from_start"`
+    Go_time_from_start *tinyros.Duration `json:"time_from_start"`
 }
 
 func NewMultiDOFJointTrajectoryPoint() (*MultiDOFJointTrajectoryPoint) {
@@ -20,6 +20,13 @@ func NewMultiDOFJointTrajectoryPoint() (*MultiDOFJointTrajectoryPoint) {
     newMultiDOFJointTrajectoryPoint.Go_accelerations = []geometry_msgs.Twist{}
     newMultiDOFJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
     return newMultiDOFJointTrajectoryPoint
+}
+
+func (self *MultiDOFJointTrajectoryPoint) Go_initialize() {
+    self.Go_transforms = []geometry_msgs.Transform{}
+    self.Go_velocities = []geometry_msgs.Twist{}
+    self.Go_accelerations = []geometry_msgs.Twist{}
+    self.Go_time_from_start = tinyros.NewDuration()
 }
 
 func (self *MultiDOFJointTrajectoryPoint) Go_serialize(buff []byte) (int) {
@@ -66,42 +73,42 @@ func (self *MultiDOFJointTrajectoryPoint) Go_serialize(buff []byte) (int) {
 
 func (self *MultiDOFJointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_transforms := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_transforms |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_transforms |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_transforms |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_transforms := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_transforms |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_transforms |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_transforms |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_transforms = make([]geometry_msgs.Transform, length_transforms, length_transforms)
     for i := 0; i < length_transforms; i++ {
         offset += self.Go_transforms[i].Go_deserialize(buff[offset:])
     }
-    length_velocities := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_velocities |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_velocities |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_velocities |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_velocities := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_velocities |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_velocities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_velocities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_velocities = make([]geometry_msgs.Twist, length_velocities, length_velocities)
     for i := 0; i < length_velocities; i++ {
         offset += self.Go_velocities[i].Go_deserialize(buff[offset:])
     }
-    length_accelerations := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_accelerations |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_accelerations |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_accelerations |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_accelerations := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_accelerations |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_accelerations |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_accelerations |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_accelerations = make([]geometry_msgs.Twist, length_accelerations, length_accelerations)
     for i := 0; i < length_accelerations; i++ {
         offset += self.Go_accelerations[i].Go_deserialize(buff[offset:])
     }
-    self.Go_time_from_start.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_from_start.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_time_from_start.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_from_start.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

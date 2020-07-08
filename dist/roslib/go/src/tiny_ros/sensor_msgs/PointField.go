@@ -3,6 +3,15 @@ package sensor_msgs
 import (
 )
 
+func Go_INT8() (uint8) { return  1 }
+func Go_UINT8() (uint8) { return  2 }
+func Go_INT16() (uint8) { return  3 }
+func Go_UINT16() (uint8) { return  4 }
+func Go_INT32() (uint8) { return  5 }
+func Go_UINT32() (uint8) { return  6 }
+func Go_FLOAT32() (uint8) { return  7 }
+func Go_FLOAT64() (uint8) { return  8 }
+
 type PointField struct {
     Go_name string `json:"name"`
     Go_offset uint32 `json:"offset"`
@@ -10,14 +19,6 @@ type PointField struct {
     Go_count uint32 `json:"count"`
 }
 
-func (self *PointField) Go_INT8() (uint8) { return  1 }
-func (self *PointField) Go_UINT8() (uint8) { return  2 }
-func (self *PointField) Go_INT16() (uint8) { return  3 }
-func (self *PointField) Go_UINT16() (uint8) { return  4 }
-func (self *PointField) Go_INT32() (uint8) { return  5 }
-func (self *PointField) Go_UINT32() (uint8) { return  6 }
-func (self *PointField) Go_FLOAT32() (uint8) { return  7 }
-func (self *PointField) Go_FLOAT64() (uint8) { return  8 }
 func NewPointField() (*PointField) {
     newPointField := new(PointField)
     newPointField.Go_name = ""
@@ -25,6 +26,13 @@ func NewPointField() (*PointField) {
     newPointField.Go_datatype = 0
     newPointField.Go_count = 0
     return newPointField
+}
+
+func (self *PointField) Go_initialize() {
+    self.Go_name = ""
+    self.Go_offset = 0
+    self.Go_datatype = 0
+    self.Go_count = 0
 }
 
 func (self *PointField) Go_serialize(buff []byte) (int) {
@@ -54,24 +62,24 @@ func (self *PointField) Go_serialize(buff []byte) (int) {
 
 func (self *PointField) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_name = string(buff[offset:(offset+length_name)])
     offset += length_name
-    self.Go_offset = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_offset |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_offset |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_offset |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_offset = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_offset |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_offset |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_offset |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_datatype = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_datatype = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    self.Go_count = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_count |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_count |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_count |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_count = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_count |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_count |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_count |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

@@ -1,19 +1,24 @@
 package std_msgs
 
 import (
-    "std_msgs/MultiArrayLayout"
 )
 
+
 type UInt64MultiArray struct {
-    Go_layout std_msgs.MultiArrayLayout `json:"layout"`
+    Go_layout *MultiArrayLayout `json:"layout"`
     Go_data []uint64 `json:"data"`
 }
 
 func NewUInt64MultiArray() (*UInt64MultiArray) {
     newUInt64MultiArray := new(UInt64MultiArray)
-    newUInt64MultiArray.Go_layout = std_msgs.NewMultiArrayLayout()
+    newUInt64MultiArray.Go_layout = NewMultiArrayLayout()
     newUInt64MultiArray.Go_data = []uint64{}
     return newUInt64MultiArray
+}
+
+func (self *UInt64MultiArray) Go_initialize() {
+    self.Go_layout = NewMultiArrayLayout()
+    self.Go_data = []uint64{}
 }
 
 func (self *UInt64MultiArray) Go_serialize(buff []byte) (int) {
@@ -42,21 +47,21 @@ func (self *UInt64MultiArray) Go_serialize(buff []byte) (int) {
 func (self *UInt64MultiArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_layout.Go_deserialize(buff[offset:])
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]uint64, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = uint64((buff[offset + 0] & 0xFF) << (8 * 0))
-        self.Go_data[i] |= uint64((buff[offset + 1] & 0xFF) << (8 * 1))
-        self.Go_data[i] |= uint64((buff[offset + 2] & 0xFF) << (8 * 2))
-        self.Go_data[i] |= uint64((buff[offset + 3] & 0xFF) << (8 * 3))
-        self.Go_data[i] |= uint64((buff[offset + 4] & 0xFF) << (8 * 4))
-        self.Go_data[i] |= uint64((buff[offset + 5] & 0xFF) << (8 * 5))
-        self.Go_data[i] |= uint64((buff[offset + 6] & 0xFF) << (8 * 6))
-        self.Go_data[i] |= uint64((buff[offset + 7] & 0xFF) << (8 * 7))
+        self.Go_data[i] = uint64(buff[offset + 0] & 0xFF) << (8 * 0)
+        self.Go_data[i] |= uint64(buff[offset + 1] & 0xFF) << (8 * 1)
+        self.Go_data[i] |= uint64(buff[offset + 2] & 0xFF) << (8 * 2)
+        self.Go_data[i] |= uint64(buff[offset + 3] & 0xFF) << (8 * 3)
+        self.Go_data[i] |= uint64(buff[offset + 4] & 0xFF) << (8 * 4)
+        self.Go_data[i] |= uint64(buff[offset + 5] & 0xFF) << (8 * 5)
+        self.Go_data[i] |= uint64(buff[offset + 6] & 0xFF) << (8 * 6)
+        self.Go_data[i] |= uint64(buff[offset + 7] & 0xFF) << (8 * 7)
         offset += 8
     }
     return offset

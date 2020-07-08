@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Point"
 )
 
+
 type PointStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_point geometry_msgs.Point `json:"point"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_point *Point `json:"point"`
 }
 
 func NewPointStamped() (*PointStamped) {
     newPointStamped := new(PointStamped)
     newPointStamped.Go_header = std_msgs.NewHeader()
-    newPointStamped.Go_point = geometry_msgs.NewPoint()
+    newPointStamped.Go_point = NewPoint()
     return newPointStamped
+}
+
+func (self *PointStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_point = NewPoint()
 }
 
 func (self *PointStamped) Go_serialize(buff []byte) (int) {

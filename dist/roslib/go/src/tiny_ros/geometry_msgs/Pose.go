@@ -1,20 +1,24 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Point"
-    "geometry_msgs/Quaternion"
 )
 
+
 type Pose struct {
-    Go_position geometry_msgs.Point `json:"position"`
-    Go_orientation geometry_msgs.Quaternion `json:"orientation"`
+    Go_position *Point `json:"position"`
+    Go_orientation *Quaternion `json:"orientation"`
 }
 
 func NewPose() (*Pose) {
     newPose := new(Pose)
-    newPose.Go_position = geometry_msgs.NewPoint()
-    newPose.Go_orientation = geometry_msgs.NewQuaternion()
+    newPose.Go_position = NewPoint()
+    newPose.Go_orientation = NewQuaternion()
     return newPose
+}
+
+func (self *Pose) Go_initialize() {
+    self.Go_position = NewPoint()
+    self.Go_orientation = NewQuaternion()
 }
 
 func (self *Pose) Go_serialize(buff []byte) (int) {

@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Polygon"
 )
 
+
 type PolygonStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_polygon geometry_msgs.Polygon `json:"polygon"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_polygon *Polygon `json:"polygon"`
 }
 
 func NewPolygonStamped() (*PolygonStamped) {
     newPolygonStamped := new(PolygonStamped)
     newPolygonStamped.Go_header = std_msgs.NewHeader()
-    newPolygonStamped.Go_polygon = geometry_msgs.NewPolygon()
+    newPolygonStamped.Go_polygon = NewPolygon()
     return newPolygonStamped
+}
+
+func (self *PolygonStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_polygon = NewPolygon()
 }
 
 func (self *PolygonStamped) Go_serialize(buff []byte) (int) {

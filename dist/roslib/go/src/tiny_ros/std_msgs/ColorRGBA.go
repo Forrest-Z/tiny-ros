@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type ColorRGBA struct {
     Go_r float32 `json:"r"`
     Go_g float32 `json:"g"`
@@ -19,6 +20,13 @@ func NewColorRGBA() (*ColorRGBA) {
     newColorRGBA.Go_b = 0.0
     newColorRGBA.Go_a = 0.0
     return newColorRGBA
+}
+
+func (self *ColorRGBA) Go_initialize() {
+    self.Go_r = 0.0
+    self.Go_g = 0.0
+    self.Go_b = 0.0
+    self.Go_a = 0.0
 }
 
 func (self *ColorRGBA) Go_serialize(buff []byte) (int) {

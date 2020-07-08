@@ -3,6 +3,7 @@ package tinyros_hello
 import (
 )
 
+
 type TinyrosHello struct {
     Go_hello string `json:"hello"`
 }
@@ -11,6 +12,10 @@ func NewTinyrosHello() (*TinyrosHello) {
     newTinyrosHello := new(TinyrosHello)
     newTinyrosHello.Go_hello = ""
     return newTinyrosHello
+}
+
+func (self *TinyrosHello) Go_initialize() {
+    self.Go_hello = ""
 }
 
 func (self *TinyrosHello) Go_serialize(buff []byte) (int) {
@@ -28,10 +33,10 @@ func (self *TinyrosHello) Go_serialize(buff []byte) (int) {
 
 func (self *TinyrosHello) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_hello := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_hello |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_hello |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_hello |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_hello := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_hello |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_hello |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_hello |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_hello = string(buff[offset:(offset+length_hello)])
     offset += length_hello

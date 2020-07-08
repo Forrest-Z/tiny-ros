@@ -1,8 +1,8 @@
 package map_msgs
 
 import (
-    "map_msgs/ProjectedMapInfo"
 )
+
 
 
 type SetMapProjectionsRequest struct {
@@ -13,6 +13,10 @@ func NewSetMapProjectionsRequest() (*SetMapProjectionsRequest) {
     newSetMapProjectionsRequest := new(SetMapProjectionsRequest)
     newSetMapProjectionsRequest.__id__ = 0
     return newSetMapProjectionsRequest
+}
+
+func (self *SetMapProjectionsRequest) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *SetMapProjectionsRequest) Go_serialize(buff []byte) (int) {
@@ -27,10 +31,10 @@ func (self *SetMapProjectionsRequest) Go_serialize(buff []byte) (int) {
 
 func (self *SetMapProjectionsRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }
@@ -49,16 +53,22 @@ func (self *SetMapProjectionsRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type SetMapProjectionsResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_projected_maps_info []map_msgs.ProjectedMapInfo `json:"projected_maps_info"`
+    Go_projected_maps_info []ProjectedMapInfo `json:"projected_maps_info"`
 }
 
 func NewSetMapProjectionsResponse() (*SetMapProjectionsResponse) {
     newSetMapProjectionsResponse := new(SetMapProjectionsResponse)
-    newSetMapProjectionsResponse.Go_projected_maps_info = []map_msgs.ProjectedMapInfo{}
+    newSetMapProjectionsResponse.Go_projected_maps_info = []ProjectedMapInfo{}
     newSetMapProjectionsResponse.__id__ = 0
     return newSetMapProjectionsResponse
+}
+
+func (self *SetMapProjectionsResponse) Go_initialize() {
+    self.Go_projected_maps_info = []ProjectedMapInfo{}
+    self.__id__ = 0
 }
 
 func (self *SetMapProjectionsResponse) Go_serialize(buff []byte) (int) {
@@ -82,17 +92,17 @@ func (self *SetMapProjectionsResponse) Go_serialize(buff []byte) (int) {
 
 func (self *SetMapProjectionsResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_projected_maps_info := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_projected_maps_info |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_projected_maps_info |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_projected_maps_info |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_projected_maps_info := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_projected_maps_info |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_projected_maps_info |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_projected_maps_info |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_projected_maps_info = make([]map_msgs.ProjectedMapInfo, length_projected_maps_info, length_projected_maps_info)
+    self.Go_projected_maps_info = make([]ProjectedMapInfo, length_projected_maps_info, length_projected_maps_info)
     for i := 0; i < length_projected_maps_info; i++ {
         offset += self.Go_projected_maps_info[i].Go_deserialize(buff[offset:])
     }

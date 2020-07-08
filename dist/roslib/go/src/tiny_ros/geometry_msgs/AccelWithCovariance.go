@@ -1,21 +1,26 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Accel"
     "encoding/binary"
     "math"
 )
 
+
 type AccelWithCovariance struct {
-    Go_accel geometry_msgs.Accel `json:"accel"`
+    Go_accel *Accel `json:"accel"`
     Go_covariance [36]float64 `json:"covariance"`
 }
 
 func NewAccelWithCovariance() (*AccelWithCovariance) {
     newAccelWithCovariance := new(AccelWithCovariance)
-    newAccelWithCovariance.Go_accel = geometry_msgs.NewAccel()
+    newAccelWithCovariance.Go_accel = NewAccel()
     newAccelWithCovariance.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     return newAccelWithCovariance
+}
+
+func (self *AccelWithCovariance) Go_initialize() {
+    self.Go_accel = NewAccel()
+    self.Go_covariance = [36]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *AccelWithCovariance) Go_serialize(buff []byte) (int) {

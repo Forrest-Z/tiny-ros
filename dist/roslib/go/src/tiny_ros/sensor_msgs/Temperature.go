@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type Temperature struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_temperature float64 `json:"temperature"`
     Go_variance float64 `json:"variance"`
 }
@@ -18,6 +19,12 @@ func NewTemperature() (*Temperature) {
     newTemperature.Go_temperature = 0.0
     newTemperature.Go_variance = 0.0
     return newTemperature
+}
+
+func (self *Temperature) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_temperature = 0.0
+    self.Go_variance = 0.0
 }
 
 func (self *Temperature) Go_serialize(buff []byte) (int) {

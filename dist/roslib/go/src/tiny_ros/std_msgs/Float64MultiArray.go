@@ -1,21 +1,26 @@
 package std_msgs
 
 import (
-    "std_msgs/MultiArrayLayout"
     "encoding/binary"
     "math"
 )
 
+
 type Float64MultiArray struct {
-    Go_layout std_msgs.MultiArrayLayout `json:"layout"`
+    Go_layout *MultiArrayLayout `json:"layout"`
     Go_data []float64 `json:"data"`
 }
 
 func NewFloat64MultiArray() (*Float64MultiArray) {
     newFloat64MultiArray := new(Float64MultiArray)
-    newFloat64MultiArray.Go_layout = std_msgs.NewMultiArrayLayout()
+    newFloat64MultiArray.Go_layout = NewMultiArrayLayout()
     newFloat64MultiArray.Go_data = []float64{}
     return newFloat64MultiArray
+}
+
+func (self *Float64MultiArray) Go_initialize() {
+    self.Go_layout = NewMultiArrayLayout()
+    self.Go_data = []float64{}
 }
 
 func (self *Float64MultiArray) Go_serialize(buff []byte) (int) {
@@ -38,10 +43,10 @@ func (self *Float64MultiArray) Go_serialize(buff []byte) (int) {
 func (self *Float64MultiArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_layout.Go_deserialize(buff[offset:])
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]float64, length_data, length_data)
     for i := 0; i < length_data; i++ {

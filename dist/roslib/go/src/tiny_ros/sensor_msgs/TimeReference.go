@@ -2,12 +2,13 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
 
+
 type TimeReference struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_time_ref tinyros.Time `json:"time_ref"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_time_ref *tinyros.Time `json:"time_ref"`
     Go_source string `json:"source"`
 }
 
@@ -17,6 +18,12 @@ func NewTimeReference() (*TimeReference) {
     newTimeReference.Go_time_ref = tinyros.NewTime()
     newTimeReference.Go_source = ""
     return newTimeReference
+}
+
+func (self *TimeReference) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_time_ref = tinyros.NewTime()
+    self.Go_source = ""
 }
 
 func (self *TimeReference) Go_serialize(buff []byte) (int) {
@@ -46,20 +53,20 @@ func (self *TimeReference) Go_serialize(buff []byte) (int) {
 func (self *TimeReference) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    self.Go_time_ref.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_ref.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_ref.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_ref.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_ref.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_ref.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_ref.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_ref.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_time_ref.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_ref.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_ref.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_ref.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_ref.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_ref.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_ref.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_ref.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_source := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_source |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_source |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_source |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_source := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_source |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_source |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_source |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_source = string(buff[offset:(offset+length_source)])
     offset += length_source

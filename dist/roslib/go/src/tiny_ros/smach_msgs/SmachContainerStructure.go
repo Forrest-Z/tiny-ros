@@ -4,8 +4,9 @@ import (
     "tiny_ros/std_msgs"
 )
 
+
 type SmachContainerStructure struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_path string `json:"path"`
     Go_children []string `json:"children"`
     Go_internal_outcomes []string `json:"internal_outcomes"`
@@ -24,6 +25,16 @@ func NewSmachContainerStructure() (*SmachContainerStructure) {
     newSmachContainerStructure.Go_outcomes_to = []string{}
     newSmachContainerStructure.Go_container_outcomes = []string{}
     return newSmachContainerStructure
+}
+
+func (self *SmachContainerStructure) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_path = ""
+    self.Go_children = []string{}
+    self.Go_internal_outcomes = []string{}
+    self.Go_outcomes_from = []string{}
+    self.Go_outcomes_to = []string{}
+    self.Go_container_outcomes = []string{}
 }
 
 func (self *SmachContainerStructure) Go_serialize(buff []byte) (int) {
@@ -123,84 +134,84 @@ func (self *SmachContainerStructure) Go_serialize(buff []byte) (int) {
 func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_path := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_path |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_path |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_path |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_path := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_path |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_path |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_path |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_path = string(buff[offset:(offset+length_path)])
     offset += length_path
-    length_children := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_children |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_children |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_children |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_children := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_children |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_children |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_children |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_children = make([]string, length_children, length_children)
     for i := 0; i < length_children; i++ {
-        length_childreni := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_childreni |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_childreni |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_childreni |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_childreni := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_childreni |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_childreni |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_childreni |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_children[i] = string(buff[offset:(offset+length_childreni)])
         offset += length_childreni
     }
-    length_internal_outcomes := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_internal_outcomes |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_internal_outcomes |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_internal_outcomes |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_internal_outcomes := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_internal_outcomes |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_internal_outcomes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_internal_outcomes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_internal_outcomes = make([]string, length_internal_outcomes, length_internal_outcomes)
     for i := 0; i < length_internal_outcomes; i++ {
-        length_internal_outcomesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_internal_outcomesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_internal_outcomesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_internal_outcomesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_internal_outcomesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_internal_outcomesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_internal_outcomesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_internal_outcomesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_internal_outcomes[i] = string(buff[offset:(offset+length_internal_outcomesi)])
         offset += length_internal_outcomesi
     }
-    length_outcomes_from := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_outcomes_from |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_outcomes_from |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_outcomes_from |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_outcomes_from := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_outcomes_from |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_outcomes_from |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_outcomes_from |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_outcomes_from = make([]string, length_outcomes_from, length_outcomes_from)
     for i := 0; i < length_outcomes_from; i++ {
-        length_outcomes_fromi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_outcomes_fromi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_outcomes_fromi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_outcomes_fromi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_outcomes_fromi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_outcomes_fromi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_outcomes_fromi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_outcomes_fromi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_outcomes_from[i] = string(buff[offset:(offset+length_outcomes_fromi)])
         offset += length_outcomes_fromi
     }
-    length_outcomes_to := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_outcomes_to |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_outcomes_to |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_outcomes_to |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_outcomes_to := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_outcomes_to |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_outcomes_to |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_outcomes_to |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_outcomes_to = make([]string, length_outcomes_to, length_outcomes_to)
     for i := 0; i < length_outcomes_to; i++ {
-        length_outcomes_toi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_outcomes_toi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_outcomes_toi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_outcomes_toi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_outcomes_toi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_outcomes_toi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_outcomes_toi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_outcomes_toi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_outcomes_to[i] = string(buff[offset:(offset+length_outcomes_toi)])
         offset += length_outcomes_toi
     }
-    length_container_outcomes := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_container_outcomes |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_container_outcomes |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_container_outcomes |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_container_outcomes := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_container_outcomes |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_container_outcomes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_container_outcomes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_container_outcomes = make([]string, length_container_outcomes, length_container_outcomes)
     for i := 0; i < length_container_outcomes; i++ {
-        length_container_outcomesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_container_outcomesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_container_outcomesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_container_outcomesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_container_outcomesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_container_outcomesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_container_outcomesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_container_outcomesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_container_outcomes[i] = string(buff[offset:(offset+length_container_outcomesi)])
         offset += length_container_outcomesi

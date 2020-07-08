@@ -1,17 +1,22 @@
 package std_msgs
 
 import (
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
 
+
 type Duration struct {
-    Go_data tinyros.Duration `json:"data"`
+    Go_data *tinyros.Duration `json:"data"`
 }
 
 func NewDuration() (*Duration) {
     newDuration := new(Duration)
     newDuration.Go_data = tinyros.NewDuration()
     return newDuration
+}
+
+func (self *Duration) Go_initialize() {
+    self.Go_data = tinyros.NewDuration()
 }
 
 func (self *Duration) Go_serialize(buff []byte) (int) {
@@ -31,15 +36,15 @@ func (self *Duration) Go_serialize(buff []byte) (int) {
 
 func (self *Duration) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_data.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_data.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_data.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_data.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_data.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_data.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_data.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_data.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_data.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_data.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_data.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_data.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_data.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_data.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_data.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

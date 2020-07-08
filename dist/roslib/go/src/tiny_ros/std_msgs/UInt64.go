@@ -3,6 +3,7 @@ package std_msgs
 import (
 )
 
+
 type UInt64 struct {
     Go_data uint64 `json:"data"`
 }
@@ -11,6 +12,10 @@ func NewUInt64() (*UInt64) {
     newUInt64 := new(UInt64)
     newUInt64.Go_data = 0
     return newUInt64
+}
+
+func (self *UInt64) Go_initialize() {
+    self.Go_data = 0
 }
 
 func (self *UInt64) Go_serialize(buff []byte) (int) {
@@ -29,14 +34,14 @@ func (self *UInt64) Go_serialize(buff []byte) (int) {
 
 func (self *UInt64) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_data = uint64((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_data |= uint64((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_data |= uint64((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_data |= uint64((buff[offset + 3] & 0xFF) << (8 * 3))
-    self.Go_data |= uint64((buff[offset + 4] & 0xFF) << (8 * 4))
-    self.Go_data |= uint64((buff[offset + 5] & 0xFF) << (8 * 5))
-    self.Go_data |= uint64((buff[offset + 6] & 0xFF) << (8 * 6))
-    self.Go_data |= uint64((buff[offset + 7] & 0xFF) << (8 * 7))
+    self.Go_data = uint64(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_data |= uint64(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_data |= uint64(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_data |= uint64(buff[offset + 3] & 0xFF) << (8 * 3)
+    self.Go_data |= uint64(buff[offset + 4] & 0xFF) << (8 * 4)
+    self.Go_data |= uint64(buff[offset + 5] & 0xFF) << (8 * 5)
+    self.Go_data |= uint64(buff[offset + 6] & 0xFF) << (8 * 6)
+    self.Go_data |= uint64(buff[offset + 7] & 0xFF) << (8 * 7)
     offset += 8
     return offset
 }

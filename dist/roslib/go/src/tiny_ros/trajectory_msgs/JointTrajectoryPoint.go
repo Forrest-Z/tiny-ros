@@ -3,15 +3,16 @@ package trajectory_msgs
 import (
     "encoding/binary"
     "math"
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
+
 
 type JointTrajectoryPoint struct {
     Go_positions []float64 `json:"positions"`
     Go_velocities []float64 `json:"velocities"`
     Go_accelerations []float64 `json:"accelerations"`
     Go_effort []float64 `json:"effort"`
-    Go_time_from_start tinyros.Duration `json:"time_from_start"`
+    Go_time_from_start *tinyros.Duration `json:"time_from_start"`
 }
 
 func NewJointTrajectoryPoint() (*JointTrajectoryPoint) {
@@ -22,6 +23,14 @@ func NewJointTrajectoryPoint() (*JointTrajectoryPoint) {
     newJointTrajectoryPoint.Go_effort = []float64{}
     newJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
     return newJointTrajectoryPoint
+}
+
+func (self *JointTrajectoryPoint) Go_initialize() {
+    self.Go_positions = []float64{}
+    self.Go_velocities = []float64{}
+    self.Go_accelerations = []float64{}
+    self.Go_effort = []float64{}
+    self.Go_time_from_start = tinyros.NewDuration()
 }
 
 func (self *JointTrajectoryPoint) Go_serialize(buff []byte) (int) {
@@ -85,10 +94,10 @@ func (self *JointTrajectoryPoint) Go_serialize(buff []byte) (int) {
 
 func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_positions := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_positions |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_positions |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_positions |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_positions := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_positions |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_positions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_positions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_positions = make([]float64, length_positions, length_positions)
     for i := 0; i < length_positions; i++ {
@@ -96,10 +105,10 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
         self.Go_positions[i] = math.Float64frombits(bits_positionsi)
         offset += 8
     }
-    length_velocities := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_velocities |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_velocities |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_velocities |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_velocities := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_velocities |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_velocities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_velocities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_velocities = make([]float64, length_velocities, length_velocities)
     for i := 0; i < length_velocities; i++ {
@@ -107,10 +116,10 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
         self.Go_velocities[i] = math.Float64frombits(bits_velocitiesi)
         offset += 8
     }
-    length_accelerations := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_accelerations |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_accelerations |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_accelerations |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_accelerations := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_accelerations |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_accelerations |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_accelerations |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_accelerations = make([]float64, length_accelerations, length_accelerations)
     for i := 0; i < length_accelerations; i++ {
@@ -118,10 +127,10 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
         self.Go_accelerations[i] = math.Float64frombits(bits_accelerationsi)
         offset += 8
     }
-    length_effort := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_effort |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_effort |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_effort |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_effort := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_effort |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_effort |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_effort |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_effort = make([]float64, length_effort, length_effort)
     for i := 0; i < length_effort; i++ {
@@ -129,15 +138,15 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
         self.Go_effort[i] = math.Float64frombits(bits_efforti)
         offset += 8
     }
-    self.Go_time_from_start.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_from_start.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_from_start.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_from_start.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_time_from_start.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_time_from_start.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_time_from_start.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_time_from_start.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type Point struct {
     Go_x float64 `json:"x"`
     Go_y float64 `json:"y"`
@@ -17,6 +18,12 @@ func NewPoint() (*Point) {
     newPoint.Go_y = 0.0
     newPoint.Go_z = 0.0
     return newPoint
+}
+
+func (self *Point) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_z = 0.0
 }
 
 func (self *Point) Go_serialize(buff []byte) (int) {

@@ -3,6 +3,7 @@ package std_msgs
 import (
 )
 
+
 type Int8 struct {
     Go_data int8 `json:"data"`
 }
@@ -13,16 +14,20 @@ func NewInt8() (*Int8) {
     return newInt8
 }
 
+func (self *Int8) Go_initialize() {
+    self.Go_data = 0
+}
+
 func (self *Int8) Go_serialize(buff []byte) (int) {
     offset := 0
-    buff[offset + 0] = byte((self.Go_data >> (8 * 0)) & 0xFF)
+    buff[offset + 0] = byte(uint8(self.Go_data >> (8 * 0)) & 0xFF)
     offset += 1
     return offset
 }
 
 func (self *Int8) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_data = int8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_data = int8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
     return offset
 }

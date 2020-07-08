@@ -1,17 +1,21 @@
 package nav_msgs
 
 import (
-    "nav_msgs/OccupancyGrid"
 )
 
+
 type GetMapResult struct {
-    Go_map nav_msgs.OccupancyGrid `json:"map"`
+    Go_map *OccupancyGrid `json:"map"`
 }
 
 func NewGetMapResult() (*GetMapResult) {
     newGetMapResult := new(GetMapResult)
-    newGetMapResult.Go_map = nav_msgs.NewOccupancyGrid()
+    newGetMapResult.Go_map = NewOccupancyGrid()
     return newGetMapResult
+}
+
+func (self *GetMapResult) Go_initialize() {
+    self.Go_map = NewOccupancyGrid()
 }
 
 func (self *GetMapResult) Go_serialize(buff []byte) (int) {

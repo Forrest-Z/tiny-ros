@@ -1,17 +1,17 @@
 package nav_msgs
 
 import (
-    "geometry_msgs/PoseStamped"
     "encoding/binary"
+    "tiny_ros/geometry_msgs"
     "math"
-    "nav_msgs/Path"
 )
+
 
 
 type GetPlanRequest struct {
     __id__ uint32 `json:"__id__"`
-    Go_start geometry_msgs.PoseStamped `json:"start"`
-    Go_goal geometry_msgs.PoseStamped `json:"goal"`
+    Go_start *geometry_msgs.PoseStamped `json:"start"`
+    Go_goal *geometry_msgs.PoseStamped `json:"goal"`
     Go_tolerance float32 `json:"tolerance"`
 }
 
@@ -22,6 +22,13 @@ func NewGetPlanRequest() (*GetPlanRequest) {
     newGetPlanRequest.Go_tolerance = 0.0
     newGetPlanRequest.__id__ = 0
     return newGetPlanRequest
+}
+
+func (self *GetPlanRequest) Go_initialize() {
+    self.Go_start = geometry_msgs.NewPoseStamped()
+    self.Go_goal = geometry_msgs.NewPoseStamped()
+    self.Go_tolerance = 0.0
+    self.__id__ = 0
 }
 
 func (self *GetPlanRequest) Go_serialize(buff []byte) (int) {
@@ -41,10 +48,10 @@ func (self *GetPlanRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetPlanRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_start.Go_deserialize(buff[offset:])
     offset += self.Go_goal.Go_deserialize(buff[offset:])
@@ -71,16 +78,22 @@ func (self *GetPlanRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type GetPlanResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_plan nav_msgs.Path `json:"plan"`
+    Go_plan *Path `json:"plan"`
 }
 
 func NewGetPlanResponse() (*GetPlanResponse) {
     newGetPlanResponse := new(GetPlanResponse)
-    newGetPlanResponse.Go_plan = nav_msgs.NewPath()
+    newGetPlanResponse.Go_plan = NewPath()
     newGetPlanResponse.__id__ = 0
     return newGetPlanResponse
+}
+
+func (self *GetPlanResponse) Go_initialize() {
+    self.Go_plan = NewPath()
+    self.__id__ = 0
 }
 
 func (self *GetPlanResponse) Go_serialize(buff []byte) (int) {
@@ -96,10 +109,10 @@ func (self *GetPlanResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetPlanResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_plan.Go_deserialize(buff[offset:])
     return offset

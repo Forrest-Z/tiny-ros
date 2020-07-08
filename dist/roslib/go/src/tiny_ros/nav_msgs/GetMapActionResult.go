@@ -2,22 +2,28 @@ package nav_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "actionlib_msgs/GoalStatus"
-    "nav_msgs/GetMapResult"
+    "tiny_ros/actionlib_msgs"
 )
 
+
 type GetMapActionResult struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status actionlib_msgs.GoalStatus `json:"status"`
-    Go_result nav_msgs.GetMapResult `json:"result"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status *actionlib_msgs.GoalStatus `json:"status"`
+    Go_result *GetMapResult `json:"result"`
 }
 
 func NewGetMapActionResult() (*GetMapActionResult) {
     newGetMapActionResult := new(GetMapActionResult)
     newGetMapActionResult.Go_header = std_msgs.NewHeader()
     newGetMapActionResult.Go_status = actionlib_msgs.NewGoalStatus()
-    newGetMapActionResult.Go_result = nav_msgs.NewGetMapResult()
+    newGetMapActionResult.Go_result = NewGetMapResult()
     return newGetMapActionResult
+}
+
+func (self *GetMapActionResult) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = actionlib_msgs.NewGoalStatus()
+    self.Go_result = NewGetMapResult()
 }
 
 func (self *GetMapActionResult) Go_serialize(buff []byte) (int) {

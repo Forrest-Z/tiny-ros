@@ -1,34 +1,28 @@
-/*
- * File      : ExampleServiceClient.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-#include "tiny_ros/ros.h"
-#include "tiny_ros/tinyros_hello/Test.h"
+package main
 
-int main() {
-  tinyros::init("127.0.0.1");
-  tinyros::ServiceClient<tinyros_hello::Test::Request, tinyros_hello::Test::Response> client("test_srv");
-  tinyros::nh()->serviceClient(client);
-  while (true) {
-    tinyros_hello::Test::Request req;
-    tinyros_hello::Test::Response res;
-    req.input = "hello world!";
-    if (client.call(req, res)) {
-       printf("Service responsed with \"%s\"\n", res.output.c_str());
-    } else {
-       printf("Service call failed.\n");
+import (
+    "fmt"
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func main() {
+    tinyros.Go_init("127.0.0.1")
+    
+    client := tinyros.NewServiceClient("test_srv", tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
+
+    tinyros.Go_nh().Go_serviceClient(client)
+
+    for {
+        req := tinyros_hello.NewTestRequest()
+        resp := tinyros_hello.NewTestResponse()
+        req.Go_input = "hello world!"
+        if client.Go_call(req, resp) {
+            fmt.Println("Service responsed with\"", resp.Go_output, "\"")
+        } else {
+            fmt.Println("Service call failed.")
+        }
+        time.Sleep(time.Second)
     }
-#ifdef WIN32
-    Sleep(1000);
-#else
-    sleep(1);
-#endif
-  }
-  
-  return 0;
 }
-

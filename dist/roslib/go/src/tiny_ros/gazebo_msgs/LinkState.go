@@ -1,14 +1,14 @@
 package gazebo_msgs
 
 import (
-    "geometry_msgs/Pose"
-    "geometry_msgs/Twist"
+    "tiny_ros/geometry_msgs"
 )
+
 
 type LinkState struct {
     Go_link_name string `json:"link_name"`
-    Go_pose geometry_msgs.Pose `json:"pose"`
-    Go_twist geometry_msgs.Twist `json:"twist"`
+    Go_pose *geometry_msgs.Pose `json:"pose"`
+    Go_twist *geometry_msgs.Twist `json:"twist"`
     Go_reference_frame string `json:"reference_frame"`
 }
 
@@ -19,6 +19,13 @@ func NewLinkState() (*LinkState) {
     newLinkState.Go_twist = geometry_msgs.NewTwist()
     newLinkState.Go_reference_frame = ""
     return newLinkState
+}
+
+func (self *LinkState) Go_initialize() {
+    self.Go_link_name = ""
+    self.Go_pose = geometry_msgs.NewPose()
+    self.Go_twist = geometry_msgs.NewTwist()
+    self.Go_reference_frame = ""
 }
 
 func (self *LinkState) Go_serialize(buff []byte) (int) {
@@ -46,19 +53,19 @@ func (self *LinkState) Go_serialize(buff []byte) (int) {
 
 func (self *LinkState) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_link_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_link_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_link_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_link_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_link_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_link_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_link_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_link_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_link_name = string(buff[offset:(offset+length_link_name)])
     offset += length_link_name
     offset += self.Go_pose.Go_deserialize(buff[offset:])
     offset += self.Go_twist.Go_deserialize(buff[offset:])
-    length_reference_frame := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_reference_frame |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_reference_frame |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_reference_frame |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_reference_frame := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_reference_frame |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_reference_frame |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_reference_frame |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_reference_frame = string(buff[offset:(offset+length_reference_frame)])
     offset += length_reference_frame

@@ -1,19 +1,24 @@
 package std_msgs
 
 import (
-    "std_msgs/MultiArrayLayout"
 )
 
+
 type UInt16MultiArray struct {
-    Go_layout std_msgs.MultiArrayLayout `json:"layout"`
+    Go_layout *MultiArrayLayout `json:"layout"`
     Go_data []uint16 `json:"data"`
 }
 
 func NewUInt16MultiArray() (*UInt16MultiArray) {
     newUInt16MultiArray := new(UInt16MultiArray)
-    newUInt16MultiArray.Go_layout = std_msgs.NewMultiArrayLayout()
+    newUInt16MultiArray.Go_layout = NewMultiArrayLayout()
     newUInt16MultiArray.Go_data = []uint16{}
     return newUInt16MultiArray
+}
+
+func (self *UInt16MultiArray) Go_initialize() {
+    self.Go_layout = NewMultiArrayLayout()
+    self.Go_data = []uint16{}
 }
 
 func (self *UInt16MultiArray) Go_serialize(buff []byte) (int) {
@@ -36,15 +41,15 @@ func (self *UInt16MultiArray) Go_serialize(buff []byte) (int) {
 func (self *UInt16MultiArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_layout.Go_deserialize(buff[offset:])
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]uint16, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = uint16((buff[offset + 0] & 0xFF) << (8 * 0))
-        self.Go_data[i] |= uint16((buff[offset + 1] & 0xFF) << (8 * 1))
+        self.Go_data[i] = uint16(buff[offset + 0] & 0xFF) << (8 * 0)
+        self.Go_data[i] |= uint16(buff[offset + 1] & 0xFF) << (8 * 1)
         offset += 2
     }
     return offset

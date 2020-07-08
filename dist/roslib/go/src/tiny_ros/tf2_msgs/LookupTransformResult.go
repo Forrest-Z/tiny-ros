@@ -1,20 +1,25 @@
 package tf2_msgs
 
 import (
-    "geometry_msgs/TransformStamped"
-    "tf2_msgs/TF2Error"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type LookupTransformResult struct {
-    Go_transform geometry_msgs.TransformStamped `json:"transform"`
-    Go_error tf2_msgs.TF2Error `json:"error"`
+    Go_transform *geometry_msgs.TransformStamped `json:"transform"`
+    Go_error *TF2Error `json:"error"`
 }
 
 func NewLookupTransformResult() (*LookupTransformResult) {
     newLookupTransformResult := new(LookupTransformResult)
     newLookupTransformResult.Go_transform = geometry_msgs.NewTransformStamped()
-    newLookupTransformResult.Go_error = tf2_msgs.NewTF2Error()
+    newLookupTransformResult.Go_error = NewTF2Error()
     return newLookupTransformResult
+}
+
+func (self *LookupTransformResult) Go_initialize() {
+    self.Go_transform = geometry_msgs.NewTransformStamped()
+    self.Go_error = NewTF2Error()
 }
 
 func (self *LookupTransformResult) Go_serialize(buff []byte) (int) {

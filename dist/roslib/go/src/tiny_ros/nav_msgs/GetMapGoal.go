@@ -3,12 +3,16 @@ package nav_msgs
 import (
 )
 
+
 type GetMapGoal struct {
 }
 
 func NewGetMapGoal() (*GetMapGoal) {
     newGetMapGoal := new(GetMapGoal)
     return newGetMapGoal
+}
+
+func (self *GetMapGoal) Go_initialize() {
 }
 
 func (self *GetMapGoal) Go_serialize(buff []byte) (int) {

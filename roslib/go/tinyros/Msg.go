@@ -1,6 +1,7 @@
 package tinyros
 
 type Msg interface {
+    Go_initialize()
     Go_serialize(buff []byte) (int)
     Go_deserialize(buff []byte) (int)
     Go_serializedLength() (int)

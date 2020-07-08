@@ -1,18 +1,19 @@
 package nav_msgs
 
 import (
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
     "encoding/binary"
     "math"
-    "geometry_msgs/Pose"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type MapMetaData struct {
-    Go_map_load_time tinyros.Time `json:"map_load_time"`
+    Go_map_load_time *tinyros.Time `json:"map_load_time"`
     Go_resolution float32 `json:"resolution"`
     Go_width uint32 `json:"width"`
     Go_height uint32 `json:"height"`
-    Go_origin geometry_msgs.Pose `json:"origin"`
+    Go_origin *geometry_msgs.Pose `json:"origin"`
 }
 
 func NewMapMetaData() (*MapMetaData) {
@@ -23,6 +24,14 @@ func NewMapMetaData() (*MapMetaData) {
     newMapMetaData.Go_height = 0
     newMapMetaData.Go_origin = geometry_msgs.NewPose()
     return newMapMetaData
+}
+
+func (self *MapMetaData) Go_initialize() {
+    self.Go_map_load_time = tinyros.NewTime()
+    self.Go_resolution = 0.0
+    self.Go_width = 0
+    self.Go_height = 0
+    self.Go_origin = geometry_msgs.NewPose()
 }
 
 func (self *MapMetaData) Go_serialize(buff []byte) (int) {
@@ -56,28 +65,28 @@ func (self *MapMetaData) Go_serialize(buff []byte) (int) {
 
 func (self *MapMetaData) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_map_load_time.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_map_load_time.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_map_load_time.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_map_load_time.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_map_load_time.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_map_load_time.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_map_load_time.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_map_load_time.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_map_load_time.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_map_load_time.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_map_load_time.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_map_load_time.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_map_load_time.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_map_load_time.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_map_load_time.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_map_load_time.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     bits_resolution := binary.LittleEndian.Uint32(buff[offset:])
     self.Go_resolution = math.Float32frombits(bits_resolution)
     offset += 4
-    self.Go_width = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_width |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_width |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_width |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_width = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_width |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_width |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_width |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_height = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_height |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_height |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_height |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_height = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_height |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_height |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_height |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_origin.Go_deserialize(buff[offset:])
     return offset

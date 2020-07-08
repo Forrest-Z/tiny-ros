@@ -2,7 +2,7 @@ package tinyros
 
 import (
     "net"
-    "log"
+    "fmt"
 )
 
 type Hardware interface {
@@ -32,13 +32,13 @@ func (self *HardwareTCP) init(ip string) (bool) {
     self.close()
     addr, err := net.ResolveTCPAddr("tcp", string(target))
     if err != nil {
-        log.Fatal(err)
+        fmt.Println("HardwareTCP.init", err)
         return false
     }
     
     self.sockfd_, err = net.DialTCP("tcp", nil, addr)
     if err != nil {
-        log.Fatal(err)
+        fmt.Println("HardwareTCP.init", err)
         return false
     }
     self.sockfd_.SetNoDelay(true)
@@ -51,7 +51,7 @@ func (self *HardwareTCP) read(data []byte) (int) {
     if self.connected_ {
         rv, err := self.sockfd_.Read(data)
         if err != nil {
-            log.Fatal(err)
+            fmt.Println("HardwareTCP.read", err)
             self.close()
             rv = -1
         }
@@ -64,7 +64,7 @@ func (self *HardwareTCP) write(data []byte) (int) {
     if self.connected_ {
         rv, err := self.sockfd_.Write(data)
         if err != nil {
-            log.Fatal(err)
+            fmt.Println("HardwareTCP.write", err)
             self.close()
             rv = -1
         }
@@ -116,21 +116,21 @@ func (self *HardwareUDP) init(ip string) (bool) {
     self.close()
     addr_send, err := net.ResolveUDPAddr("udp", string(target))
     if err != nil {
-        log.Fatal(err)
+        fmt.Println("HardwareUDP.init", err)
         return false
     }
     self.addr_send_ = addr_send
     
-    target = "" + self.server_port_
+    target = "" + self.client_port_
     self.addr_recv_, err = net.ResolveUDPAddr("udp", string(target))
     if err != nil {
-        log.Fatal(err)
+        fmt.Println("HardwareUDP.init", err)
         return false
     }
     
     self.conn_send_, err = net.DialUDP("udp", nil, self.addr_send_)
     if err != nil {
-        log.Fatal(err)
+        fmt.Println("HardwareUDP.init", err)
         return false
     }
     self.connected_ = true
@@ -142,7 +142,7 @@ func (self *HardwareUDP) read(data []byte) (int) {
         if self.conn_recv_ == nil {
             conn_recv, err := net.ListenUDP("udp", self.addr_recv_)
             if err != nil {
-                log.Fatal(err)
+                fmt.Println("HardwareUDP.read", err)
                 return -1
             }
             self.conn_recv_ = conn_recv
@@ -150,7 +150,7 @@ func (self *HardwareUDP) read(data []byte) (int) {
         
         rv, _, err := self.conn_recv_.ReadFrom(data)
         if err != nil {
-            log.Fatal(err)
+            fmt.Println("HardwareUDP.read", err)
             self.close()
             rv = -1
         }
@@ -163,7 +163,7 @@ func (self *HardwareUDP) write(data []byte) (int) {
     if self.connected_ {
         rv, err := self.conn_send_.Write(data)
         if err != nil {
-            log.Fatal(err)
+            fmt.Println("HardwareUDP.write", err)
             self.close()
             rv = -1
         }

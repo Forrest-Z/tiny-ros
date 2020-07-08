@@ -2,22 +2,28 @@ package tf2_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "actionlib_msgs/GoalStatus"
-    "tf2_msgs/LookupTransformResult"
+    "tiny_ros/actionlib_msgs"
 )
 
+
 type LookupTransformActionResult struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status actionlib_msgs.GoalStatus `json:"status"`
-    Go_result tf2_msgs.LookupTransformResult `json:"result"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status *actionlib_msgs.GoalStatus `json:"status"`
+    Go_result *LookupTransformResult `json:"result"`
 }
 
 func NewLookupTransformActionResult() (*LookupTransformActionResult) {
     newLookupTransformActionResult := new(LookupTransformActionResult)
     newLookupTransformActionResult.Go_header = std_msgs.NewHeader()
     newLookupTransformActionResult.Go_status = actionlib_msgs.NewGoalStatus()
-    newLookupTransformActionResult.Go_result = tf2_msgs.NewLookupTransformResult()
+    newLookupTransformActionResult.Go_result = NewLookupTransformResult()
     return newLookupTransformActionResult
+}
+
+func (self *LookupTransformActionResult) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = actionlib_msgs.NewGoalStatus()
+    self.Go_result = NewLookupTransformResult()
 }
 
 func (self *LookupTransformActionResult) Go_serialize(buff []byte) (int) {

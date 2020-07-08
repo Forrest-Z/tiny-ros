@@ -2,19 +2,19 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Quaternion"
+    "tiny_ros/geometry_msgs"
     "encoding/binary"
     "math"
-    "geometry_msgs/Vector3"
 )
 
+
 type Imu struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_orientation geometry_msgs.Quaternion `json:"orientation"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_orientation *geometry_msgs.Quaternion `json:"orientation"`
     Go_orientation_covariance [9]float64 `json:"orientation_covariance"`
-    Go_angular_velocity geometry_msgs.Vector3 `json:"angular_velocity"`
+    Go_angular_velocity *geometry_msgs.Vector3 `json:"angular_velocity"`
     Go_angular_velocity_covariance [9]float64 `json:"angular_velocity_covariance"`
-    Go_linear_acceleration geometry_msgs.Vector3 `json:"linear_acceleration"`
+    Go_linear_acceleration *geometry_msgs.Vector3 `json:"linear_acceleration"`
     Go_linear_acceleration_covariance [9]float64 `json:"linear_acceleration_covariance"`
 }
 
@@ -28,6 +28,16 @@ func NewImu() (*Imu) {
     newImu.Go_linear_acceleration = geometry_msgs.NewVector3()
     newImu.Go_linear_acceleration_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     return newImu
+}
+
+func (self *Imu) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_orientation = geometry_msgs.NewQuaternion()
+    self.Go_orientation_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_angular_velocity = geometry_msgs.NewVector3()
+    self.Go_angular_velocity_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    self.Go_linear_acceleration = geometry_msgs.NewVector3()
+    self.Go_linear_acceleration_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *Imu) Go_serialize(buff []byte) (int) {

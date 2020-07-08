@@ -1,12 +1,13 @@
 package std_msgs
 
 import (
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
+
 
 type Header struct {
     Go_seq uint32 `json:"seq"`
-    Go_stamp tinyros.Time `json:"stamp"`
+    Go_stamp *tinyros.Time `json:"stamp"`
     Go_frame_id string `json:"frame_id"`
 }
 
@@ -16,6 +17,12 @@ func NewHeader() (*Header) {
     newHeader.Go_stamp = tinyros.NewTime()
     newHeader.Go_frame_id = ""
     return newHeader
+}
+
+func (self *Header) Go_initialize() {
+    self.Go_seq = 0
+    self.Go_stamp = tinyros.NewTime()
+    self.Go_frame_id = ""
 }
 
 func (self *Header) Go_serialize(buff []byte) (int) {
@@ -48,25 +55,25 @@ func (self *Header) Go_serialize(buff []byte) (int) {
 
 func (self *Header) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_seq = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_seq |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_seq |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_seq |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_seq = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_seq |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_seq |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_seq |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_frame_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_frame_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_frame_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_frame_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_frame_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_frame_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_frame_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_frame_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_frame_id = string(buff[offset:(offset+length_frame_id)])
     offset += length_frame_id

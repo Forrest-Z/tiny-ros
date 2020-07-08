@@ -1,34 +1,29 @@
-/*
- * File      : ExampleSubscriber.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-#include "tiny_ros/ros.h"
-#include "tiny_ros/tinyros_hello/TinyrosHello.h"
+package main
 
-static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
-  printf("%s\n", received_msg.hello.c_str());
+import (
+    "fmt"
+    "time"
+    "tiny_ros/tinyros"
+    "tiny_ros/tinyros_hello"
+)
+
+func subscriber_cb(msg tinyros.Msg) {
+    tmsg := msg.(*tinyros_hello.TinyrosHello)
+    fmt.Println(tmsg.Go_hello)
 }
 
-int main(void) {
-  tinyros::init("127.0.0.1");
-  tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
-#if 1
-  tinyros::nh()->subscribe(sub);
-#else
-  tinyros::udp()->subscribe(sub);
-#endif
-  while(true) {
-#ifdef WIN32
-    Sleep(10*1000);
-#else
-    sleep(10);
-#endif
-  }
+func main() {
+    tinyros.Go_init("127.0.0.1")
 
-  return 0;
+    sub := tinyros.NewSubscriber("tinyros_hello", subscriber_cb, tinyros_hello.NewTinyrosHello())
+
+    if true {
+        tinyros.Go_nh().Go_subscribe(sub)
+    } else {
+        tinyros.Go_udp().Go_subscribe(sub)
+    }
+    
+    for {
+        time.Sleep(10 * time.Second)
+    }
 }
-

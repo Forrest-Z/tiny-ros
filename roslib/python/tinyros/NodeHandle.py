@@ -395,8 +395,8 @@ class NodeHandle(NodeHandleBase):
                         (srv.id_, srv.id_, srv.topic_, srv.pub_.id_, srv.pub_.id_, srv.pub_.topic_))
                 return True
             else:
+                self.mutex_.release()
                 return False
-            self.mutex_.release()
         else:
             return False
 
@@ -418,8 +418,8 @@ class NodeHandle(NodeHandleBase):
                         (srv.id_, srv.id_, srv.topic_, srv.pub_.id_, srv.pub_.id_, srv.pub_.topic_))
                 return True
             else:
+                self.mutex_.release()
                 return False
-            self.mutex_.release()
         else:
             return False
             

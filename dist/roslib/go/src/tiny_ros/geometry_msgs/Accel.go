@@ -1,19 +1,24 @@
 package geometry_msgs
 
 import (
-    "geometry_msgs/Vector3"
 )
 
+
 type Accel struct {
-    Go_linear geometry_msgs.Vector3 `json:"linear"`
-    Go_angular geometry_msgs.Vector3 `json:"angular"`
+    Go_linear *Vector3 `json:"linear"`
+    Go_angular *Vector3 `json:"angular"`
 }
 
 func NewAccel() (*Accel) {
     newAccel := new(Accel)
-    newAccel.Go_linear = geometry_msgs.NewVector3()
-    newAccel.Go_angular = geometry_msgs.NewVector3()
+    newAccel.Go_linear = NewVector3()
+    newAccel.Go_angular = NewVector3()
     return newAccel
+}
+
+func (self *Accel) Go_initialize() {
+    self.Go_linear = NewVector3()
+    self.Go_angular = NewVector3()
 }
 
 func (self *Accel) Go_serialize(buff []byte) (int) {

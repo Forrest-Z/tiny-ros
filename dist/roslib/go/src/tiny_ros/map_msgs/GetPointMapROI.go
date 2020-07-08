@@ -2,9 +2,10 @@ package map_msgs
 
 import (
     "encoding/binary"
-    "sensor_msgs/PointCloud2"
+    "tiny_ros/sensor_msgs"
     "math"
 )
+
 
 
 type GetPointMapROIRequest struct {
@@ -29,6 +30,17 @@ func NewGetPointMapROIRequest() (*GetPointMapROIRequest) {
     newGetPointMapROIRequest.Go_l_z = 0.0
     newGetPointMapROIRequest.__id__ = 0
     return newGetPointMapROIRequest
+}
+
+func (self *GetPointMapROIRequest) Go_initialize() {
+    self.Go_x = 0.0
+    self.Go_y = 0.0
+    self.Go_z = 0.0
+    self.Go_r = 0.0
+    self.Go_l_x = 0.0
+    self.Go_l_y = 0.0
+    self.Go_l_z = 0.0
+    self.__id__ = 0
 }
 
 func (self *GetPointMapROIRequest) Go_serialize(buff []byte) (int) {
@@ -64,10 +76,10 @@ func (self *GetPointMapROIRequest) Go_serialize(buff []byte) (int) {
 
 func (self *GetPointMapROIRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     bits_x := binary.LittleEndian.Uint64(buff[offset:])
     self.Go_x = math.Float64frombits(bits_x)
@@ -114,9 +126,10 @@ func (self *GetPointMapROIRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type GetPointMapROIResponse struct {
     __id__ uint32 `json:"__id__"`
-    Go_sub_map sensor_msgs.PointCloud2 `json:"sub_map"`
+    Go_sub_map *sensor_msgs.PointCloud2 `json:"sub_map"`
 }
 
 func NewGetPointMapROIResponse() (*GetPointMapROIResponse) {
@@ -124,6 +137,11 @@ func NewGetPointMapROIResponse() (*GetPointMapROIResponse) {
     newGetPointMapROIResponse.Go_sub_map = sensor_msgs.NewPointCloud2()
     newGetPointMapROIResponse.__id__ = 0
     return newGetPointMapROIResponse
+}
+
+func (self *GetPointMapROIResponse) Go_initialize() {
+    self.Go_sub_map = sensor_msgs.NewPointCloud2()
+    self.__id__ = 0
 }
 
 func (self *GetPointMapROIResponse) Go_serialize(buff []byte) (int) {
@@ -139,10 +157,10 @@ func (self *GetPointMapROIResponse) Go_serialize(buff []byte) (int) {
 
 func (self *GetPointMapROIResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     offset += self.Go_sub_map.Go_deserialize(buff[offset:])
     return offset

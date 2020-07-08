@@ -4,6 +4,7 @@ import (
 )
 
 
+
 type JointRequestRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_joint_name string `json:"joint_name"`
@@ -14,6 +15,11 @@ func NewJointRequestRequest() (*JointRequestRequest) {
     newJointRequestRequest.Go_joint_name = ""
     newJointRequestRequest.__id__ = 0
     return newJointRequestRequest
+}
+
+func (self *JointRequestRequest) Go_initialize() {
+    self.Go_joint_name = ""
+    self.__id__ = 0
 }
 
 func (self *JointRequestRequest) Go_serialize(buff []byte) (int) {
@@ -36,15 +42,15 @@ func (self *JointRequestRequest) Go_serialize(buff []byte) (int) {
 
 func (self *JointRequestRequest) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_joint_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_joint_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_joint_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_joint_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_joint_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_joint_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_joint_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_joint_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_joint_name = string(buff[offset:(offset+length_joint_name)])
     offset += length_joint_name
@@ -68,6 +74,7 @@ func (self *JointRequestRequest) Go_setID(id uint32) { self.__id__ = id }
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 type JointRequestResponse struct {
     __id__ uint32 `json:"__id__"`
 }
@@ -76,6 +83,10 @@ func NewJointRequestResponse() (*JointRequestResponse) {
     newJointRequestResponse := new(JointRequestResponse)
     newJointRequestResponse.__id__ = 0
     return newJointRequestResponse
+}
+
+func (self *JointRequestResponse) Go_initialize() {
+    self.__id__ = 0
 }
 
 func (self *JointRequestResponse) Go_serialize(buff []byte) (int) {
@@ -90,10 +101,10 @@ func (self *JointRequestResponse) Go_serialize(buff []byte) (int) {
 
 func (self *JointRequestResponse) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.__id__ =  uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.__id__ |=  uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.__id__ |=  uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.__id__ |=  uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.__id__ =  uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.__id__ |=  uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.__id__ |=  uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.__id__ |=  uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

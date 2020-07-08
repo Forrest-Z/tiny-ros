@@ -2,13 +2,12 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Transform"
-    "geometry_msgs/Twist"
-    "geometry_msgs/Wrench"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type MultiDOFJointState struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_joint_names []string `json:"joint_names"`
     Go_transforms []geometry_msgs.Transform `json:"transforms"`
     Go_twist []geometry_msgs.Twist `json:"twist"`
@@ -23,6 +22,14 @@ func NewMultiDOFJointState() (*MultiDOFJointState) {
     newMultiDOFJointState.Go_twist = []geometry_msgs.Twist{}
     newMultiDOFJointState.Go_wrench = []geometry_msgs.Wrench{}
     return newMultiDOFJointState
+}
+
+func (self *MultiDOFJointState) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_joint_names = []string{}
+    self.Go_transforms = []geometry_msgs.Transform{}
+    self.Go_twist = []geometry_msgs.Twist{}
+    self.Go_wrench = []geometry_msgs.Wrench{}
 }
 
 func (self *MultiDOFJointState) Go_serialize(buff []byte) (int) {
@@ -77,43 +84,43 @@ func (self *MultiDOFJointState) Go_serialize(buff []byte) (int) {
 func (self *MultiDOFJointState) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_joint_names := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_joint_names |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_joint_names |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_joint_names |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_joint_names := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_joint_names |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_joint_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_joint_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_joint_names = make([]string, length_joint_names, length_joint_names)
     for i := 0; i < length_joint_names; i++ {
-        length_joint_namesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_joint_namesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_joint_namesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_joint_namesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_joint_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_joint_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_joint_namesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_joint_namesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_joint_names[i] = string(buff[offset:(offset+length_joint_namesi)])
         offset += length_joint_namesi
     }
-    length_transforms := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_transforms |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_transforms |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_transforms |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_transforms := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_transforms |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_transforms |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_transforms |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_transforms = make([]geometry_msgs.Transform, length_transforms, length_transforms)
     for i := 0; i < length_transforms; i++ {
         offset += self.Go_transforms[i].Go_deserialize(buff[offset:])
     }
-    length_twist := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_twist |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_twist |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_twist |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_twist := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_twist |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_twist |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_twist |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_twist = make([]geometry_msgs.Twist, length_twist, length_twist)
     for i := 0; i < length_twist; i++ {
         offset += self.Go_twist[i].Go_deserialize(buff[offset:])
     }
-    length_wrench := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_wrench |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_wrench |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_wrench |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_wrench := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_wrench |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_wrench |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_wrench |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_wrench = make([]geometry_msgs.Wrench, length_wrench, length_wrench)
     for i := 0; i < length_wrench; i++ {

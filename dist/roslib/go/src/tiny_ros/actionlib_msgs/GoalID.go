@@ -1,11 +1,12 @@
 package actionlib_msgs
 
 import (
-    "tiny_ros/tinyros"
+    "tiny_ros/tinyros/time"
 )
 
+
 type GoalID struct {
-    Go_stamp tinyros.Time `json:"stamp"`
+    Go_stamp *tinyros.Time `json:"stamp"`
     Go_id string `json:"id"`
 }
 
@@ -14,6 +15,11 @@ func NewGoalID() (*GoalID) {
     newGoalID.Go_stamp = tinyros.NewTime()
     newGoalID.Go_id = ""
     return newGoalID
+}
+
+func (self *GoalID) Go_initialize() {
+    self.Go_stamp = tinyros.NewTime()
+    self.Go_id = ""
 }
 
 func (self *GoalID) Go_serialize(buff []byte) (int) {
@@ -41,20 +47,20 @@ func (self *GoalID) Go_serialize(buff []byte) (int) {
 
 func (self *GoalID) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_stamp.Go_sec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp.Go_sec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp.Go_sec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp.Go_sec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_stamp.Go_nsec = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_stamp.Go_nsec |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_stamp.Go_nsec = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_stamp.Go_nsec |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_id = string(buff[offset:(offset+length_id)])
     offset += length_id

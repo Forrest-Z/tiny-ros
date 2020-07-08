@@ -3,12 +3,12 @@ package geometry_msgs
 import (
     "encoding/binary"
     "math"
-    "geometry_msgs/Vector3"
 )
+
 
 type Inertia struct {
     Go_m float64 `json:"m"`
-    Go_com geometry_msgs.Vector3 `json:"com"`
+    Go_com *Vector3 `json:"com"`
     Go_ixx float64 `json:"ixx"`
     Go_ixy float64 `json:"ixy"`
     Go_ixz float64 `json:"ixz"`
@@ -20,7 +20,7 @@ type Inertia struct {
 func NewInertia() (*Inertia) {
     newInertia := new(Inertia)
     newInertia.Go_m = 0.0
-    newInertia.Go_com = geometry_msgs.NewVector3()
+    newInertia.Go_com = NewVector3()
     newInertia.Go_ixx = 0.0
     newInertia.Go_ixy = 0.0
     newInertia.Go_ixz = 0.0
@@ -28,6 +28,17 @@ func NewInertia() (*Inertia) {
     newInertia.Go_iyz = 0.0
     newInertia.Go_izz = 0.0
     return newInertia
+}
+
+func (self *Inertia) Go_initialize() {
+    self.Go_m = 0.0
+    self.Go_com = NewVector3()
+    self.Go_ixx = 0.0
+    self.Go_ixy = 0.0
+    self.Go_ixz = 0.0
+    self.Go_iyy = 0.0
+    self.Go_iyz = 0.0
+    self.Go_izz = 0.0
 }
 
 func (self *Inertia) Go_serialize(buff []byte) (int) {

@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Accel"
 )
 
+
 type AccelStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_accel geometry_msgs.Accel `json:"accel"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_accel *Accel `json:"accel"`
 }
 
 func NewAccelStamped() (*AccelStamped) {
     newAccelStamped := new(AccelStamped)
     newAccelStamped.Go_header = std_msgs.NewHeader()
-    newAccelStamped.Go_accel = geometry_msgs.NewAccel()
+    newAccelStamped.Go_accel = NewAccel()
     return newAccelStamped
+}
+
+func (self *AccelStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_accel = NewAccel()
 }
 
 func (self *AccelStamped) Go_serialize(buff []byte) (int) {

@@ -7,12 +7,20 @@ import (
 )
 
 func main() {
-   nh := tinyros.Go_udp()
-   for {
-       msg := new(tinyros_hello.TinyrosHello)
-       msg.Go_hello = "Go Hello, tiny-ros ^_^ "
-       nh.Go_publish(3364715186, msg)
-       time.Sleep(time.Second)
-   }
+    tinyros.Go_init("127.0.0.1")
+    
+    pub := tinyros.NewPublisher("tinyros_hello", tinyros_hello.NewTinyrosHello())
+    
+    if true {
+        tinyros.Go_nh().Go_advertise(pub)
+    } else {
+        tinyros.Go_udp().Go_advertise(pub)
+    }
+    
+    for {
+        msg := tinyros_hello.NewTinyrosHello()
+        msg.Go_hello = "Hello, tiny-ros ^_^ "
+        pub.Go_publish(msg)
+        time.Sleep(1 * time.Second)
+    }
 }
-

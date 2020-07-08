@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Inertia"
 )
 
+
 type InertiaStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_inertia geometry_msgs.Inertia `json:"inertia"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_inertia *Inertia `json:"inertia"`
 }
 
 func NewInertiaStamped() (*InertiaStamped) {
     newInertiaStamped := new(InertiaStamped)
     newInertiaStamped.Go_header = std_msgs.NewHeader()
-    newInertiaStamped.Go_inertia = geometry_msgs.NewInertia()
+    newInertiaStamped.Go_inertia = NewInertia()
     return newInertiaStamped
+}
+
+func (self *InertiaStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_inertia = NewInertia()
 }
 
 func (self *InertiaStamped) Go_serialize(buff []byte) (int) {

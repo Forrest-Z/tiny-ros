@@ -1,17 +1,21 @@
 package sensor_msgs
 
 import (
-    "sensor_msgs/JoyFeedback"
 )
 
+
 type JoyFeedbackArray struct {
-    Go_array []sensor_msgs.JoyFeedback `json:"array"`
+    Go_array []JoyFeedback `json:"array"`
 }
 
 func NewJoyFeedbackArray() (*JoyFeedbackArray) {
     newJoyFeedbackArray := new(JoyFeedbackArray)
-    newJoyFeedbackArray.Go_array = []sensor_msgs.JoyFeedback{}
+    newJoyFeedbackArray.Go_array = []JoyFeedback{}
     return newJoyFeedbackArray
+}
+
+func (self *JoyFeedbackArray) Go_initialize() {
+    self.Go_array = []JoyFeedback{}
 }
 
 func (self *JoyFeedbackArray) Go_serialize(buff []byte) (int) {
@@ -30,12 +34,12 @@ func (self *JoyFeedbackArray) Go_serialize(buff []byte) (int) {
 
 func (self *JoyFeedbackArray) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_array := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_array |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_array |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_array |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_array := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_array |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_array |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_array |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_array = make([]sensor_msgs.JoyFeedback, length_array, length_array)
+    self.Go_array = make([]JoyFeedback, length_array, length_array)
     for i := 0; i < length_array; i++ {
         offset += self.Go_array[i].Go_deserialize(buff[offset:])
     }

@@ -5,6 +5,7 @@ import (
     "math"
 )
 
+
 type LaserEcho struct {
     Go_echoes []float32 `json:"echoes"`
 }
@@ -13,6 +14,10 @@ func NewLaserEcho() (*LaserEcho) {
     newLaserEcho := new(LaserEcho)
     newLaserEcho.Go_echoes = []float32{}
     return newLaserEcho
+}
+
+func (self *LaserEcho) Go_initialize() {
+    self.Go_echoes = []float32{}
 }
 
 func (self *LaserEcho) Go_serialize(buff []byte) (int) {
@@ -33,10 +38,10 @@ func (self *LaserEcho) Go_serialize(buff []byte) (int) {
 
 func (self *LaserEcho) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_echoes := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_echoes |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_echoes |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_echoes |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_echoes := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_echoes |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_echoes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_echoes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_echoes = make([]float32, length_echoes, length_echoes)
     for i := 0; i < length_echoes; i++ {

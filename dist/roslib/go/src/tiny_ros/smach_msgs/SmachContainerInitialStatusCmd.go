@@ -3,6 +3,7 @@ package smach_msgs
 import (
 )
 
+
 type SmachContainerInitialStatusCmd struct {
     Go_path string `json:"path"`
     Go_initial_states []string `json:"initial_states"`
@@ -15,6 +16,12 @@ func NewSmachContainerInitialStatusCmd() (*SmachContainerInitialStatusCmd) {
     newSmachContainerInitialStatusCmd.Go_initial_states = []string{}
     newSmachContainerInitialStatusCmd.Go_local_data = ""
     return newSmachContainerInitialStatusCmd
+}
+
+func (self *SmachContainerInitialStatusCmd) Go_initialize() {
+    self.Go_path = ""
+    self.Go_initial_states = []string{}
+    self.Go_local_data = ""
 }
 
 func (self *SmachContainerInitialStatusCmd) Go_serialize(buff []byte) (int) {
@@ -56,32 +63,32 @@ func (self *SmachContainerInitialStatusCmd) Go_serialize(buff []byte) (int) {
 
 func (self *SmachContainerInitialStatusCmd) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_path := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_path |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_path |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_path |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_path := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_path |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_path |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_path |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_path = string(buff[offset:(offset+length_path)])
     offset += length_path
-    length_initial_states := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_initial_states |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_initial_states |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_initial_states |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_initial_states := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_initial_states |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_initial_states |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_initial_states |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_initial_states = make([]string, length_initial_states, length_initial_states)
     for i := 0; i < length_initial_states; i++ {
-        length_initial_statesi := int((buff[offset + 0] & 0xFF) << (8 * 0))
-        length_initial_statesi |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-        length_initial_statesi |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-        length_initial_statesi |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+        length_initial_statesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
+        length_initial_statesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+        length_initial_statesi |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+        length_initial_statesi |= int(buff[offset + 3] & 0xFF) << (8 * 3)
         offset += 4
         self.Go_initial_states[i] = string(buff[offset:(offset+length_initial_statesi)])
         offset += length_initial_statesi
     }
-    length_local_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_local_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_local_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_local_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_local_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_local_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_local_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_local_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_local_data = string(buff[offset:(offset+length_local_data)])
     offset += length_local_data

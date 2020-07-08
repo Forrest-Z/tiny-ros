@@ -6,8 +6,9 @@ import (
     "math"
 )
 
+
 type RelativeHumidity struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_relative_humidity float64 `json:"relative_humidity"`
     Go_variance float64 `json:"variance"`
 }
@@ -18,6 +19,12 @@ func NewRelativeHumidity() (*RelativeHumidity) {
     newRelativeHumidity.Go_relative_humidity = 0.0
     newRelativeHumidity.Go_variance = 0.0
     return newRelativeHumidity
+}
+
+func (self *RelativeHumidity) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_relative_humidity = 0.0
+    self.Go_variance = 0.0
 }
 
 func (self *RelativeHumidity) Go_serialize(buff []byte) (int) {

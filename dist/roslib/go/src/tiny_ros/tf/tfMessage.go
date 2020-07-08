@@ -1,8 +1,9 @@
 package tf
 
 import (
-    "geometry_msgs/TransformStamped"
+    "tiny_ros/geometry_msgs"
 )
+
 
 type tfMessage struct {
     Go_transforms []geometry_msgs.TransformStamped `json:"transforms"`
@@ -12,6 +13,10 @@ func NewtfMessage() (*tfMessage) {
     newtfMessage := new(tfMessage)
     newtfMessage.Go_transforms = []geometry_msgs.TransformStamped{}
     return newtfMessage
+}
+
+func (self *tfMessage) Go_initialize() {
+    self.Go_transforms = []geometry_msgs.TransformStamped{}
 }
 
 func (self *tfMessage) Go_serialize(buff []byte) (int) {
@@ -30,10 +35,10 @@ func (self *tfMessage) Go_serialize(buff []byte) (int) {
 
 func (self *tfMessage) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_transforms := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_transforms |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_transforms |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_transforms |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_transforms := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_transforms |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_transforms |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_transforms |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_transforms = make([]geometry_msgs.TransformStamped, length_transforms, length_transforms)
     for i := 0; i < length_transforms; i++ {

@@ -4,11 +4,11 @@ import (
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
-    "sensor_msgs/LaserEcho"
 )
 
+
 type MultiEchoLaserScan struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_angle_min float32 `json:"angle_min"`
     Go_angle_max float32 `json:"angle_max"`
     Go_angle_increment float32 `json:"angle_increment"`
@@ -16,8 +16,8 @@ type MultiEchoLaserScan struct {
     Go_scan_time float32 `json:"scan_time"`
     Go_range_min float32 `json:"range_min"`
     Go_range_max float32 `json:"range_max"`
-    Go_ranges []sensor_msgs.LaserEcho `json:"ranges"`
-    Go_intensities []sensor_msgs.LaserEcho `json:"intensities"`
+    Go_ranges []LaserEcho `json:"ranges"`
+    Go_intensities []LaserEcho `json:"intensities"`
 }
 
 func NewMultiEchoLaserScan() (*MultiEchoLaserScan) {
@@ -30,9 +30,22 @@ func NewMultiEchoLaserScan() (*MultiEchoLaserScan) {
     newMultiEchoLaserScan.Go_scan_time = 0.0
     newMultiEchoLaserScan.Go_range_min = 0.0
     newMultiEchoLaserScan.Go_range_max = 0.0
-    newMultiEchoLaserScan.Go_ranges = []sensor_msgs.LaserEcho{}
-    newMultiEchoLaserScan.Go_intensities = []sensor_msgs.LaserEcho{}
+    newMultiEchoLaserScan.Go_ranges = []LaserEcho{}
+    newMultiEchoLaserScan.Go_intensities = []LaserEcho{}
     return newMultiEchoLaserScan
+}
+
+func (self *MultiEchoLaserScan) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_angle_min = 0.0
+    self.Go_angle_max = 0.0
+    self.Go_angle_increment = 0.0
+    self.Go_time_increment = 0.0
+    self.Go_scan_time = 0.0
+    self.Go_range_min = 0.0
+    self.Go_range_max = 0.0
+    self.Go_ranges = []LaserEcho{}
+    self.Go_intensities = []LaserEcho{}
 }
 
 func (self *MultiEchoLaserScan) Go_serialize(buff []byte) (int) {
@@ -104,21 +117,21 @@ func (self *MultiEchoLaserScan) Go_deserialize(buff []byte) (int) {
     bits_range_max := binary.LittleEndian.Uint32(buff[offset:])
     self.Go_range_max = math.Float32frombits(bits_range_max)
     offset += 4
-    length_ranges := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_ranges |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_ranges |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_ranges |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_ranges := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_ranges |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_ranges |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_ranges |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_ranges = make([]sensor_msgs.LaserEcho, length_ranges, length_ranges)
+    self.Go_ranges = make([]LaserEcho, length_ranges, length_ranges)
     for i := 0; i < length_ranges; i++ {
         offset += self.Go_ranges[i].Go_deserialize(buff[offset:])
     }
-    length_intensities := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_intensities |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_intensities |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_intensities |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_intensities := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_intensities |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_intensities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_intensities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_intensities = make([]sensor_msgs.LaserEcho, length_intensities, length_intensities)
+    self.Go_intensities = make([]LaserEcho, length_intensities, length_intensities)
     for i := 0; i < length_intensities; i++ {
         offset += self.Go_intensities[i].Go_deserialize(buff[offset:])
     }

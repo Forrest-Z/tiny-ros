@@ -1,19 +1,24 @@
 package std_msgs
 
 import (
-    "std_msgs/MultiArrayLayout"
 )
 
+
 type Int8MultiArray struct {
-    Go_layout std_msgs.MultiArrayLayout `json:"layout"`
+    Go_layout *MultiArrayLayout `json:"layout"`
     Go_data []int8 `json:"data"`
 }
 
 func NewInt8MultiArray() (*Int8MultiArray) {
     newInt8MultiArray := new(Int8MultiArray)
-    newInt8MultiArray.Go_layout = std_msgs.NewMultiArrayLayout()
+    newInt8MultiArray.Go_layout = NewMultiArrayLayout()
     newInt8MultiArray.Go_data = []int8{}
     return newInt8MultiArray
+}
+
+func (self *Int8MultiArray) Go_initialize() {
+    self.Go_layout = NewMultiArrayLayout()
+    self.Go_data = []int8{}
 }
 
 func (self *Int8MultiArray) Go_serialize(buff []byte) (int) {
@@ -26,7 +31,7 @@ func (self *Int8MultiArray) Go_serialize(buff []byte) (int) {
     buff[offset + 3] = byte((length_data >> (8 * 3)) & 0xFF)
     offset += 4
     for i := 0; i < length_data; i++ {
-        buff[offset + 0] = byte((self.Go_data[i] >> (8 * 0)) & 0xFF)
+        buff[offset + 0] = byte(uint8(self.Go_data[i] >> (8 * 0)) & 0xFF)
         offset += 1
     }
     return offset
@@ -35,14 +40,14 @@ func (self *Int8MultiArray) Go_serialize(buff []byte) (int) {
 func (self *Int8MultiArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_layout.Go_deserialize(buff[offset:])
-    length_data := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_data |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_data |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_data |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_data := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_data |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_data = make([]int8, length_data, length_data)
     for i := 0; i < length_data; i++ {
-        self.Go_data[i] = int8((buff[offset + 0] & 0xFF) << (8 * 0))
+        self.Go_data[i] = int8(buff[offset + 0] & 0xFF) << (8 * 0)
         offset += 1
     }
     return offset

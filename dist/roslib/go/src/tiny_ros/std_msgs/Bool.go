@@ -3,6 +3,7 @@ package std_msgs
 import (
 )
 
+
 type Bool struct {
     Go_data bool `json:"data"`
 }
@@ -13,16 +14,28 @@ func NewBool() (*Bool) {
     return newBool
 }
 
+func (self *Bool) Go_initialize() {
+    self.Go_data = false
+}
+
 func (self *Bool) Go_serialize(buff []byte) (int) {
     offset := 0
-    buff[offset + 0] = byte((self.Go_data >> (8 * 0)) & 0xFF)
+    if self.Go_data {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     return offset
 }
 
 func (self *Bool) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_data = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_data = true
+    } else {
+        self.Go_data = false
+    }
     offset += 1
     return offset
 }

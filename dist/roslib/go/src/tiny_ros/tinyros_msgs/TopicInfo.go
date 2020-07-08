@@ -3,6 +3,17 @@ package tinyros_msgs
 import (
 )
 
+func Go_ID_PUBLISHER() (uint32) { return 0 }
+func Go_ID_SUBSCRIBER() (uint32) { return 1 }
+func Go_ID_SERVICE_SERVER() (uint32) { return 2 }
+func Go_ID_SERVICE_CLIENT() (uint32) { return 4 }
+func Go_ID_ROSTOPIC_REQUEST() (uint32) { return 6 }
+func Go_ID_ROSSERVICE_REQUEST() (uint32) { return 7 }
+func Go_ID_LOG() (uint32) { return 8 }
+func Go_ID_TIME() (uint32) { return 9 }
+func Go_ID_NEGOTIATED() (uint32) { return 10 }
+func Go_ID_SESSION_ID() (uint32) { return 11 }
+
 type TopicInfo struct {
     Go_topic_id uint32 `json:"topic_id"`
     Go_topic_name string `json:"topic_name"`
@@ -12,16 +23,6 @@ type TopicInfo struct {
     Go_negotiated bool `json:"negotiated"`
 }
 
-func (self *TopicInfo) Go_ID_PUBLISHER() (uint32) { return 0 }
-func (self *TopicInfo) Go_ID_SUBSCRIBER() (uint32) { return 1 }
-func (self *TopicInfo) Go_ID_SERVICE_SERVER() (uint32) { return 2 }
-func (self *TopicInfo) Go_ID_SERVICE_CLIENT() (uint32) { return 4 }
-func (self *TopicInfo) Go_ID_ROSTOPIC_REQUEST() (uint32) { return 6 }
-func (self *TopicInfo) Go_ID_ROSSERVICE_REQUEST() (uint32) { return 7 }
-func (self *TopicInfo) Go_ID_LOG() (uint32) { return 8 }
-func (self *TopicInfo) Go_ID_TIME() (uint32) { return 9 }
-func (self *TopicInfo) Go_ID_NEGOTIATED() (uint32) { return 10 }
-func (self *TopicInfo) Go_ID_SESSION_ID() (uint32) { return 11 }
 func NewTopicInfo() (*TopicInfo) {
     newTopicInfo := new(TopicInfo)
     newTopicInfo.Go_topic_id = 0
@@ -31,6 +32,15 @@ func NewTopicInfo() (*TopicInfo) {
     newTopicInfo.Go_buffer_size = 0
     newTopicInfo.Go_negotiated = false
     return newTopicInfo
+}
+
+func (self *TopicInfo) Go_initialize() {
+    self.Go_topic_id = 0
+    self.Go_topic_name = ""
+    self.Go_message_type = ""
+    self.Go_md5sum = ""
+    self.Go_buffer_size = 0
+    self.Go_negotiated = false
 }
 
 func (self *TopicInfo) Go_serialize(buff []byte) (int) {
@@ -69,45 +79,53 @@ func (self *TopicInfo) Go_serialize(buff []byte) (int) {
     buff[offset + 2] = byte((self.Go_buffer_size >> (8 * 2)) & 0xFF)
     buff[offset + 3] = byte((self.Go_buffer_size >> (8 * 3)) & 0xFF)
     offset += 4
-    buff[offset + 0] = byte((self.Go_negotiated >> (8 * 0)) & 0xFF)
+    if self.Go_negotiated {
+        buff[offset] = byte(0x01)
+    } else {
+        buff[offset] = byte(0x00)
+    }
     offset += 1
     return offset
 }
 
 func (self *TopicInfo) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_topic_id = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_topic_id |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_topic_id |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_topic_id |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_topic_id = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_topic_id |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_topic_id |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_topic_id |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    length_topic_name := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_topic_name |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_topic_name |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_topic_name |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_topic_name := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_topic_name |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_topic_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_topic_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_topic_name = string(buff[offset:(offset+length_topic_name)])
     offset += length_topic_name
-    length_message_type := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_message_type |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_message_type |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_message_type |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_message_type := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_message_type |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_message_type |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_message_type |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_message_type = string(buff[offset:(offset+length_message_type)])
     offset += length_message_type
-    length_md5sum := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_md5sum |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_md5sum |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_md5sum |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_md5sum := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_md5sum |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_md5sum |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_md5sum |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_md5sum = string(buff[offset:(offset+length_md5sum)])
     offset += length_md5sum
-    self.Go_buffer_size = int32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_buffer_size |= int32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_buffer_size |= int32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_buffer_size |= int32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_buffer_size = int32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_buffer_size |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_buffer_size |= int32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_buffer_size |= int32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_negotiated = bool((buff[offset + 0] & 0xFF) << (8 * 0))
+    if (buff[offset] & 0xFF) != 0 {
+        self.Go_negotiated = true
+    } else {
+        self.Go_negotiated = false
+    }
     offset += 1
     return offset
 }

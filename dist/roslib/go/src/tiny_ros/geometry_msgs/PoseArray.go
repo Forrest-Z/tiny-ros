@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Pose"
 )
 
+
 type PoseArray struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_poses []geometry_msgs.Pose `json:"poses"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_poses []Pose `json:"poses"`
 }
 
 func NewPoseArray() (*PoseArray) {
     newPoseArray := new(PoseArray)
     newPoseArray.Go_header = std_msgs.NewHeader()
-    newPoseArray.Go_poses = []geometry_msgs.Pose{}
+    newPoseArray.Go_poses = []Pose{}
     return newPoseArray
+}
+
+func (self *PoseArray) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_poses = []Pose{}
 }
 
 func (self *PoseArray) Go_serialize(buff []byte) (int) {
@@ -35,12 +40,12 @@ func (self *PoseArray) Go_serialize(buff []byte) (int) {
 func (self *PoseArray) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_poses := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_poses |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_poses |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_poses |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_poses := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_poses |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_poses |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_poses |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_poses = make([]geometry_msgs.Pose, length_poses, length_poses)
+    self.Go_poses = make([]Pose, length_poses, length_poses)
     for i := 0; i < length_poses; i++ {
         offset += self.Go_poses[i].Go_deserialize(buff[offset:])
     }

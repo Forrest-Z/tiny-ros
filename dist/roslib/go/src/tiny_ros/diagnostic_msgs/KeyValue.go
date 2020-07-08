@@ -3,6 +3,7 @@ package diagnostic_msgs
 import (
 )
 
+
 type KeyValue struct {
     Go_key string `json:"key"`
     Go_value string `json:"value"`
@@ -13,6 +14,11 @@ func NewKeyValue() (*KeyValue) {
     newKeyValue.Go_key = ""
     newKeyValue.Go_value = ""
     return newKeyValue
+}
+
+func (self *KeyValue) Go_initialize() {
+    self.Go_key = ""
+    self.Go_value = ""
 }
 
 func (self *KeyValue) Go_serialize(buff []byte) (int) {
@@ -38,17 +44,17 @@ func (self *KeyValue) Go_serialize(buff []byte) (int) {
 
 func (self *KeyValue) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_key := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_key |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_key |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_key |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_key := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_key |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_key |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_key |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_key = string(buff[offset:(offset+length_key)])
     offset += length_key
-    length_value := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_value |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_value |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_value |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_value := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_value |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_value |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_value |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_value = string(buff[offset:(offset+length_value)])
     offset += length_value

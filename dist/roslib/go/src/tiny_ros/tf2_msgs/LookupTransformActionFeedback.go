@@ -2,22 +2,28 @@ package tf2_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "actionlib_msgs/GoalStatus"
-    "tf2_msgs/LookupTransformFeedback"
+    "tiny_ros/actionlib_msgs"
 )
 
+
 type LookupTransformActionFeedback struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_status actionlib_msgs.GoalStatus `json:"status"`
-    Go_feedback tf2_msgs.LookupTransformFeedback `json:"feedback"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_status *actionlib_msgs.GoalStatus `json:"status"`
+    Go_feedback *LookupTransformFeedback `json:"feedback"`
 }
 
 func NewLookupTransformActionFeedback() (*LookupTransformActionFeedback) {
     newLookupTransformActionFeedback := new(LookupTransformActionFeedback)
     newLookupTransformActionFeedback.Go_header = std_msgs.NewHeader()
     newLookupTransformActionFeedback.Go_status = actionlib_msgs.NewGoalStatus()
-    newLookupTransformActionFeedback.Go_feedback = tf2_msgs.NewLookupTransformFeedback()
+    newLookupTransformActionFeedback.Go_feedback = NewLookupTransformFeedback()
     return newLookupTransformActionFeedback
+}
+
+func (self *LookupTransformActionFeedback) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_status = actionlib_msgs.NewGoalStatus()
+    self.Go_feedback = NewLookupTransformFeedback()
 }
 
 func (self *LookupTransformActionFeedback) Go_serialize(buff []byte) (int) {

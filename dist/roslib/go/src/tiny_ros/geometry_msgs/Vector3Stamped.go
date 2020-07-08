@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Vector3"
 )
 
+
 type Vector3Stamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_vector geometry_msgs.Vector3 `json:"vector"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_vector *Vector3 `json:"vector"`
 }
 
 func NewVector3Stamped() (*Vector3Stamped) {
     newVector3Stamped := new(Vector3Stamped)
     newVector3Stamped.Go_header = std_msgs.NewHeader()
-    newVector3Stamped.Go_vector = geometry_msgs.NewVector3()
+    newVector3Stamped.Go_vector = NewVector3()
     return newVector3Stamped
+}
+
+func (self *Vector3Stamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_vector = NewVector3()
 }
 
 func (self *Vector3Stamped) Go_serialize(buff []byte) (int) {

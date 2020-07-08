@@ -2,19 +2,24 @@ package geometry_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/AccelWithCovariance"
 )
 
+
 type AccelWithCovarianceStamped struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_accel geometry_msgs.AccelWithCovariance `json:"accel"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_accel *AccelWithCovariance `json:"accel"`
 }
 
 func NewAccelWithCovarianceStamped() (*AccelWithCovarianceStamped) {
     newAccelWithCovarianceStamped := new(AccelWithCovarianceStamped)
     newAccelWithCovarianceStamped.Go_header = std_msgs.NewHeader()
-    newAccelWithCovarianceStamped.Go_accel = geometry_msgs.NewAccelWithCovariance()
+    newAccelWithCovarianceStamped.Go_accel = NewAccelWithCovariance()
     return newAccelWithCovarianceStamped
+}
+
+func (self *AccelWithCovarianceStamped) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_accel = NewAccelWithCovariance()
 }
 
 func (self *AccelWithCovarianceStamped) Go_serialize(buff []byte) (int) {

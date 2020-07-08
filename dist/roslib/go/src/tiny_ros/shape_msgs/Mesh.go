@@ -1,20 +1,25 @@
 package shape_msgs
 
 import (
-    "shape_msgs/MeshTriangle"
-    "geometry_msgs/Point"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type Mesh struct {
-    Go_triangles []shape_msgs.MeshTriangle `json:"triangles"`
+    Go_triangles []MeshTriangle `json:"triangles"`
     Go_vertices []geometry_msgs.Point `json:"vertices"`
 }
 
 func NewMesh() (*Mesh) {
     newMesh := new(Mesh)
-    newMesh.Go_triangles = []shape_msgs.MeshTriangle{}
+    newMesh.Go_triangles = []MeshTriangle{}
     newMesh.Go_vertices = []geometry_msgs.Point{}
     return newMesh
+}
+
+func (self *Mesh) Go_initialize() {
+    self.Go_triangles = []MeshTriangle{}
+    self.Go_vertices = []geometry_msgs.Point{}
 }
 
 func (self *Mesh) Go_serialize(buff []byte) (int) {
@@ -42,19 +47,19 @@ func (self *Mesh) Go_serialize(buff []byte) (int) {
 
 func (self *Mesh) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_triangles := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_triangles |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_triangles |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_triangles |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_triangles := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_triangles |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_triangles |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_triangles |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_triangles = make([]shape_msgs.MeshTriangle, length_triangles, length_triangles)
+    self.Go_triangles = make([]MeshTriangle, length_triangles, length_triangles)
     for i := 0; i < length_triangles; i++ {
         offset += self.Go_triangles[i].Go_deserialize(buff[offset:])
     }
-    length_vertices := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_vertices |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_vertices |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_vertices |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_vertices := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_vertices |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_vertices |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_vertices |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_vertices = make([]geometry_msgs.Point, length_vertices, length_vertices)
     for i := 0; i < length_vertices; i++ {

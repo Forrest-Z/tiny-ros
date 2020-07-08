@@ -1,19 +1,24 @@
 package std_msgs
 
 import (
-    "std_msgs/MultiArrayDimension"
 )
 
+
 type MultiArrayLayout struct {
-    Go_dim []std_msgs.MultiArrayDimension `json:"dim"`
+    Go_dim []MultiArrayDimension `json:"dim"`
     Go_data_offset uint32 `json:"data_offset"`
 }
 
 func NewMultiArrayLayout() (*MultiArrayLayout) {
     newMultiArrayLayout := new(MultiArrayLayout)
-    newMultiArrayLayout.Go_dim = []std_msgs.MultiArrayDimension{}
+    newMultiArrayLayout.Go_dim = []MultiArrayDimension{}
     newMultiArrayLayout.Go_data_offset = 0
     return newMultiArrayLayout
+}
+
+func (self *MultiArrayLayout) Go_initialize() {
+    self.Go_dim = []MultiArrayDimension{}
+    self.Go_data_offset = 0
 }
 
 func (self *MultiArrayLayout) Go_serialize(buff []byte) (int) {
@@ -37,19 +42,19 @@ func (self *MultiArrayLayout) Go_serialize(buff []byte) (int) {
 
 func (self *MultiArrayLayout) Go_deserialize(buff []byte) (int) {
     offset := 0
-    length_dim := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_dim |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_dim |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_dim |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_dim := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_dim |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_dim |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_dim |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_dim = make([]std_msgs.MultiArrayDimension, length_dim, length_dim)
+    self.Go_dim = make([]MultiArrayDimension, length_dim, length_dim)
     for i := 0; i < length_dim; i++ {
         offset += self.Go_dim[i].Go_deserialize(buff[offset:])
     }
-    self.Go_data_offset = uint32((buff[offset + 0] & 0xFF) << (8 * 0))
-    self.Go_data_offset |= uint32((buff[offset + 1] & 0xFF) << (8 * 1))
-    self.Go_data_offset |= uint32((buff[offset + 2] & 0xFF) << (8 * 2))
-    self.Go_data_offset |= uint32((buff[offset + 3] & 0xFF) << (8 * 3))
+    self.Go_data_offset = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
+    self.Go_data_offset |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
+    self.Go_data_offset |= uint32(buff[offset + 2] & 0xFF) << (8 * 2)
+    self.Go_data_offset |= uint32(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     return offset
 }

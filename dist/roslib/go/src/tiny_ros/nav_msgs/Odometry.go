@@ -2,15 +2,15 @@ package nav_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/PoseWithCovariance"
-    "geometry_msgs/TwistWithCovariance"
+    "tiny_ros/geometry_msgs"
 )
 
+
 type Odometry struct {
-    Go_header std_msgs.Header `json:"header"`
+    Go_header *std_msgs.Header `json:"header"`
     Go_child_frame_id string `json:"child_frame_id"`
-    Go_pose geometry_msgs.PoseWithCovariance `json:"pose"`
-    Go_twist geometry_msgs.TwistWithCovariance `json:"twist"`
+    Go_pose *geometry_msgs.PoseWithCovariance `json:"pose"`
+    Go_twist *geometry_msgs.TwistWithCovariance `json:"twist"`
 }
 
 func NewOdometry() (*Odometry) {
@@ -20,6 +20,13 @@ func NewOdometry() (*Odometry) {
     newOdometry.Go_pose = geometry_msgs.NewPoseWithCovariance()
     newOdometry.Go_twist = geometry_msgs.NewTwistWithCovariance()
     return newOdometry
+}
+
+func (self *Odometry) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_child_frame_id = ""
+    self.Go_pose = geometry_msgs.NewPoseWithCovariance()
+    self.Go_twist = geometry_msgs.NewTwistWithCovariance()
 }
 
 func (self *Odometry) Go_serialize(buff []byte) (int) {
@@ -41,10 +48,10 @@ func (self *Odometry) Go_serialize(buff []byte) (int) {
 func (self *Odometry) Go_deserialize(buff []byte) (int) {
     offset := 0
     offset += self.Go_header.Go_deserialize(buff[offset:])
-    length_child_frame_id := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_child_frame_id |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_child_frame_id |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_child_frame_id |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_child_frame_id := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_child_frame_id |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_child_frame_id |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_child_frame_id |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_child_frame_id = string(buff[offset:(offset+length_child_frame_id)])
     offset += length_child_frame_id

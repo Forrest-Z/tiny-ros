@@ -2,14 +2,15 @@ package sensor_msgs
 
 import (
     "tiny_ros/std_msgs"
-    "geometry_msgs/Vector3"
+    "tiny_ros/geometry_msgs"
     "encoding/binary"
     "math"
 )
 
+
 type MagneticField struct {
-    Go_header std_msgs.Header `json:"header"`
-    Go_magnetic_field geometry_msgs.Vector3 `json:"magnetic_field"`
+    Go_header *std_msgs.Header `json:"header"`
+    Go_magnetic_field *geometry_msgs.Vector3 `json:"magnetic_field"`
     Go_magnetic_field_covariance [9]float64 `json:"magnetic_field_covariance"`
 }
 
@@ -19,6 +20,12 @@ func NewMagneticField() (*MagneticField) {
     newMagneticField.Go_magnetic_field = geometry_msgs.NewVector3()
     newMagneticField.Go_magnetic_field_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     return newMagneticField
+}
+
+func (self *MagneticField) Go_initialize() {
+    self.Go_header = std_msgs.NewHeader()
+    self.Go_magnetic_field = geometry_msgs.NewVector3()
+    self.Go_magnetic_field_covariance = [9]float64{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 }
 
 func (self *MagneticField) Go_serialize(buff []byte) (int) {

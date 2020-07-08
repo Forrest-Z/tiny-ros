@@ -5,28 +5,34 @@ import (
     "math"
 )
 
+func Go_BOX() (uint8) { return 1 }
+func Go_SPHERE() (uint8) { return 2 }
+func Go_CYLINDER() (uint8) { return 3 }
+func Go_CONE() (uint8) { return 4 }
+func Go_BOX_X() (uint8) { return 0 }
+func Go_BOX_Y() (uint8) { return 1 }
+func Go_BOX_Z() (uint8) { return 2 }
+func Go_SPHERE_RADIUS() (uint8) { return 0 }
+func Go_CYLINDER_HEIGHT() (uint8) { return 0 }
+func Go_CYLINDER_RADIUS() (uint8) { return 1 }
+func Go_CONE_HEIGHT() (uint8) { return 0 }
+func Go_CONE_RADIUS() (uint8) { return 1 }
+
 type SolidPrimitive struct {
     Go_type uint8 `json:"type"`
     Go_dimensions []float64 `json:"dimensions"`
 }
 
-func (self *SolidPrimitive) Go_BOX() (uint8) { return 1 }
-func (self *SolidPrimitive) Go_SPHERE() (uint8) { return 2 }
-func (self *SolidPrimitive) Go_CYLINDER() (uint8) { return 3 }
-func (self *SolidPrimitive) Go_CONE() (uint8) { return 4 }
-func (self *SolidPrimitive) Go_BOX_X() (uint8) { return 0 }
-func (self *SolidPrimitive) Go_BOX_Y() (uint8) { return 1 }
-func (self *SolidPrimitive) Go_BOX_Z() (uint8) { return 2 }
-func (self *SolidPrimitive) Go_SPHERE_RADIUS() (uint8) { return 0 }
-func (self *SolidPrimitive) Go_CYLINDER_HEIGHT() (uint8) { return 0 }
-func (self *SolidPrimitive) Go_CYLINDER_RADIUS() (uint8) { return 1 }
-func (self *SolidPrimitive) Go_CONE_HEIGHT() (uint8) { return 0 }
-func (self *SolidPrimitive) Go_CONE_RADIUS() (uint8) { return 1 }
 func NewSolidPrimitive() (*SolidPrimitive) {
     newSolidPrimitive := new(SolidPrimitive)
     newSolidPrimitive.Go_type = 0
     newSolidPrimitive.Go_dimensions = []float64{}
     return newSolidPrimitive
+}
+
+func (self *SolidPrimitive) Go_initialize() {
+    self.Go_type = 0
+    self.Go_dimensions = []float64{}
 }
 
 func (self *SolidPrimitive) Go_serialize(buff []byte) (int) {
@@ -49,12 +55,12 @@ func (self *SolidPrimitive) Go_serialize(buff []byte) (int) {
 
 func (self *SolidPrimitive) Go_deserialize(buff []byte) (int) {
     offset := 0
-    self.Go_type = uint8((buff[offset + 0] & 0xFF) << (8 * 0))
+    self.Go_type = uint8(buff[offset + 0] & 0xFF) << (8 * 0)
     offset += 1
-    length_dimensions := int((buff[offset + 0] & 0xFF) << (8 * 0))
-    length_dimensions |= int((buff[offset + 1] & 0xFF) << (8 * 1))
-    length_dimensions |= int((buff[offset + 2] & 0xFF) << (8 * 2))
-    length_dimensions |= int((buff[offset + 3] & 0xFF) << (8 * 3))
+    length_dimensions := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_dimensions |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_dimensions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_dimensions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
     self.Go_dimensions = make([]float64, length_dimensions, length_dimensions)
     for i := 0; i < length_dimensions; i++ {
