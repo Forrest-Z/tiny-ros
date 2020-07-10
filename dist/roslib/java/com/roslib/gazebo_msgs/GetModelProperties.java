@@ -64,7 +64,7 @@ public static class GetModelPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMODELPROPERTIES; }
     public java.lang.String getMD5(){ return "fe0194bf75c917c89b820b09c12fe6c1"; }
     public long getID() { return this.__id__; }
@@ -129,17 +129,17 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_body_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_body_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_body_names; i++){
-        int length_body_namesi = this.body_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_body_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_body_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_body_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_body_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_body_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.body_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_body_namesi;
+        for (int i = 0; i < length_body_names; i++) {
+            int length_body_namesi = this.body_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_body_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_body_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_body_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_body_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_body_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.body_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_body_namesi;
         }
         int length_geom_names = this.geom_names != null ? this.geom_names.length : 0;
         outbuffer[offset + 0] = (byte)((length_geom_names >> (8 * 0)) & 0xFF);
@@ -147,17 +147,17 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_geom_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_geom_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_geom_names; i++){
-        int length_geom_namesi = this.geom_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_geom_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_geom_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_geom_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_geom_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_geom_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.geom_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_geom_namesi;
+        for (int i = 0; i < length_geom_names; i++) {
+            int length_geom_namesi = this.geom_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_geom_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_geom_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_geom_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_geom_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_geom_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.geom_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_geom_namesi;
         }
         int length_joint_names = this.joint_names != null ? this.joint_names.length : 0;
         outbuffer[offset + 0] = (byte)((length_joint_names >> (8 * 0)) & 0xFF);
@@ -165,17 +165,17 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_joint_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_joint_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_joint_names; i++){
-        int length_joint_namesi = this.joint_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_joint_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_joint_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_joint_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_joint_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_joint_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.joint_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_joint_namesi;
+        for (int i = 0; i < length_joint_names; i++) {
+            int length_joint_namesi = this.joint_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_joint_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_joint_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_joint_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_joint_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_joint_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.joint_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_joint_namesi;
         }
         int length_child_model_names = this.child_model_names != null ? this.child_model_names.length : 0;
         outbuffer[offset + 0] = (byte)((length_child_model_names >> (8 * 0)) & 0xFF);
@@ -183,17 +183,17 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_child_model_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_child_model_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_child_model_names; i++){
-        int length_child_model_namesi = this.child_model_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_child_model_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_child_model_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_child_model_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_child_model_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_child_model_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.child_model_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_child_model_namesi;
+        for (int i = 0; i < length_child_model_names; i++) {
+            int length_child_model_namesi = this.child_model_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_child_model_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_child_model_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_child_model_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_child_model_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_child_model_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.child_model_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_child_model_namesi;
         }
         outbuffer[offset] = (byte)((is_static ? 0x01 : 0x00) & 0xFF);
         offset += 1;
@@ -249,18 +249,18 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         if(length_body_names > 0) {
             this.body_names = new java.lang.String[length_body_names];
         }
-        for (int i = 0; i < length_body_names; i++){
-        int length_body_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_body_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_body_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_body_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_body_namesi = new byte[length_body_namesi];
-        for(int k= 0; k< length_body_namesi; k++){
-            bytes_body_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.body_names[i] = new java.lang.String(bytes_body_namesi);
-        offset += length_body_namesi;
+        for (int i = 0; i < length_body_names; i++) {
+            int length_body_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_body_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_body_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_body_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_body_namesi = new byte[length_body_namesi];
+            for(int k= 0; k< length_body_namesi; k++){
+                bytes_body_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.body_names[i] = new java.lang.String(bytes_body_namesi);
+            offset += length_body_namesi;
         }
         int length_geom_names = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_geom_names |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -270,18 +270,18 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         if(length_geom_names > 0) {
             this.geom_names = new java.lang.String[length_geom_names];
         }
-        for (int i = 0; i < length_geom_names; i++){
-        int length_geom_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_geom_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_geom_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_geom_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_geom_namesi = new byte[length_geom_namesi];
-        for(int k= 0; k< length_geom_namesi; k++){
-            bytes_geom_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.geom_names[i] = new java.lang.String(bytes_geom_namesi);
-        offset += length_geom_namesi;
+        for (int i = 0; i < length_geom_names; i++) {
+            int length_geom_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_geom_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_geom_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_geom_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_geom_namesi = new byte[length_geom_namesi];
+            for(int k= 0; k< length_geom_namesi; k++){
+                bytes_geom_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.geom_names[i] = new java.lang.String(bytes_geom_namesi);
+            offset += length_geom_namesi;
         }
         int length_joint_names = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_joint_names |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -291,18 +291,18 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         if(length_joint_names > 0) {
             this.joint_names = new java.lang.String[length_joint_names];
         }
-        for (int i = 0; i < length_joint_names; i++){
-        int length_joint_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_joint_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_joint_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_joint_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_joint_namesi = new byte[length_joint_namesi];
-        for(int k= 0; k< length_joint_namesi; k++){
-            bytes_joint_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.joint_names[i] = new java.lang.String(bytes_joint_namesi);
-        offset += length_joint_namesi;
+        for (int i = 0; i < length_joint_names; i++) {
+            int length_joint_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_joint_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_joint_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_joint_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_joint_namesi = new byte[length_joint_namesi];
+            for(int k= 0; k< length_joint_namesi; k++){
+                bytes_joint_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.joint_names[i] = new java.lang.String(bytes_joint_namesi);
+            offset += length_joint_namesi;
         }
         int length_child_model_names = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_child_model_names |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -312,18 +312,18 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         if(length_child_model_names > 0) {
             this.child_model_names = new java.lang.String[length_child_model_names];
         }
-        for (int i = 0; i < length_child_model_names; i++){
-        int length_child_model_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_child_model_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_child_model_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_child_model_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_child_model_namesi = new byte[length_child_model_namesi];
-        for(int k= 0; k< length_child_model_namesi; k++){
-            bytes_child_model_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.child_model_names[i] = new java.lang.String(bytes_child_model_namesi);
-        offset += length_child_model_namesi;
+        for (int i = 0; i < length_child_model_names; i++) {
+            int length_child_model_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_child_model_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_child_model_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_child_model_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_child_model_namesi = new byte[length_child_model_namesi];
+            for(int k= 0; k< length_child_model_namesi; k++){
+                bytes_child_model_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.child_model_names[i] = new java.lang.String(bytes_child_model_namesi);
+            offset += length_child_model_namesi;
         }
         this.is_static = (boolean)((inbuffer[offset] & 0xFF) != 0 ? true : false);
         offset += 1;
@@ -354,30 +354,30 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         length += 4;
         int length_body_names = this.body_names != null ? this.body_names.length : 0;
         for (int i = 0; i < length_body_names; i++) {
-        int length_body_namesi = this.body_names[i].getBytes().length;
-        length += 4;
-        length += length_body_namesi;
+            int length_body_namesi = this.body_names[i].getBytes().length;
+            length += 4;
+            length += length_body_namesi;
         }
         length += 4;
         int length_geom_names = this.geom_names != null ? this.geom_names.length : 0;
         for (int i = 0; i < length_geom_names; i++) {
-        int length_geom_namesi = this.geom_names[i].getBytes().length;
-        length += 4;
-        length += length_geom_namesi;
+            int length_geom_namesi = this.geom_names[i].getBytes().length;
+            length += 4;
+            length += length_geom_namesi;
         }
         length += 4;
         int length_joint_names = this.joint_names != null ? this.joint_names.length : 0;
         for (int i = 0; i < length_joint_names; i++) {
-        int length_joint_namesi = this.joint_names[i].getBytes().length;
-        length += 4;
-        length += length_joint_namesi;
+            int length_joint_namesi = this.joint_names[i].getBytes().length;
+            length += 4;
+            length += length_joint_namesi;
         }
         length += 4;
         int length_child_model_names = this.child_model_names != null ? this.child_model_names.length : 0;
         for (int i = 0; i < length_child_model_names; i++) {
-        int length_child_model_namesi = this.child_model_names[i].getBytes().length;
-        length += 4;
-        length += length_child_model_namesi;
+            int length_child_model_namesi = this.child_model_names[i].getBytes().length;
+            length += 4;
+            length += length_child_model_namesi;
         }
         length += 1;
         length += 1;
@@ -387,7 +387,7 @@ public static class GetModelPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMODELPROPERTIES; }
     public java.lang.String getMD5(){ return "d8f16b08abaf0220a551cf9025748602"; }
     public long getID() { return this.__id__; }

@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -65,7 +66,7 @@ func (self *Joy) Go_deserialize(buff []byte) (int) {
     length_axes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_axes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_axes = make([]float32, length_axes, length_axes)
+    self.Go_axes = make([]float32, length_axes)
     for i := 0; i < length_axes; i++ {
         bits_axesi := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_axes[i] = math.Float32frombits(bits_axesi)
@@ -76,7 +77,7 @@ func (self *Joy) Go_deserialize(buff []byte) (int) {
     length_buttons |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_buttons |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_buttons = make([]int32, length_buttons, length_buttons)
+    self.Go_buttons = make([]int32, length_buttons)
     for i := 0; i < length_buttons; i++ {
         self.Go_buttons[i] = int32(buff[offset + 0] & 0xFF) << (8 * 0)
         self.Go_buttons[i] |= int32(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -103,7 +104,11 @@ func (self *Joy) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Joy) Go_echo() (string) { return "" }
+func (self *Joy) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Joy) Go_getType() (string) { return "sensor_msgs/Joy" }
 func (self *Joy) Go_getMD5() (string) { return "da3438323dbe92a4d6e4658e06bf8da1" }
 func (self *Joy) Go_getID() (uint32) { return 0 }

@@ -75,69 +75,69 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->D_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->D_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->D_length);
-      for( uint32_t i = 0; i < D_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Di;
-      u_Di.real = this->D[i];
-      *(outbuffer + offset + 0) = (u_Di.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_Di.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_Di.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_Di.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_Di.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_Di.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_Di.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_Di.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->D[i]);
+      for( uint32_t i = 0; i < D_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_Di;
+        u_Di.real = this->D[i];
+        *(outbuffer + offset + 0) = (u_Di.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_Di.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_Di.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_Di.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_Di.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_Di.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_Di.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_Di.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->D[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Ki;
-      u_Ki.real = this->K[i];
-      *(outbuffer + offset + 0) = (u_Ki.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_Ki.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_Ki.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_Ki.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_Ki.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_Ki.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_Ki.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_Ki.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->K[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_Ki;
+        u_Ki.real = this->K[i];
+        *(outbuffer + offset + 0) = (u_Ki.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_Ki.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_Ki.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_Ki.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_Ki.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_Ki.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_Ki.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_Ki.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->K[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Ri;
-      u_Ri.real = this->R[i];
-      *(outbuffer + offset + 0) = (u_Ri.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_Ri.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_Ri.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_Ri.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_Ri.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_Ri.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_Ri.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_Ri.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->R[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_Ri;
+        u_Ri.real = this->R[i];
+        *(outbuffer + offset + 0) = (u_Ri.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_Ri.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_Ri.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_Ri.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_Ri.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_Ri.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_Ri.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_Ri.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->R[i]);
       }
-      for( uint32_t i = 0; i < 12; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Pi;
-      u_Pi.real = this->P[i];
-      *(outbuffer + offset + 0) = (u_Pi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_Pi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_Pi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_Pi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_Pi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_Pi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_Pi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_Pi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->P[i]);
+      for( uint32_t i = 0; i < 12; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_Pi;
+        u_Pi.real = this->P[i];
+        *(outbuffer + offset + 0) = (u_Pi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_Pi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_Pi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_Pi.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_Pi.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_Pi.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_Pi.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_Pi.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->P[i]);
       }
       *(outbuffer + offset + 0) = (this->binning_x >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->binning_x >> (8 * 1)) & 0xFF;
@@ -171,7 +171,7 @@ namespace sensor_msgs
       arrToVar(length_distortion_model, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_distortion_model; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_distortion_model-1]=0;
       this->distortion_model = (char *)(inbuffer + offset-1);
@@ -184,74 +184,74 @@ namespace sensor_msgs
       if(D_lengthT > D_length)
         this->D = (double*)realloc(this->D, D_lengthT * sizeof(double));
       D_length = D_lengthT;
-      for( uint32_t i = 0; i < D_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_D;
-      u_st_D.base = 0;
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_D = u_st_D.real;
-      offset += sizeof(this->st_D);
+      for( uint32_t i = 0; i < D_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_D;
+        u_st_D.base = 0;
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_D.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_D = u_st_D.real;
+        offset += sizeof(this->st_D);
         memcpy( &(this->D[i]), &(this->st_D), sizeof(double));
       }
       for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Ki;
-      u_Ki.base = 0;
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->K[i] = u_Ki.real;
-      offset += sizeof(this->K[i]);
+        union {
+          double real;
+          uint64_t base;
+        } u_Ki;
+        u_Ki.base = 0;
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_Ki.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->K[i] = u_Ki.real;
+        offset += sizeof(this->K[i]);
       }
       for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Ri;
-      u_Ri.base = 0;
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->R[i] = u_Ri.real;
-      offset += sizeof(this->R[i]);
+        union {
+          double real;
+          uint64_t base;
+        } u_Ri;
+        u_Ri.base = 0;
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_Ri.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->R[i] = u_Ri.real;
+        offset += sizeof(this->R[i]);
       }
       for( uint32_t i = 0; i < 12; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_Pi;
-      u_Pi.base = 0;
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->P[i] = u_Pi.real;
-      offset += sizeof(this->P[i]);
+        union {
+          double real;
+          uint64_t base;
+        } u_Pi;
+        u_Pi.base = 0;
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_Pi.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->P[i] = u_Pi.real;
+        offset += sizeof(this->P[i]);
       }
       this->binning_x =  ((uint32_t) (*(inbuffer + offset)));
       this->binning_x |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
@@ -277,17 +277,17 @@ namespace sensor_msgs
       length += 4;
       length += length_distortion_model;
       length += sizeof(this->D_length);
-      for( uint32_t i = 0; i < D_length; i++){
-      length += sizeof(this->D[i]);
+      for( uint32_t i = 0; i < D_length; i++) {
+        length += sizeof(this->D[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
-      length += sizeof(this->K[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        length += sizeof(this->K[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
-      length += sizeof(this->R[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        length += sizeof(this->R[i]);
       }
-      for( uint32_t i = 0; i < 12; i++){
-      length += sizeof(this->P[i]);
+      for( uint32_t i = 0; i < 12; i++) {
+        length += sizeof(this->P[i]);
       }
       length += sizeof(this->binning_x);
       length += sizeof(this->binning_y);

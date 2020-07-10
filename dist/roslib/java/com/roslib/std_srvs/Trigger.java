@@ -38,7 +38,7 @@ public static class TriggerRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return TRIGGER; }
     public java.lang.String getMD5(){ return "23ce35174a691cb0bfbbdb21395edbac"; }
     public long getID() { return this.__id__; }
@@ -110,7 +110,7 @@ public static class TriggerResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return TRIGGER; }
     public java.lang.String getMD5(){ return "08d111154ed595049573252ba929a6d8"; }
     public long getID() { return this.__id__; }

@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -48,7 +49,7 @@ func (self *UInt32MultiArray) Go_deserialize(buff []byte) (int) {
     length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data = make([]uint32, length_data, length_data)
+    self.Go_data = make([]uint32, length_data)
     for i := 0; i < length_data; i++ {
         self.Go_data[i] = uint32(buff[offset + 0] & 0xFF) << (8 * 0)
         self.Go_data[i] |= uint32(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -70,7 +71,11 @@ func (self *UInt32MultiArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *UInt32MultiArray) Go_echo() (string) { return "" }
+func (self *UInt32MultiArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *UInt32MultiArray) Go_getType() (string) { return "std_msgs/UInt32MultiArray" }
 func (self *UInt32MultiArray) Go_getMD5() (string) { return "eb9320ab0c1ae5878d7ab30676e3083f" }
 func (self *UInt32MultiArray) Go_getID() (uint32) { return 0 }

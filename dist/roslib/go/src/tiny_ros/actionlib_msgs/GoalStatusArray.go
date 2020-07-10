@@ -1,25 +1,26 @@
 package actionlib_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
 
 type GoalStatusArray struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_status_list []GoalStatus `json:"status_list"`
+    Go_status_list []*GoalStatus `json:"status_list"`
 }
 
 func NewGoalStatusArray() (*GoalStatusArray) {
     newGoalStatusArray := new(GoalStatusArray)
     newGoalStatusArray.Go_header = std_msgs.NewHeader()
-    newGoalStatusArray.Go_status_list = []GoalStatus{}
+    newGoalStatusArray.Go_status_list = []*GoalStatus{}
     return newGoalStatusArray
 }
 
 func (self *GoalStatusArray) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_status_list = []GoalStatus{}
+    self.Go_status_list = []*GoalStatus{}
 }
 
 func (self *GoalStatusArray) Go_serialize(buff []byte) (int) {
@@ -45,7 +46,10 @@ func (self *GoalStatusArray) Go_deserialize(buff []byte) (int) {
     length_status_list |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_status_list |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status_list = make([]GoalStatus, length_status_list, length_status_list)
+    self.Go_status_list = make([]*GoalStatus, length_status_list)
+    for i := 0; i < length_status_list; i++ {
+        self.Go_status_list[i] = NewGoalStatus()
+    }
     for i := 0; i < length_status_list; i++ {
         offset += self.Go_status_list[i].Go_deserialize(buff[offset:])
     }
@@ -63,7 +67,11 @@ func (self *GoalStatusArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GoalStatusArray) Go_echo() (string) { return "" }
+func (self *GoalStatusArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GoalStatusArray) Go_getType() (string) { return "actionlib_msgs/GoalStatusArray" }
 func (self *GoalStatusArray) Go_getMD5() (string) { return "53f6501f7c14f5f3963638de4bbe3a71" }
 func (self *GoalStatusArray) Go_getID() (uint32) { return 0 }

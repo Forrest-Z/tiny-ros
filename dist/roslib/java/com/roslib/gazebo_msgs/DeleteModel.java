@@ -64,7 +64,7 @@ public static class DeleteModelRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return DELETEMODEL; }
     public java.lang.String getMD5(){ return "c4e25cd35d75c6c2f51ee0d986d8e556"; }
     public long getID() { return this.__id__; }
@@ -136,7 +136,7 @@ public static class DeleteModelResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return DELETEMODEL; }
     public java.lang.String getMD5(){ return "3feb2eeea1c45bcf64067e4dd162726f"; }
     public long getID() { return this.__id__; }

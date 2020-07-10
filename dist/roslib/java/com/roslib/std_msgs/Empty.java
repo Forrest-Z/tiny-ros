@@ -22,7 +22,7 @@ public class Empty implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Empty"; }
     public java.lang.String getMD5(){ return "140bdcb7bbc50b4a936e90ff2350c8d3"; }
     public long getID() { return 0; }

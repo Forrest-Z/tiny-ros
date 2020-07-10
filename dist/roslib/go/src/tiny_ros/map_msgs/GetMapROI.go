@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "tiny_ros/nav_msgs"
     "math"
@@ -87,7 +88,11 @@ func (self *GetMapROIRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetMapROIRequest) Go_echo() (string) { return "" }
+func (self *GetMapROIRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetMapROIRequest) Go_getType() (string) { return "map_msgs/GetMapROI" }
 func (self *GetMapROIRequest) Go_getMD5() (string) { return "f74ea8c8dc9b857aae7ea10033520d28" }
 func (self *GetMapROIRequest) Go_getID() (uint32) { return self.__id__ }
@@ -142,7 +147,11 @@ func (self *GetMapROIResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetMapROIResponse) Go_echo() (string) { return "" }
+func (self *GetMapROIResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetMapROIResponse) Go_getType() (string) { return "map_msgs/GetMapROI" }
 func (self *GetMapROIResponse) Go_getMD5() (string) { return "a178ec520c3d0d99d9d85c70ed4b535a" }
 func (self *GetMapROIResponse) Go_getID() (uint32) { return self.__id__ }

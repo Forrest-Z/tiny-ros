@@ -90,12 +90,12 @@ namespace rosgraph_msgs
       *(outbuffer + offset + 2) = (this->topics_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->topics_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->topics_length);
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = this->topics[i].size();
-      varToArr(outbuffer + offset, length_topicsi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->topics[i].c_str(), length_topicsi);
-      offset += length_topicsi;
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_topicsi = this->topics[i].size();
+        varToArr(outbuffer + offset, length_topicsi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->topics[i].c_str(), length_topicsi);
+        offset += length_topicsi;
       }
       return offset;
     }
@@ -116,7 +116,7 @@ namespace rosgraph_msgs
       arrToVar(length_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_name-1]=0;
       this->name = (char *)(inbuffer + offset-1);
@@ -125,7 +125,7 @@ namespace rosgraph_msgs
       arrToVar(length_msg, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_msg; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_msg-1]=0;
       this->msg = (char *)(inbuffer + offset-1);
@@ -134,7 +134,7 @@ namespace rosgraph_msgs
       arrToVar(length_file, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_file; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_file-1]=0;
       this->file = (char *)(inbuffer + offset-1);
@@ -143,7 +143,7 @@ namespace rosgraph_msgs
       arrToVar(length_function, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_function; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_function-1]=0;
       this->function = (char *)(inbuffer + offset-1);
@@ -161,16 +161,16 @@ namespace rosgraph_msgs
       if(topics_lengthT > topics_length)
         this->topics = (tinyros::string*)realloc(this->topics, topics_lengthT * sizeof(tinyros::string));
       topics_length = topics_lengthT;
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_st_topics;
-      arrToVar(length_st_topics, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_topics; ++k){
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_st_topics;
+        arrToVar(length_st_topics, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_topics; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_topics-1]=0;
-      this->st_topics = (char *)(inbuffer + offset-1);
-      offset += length_st_topics;
+        }
+        inbuffer[offset+length_st_topics-1]=0;
+        this->st_topics = (char *)(inbuffer + offset-1);
+        offset += length_st_topics;
         memcpy( &(this->topics[i]), &(this->st_topics), sizeof(tinyros::string));
       }
       return offset;
@@ -195,10 +195,10 @@ namespace rosgraph_msgs
       length += length_function;
       length += sizeof(this->line);
       length += sizeof(this->topics_length);
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = this->topics[i].size();
-      length += 4;
-      length += length_topicsi;
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_topicsi = this->topics[i].size();
+        length += 4;
+        length += length_topicsi;
       }
       return length;
     }

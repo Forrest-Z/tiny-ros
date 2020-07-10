@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -46,7 +47,11 @@ func (self *GetWorldPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetWorldPropertiesRequest) Go_echo() (string) { return "" }
+func (self *GetWorldPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetWorldPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/GetWorldProperties" }
 func (self *GetWorldPropertiesRequest) Go_getMD5() (string) { return "3aa5de7106eec5dae41ad1c9ae681123" }
 func (self *GetWorldPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -149,7 +154,7 @@ func (self *GetWorldPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_model_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_model_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_model_names = make([]string, length_model_names, length_model_names)
+    self.Go_model_names = make([]string, length_model_names)
     for i := 0; i < length_model_names; i++ {
         length_model_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_model_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -199,7 +204,11 @@ func (self *GetWorldPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetWorldPropertiesResponse) Go_echo() (string) { return "" }
+func (self *GetWorldPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetWorldPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/GetWorldProperties" }
 func (self *GetWorldPropertiesResponse) Go_getMD5() (string) { return "fe944c1c210919291ad14bc43b6c10cf" }
 func (self *GetWorldPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

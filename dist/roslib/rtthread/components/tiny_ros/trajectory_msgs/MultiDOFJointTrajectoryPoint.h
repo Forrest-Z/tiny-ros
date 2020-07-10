@@ -46,24 +46,24 @@ namespace trajectory_msgs
       *(outbuffer + offset + 2) = (this->transforms_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->transforms_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->transforms[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->transforms[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->velocities_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->velocities_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->velocities_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->velocities_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->velocities_length);
-      for( uint32_t i = 0; i < velocities_length; i++){
-      offset += this->velocities[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        offset += this->velocities[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->accelerations_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->accelerations_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->accelerations_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->accelerations_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->accelerations_length);
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      offset += this->accelerations[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        offset += this->accelerations[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->time_from_start.sec >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->time_from_start.sec >> (8 * 1)) & 0xFF;
@@ -89,8 +89,8 @@ namespace trajectory_msgs
       if(transforms_lengthT > transforms_length)
         this->transforms = (geometry_msgs::Transform*)realloc(this->transforms, transforms_lengthT * sizeof(geometry_msgs::Transform));
       transforms_length = transforms_lengthT;
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->st_transforms.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->st_transforms.deserialize(inbuffer + offset);
         memcpy( &(this->transforms[i]), &(this->st_transforms), sizeof(geometry_msgs::Transform));
       }
       uint32_t velocities_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -101,8 +101,8 @@ namespace trajectory_msgs
       if(velocities_lengthT > velocities_length)
         this->velocities = (geometry_msgs::Twist*)realloc(this->velocities, velocities_lengthT * sizeof(geometry_msgs::Twist));
       velocities_length = velocities_lengthT;
-      for( uint32_t i = 0; i < velocities_length; i++){
-      offset += this->st_velocities.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        offset += this->st_velocities.deserialize(inbuffer + offset);
         memcpy( &(this->velocities[i]), &(this->st_velocities), sizeof(geometry_msgs::Twist));
       }
       uint32_t accelerations_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -113,8 +113,8 @@ namespace trajectory_msgs
       if(accelerations_lengthT > accelerations_length)
         this->accelerations = (geometry_msgs::Twist*)realloc(this->accelerations, accelerations_lengthT * sizeof(geometry_msgs::Twist));
       accelerations_length = accelerations_lengthT;
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      offset += this->st_accelerations.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        offset += this->st_accelerations.deserialize(inbuffer + offset);
         memcpy( &(this->accelerations[i]), &(this->st_accelerations), sizeof(geometry_msgs::Twist));
       }
       this->time_from_start.sec =  ((uint32_t) (*(inbuffer + offset)));
@@ -134,16 +134,16 @@ namespace trajectory_msgs
     {
       int length = 0;
       length += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      length += this->transforms[i].serializedLength();
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        length += this->transforms[i].serializedLength();
       }
       length += sizeof(this->velocities_length);
-      for( uint32_t i = 0; i < velocities_length; i++){
-      length += this->velocities[i].serializedLength();
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        length += this->velocities[i].serializedLength();
       }
       length += sizeof(this->accelerations_length);
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      length += this->accelerations[i].serializedLength();
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        length += this->accelerations[i].serializedLength();
       }
       length += sizeof(this->time_from_start.sec);
       length += sizeof(this->time_from_start.nsec);

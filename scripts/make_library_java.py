@@ -75,9 +75,9 @@ class EnumerationType:
     def make_declaration(self, f):
         cn = self.value.replace("\"","")
         if self.type == 'java.lang.String':
-            f.write('    public static final %s %s = (%s)("%s");\n' % (self.type, self.name, self.type, cn) )
+            f.write('    public static final %s %s = (%s)("%s");\n' % (self.type, self.name, self.type, cn))
         else:
-            f.write('    public static final %s %s = (%s)(%s);\n' % (self.type, self.name, self.type, self.value) )
+            f.write('    public static final %s %s = (%s)(%s);\n' % (self.type, self.name, self.type, self.value))
 
 class PrimitiveDataType:
     """ Our datatype is a java primitive. """
@@ -91,41 +91,41 @@ class PrimitiveDataType:
     def make_declaration(self, f):
         f.write('    public %s %s;\n' % (self.type, self.name) )
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         cn = self.name.replace("[","").replace("]","").split(".")[-1]
         if self.type == 'float':
-            f.write('        int bits_%s = Float.floatToRawIntBits(%s);\n' % (cn, self.name) )
+            f.write('%s        int bits_%s = Float.floatToRawIntBits(%s);\n' % (header, cn, self.name))
             for i in range(self.bytes):
-                f.write('        outbuffer[offset + %d] = (byte)((bits_%s >> (8 * %d)) & 0xFF);\n' % (i, cn, i) )
+                f.write('%s        outbuffer[offset + %d] = (byte)((bits_%s >> (8 * %d)) & 0xFF);\n' % (header, i, cn, i))
         elif self.type == 'double':
-            f.write('        long bits_%s = Double.doubleToRawLongBits(this.%s);\n' % (cn, self.name) )
+            f.write('%s        long bits_%s = Double.doubleToRawLongBits(this.%s);\n' % (header, cn, self.name) )
             for i in range(self.bytes):
-                f.write('        outbuffer[offset + %d] = (byte)((bits_%s >> (8 * %d)) & 0xFF);\n' % (i, cn, i) )
+                f.write('%s        outbuffer[offset + %d] = (byte)((bits_%s >> (8 * %d)) & 0xFF);\n' % (header, i, cn, i))
         else:
             for i in range(self.bytes):
-                f.write('        outbuffer[offset + %d] = (byte)((this.%s >> (8 * %d)) & 0xFF);\n' % (i, self.name, i) )
-        f.write('        offset += %s;\n' % (self.bytes) )
+                f.write('%s        outbuffer[offset + %d] = (byte)((this.%s >> (8 * %d)) & 0xFF);\n' % (header, i, self.name, i))
+        f.write('%s        offset += %s;\n' % (header, self.bytes) )
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         cn = self.name.replace("[","").replace("]","").split(".")[-1]
         if self.type == 'float':
-            f.write('        int bits_%s = 0;\n' % cn )
+            f.write('%s        int bits_%s = 0;\n' % (header, cn))
             for i in range(self.bytes):
-                f.write('        bits_%s |= (int)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (cn, i, i) )
-            f.write('        this.%s = Float.intBitsToFloat(bits_%s);\n' % (self.name, cn) )
+                f.write('%s        bits_%s |= (int)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (header, cn, i, i))
+            f.write('%s        this.%s = Float.intBitsToFloat(bits_%s);\n' % (header, self.name, cn) )
         elif self.type == 'double':
-            f.write('        long bits_%s = 0;\n' % cn )
+            f.write('%s        long bits_%s = 0;\n' % (header, cn))
             for i in range(self.bytes):
-                f.write('        bits_%s |= (long)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (cn, i, i) )
-            f.write('        this.%s = Double.longBitsToDouble(bits_%s);\n' % (self.name, cn) )
+                f.write('%s        bits_%s |= (long)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (header, cn, i, i))
+            f.write('%s        this.%s = Double.longBitsToDouble(bits_%s);\n' % (header, self.name, cn) )
         else:
-            f.write('        this.%s   = (%s)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % (self.name, self.type) )
+            f.write('%s        this.%s   = (%s)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % (header, self.name, self.type) )
             for i in range(self.bytes-1):
-                f.write('        this.%s |= (%s)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (self.name, self.type, i+1, i+1) )
-        f.write('        offset += %s;\n' % (self.bytes) )
+                f.write('%s        this.%s |= (%s)((inbuffer[offset + %d] & 0xFF) << (8 * %d));\n' % (header, self.name, self.type, i+1, i+1) )
+        f.write('%s        offset += %s;\n' % (header, self.bytes) )
 
-    def serializedLength(self, f):
-        f.write('        length += %s;\n' % (self.bytes) )
+    def serializedLength(self, f, header):
+        f.write('%s        length += %s;\n' % (header, self.bytes) )
 
 
 class MessageDataType(PrimitiveDataType):
@@ -134,14 +134,14 @@ class MessageDataType(PrimitiveDataType):
     def make_initializer(self, f, trailer):
         f.write('        this.%s = new %s();\n' % (self.name, self.type) )
 
-    def serialize(self, f):
-        f.write('        offset = this.%s.serialize(outbuffer, offset);\n' % self.name)
+    def serialize(self, f, header):
+        f.write('%s        offset = this.%s.serialize(outbuffer, offset);\n' % (header, self.name))
 
-    def deserialize(self, f):
-        f.write('        offset = this.%s.deserialize(inbuffer, offset);\n' % self.name)
+    def deserialize(self, f, header):
+        f.write('%s        offset = this.%s.deserialize(inbuffer, offset);\n' % (header, self.name))
 
-    def serializedLength(self, f):
-        f.write('        length += this.%s.serializedLength();\n' % self.name)
+    def serializedLength(self, f, header):
+        f.write('%s        length += this.%s.serializedLength();\n' % (header, self.name))
 
 
 class StringDataType(PrimitiveDataType):
@@ -153,38 +153,38 @@ class StringDataType(PrimitiveDataType):
     def make_declaration(self, f):
         f.write('    public %s %s;\n' % (self.type, self.name) )
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('        int length_%s = this.%s.getBytes().length;\n' % (cn,self.name) )
-        f.write('        outbuffer[offset + 0] = (byte)((length_%s >> (8 * 0)) & 0xFF);\n' % (cn))
-        f.write('        outbuffer[offset + 1] = (byte)((length_%s >> (8 * 1)) & 0xFF);\n' % (cn))
-        f.write('        outbuffer[offset + 2] = (byte)((length_%s >> (8 * 2)) & 0xFF);\n' % (cn))
-        f.write('        outbuffer[offset + 3] = (byte)((length_%s >> (8 * 3)) & 0xFF);\n' % (cn))
-        f.write('        offset += 4;\n')
-        f.write('        for (int k=0; k<length_%s; k++) {\n' % (cn))
-        f.write('            outbuffer[offset + k] = (byte)((this.%s.getBytes())[k] & 0xFF);\n' % (self.name))
-        f.write('        }\n')
-        f.write('        offset += length_%s;\n' % cn)
+        f.write('%s        int length_%s = this.%s.getBytes().length;\n' % (header, cn,self.name))
+        f.write('%s        outbuffer[offset + 0] = (byte)((length_%s >> (8 * 0)) & 0xFF);\n' % (header, cn))
+        f.write('%s        outbuffer[offset + 1] = (byte)((length_%s >> (8 * 1)) & 0xFF);\n' % (header, cn))
+        f.write('%s        outbuffer[offset + 2] = (byte)((length_%s >> (8 * 2)) & 0xFF);\n' % (header, cn))
+        f.write('%s        outbuffer[offset + 3] = (byte)((length_%s >> (8 * 3)) & 0xFF);\n' % (header, cn))
+        f.write('%s        offset += 4;\n' % header)
+        f.write('%s        for (int k=0; k<length_%s; k++) {\n' % (header, cn))
+        f.write('%s            outbuffer[offset + k] = (byte)((this.%s.getBytes())[k] & 0xFF);\n' % (header, self.name))
+        f.write('%s        }\n' % header)
+        f.write('%s        offset += length_%s;\n' % (header, cn))
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('        int length_%s = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % cn)
-        f.write('        length_%s |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));\n' % cn)
-        f.write('        length_%s |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));\n' % cn)
-        f.write('        length_%s |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));\n' % cn)
-        f.write('        offset += 4;\n')
-        f.write('        byte[] bytes_%s = new byte[length_%s];\n' % (cn, cn) )
-        f.write('        for(int k= 0; k< length_%s; k++){\n' %cn)
-        f.write('            bytes_%s[k] = (byte)(inbuffer[k + offset] & 0xFF);\n' % cn)
-        f.write('        }\n')
-        f.write('        this.%s = new java.lang.String(bytes_%s);\n' % (self.name, cn) )
-        f.write('        offset += length_%s;\n' % cn)
+        f.write('%s        int length_%s = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % (header, cn))
+        f.write('%s        length_%s |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));\n' % (header, cn))
+        f.write('%s        length_%s |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));\n' % (header, cn))
+        f.write('%s        length_%s |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));\n' % (header, cn))
+        f.write('%s        offset += 4;\n' % header)
+        f.write('%s        byte[] bytes_%s = new byte[length_%s];\n' % (header, cn, cn) )
+        f.write('%s        for(int k= 0; k< length_%s; k++){\n' % (header, cn))
+        f.write('%s            bytes_%s[k] = (byte)(inbuffer[k + offset] & 0xFF);\n' % (header, cn))
+        f.write('%s        }\n' % header)
+        f.write('%s        this.%s = new java.lang.String(bytes_%s);\n' % (header, self.name, cn) )
+        f.write('%s        offset += length_%s;\n' % (header, cn))
 
-    def serializedLength(self, f):
+    def serializedLength(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('        int length_%s = this.%s.getBytes().length;\n' % (cn,self.name) )
-        f.write('        length += 4;\n')
-        f.write('        length += length_%s;\n' % cn)
+        f.write('%s        int length_%s = this.%s.getBytes().length;\n' % (header, cn,self.name) )
+        f.write('%s        length += 4;\n' % header)
+        f.write('%s        length += length_%s;\n' % (header, cn))
 
 
 class TimeDataType(PrimitiveDataType):
@@ -201,17 +201,17 @@ class TimeDataType(PrimitiveDataType):
     def make_declaration(self, f):
         f.write('    public %s %s;\n' % (self.type, self.name) )
 
-    def serialize(self, f):
-        self.sec.serialize(f)
-        self.nsec.serialize(f)
+    def serialize(self, f, header):
+        self.sec.serialize(f, header)
+        self.nsec.serialize(f, header)
 
-    def deserialize(self, f):
-        self.sec.deserialize(f)
-        self.nsec.deserialize(f)
+    def deserialize(self, f, header):
+        self.sec.deserialize(f, header)
+        self.nsec.deserialize(f, header)
 
-    def serializedLength(self, f):
-        self.sec.serializedLength(f)
-        self.nsec.serializedLength(f)
+    def serializedLength(self, f, header):
+        self.sec.serializedLength(f, header)
+        self.nsec.serializedLength(f, header)
 
 
 class ArrayDataType(PrimitiveDataType):
@@ -232,59 +232,58 @@ class ArrayDataType(PrimitiveDataType):
     def make_declaration(self, f):
         f.write('    public %s[] %s;\n' % (self.type, self.name))
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         c = self.cls(self.name+"[i]", self.type, self.bytes)
         if self.size == None:
             # serialize length
-            f.write('        int length_%s = this.%s != null ? this.%s.length : 0;\n' % (self.name, self.name, self.name) )
-            f.write('        outbuffer[offset + 0] = (byte)((length_%s >> (8 * 0)) & 0xFF);\n' % self.name)
-            f.write('        outbuffer[offset + 1] = (byte)((length_%s >> (8 * 1)) & 0xFF);\n' % self.name)
-            f.write('        outbuffer[offset + 2] = (byte)((length_%s >> (8 * 2)) & 0xFF);\n' % self.name)
-            f.write('        outbuffer[offset + 3] = (byte)((length_%s >> (8 * 3)) & 0xFF);\n' % self.name)
-            f.write('        offset += 4;\n')
-            f.write('        for (int i = 0; i < length_%s; i++){\n' % self.name)
-            c.serialize(f)
-            f.write('        }\n')
+            f.write('%s        int length_%s = this.%s != null ? this.%s.length : 0;\n' % (header, self.name, self.name, self.name) )
+            f.write('%s        outbuffer[offset + 0] = (byte)((length_%s >> (8 * 0)) & 0xFF);\n' % (header, self.name))
+            f.write('%s        outbuffer[offset + 1] = (byte)((length_%s >> (8 * 1)) & 0xFF);\n' % (header, self.name))
+            f.write('%s        outbuffer[offset + 2] = (byte)((length_%s >> (8 * 2)) & 0xFF);\n' % (header, self.name))
+            f.write('%s        outbuffer[offset + 3] = (byte)((length_%s >> (8 * 3)) & 0xFF);\n' % (header, self.name))
+            f.write('%s        offset += 4;\n' % header)
+            f.write('%s        for (int i = 0; i < length_%s; i++) {\n' % (header, self.name))
+            c.serialize(f, header + "    ")
+            f.write('%s        }\n' % header)
         else:
-            f.write('        for (int i = 0; i < %d; i++){\n' % (self.size) )
-            c.serialize(f)
-            f.write('        }\n')
+            f.write('%s        for (int i = 0; i < %d; i++) {\n' % (header, self.size) )
+            c.serialize(f, header + "    ")
+            f.write('%s        }\n' % header)
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         if self.size == None:
             c = self.cls(self.name+"[i]", self.type, self.bytes)
             # deserialize length
-            f.write('        int length_%s = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % self.name)
-            f.write('        length_%s |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));\n' % self.name)
-            f.write('        length_%s |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));\n' % self.name)
-            f.write('        length_%s |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));\n' % self.name)
-            f.write('        offset += 4;\n' )
-            f.write('        if(length_%s > 0) {\n' % self.name)
-            f.write('            this.%s = new %s[length_%s];\n' % (self.name, self.type, self.name))
-            f.write('        }\n' )
-            # copy to array
-            f.write('        for (int i = 0; i < length_%s; i++){\n' % (self.name) )
-            c.deserialize(f)
-            f.write('        }\n')
+            f.write('%s        int length_%s = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));\n' % (header, self.name))
+            f.write('%s        length_%s |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));\n' % (header, self.name))
+            f.write('%s        length_%s |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));\n' % (header, self.name))
+            f.write('%s        length_%s |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));\n' % (header, self.name))
+            f.write('%s        offset += 4;\n' % header)
+            f.write('%s        if(length_%s > 0) {\n' % (header, self.name))
+            f.write('%s            this.%s = new %s[length_%s];\n' % (header, self.name, self.type, self.name))
+            f.write('%s        }\n' % header)
+            f.write('%s        for (int i = 0; i < length_%s; i++) {\n' % (header, self.name))
+            c.deserialize(f, header + "    ")
+            f.write('%s        }\n' % header)
         else:
             c = self.cls(self.name+"[i]", self.type, self.bytes)
-            f.write('        for(int i = 0; i < %d; i++){\n' % (self.size) )
-            c.deserialize(f)
-            f.write('        }\n')
+            f.write('%s        for(int i = 0; i < %d; i++) {\n' % (header, self.size) )
+            c.deserialize(f, header + "    ")
+            f.write('%s        }\n' % header)
 
-    def serializedLength(self, f):
+    def serializedLength(self, f, header):
         c = self.cls(self.name+"[i]", self.type, self.bytes)
         if self.size == None:
             # serialize length
-            f.write('        length += 4;\n' )
-            f.write('        int length_%s = this.%s != null ? this.%s.length : 0;\n' % (self.name, self.name, self.name) )
-            f.write('        for (int i = 0; i < length_%s; i++) {\n' % self.name)
-            c.serializedLength(f)
-            f.write('        }\n')
+            f.write('%s        length += 4;\n' % header)
+            f.write('%s        int length_%s = this.%s != null ? this.%s.length : 0;\n' % (header, self.name, self.name, self.name) )
+            f.write('%s        for (int i = 0; i < length_%s; i++) {\n' % (header, self.name))
+            c.serializedLength(f, header + "    ")
+            f.write('%s        }\n' % header)
         else:
-            f.write('        for (int i = 0; i < %d; i++){\n' % (self.size) )
-            c.serializedLength(f)
-            f.write('        }\n')
+            f.write('%s        for (int i = 0; i < %d; i++){\n' % (header, self.size) )
+            c.serializedLength(f, header + "    ")
+            f.write('%s        }\n' % header)
 
 class BoolDataType:
     def __init__(self, name, ty, bytes):
@@ -297,16 +296,16 @@ class BoolDataType:
     def make_declaration(self, f):
         f.write('    public %s %s;\n' % (self.type, self.name) )
 
-    def serialize(self, f):
-        f.write('        outbuffer[offset] = (byte)((%s ? 0x01 : 0x00) & 0xFF);\n' % (self.name) )
-        f.write('        offset += %s;\n' % (self.bytes) )
+    def serialize(self, f, header):
+        f.write('%s        outbuffer[offset] = (byte)((%s ? 0x01 : 0x00) & 0xFF);\n' % (header, self.name) )
+        f.write('%s        offset += %s;\n' % (header, self.bytes) )
 
-    def deserialize(self, f):
-        f.write('        this.%s = (%s)((inbuffer[offset] & 0xFF) != 0 ? true : false);\n' % (self.name, self.type) )
-        f.write('        offset += %s;\n' % (self.bytes) )
+    def deserialize(self, f, header):
+        f.write('%s        this.%s = (%s)((inbuffer[offset] & 0xFF) != 0 ? true : false);\n' % (header, self.name, self.type) )
+        f.write('%s        offset += %s;\n' % (header, self.bytes) )
 
-    def serializedLength(self, f):
-        f.write('        length += %s;\n' % (self.bytes) )
+    def serializedLength(self, f, header):
+        f.write('%s        length += %s;\n' % (header, self.bytes) )
 
 
 ROS_TO_EMBEDDED_TYPES = {
@@ -428,7 +427,7 @@ class Message:
         f.write('        int offset = start;\n')
         self._write_id_serializer(f)
         for d in self.data:
-            d.serialize(f)
+            d.serialize(f, "")
         f.write('        return offset;\n');
         f.write('    }\n')
         f.write('\n')
@@ -439,7 +438,7 @@ class Message:
         f.write('        int offset = start;\n')
         self._write_id_deserializer(f)
         for d in self.data:
-            d.deserialize(f)
+            d.deserialize(f, "")
         f.write('        return offset;\n');
         f.write('    }\n')
         f.write('\n')
@@ -449,13 +448,13 @@ class Message:
         f.write('    public int serializedLength() {\n')
         f.write('        int length = 0;\n')
         for d in self.data:
-            d.serializedLength(f)
+            d.serializedLength(f, "")
         f.write('        return length;\n');
         f.write('    }\n')
         f.write('\n')
 
     def _write_echo(self, f):
-        f.write('    public java.lang.String echo(){ return ""; }\n')
+        f.write('    public java.lang.String echo() { return ""; }\n')
 
     def _write_std_includes(self, f):
         f.write('package com.roslib.%s;\n\n' % (self.package) )

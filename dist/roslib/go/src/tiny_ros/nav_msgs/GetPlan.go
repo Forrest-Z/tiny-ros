@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "tiny_ros/geometry_msgs"
     "math"
@@ -69,7 +70,11 @@ func (self *GetPlanRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPlanRequest) Go_echo() (string) { return "" }
+func (self *GetPlanRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPlanRequest) Go_getType() (string) { return "nav_msgs/GetPlan" }
 func (self *GetPlanRequest) Go_getMD5() (string) { return "557d5ea947f7761284cf7abef1cd7227" }
 func (self *GetPlanRequest) Go_getID() (uint32) { return self.__id__ }
@@ -124,7 +129,11 @@ func (self *GetPlanResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPlanResponse) Go_echo() (string) { return "" }
+func (self *GetPlanResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPlanResponse) Go_getType() (string) { return "nav_msgs/GetPlan" }
 func (self *GetPlanResponse) Go_getMD5() (string) { return "67c62b8c931eabfe35c88aed4b8f1258" }
 func (self *GetPlanResponse) Go_getID() (uint32) { return self.__id__ }

@@ -46,7 +46,7 @@ namespace diagnostic_msgs
       arrToVar(length_key, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_key; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_key-1]=0;
       this->key = (char *)(inbuffer + offset-1);
@@ -55,7 +55,7 @@ namespace diagnostic_msgs
       arrToVar(length_value, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_value; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_value-1]=0;
       this->value = (char *)(inbuffer + offset-1);

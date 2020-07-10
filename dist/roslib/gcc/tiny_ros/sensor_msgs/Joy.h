@@ -42,34 +42,34 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->axes_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->axes_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->axes_length);
-      for( uint32_t i = 0; i < axes_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_axesi;
-      u_axesi.real = this->axes[i];
-      *(outbuffer + offset + 0) = (u_axesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_axesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_axesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_axesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->axes[i]);
+      for( uint32_t i = 0; i < axes_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_axesi;
+        u_axesi.real = this->axes[i];
+        *(outbuffer + offset + 0) = (u_axesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_axesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_axesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_axesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->axes[i]);
       }
       *(outbuffer + offset + 0) = (this->buttons_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->buttons_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->buttons_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->buttons_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->buttons_length);
-      for( uint32_t i = 0; i < buttons_length; i++){
-      union {
-        int32_t real;
-        uint32_t base;
-      } u_buttonsi;
-      u_buttonsi.real = this->buttons[i];
-      *(outbuffer + offset + 0) = (u_buttonsi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_buttonsi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_buttonsi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_buttonsi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->buttons[i]);
+      for( uint32_t i = 0; i < buttons_length; i++) {
+        union {
+          int32_t real;
+          uint32_t base;
+        } u_buttonsi;
+        u_buttonsi.real = this->buttons[i];
+        *(outbuffer + offset + 0) = (u_buttonsi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_buttonsi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_buttonsi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_buttonsi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->buttons[i]);
       }
       return offset;
     }
@@ -86,18 +86,18 @@ namespace sensor_msgs
       if(axes_lengthT > axes_length)
         this->axes = (float*)realloc(this->axes, axes_lengthT * sizeof(float));
       axes_length = axes_lengthT;
-      for( uint32_t i = 0; i < axes_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_axes;
-      u_st_axes.base = 0;
-      u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_axes = u_st_axes.real;
-      offset += sizeof(this->st_axes);
+      for( uint32_t i = 0; i < axes_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_axes;
+        u_st_axes.base = 0;
+        u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_axes.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_axes = u_st_axes.real;
+        offset += sizeof(this->st_axes);
         memcpy( &(this->axes[i]), &(this->st_axes), sizeof(float));
       }
       uint32_t buttons_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -108,18 +108,18 @@ namespace sensor_msgs
       if(buttons_lengthT > buttons_length)
         this->buttons = (int32_t*)realloc(this->buttons, buttons_lengthT * sizeof(int32_t));
       buttons_length = buttons_lengthT;
-      for( uint32_t i = 0; i < buttons_length; i++){
-      union {
-        int32_t real;
-        uint32_t base;
-      } u_st_buttons;
-      u_st_buttons.base = 0;
-      u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_buttons = u_st_buttons.real;
-      offset += sizeof(this->st_buttons);
+      for( uint32_t i = 0; i < buttons_length; i++) {
+        union {
+          int32_t real;
+          uint32_t base;
+        } u_st_buttons;
+        u_st_buttons.base = 0;
+        u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_buttons.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_buttons = u_st_buttons.real;
+        offset += sizeof(this->st_buttons);
         memcpy( &(this->buttons[i]), &(this->st_buttons), sizeof(int32_t));
       }
       return offset;
@@ -130,12 +130,12 @@ namespace sensor_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->axes_length);
-      for( uint32_t i = 0; i < axes_length; i++){
-      length += sizeof(this->axes[i]);
+      for( uint32_t i = 0; i < axes_length; i++) {
+        length += sizeof(this->axes[i]);
       }
       length += sizeof(this->buttons_length);
-      for( uint32_t i = 0; i < buttons_length; i++){
-      length += sizeof(this->buttons[i]);
+      for( uint32_t i = 0; i < buttons_length; i++) {
+        length += sizeof(this->buttons[i]);
       }
       return length;
     }
@@ -143,29 +143,29 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "axes: [";
-      for( uint32_t i = 0; i < axes_length; i++){
-      if( i == (axes_length - 1)) {
-      std::stringstream ss_axesi; ss_axesi << "{\"axes" << i <<"\": " << axes[i] <<"}";
-      string_echo += ss_axesi.str();
-      } else {
-      std::stringstream ss_axesi; ss_axesi << "{\"axes" << i <<"\": " << axes[i] <<"}, ";
-      string_echo += ss_axesi.str();
+      string_echo += ",";
+      string_echo += "axes:[";
+      for( uint32_t i = 0; i < axes_length; i++) {
+        if( i == (axes_length - 1)) {
+          std::stringstream ss_axesi; ss_axesi << axes[i] <<"";
+          string_echo += ss_axesi.str();
+        } else {
+          std::stringstream ss_axesi; ss_axesi << axes[i] <<",";
+          string_echo += ss_axesi.str();
+        }
       }
-      }
-      string_echo += "], ";
-      string_echo += "buttons: [";
-      for( uint32_t i = 0; i < buttons_length; i++){
-      if( i == (buttons_length - 1)) {
-      std::stringstream ss_buttonsi; ss_buttonsi << "{\"buttons" << i <<"\": " << buttons[i] <<"}";
-      string_echo += ss_buttonsi.str();
-      } else {
-      std::stringstream ss_buttonsi; ss_buttonsi << "{\"buttons" << i <<"\": " << buttons[i] <<"}, ";
-      string_echo += ss_buttonsi.str();
-      }
+      string_echo += "],";
+      string_echo += "buttons:[";
+      for( uint32_t i = 0; i < buttons_length; i++) {
+        if( i == (buttons_length - 1)) {
+          std::stringstream ss_buttonsi; ss_buttonsi << buttons[i] <<"";
+          string_echo += ss_buttonsi.str();
+        } else {
+          std::stringstream ss_buttonsi; ss_buttonsi << buttons[i] <<",";
+          string_echo += ss_buttonsi.str();
+        }
       }
       string_echo += "]";
       string_echo += "}";

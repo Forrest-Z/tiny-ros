@@ -1,6 +1,7 @@
 package std_srvs
 
 import (
+    "encoding/json"
 )
 
 
@@ -60,7 +61,11 @@ func (self *SetBoolRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetBoolRequest) Go_echo() (string) { return "" }
+func (self *SetBoolRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetBoolRequest) Go_getType() (string) { return "std_srvs/SetBool" }
 func (self *SetBoolRequest) Go_getMD5() (string) { return "2600271ce244b6b0d236894ec6f04373" }
 func (self *SetBoolRequest) Go_getID() (uint32) { return self.__id__ }
@@ -146,7 +151,11 @@ func (self *SetBoolResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetBoolResponse) Go_echo() (string) { return "" }
+func (self *SetBoolResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetBoolResponse) Go_getType() (string) { return "std_srvs/SetBool" }
 func (self *SetBoolResponse) Go_getMD5() (string) { return "51cf1b5cb67d107350442299d694fd1d" }
 func (self *SetBoolResponse) Go_getID() (uint32) { return self.__id__ }

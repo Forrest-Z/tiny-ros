@@ -38,10 +38,8 @@ func NewServiceClient(topic_name string, req Msg, resp Msg) (*ServiceClient) {
 }
 
 func (self *ServiceClient) Go_call(request Msg, response Msg, args ...int) (bool) {
-    var duration int
-    if len(args) <=0 {
-        duration = 3
-    } else {
+    var duration int = 3
+    if len(args) > 0 {
         duration = args[0]
     }
     

@@ -32,7 +32,7 @@ public class QuaternionStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/QuaternionStamped"; }
     public java.lang.String getMD5(){ return "69e39922feb9ec6eaf93755f93fce2cf"; }
     public long getID() { return 0; }

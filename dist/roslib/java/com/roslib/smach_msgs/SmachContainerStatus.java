@@ -38,17 +38,17 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_initial_states >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_initial_states >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_initial_states; i++){
-        int length_initial_statesi = this.initial_states[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_initial_statesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_initial_statesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_initial_statesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_initial_statesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_initial_statesi; k++) {
-            outbuffer[offset + k] = (byte)((this.initial_states[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_initial_statesi;
+        for (int i = 0; i < length_initial_states; i++) {
+            int length_initial_statesi = this.initial_states[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_initial_statesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_initial_statesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_initial_statesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_initial_statesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_initial_statesi; k++) {
+                outbuffer[offset + k] = (byte)((this.initial_states[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_initial_statesi;
         }
         int length_active_states = this.active_states != null ? this.active_states.length : 0;
         outbuffer[offset + 0] = (byte)((length_active_states >> (8 * 0)) & 0xFF);
@@ -56,17 +56,17 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_active_states >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_active_states >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_active_states; i++){
-        int length_active_statesi = this.active_states[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_active_statesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_active_statesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_active_statesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_active_statesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_active_statesi; k++) {
-            outbuffer[offset + k] = (byte)((this.active_states[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_active_statesi;
+        for (int i = 0; i < length_active_states; i++) {
+            int length_active_statesi = this.active_states[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_active_statesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_active_statesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_active_statesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_active_statesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_active_statesi; k++) {
+                outbuffer[offset + k] = (byte)((this.active_states[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_active_statesi;
         }
         int length_local_data = this.local_data.getBytes().length;
         outbuffer[offset + 0] = (byte)((length_local_data >> (8 * 0)) & 0xFF);
@@ -113,18 +113,18 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         if(length_initial_states > 0) {
             this.initial_states = new java.lang.String[length_initial_states];
         }
-        for (int i = 0; i < length_initial_states; i++){
-        int length_initial_statesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_initial_statesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_initial_statesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_initial_statesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_initial_statesi = new byte[length_initial_statesi];
-        for(int k= 0; k< length_initial_statesi; k++){
-            bytes_initial_statesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.initial_states[i] = new java.lang.String(bytes_initial_statesi);
-        offset += length_initial_statesi;
+        for (int i = 0; i < length_initial_states; i++) {
+            int length_initial_statesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_initial_statesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_initial_statesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_initial_statesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_initial_statesi = new byte[length_initial_statesi];
+            for(int k= 0; k< length_initial_statesi; k++){
+                bytes_initial_statesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.initial_states[i] = new java.lang.String(bytes_initial_statesi);
+            offset += length_initial_statesi;
         }
         int length_active_states = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_active_states |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -134,18 +134,18 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         if(length_active_states > 0) {
             this.active_states = new java.lang.String[length_active_states];
         }
-        for (int i = 0; i < length_active_states; i++){
-        int length_active_statesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_active_statesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_active_statesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_active_statesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_active_statesi = new byte[length_active_statesi];
-        for(int k= 0; k< length_active_statesi; k++){
-            bytes_active_statesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.active_states[i] = new java.lang.String(bytes_active_statesi);
-        offset += length_active_statesi;
+        for (int i = 0; i < length_active_states; i++) {
+            int length_active_statesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_active_statesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_active_statesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_active_statesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_active_statesi = new byte[length_active_statesi];
+            for(int k= 0; k< length_active_statesi; k++){
+                bytes_active_statesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.active_states[i] = new java.lang.String(bytes_active_statesi);
+            offset += length_active_statesi;
         }
         int length_local_data = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_local_data |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -181,16 +181,16 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         length += 4;
         int length_initial_states = this.initial_states != null ? this.initial_states.length : 0;
         for (int i = 0; i < length_initial_states; i++) {
-        int length_initial_statesi = this.initial_states[i].getBytes().length;
-        length += 4;
-        length += length_initial_statesi;
+            int length_initial_statesi = this.initial_states[i].getBytes().length;
+            length += 4;
+            length += length_initial_statesi;
         }
         length += 4;
         int length_active_states = this.active_states != null ? this.active_states.length : 0;
         for (int i = 0; i < length_active_states; i++) {
-        int length_active_statesi = this.active_states[i].getBytes().length;
-        length += 4;
-        length += length_active_statesi;
+            int length_active_statesi = this.active_states[i].getBytes().length;
+            length += 4;
+            length += length_active_statesi;
         }
         int length_local_data = this.local_data.getBytes().length;
         length += 4;
@@ -201,7 +201,7 @@ public class SmachContainerStatus implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "smach_msgs/SmachContainerStatus"; }
     public java.lang.String getMD5(){ return "3e74cf72da18311be27e7a5970ea6415"; }
     public long getID() { return 0; }

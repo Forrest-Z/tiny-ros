@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -51,7 +52,11 @@ func (self *SaveMapRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SaveMapRequest) Go_echo() (string) { return "" }
+func (self *SaveMapRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SaveMapRequest) Go_getType() (string) { return "map_msgs/SaveMap" }
 func (self *SaveMapRequest) Go_getMD5() (string) { return "6643d8ede81a23998690e6a3ff657316" }
 func (self *SaveMapRequest) Go_getID() (uint32) { return self.__id__ }
@@ -100,7 +105,11 @@ func (self *SaveMapResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SaveMapResponse) Go_echo() (string) { return "" }
+func (self *SaveMapResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SaveMapResponse) Go_getType() (string) { return "map_msgs/SaveMap" }
 func (self *SaveMapResponse) Go_getMD5() (string) { return "9cd07446fa1bd59b4758dadf19f196e9" }
 func (self *SaveMapResponse) Go_getID() (uint32) { return self.__id__ }

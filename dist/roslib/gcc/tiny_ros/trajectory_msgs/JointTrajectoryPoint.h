@@ -51,84 +51,84 @@ namespace trajectory_msgs
       *(outbuffer + offset + 2) = (this->positions_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->positions_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->positions_length);
-      for( uint32_t i = 0; i < positions_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_positionsi;
-      u_positionsi.real = this->positions[i];
-      *(outbuffer + offset + 0) = (u_positionsi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_positionsi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_positionsi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_positionsi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_positionsi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_positionsi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_positionsi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_positionsi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->positions[i]);
+      for( uint32_t i = 0; i < positions_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_positionsi;
+        u_positionsi.real = this->positions[i];
+        *(outbuffer + offset + 0) = (u_positionsi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_positionsi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_positionsi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_positionsi.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_positionsi.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_positionsi.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_positionsi.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_positionsi.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->positions[i]);
       }
       *(outbuffer + offset + 0) = (this->velocities_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->velocities_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->velocities_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->velocities_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->velocities_length);
-      for( uint32_t i = 0; i < velocities_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_velocitiesi;
-      u_velocitiesi.real = this->velocities[i];
-      *(outbuffer + offset + 0) = (u_velocitiesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_velocitiesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_velocitiesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_velocitiesi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_velocitiesi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_velocitiesi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_velocitiesi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_velocitiesi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->velocities[i]);
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_velocitiesi;
+        u_velocitiesi.real = this->velocities[i];
+        *(outbuffer + offset + 0) = (u_velocitiesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_velocitiesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_velocitiesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_velocitiesi.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_velocitiesi.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_velocitiesi.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_velocitiesi.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_velocitiesi.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->velocities[i]);
       }
       *(outbuffer + offset + 0) = (this->accelerations_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->accelerations_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->accelerations_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->accelerations_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->accelerations_length);
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_accelerationsi;
-      u_accelerationsi.real = this->accelerations[i];
-      *(outbuffer + offset + 0) = (u_accelerationsi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_accelerationsi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_accelerationsi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_accelerationsi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_accelerationsi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_accelerationsi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_accelerationsi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_accelerationsi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->accelerations[i]);
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_accelerationsi;
+        u_accelerationsi.real = this->accelerations[i];
+        *(outbuffer + offset + 0) = (u_accelerationsi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_accelerationsi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_accelerationsi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_accelerationsi.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_accelerationsi.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_accelerationsi.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_accelerationsi.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_accelerationsi.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->accelerations[i]);
       }
       *(outbuffer + offset + 0) = (this->effort_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->effort_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->effort_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->effort_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->effort_length);
-      for( uint32_t i = 0; i < effort_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_efforti;
-      u_efforti.real = this->effort[i];
-      *(outbuffer + offset + 0) = (u_efforti.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_efforti.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_efforti.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_efforti.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_efforti.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_efforti.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_efforti.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_efforti.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->effort[i]);
+      for( uint32_t i = 0; i < effort_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_efforti;
+        u_efforti.real = this->effort[i];
+        *(outbuffer + offset + 0) = (u_efforti.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_efforti.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_efforti.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_efforti.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_efforti.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_efforti.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_efforti.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_efforti.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->effort[i]);
       }
       *(outbuffer + offset + 0) = (this->time_from_start.sec >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->time_from_start.sec >> (8 * 1)) & 0xFF;
@@ -154,22 +154,22 @@ namespace trajectory_msgs
       if(positions_lengthT > positions_length)
         this->positions = (double*)realloc(this->positions, positions_lengthT * sizeof(double));
       positions_length = positions_lengthT;
-      for( uint32_t i = 0; i < positions_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_positions;
-      u_st_positions.base = 0;
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_positions = u_st_positions.real;
-      offset += sizeof(this->st_positions);
+      for( uint32_t i = 0; i < positions_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_positions;
+        u_st_positions.base = 0;
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_positions.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_positions = u_st_positions.real;
+        offset += sizeof(this->st_positions);
         memcpy( &(this->positions[i]), &(this->st_positions), sizeof(double));
       }
       uint32_t velocities_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -180,22 +180,22 @@ namespace trajectory_msgs
       if(velocities_lengthT > velocities_length)
         this->velocities = (double*)realloc(this->velocities, velocities_lengthT * sizeof(double));
       velocities_length = velocities_lengthT;
-      for( uint32_t i = 0; i < velocities_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_velocities;
-      u_st_velocities.base = 0;
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_velocities = u_st_velocities.real;
-      offset += sizeof(this->st_velocities);
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_velocities;
+        u_st_velocities.base = 0;
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_velocities.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_velocities = u_st_velocities.real;
+        offset += sizeof(this->st_velocities);
         memcpy( &(this->velocities[i]), &(this->st_velocities), sizeof(double));
       }
       uint32_t accelerations_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -206,22 +206,22 @@ namespace trajectory_msgs
       if(accelerations_lengthT > accelerations_length)
         this->accelerations = (double*)realloc(this->accelerations, accelerations_lengthT * sizeof(double));
       accelerations_length = accelerations_lengthT;
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_accelerations;
-      u_st_accelerations.base = 0;
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_accelerations = u_st_accelerations.real;
-      offset += sizeof(this->st_accelerations);
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_accelerations;
+        u_st_accelerations.base = 0;
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_accelerations.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_accelerations = u_st_accelerations.real;
+        offset += sizeof(this->st_accelerations);
         memcpy( &(this->accelerations[i]), &(this->st_accelerations), sizeof(double));
       }
       uint32_t effort_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -232,22 +232,22 @@ namespace trajectory_msgs
       if(effort_lengthT > effort_length)
         this->effort = (double*)realloc(this->effort, effort_lengthT * sizeof(double));
       effort_length = effort_lengthT;
-      for( uint32_t i = 0; i < effort_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_effort;
-      u_st_effort.base = 0;
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_effort = u_st_effort.real;
-      offset += sizeof(this->st_effort);
+      for( uint32_t i = 0; i < effort_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_effort;
+        u_st_effort.base = 0;
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_effort = u_st_effort.real;
+        offset += sizeof(this->st_effort);
         memcpy( &(this->effort[i]), &(this->st_effort), sizeof(double));
       }
       this->time_from_start.sec =  ((uint32_t) (*(inbuffer + offset)));
@@ -267,20 +267,20 @@ namespace trajectory_msgs
     {
       int length = 0;
       length += sizeof(this->positions_length);
-      for( uint32_t i = 0; i < positions_length; i++){
-      length += sizeof(this->positions[i]);
+      for( uint32_t i = 0; i < positions_length; i++) {
+        length += sizeof(this->positions[i]);
       }
       length += sizeof(this->velocities_length);
-      for( uint32_t i = 0; i < velocities_length; i++){
-      length += sizeof(this->velocities[i]);
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        length += sizeof(this->velocities[i]);
       }
       length += sizeof(this->accelerations_length);
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      length += sizeof(this->accelerations[i]);
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        length += sizeof(this->accelerations[i]);
       }
       length += sizeof(this->effort_length);
-      for( uint32_t i = 0; i < effort_length; i++){
-      length += sizeof(this->effort[i]);
+      for( uint32_t i = 0; i < effort_length; i++) {
+        length += sizeof(this->effort[i]);
       }
       length += sizeof(this->time_from_start.sec);
       length += sizeof(this->time_from_start.nsec);
@@ -290,53 +290,53 @@ namespace trajectory_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "positions: [";
-      for( uint32_t i = 0; i < positions_length; i++){
-      if( i == (positions_length - 1)) {
-      std::stringstream ss_positionsi; ss_positionsi << "{\"positions" << i <<"\": " << positions[i] <<"}";
-      string_echo += ss_positionsi.str();
-      } else {
-      std::stringstream ss_positionsi; ss_positionsi << "{\"positions" << i <<"\": " << positions[i] <<"}, ";
-      string_echo += ss_positionsi.str();
+      string_echo += "positions:[";
+      for( uint32_t i = 0; i < positions_length; i++) {
+        if( i == (positions_length - 1)) {
+          std::stringstream ss_positionsi; ss_positionsi << positions[i] <<"";
+          string_echo += ss_positionsi.str();
+        } else {
+          std::stringstream ss_positionsi; ss_positionsi << positions[i] <<",";
+          string_echo += ss_positionsi.str();
+        }
       }
+      string_echo += "],";
+      string_echo += "velocities:[";
+      for( uint32_t i = 0; i < velocities_length; i++) {
+        if( i == (velocities_length - 1)) {
+          std::stringstream ss_velocitiesi; ss_velocitiesi << velocities[i] <<"";
+          string_echo += ss_velocitiesi.str();
+        } else {
+          std::stringstream ss_velocitiesi; ss_velocitiesi << velocities[i] <<",";
+          string_echo += ss_velocitiesi.str();
+        }
       }
-      string_echo += "], ";
-      string_echo += "velocities: [";
-      for( uint32_t i = 0; i < velocities_length; i++){
-      if( i == (velocities_length - 1)) {
-      std::stringstream ss_velocitiesi; ss_velocitiesi << "{\"velocities" << i <<"\": " << velocities[i] <<"}";
-      string_echo += ss_velocitiesi.str();
-      } else {
-      std::stringstream ss_velocitiesi; ss_velocitiesi << "{\"velocities" << i <<"\": " << velocities[i] <<"}, ";
-      string_echo += ss_velocitiesi.str();
+      string_echo += "],";
+      string_echo += "accelerations:[";
+      for( uint32_t i = 0; i < accelerations_length; i++) {
+        if( i == (accelerations_length - 1)) {
+          std::stringstream ss_accelerationsi; ss_accelerationsi << accelerations[i] <<"";
+          string_echo += ss_accelerationsi.str();
+        } else {
+          std::stringstream ss_accelerationsi; ss_accelerationsi << accelerations[i] <<",";
+          string_echo += ss_accelerationsi.str();
+        }
       }
+      string_echo += "],";
+      string_echo += "effort:[";
+      for( uint32_t i = 0; i < effort_length; i++) {
+        if( i == (effort_length - 1)) {
+          std::stringstream ss_efforti; ss_efforti << effort[i] <<"";
+          string_echo += ss_efforti.str();
+        } else {
+          std::stringstream ss_efforti; ss_efforti << effort[i] <<",";
+          string_echo += ss_efforti.str();
+        }
       }
-      string_echo += "], ";
-      string_echo += "accelerations: [";
-      for( uint32_t i = 0; i < accelerations_length; i++){
-      if( i == (accelerations_length - 1)) {
-      std::stringstream ss_accelerationsi; ss_accelerationsi << "{\"accelerations" << i <<"\": " << accelerations[i] <<"}";
-      string_echo += ss_accelerationsi.str();
-      } else {
-      std::stringstream ss_accelerationsi; ss_accelerationsi << "{\"accelerations" << i <<"\": " << accelerations[i] <<"}, ";
-      string_echo += ss_accelerationsi.str();
-      }
-      }
-      string_echo += "], ";
-      string_echo += "effort: [";
-      for( uint32_t i = 0; i < effort_length; i++){
-      if( i == (effort_length - 1)) {
-      std::stringstream ss_efforti; ss_efforti << "{\"effort" << i <<"\": " << effort[i] <<"}";
-      string_echo += ss_efforti.str();
-      } else {
-      std::stringstream ss_efforti; ss_efforti << "{\"effort" << i <<"\": " << effort[i] <<"}, ";
-      string_echo += ss_efforti.str();
-      }
-      }
-      string_echo += "], ";
+      string_echo += "],";
       std::stringstream ss_time_from_start;
-      ss_time_from_start << "\"time_from_start.sec\": " << time_from_start.sec;
-      ss_time_from_start << ", \"time_from_start.nsec\": " << time_from_start.nsec << "";
+      ss_time_from_start << "\"time_from_start\":{\"sec\":" << time_from_start.sec;
+      ss_time_from_start << ",\"nsec\":" << time_from_start.nsec << "}";
       string_echo += ss_time_from_start.str();
       string_echo += "}";
       return string_echo;

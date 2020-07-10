@@ -61,15 +61,15 @@ namespace nav_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"goal_id\": {";
+      string_echo += ",";
+      string_echo += "\"goal_id\":";
       string_echo += this->goal_id.echo();
-      string_echo += "}, ";
-      string_echo += "\"goal\": {";
+      string_echo += ",";
+      string_echo += "\"goal\":";
       string_echo += this->goal.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

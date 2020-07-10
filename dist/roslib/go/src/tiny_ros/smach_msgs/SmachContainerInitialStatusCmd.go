@@ -1,6 +1,7 @@
 package smach_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -75,7 +76,7 @@ func (self *SmachContainerInitialStatusCmd) Go_deserialize(buff []byte) (int) {
     length_initial_states |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_initial_states |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_initial_states = make([]string, length_initial_states, length_initial_states)
+    self.Go_initial_states = make([]string, length_initial_states)
     for i := 0; i < length_initial_states; i++ {
         length_initial_statesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_initial_statesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -113,7 +114,11 @@ func (self *SmachContainerInitialStatusCmd) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SmachContainerInitialStatusCmd) Go_echo() (string) { return "" }
+func (self *SmachContainerInitialStatusCmd) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SmachContainerInitialStatusCmd) Go_getType() (string) { return "smach_msgs/SmachContainerInitialStatusCmd" }
 func (self *SmachContainerInitialStatusCmd) Go_getMD5() (string) { return "b7c8a2bbd4d7c89f80561645ea1f4f13" }
 func (self *SmachContainerInitialStatusCmd) Go_getID() (uint32) { return 0 }

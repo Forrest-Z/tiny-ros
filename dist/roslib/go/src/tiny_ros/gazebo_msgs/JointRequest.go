@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -65,7 +66,11 @@ func (self *JointRequestRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JointRequestRequest) Go_echo() (string) { return "" }
+func (self *JointRequestRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JointRequestRequest) Go_getType() (string) { return "gazebo_msgs/JointRequest" }
 func (self *JointRequestRequest) Go_getMD5() (string) { return "e0bdc37edb92be07f3069573364a169f" }
 func (self *JointRequestRequest) Go_getID() (uint32) { return self.__id__ }
@@ -114,7 +119,11 @@ func (self *JointRequestResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JointRequestResponse) Go_echo() (string) { return "" }
+func (self *JointRequestResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JointRequestResponse) Go_getType() (string) { return "gazebo_msgs/JointRequest" }
 func (self *JointRequestResponse) Go_getMD5() (string) { return "ac5876a62df51a76c2828bb62894779d" }
 func (self *JointRequestResponse) Go_getID() (uint32) { return self.__id__ }

@@ -136,7 +136,7 @@ public static class ApplyJointEffortRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return APPLYJOINTEFFORT; }
     public java.lang.String getMD5(){ return "90595a46cf1fb4ee17158e2f7034a0eb"; }
     public long getID() { return this.__id__; }
@@ -208,7 +208,7 @@ public static class ApplyJointEffortResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return APPLYJOINTEFFORT; }
     public java.lang.String getMD5(){ return "953194fc8ca726693bef2876cebb0438"; }
     public long getID() { return this.__id__; }

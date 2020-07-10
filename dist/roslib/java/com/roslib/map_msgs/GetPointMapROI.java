@@ -206,7 +206,7 @@ public static class GetPointMapROIRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPOINTMAPROI; }
     public java.lang.String getMD5(){ return "c338f5616930e00a72c38486f77e9810"; }
     public long getID() { return this.__id__; }
@@ -250,7 +250,7 @@ public static class GetPointMapROIResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPOINTMAPROI; }
     public java.lang.String getMD5(){ return "de10fb68f23987142a0ffbdb59b6e079"; }
     public long getID() { return this.__id__; }

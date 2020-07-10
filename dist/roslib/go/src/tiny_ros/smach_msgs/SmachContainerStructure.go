@@ -1,6 +1,7 @@
 package smach_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -146,7 +147,7 @@ func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     length_children |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_children |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_children = make([]string, length_children, length_children)
+    self.Go_children = make([]string, length_children)
     for i := 0; i < length_children; i++ {
         length_childreni := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_childreni |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -161,7 +162,7 @@ func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     length_internal_outcomes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_internal_outcomes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_internal_outcomes = make([]string, length_internal_outcomes, length_internal_outcomes)
+    self.Go_internal_outcomes = make([]string, length_internal_outcomes)
     for i := 0; i < length_internal_outcomes; i++ {
         length_internal_outcomesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_internal_outcomesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -176,7 +177,7 @@ func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     length_outcomes_from |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_outcomes_from |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_outcomes_from = make([]string, length_outcomes_from, length_outcomes_from)
+    self.Go_outcomes_from = make([]string, length_outcomes_from)
     for i := 0; i < length_outcomes_from; i++ {
         length_outcomes_fromi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_outcomes_fromi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -191,7 +192,7 @@ func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     length_outcomes_to |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_outcomes_to |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_outcomes_to = make([]string, length_outcomes_to, length_outcomes_to)
+    self.Go_outcomes_to = make([]string, length_outcomes_to)
     for i := 0; i < length_outcomes_to; i++ {
         length_outcomes_toi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_outcomes_toi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -206,7 +207,7 @@ func (self *SmachContainerStructure) Go_deserialize(buff []byte) (int) {
     length_container_outcomes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_container_outcomes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_container_outcomes = make([]string, length_container_outcomes, length_container_outcomes)
+    self.Go_container_outcomes = make([]string, length_container_outcomes)
     for i := 0; i < length_container_outcomes; i++ {
         length_container_outcomesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_container_outcomesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -263,7 +264,11 @@ func (self *SmachContainerStructure) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SmachContainerStructure) Go_echo() (string) { return "" }
+func (self *SmachContainerStructure) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SmachContainerStructure) Go_getType() (string) { return "smach_msgs/SmachContainerStructure" }
 func (self *SmachContainerStructure) Go_getMD5() (string) { return "0209663ab13753a56b6ac1d094d07fbe" }
 func (self *SmachContainerStructure) Go_getID() (uint32) { return 0 }

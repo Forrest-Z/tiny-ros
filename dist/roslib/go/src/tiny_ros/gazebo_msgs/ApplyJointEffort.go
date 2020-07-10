@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
     "encoding/binary"
     "math"
@@ -12,16 +13,16 @@ type ApplyJointEffortRequest struct {
     __id__ uint32 `json:"__id__"`
     Go_joint_name string `json:"joint_name"`
     Go_effort float64 `json:"effort"`
-    Go_start_time *tinyros.Time `json:"start_time"`
-    Go_duration *tinyros.Duration `json:"duration"`
+    Go_start_time *rostime.Time `json:"start_time"`
+    Go_duration *rostime.Duration `json:"duration"`
 }
 
 func NewApplyJointEffortRequest() (*ApplyJointEffortRequest) {
     newApplyJointEffortRequest := new(ApplyJointEffortRequest)
     newApplyJointEffortRequest.Go_joint_name = ""
     newApplyJointEffortRequest.Go_effort = 0.0
-    newApplyJointEffortRequest.Go_start_time = tinyros.NewTime()
-    newApplyJointEffortRequest.Go_duration = tinyros.NewDuration()
+    newApplyJointEffortRequest.Go_start_time = rostime.NewTime()
+    newApplyJointEffortRequest.Go_duration = rostime.NewDuration()
     newApplyJointEffortRequest.__id__ = 0
     return newApplyJointEffortRequest
 }
@@ -29,8 +30,8 @@ func NewApplyJointEffortRequest() (*ApplyJointEffortRequest) {
 func (self *ApplyJointEffortRequest) Go_initialize() {
     self.Go_joint_name = ""
     self.Go_effort = 0.0
-    self.Go_start_time = tinyros.NewTime()
-    self.Go_duration = tinyros.NewDuration()
+    self.Go_start_time = rostime.NewTime()
+    self.Go_duration = rostime.NewDuration()
     self.__id__ = 0
 }
 
@@ -128,7 +129,11 @@ func (self *ApplyJointEffortRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ApplyJointEffortRequest) Go_echo() (string) { return "" }
+func (self *ApplyJointEffortRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ApplyJointEffortRequest) Go_getType() (string) { return "gazebo_msgs/ApplyJointEffort" }
 func (self *ApplyJointEffortRequest) Go_getMD5() (string) { return "90595a46cf1fb4ee17158e2f7034a0eb" }
 func (self *ApplyJointEffortRequest) Go_getID() (uint32) { return self.__id__ }
@@ -214,7 +219,11 @@ func (self *ApplyJointEffortResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ApplyJointEffortResponse) Go_echo() (string) { return "" }
+func (self *ApplyJointEffortResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ApplyJointEffortResponse) Go_getType() (string) { return "gazebo_msgs/ApplyJointEffort" }
 func (self *ApplyJointEffortResponse) Go_getMD5() (string) { return "953194fc8ca726693bef2876cebb0438" }
 func (self *ApplyJointEffortResponse) Go_getID() (uint32) { return self.__id__ }

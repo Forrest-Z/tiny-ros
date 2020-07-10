@@ -74,7 +74,7 @@ public class KeyValue implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "diagnostic_msgs/KeyValue"; }
     public java.lang.String getMD5(){ return "1baa904b80c685c77d1a42a872ca1d07"; }
     public long getID() { return 0; }

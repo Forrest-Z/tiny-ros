@@ -81,7 +81,7 @@ public class RegionOfInterest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/RegionOfInterest"; }
     public java.lang.String getMD5(){ return "8370dc286f915405c906299aef5bb442"; }
     public long getID() { return 0; }

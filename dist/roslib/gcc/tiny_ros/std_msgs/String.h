@@ -40,7 +40,7 @@ namespace std_msgs
       arrToVar(length_data, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_data; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_data-1]=0;
       this->data = (char *)(inbuffer + offset-1);
@@ -60,7 +60,12 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"data\": \"";
+      std::size_t data_pos = data.find("\"");
+      while(data_pos != std::string::npos){
+        data.replace(data_pos, 1,"\\\"");
+        data_pos = data.find("\"", data_pos+2);
+      }
+      string_echo += "\"data\":\"";
       string_echo += data;
       string_echo += "\"";
       string_echo += "}";

@@ -68,7 +68,7 @@ namespace sensor_msgs
       arrToVar(length_source, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_source; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_source-1]=0;
       this->source = (char *)(inbuffer + offset-1);

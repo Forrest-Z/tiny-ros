@@ -64,7 +64,7 @@ public static class AddDiagnosticsRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return ADDDIAGNOSTICS; }
     public java.lang.String getMD5(){ return "005ba76b3cd04edebfe46acad928fbeb"; }
     public long getID() { return this.__id__; }
@@ -136,7 +136,7 @@ public static class AddDiagnosticsResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return ADDDIAGNOSTICS; }
     public java.lang.String getMD5(){ return "9bd37b30a2340a31743d1e80a2c52ed0"; }
     public long getID() { return this.__id__; }

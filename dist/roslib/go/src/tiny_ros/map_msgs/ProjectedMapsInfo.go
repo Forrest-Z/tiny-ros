@@ -1,24 +1,25 @@
 package map_msgs
 
 import (
+    "encoding/json"
 )
 
 
 
 type ProjectedMapsInfoRequest struct {
     __id__ uint32 `json:"__id__"`
-    Go_projected_maps_info []ProjectedMapInfo `json:"projected_maps_info"`
+    Go_projected_maps_info []*ProjectedMapInfo `json:"projected_maps_info"`
 }
 
 func NewProjectedMapsInfoRequest() (*ProjectedMapsInfoRequest) {
     newProjectedMapsInfoRequest := new(ProjectedMapsInfoRequest)
-    newProjectedMapsInfoRequest.Go_projected_maps_info = []ProjectedMapInfo{}
+    newProjectedMapsInfoRequest.Go_projected_maps_info = []*ProjectedMapInfo{}
     newProjectedMapsInfoRequest.__id__ = 0
     return newProjectedMapsInfoRequest
 }
 
 func (self *ProjectedMapsInfoRequest) Go_initialize() {
-    self.Go_projected_maps_info = []ProjectedMapInfo{}
+    self.Go_projected_maps_info = []*ProjectedMapInfo{}
     self.__id__ = 0
 }
 
@@ -53,7 +54,10 @@ func (self *ProjectedMapsInfoRequest) Go_deserialize(buff []byte) (int) {
     length_projected_maps_info |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_projected_maps_info |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_projected_maps_info = make([]ProjectedMapInfo, length_projected_maps_info, length_projected_maps_info)
+    self.Go_projected_maps_info = make([]*ProjectedMapInfo, length_projected_maps_info)
+    for i := 0; i < length_projected_maps_info; i++ {
+        self.Go_projected_maps_info[i] = NewProjectedMapInfo()
+    }
     for i := 0; i < length_projected_maps_info; i++ {
         offset += self.Go_projected_maps_info[i].Go_deserialize(buff[offset:])
     }
@@ -70,7 +74,11 @@ func (self *ProjectedMapsInfoRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ProjectedMapsInfoRequest) Go_echo() (string) { return "" }
+func (self *ProjectedMapsInfoRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ProjectedMapsInfoRequest) Go_getType() (string) { return "map_msgs/ProjectedMapsInfo" }
 func (self *ProjectedMapsInfoRequest) Go_getMD5() (string) { return "59778fc7286f314a408be52b4611a8b4" }
 func (self *ProjectedMapsInfoRequest) Go_getID() (uint32) { return self.__id__ }
@@ -119,7 +127,11 @@ func (self *ProjectedMapsInfoResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ProjectedMapsInfoResponse) Go_echo() (string) { return "" }
+func (self *ProjectedMapsInfoResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ProjectedMapsInfoResponse) Go_getType() (string) { return "map_msgs/ProjectedMapsInfo" }
 func (self *ProjectedMapsInfoResponse) Go_getMD5() (string) { return "223a7c48f052c5181dd525823dcc67fc" }
 func (self *ProjectedMapsInfoResponse) Go_getID() (uint32) { return self.__id__ }

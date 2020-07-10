@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
     "encoding/binary"
     "math"
@@ -11,10 +12,10 @@ type ContactState struct {
     Go_info string `json:"info"`
     Go_collision1_name string `json:"collision1_name"`
     Go_collision2_name string `json:"collision2_name"`
-    Go_wrenches []geometry_msgs.Wrench `json:"wrenches"`
+    Go_wrenches []*geometry_msgs.Wrench `json:"wrenches"`
     Go_total_wrench *geometry_msgs.Wrench `json:"total_wrench"`
-    Go_contact_positions []geometry_msgs.Vector3 `json:"contact_positions"`
-    Go_contact_normals []geometry_msgs.Vector3 `json:"contact_normals"`
+    Go_contact_positions []*geometry_msgs.Vector3 `json:"contact_positions"`
+    Go_contact_normals []*geometry_msgs.Vector3 `json:"contact_normals"`
     Go_depths []float64 `json:"depths"`
 }
 
@@ -23,10 +24,10 @@ func NewContactState() (*ContactState) {
     newContactState.Go_info = ""
     newContactState.Go_collision1_name = ""
     newContactState.Go_collision2_name = ""
-    newContactState.Go_wrenches = []geometry_msgs.Wrench{}
+    newContactState.Go_wrenches = []*geometry_msgs.Wrench{}
     newContactState.Go_total_wrench = geometry_msgs.NewWrench()
-    newContactState.Go_contact_positions = []geometry_msgs.Vector3{}
-    newContactState.Go_contact_normals = []geometry_msgs.Vector3{}
+    newContactState.Go_contact_positions = []*geometry_msgs.Vector3{}
+    newContactState.Go_contact_normals = []*geometry_msgs.Vector3{}
     newContactState.Go_depths = []float64{}
     return newContactState
 }
@@ -35,10 +36,10 @@ func (self *ContactState) Go_initialize() {
     self.Go_info = ""
     self.Go_collision1_name = ""
     self.Go_collision2_name = ""
-    self.Go_wrenches = []geometry_msgs.Wrench{}
+    self.Go_wrenches = []*geometry_msgs.Wrench{}
     self.Go_total_wrench = geometry_msgs.NewWrench()
-    self.Go_contact_positions = []geometry_msgs.Vector3{}
-    self.Go_contact_normals = []geometry_msgs.Vector3{}
+    self.Go_contact_positions = []*geometry_msgs.Vector3{}
+    self.Go_contact_normals = []*geometry_msgs.Vector3{}
     self.Go_depths = []float64{}
 }
 
@@ -138,7 +139,10 @@ func (self *ContactState) Go_deserialize(buff []byte) (int) {
     length_wrenches |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_wrenches |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_wrenches = make([]geometry_msgs.Wrench, length_wrenches, length_wrenches)
+    self.Go_wrenches = make([]*geometry_msgs.Wrench, length_wrenches)
+    for i := 0; i < length_wrenches; i++ {
+        self.Go_wrenches[i] = geometry_msgs.NewWrench()
+    }
     for i := 0; i < length_wrenches; i++ {
         offset += self.Go_wrenches[i].Go_deserialize(buff[offset:])
     }
@@ -148,7 +152,10 @@ func (self *ContactState) Go_deserialize(buff []byte) (int) {
     length_contact_positions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_contact_positions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_contact_positions = make([]geometry_msgs.Vector3, length_contact_positions, length_contact_positions)
+    self.Go_contact_positions = make([]*geometry_msgs.Vector3, length_contact_positions)
+    for i := 0; i < length_contact_positions; i++ {
+        self.Go_contact_positions[i] = geometry_msgs.NewVector3()
+    }
     for i := 0; i < length_contact_positions; i++ {
         offset += self.Go_contact_positions[i].Go_deserialize(buff[offset:])
     }
@@ -157,7 +164,10 @@ func (self *ContactState) Go_deserialize(buff []byte) (int) {
     length_contact_normals |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_contact_normals |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_contact_normals = make([]geometry_msgs.Vector3, length_contact_normals, length_contact_normals)
+    self.Go_contact_normals = make([]*geometry_msgs.Vector3, length_contact_normals)
+    for i := 0; i < length_contact_normals; i++ {
+        self.Go_contact_normals[i] = geometry_msgs.NewVector3()
+    }
     for i := 0; i < length_contact_normals; i++ {
         offset += self.Go_contact_normals[i].Go_deserialize(buff[offset:])
     }
@@ -166,7 +176,7 @@ func (self *ContactState) Go_deserialize(buff []byte) (int) {
     length_depths |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_depths |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_depths = make([]float64, length_depths, length_depths)
+    self.Go_depths = make([]float64, length_depths)
     for i := 0; i < length_depths; i++ {
         bits_depthsi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_depths[i] = math.Float64frombits(bits_depthsi)
@@ -210,7 +220,11 @@ func (self *ContactState) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ContactState) Go_echo() (string) { return "" }
+func (self *ContactState) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ContactState) Go_getType() (string) { return "gazebo_msgs/ContactState" }
 func (self *ContactState) Go_getMD5() (string) { return "d82d0f0cae88aebf6b2cc86caea33a2b" }
 func (self *ContactState) Go_getID() (uint32) { return 0 }

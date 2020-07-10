@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "tiny_ros/sensor_msgs"
     "math"
@@ -117,7 +118,11 @@ func (self *GetPointMapROIRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPointMapROIRequest) Go_echo() (string) { return "" }
+func (self *GetPointMapROIRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPointMapROIRequest) Go_getType() (string) { return "map_msgs/GetPointMapROI" }
 func (self *GetPointMapROIRequest) Go_getMD5() (string) { return "c338f5616930e00a72c38486f77e9810" }
 func (self *GetPointMapROIRequest) Go_getID() (uint32) { return self.__id__ }
@@ -172,7 +177,11 @@ func (self *GetPointMapROIResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPointMapROIResponse) Go_echo() (string) { return "" }
+func (self *GetPointMapROIResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPointMapROIResponse) Go_getType() (string) { return "map_msgs/GetPointMapROI" }
 func (self *GetPointMapROIResponse) Go_getMD5() (string) { return "de10fb68f23987142a0ffbdb59b6e079" }
 func (self *GetPointMapROIResponse) Go_getID() (uint32) { return self.__id__ }

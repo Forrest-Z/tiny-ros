@@ -20,8 +20,8 @@ public class DiagnosticArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_status >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_status >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_status; i++){
-        offset = this.status[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_status; i++) {
+            offset = this.status[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -37,8 +37,8 @@ public class DiagnosticArray implements com.roslib.ros.Msg {
         if(length_status > 0) {
             this.status = new com.roslib.diagnostic_msgs.DiagnosticStatus[length_status];
         }
-        for (int i = 0; i < length_status; i++){
-        offset = this.status[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_status; i++) {
+            offset = this.status[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -49,12 +49,12 @@ public class DiagnosticArray implements com.roslib.ros.Msg {
         length += 4;
         int length_status = this.status != null ? this.status.length : 0;
         for (int i = 0; i < length_status; i++) {
-        length += this.status[i].serializedLength();
+            length += this.status[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "diagnostic_msgs/DiagnosticArray"; }
     public java.lang.String getMD5(){ return "79a87210f85eb6afbd600eb2ba49dd85"; }
     public long getID() { return 0; }

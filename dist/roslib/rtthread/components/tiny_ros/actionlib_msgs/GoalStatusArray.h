@@ -36,8 +36,8 @@ namespace actionlib_msgs
       *(outbuffer + offset + 2) = (this->status_list_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->status_list_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->status_list_length);
-      for( uint32_t i = 0; i < status_list_length; i++){
-      offset += this->status_list[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < status_list_length; i++) {
+        offset += this->status_list[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -54,8 +54,8 @@ namespace actionlib_msgs
       if(status_list_lengthT > status_list_length)
         this->status_list = (actionlib_msgs::GoalStatus*)realloc(this->status_list, status_list_lengthT * sizeof(actionlib_msgs::GoalStatus));
       status_list_length = status_list_lengthT;
-      for( uint32_t i = 0; i < status_list_length; i++){
-      offset += this->st_status_list.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < status_list_length; i++) {
+        offset += this->st_status_list.deserialize(inbuffer + offset);
         memcpy( &(this->status_list[i]), &(this->st_status_list), sizeof(actionlib_msgs::GoalStatus));
       }
       return offset;
@@ -66,8 +66,8 @@ namespace actionlib_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->status_list_length);
-      for( uint32_t i = 0; i < status_list_length; i++){
-      length += this->status_list[i].serializedLength();
+      for( uint32_t i = 0; i < status_list_length; i++) {
+        length += this->status_list[i].serializedLength();
       }
       return length;
     }

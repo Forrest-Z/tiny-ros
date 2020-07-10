@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -59,7 +60,11 @@ func (self *FluidPressure) Go_serializedLength() (int) {
     return length
 }
 
-func (self *FluidPressure) Go_echo() (string) { return "" }
+func (self *FluidPressure) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *FluidPressure) Go_getType() (string) { return "sensor_msgs/FluidPressure" }
 func (self *FluidPressure) Go_getMD5() (string) { return "0fdea137019d78ebf8c2cb91c31a458a" }
 func (self *FluidPressure) Go_getID() (uint32) { return 0 }

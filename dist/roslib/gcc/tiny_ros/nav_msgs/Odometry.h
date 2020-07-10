@@ -56,7 +56,7 @@ namespace nav_msgs
       arrToVar(length_child_frame_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_child_frame_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_child_frame_id-1]=0;
       this->child_frame_id = (char *)(inbuffer + offset-1);
@@ -81,18 +81,23 @@ namespace nav_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"child_frame_id\": \"";
+      string_echo += ",";
+      std::size_t child_frame_id_pos = child_frame_id.find("\"");
+      while(child_frame_id_pos != std::string::npos){
+        child_frame_id.replace(child_frame_id_pos, 1,"\\\"");
+        child_frame_id_pos = child_frame_id.find("\"", child_frame_id_pos+2);
+      }
+      string_echo += "\"child_frame_id\":\"";
       string_echo += child_frame_id;
-      string_echo += "\", ";
-      string_echo += "\"pose\": {";
+      string_echo += "\",";
+      string_echo += "\"pose\":";
       string_echo += this->pose.echo();
-      string_echo += "}, ";
-      string_echo += "\"twist\": {";
+      string_echo += ",";
+      string_echo += "\"twist\":";
       string_echo += this->twist.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

@@ -57,7 +57,7 @@ static const char GETLINKPROPERTIES[] = "gazebo_msgs/GetLinkProperties";
       arrToVar(length_link_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_link_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_link_name-1]=0;
       this->link_name = (char *)(inbuffer + offset-1);
@@ -77,7 +77,12 @@ static const char GETLINKPROPERTIES[] = "gazebo_msgs/GetLinkProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"link_name\": \"";
+      std::size_t link_name_pos = link_name.find("\"");
+      while(link_name_pos != std::string::npos){
+        link_name.replace(link_name_pos, 1,"\\\"");
+        link_name_pos = link_name.find("\"", link_name_pos+2);
+      }
+      string_echo += "\"link_name\":\"";
       string_echo += link_name;
       string_echo += "\"";
       string_echo += "}";
@@ -400,7 +405,7 @@ static const char GETLINKPROPERTIES[] = "gazebo_msgs/GetLinkProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -430,28 +435,33 @@ static const char GETLINKPROPERTIES[] = "gazebo_msgs/GetLinkProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"com\": {";
+      string_echo += "\"com\":";
       string_echo += this->com.echo();
-      string_echo += "}, ";
-      std::stringstream ss_gravity_mode; ss_gravity_mode << "\"gravity_mode\": " << gravity_mode <<", ";
+      string_echo += ",";
+      std::stringstream ss_gravity_mode; ss_gravity_mode << "\"gravity_mode\":" << gravity_mode <<",";
       string_echo += ss_gravity_mode.str();
-      std::stringstream ss_mass; ss_mass << "\"mass\": " << mass <<", ";
+      std::stringstream ss_mass; ss_mass << "\"mass\":" << mass <<",";
       string_echo += ss_mass.str();
-      std::stringstream ss_ixx; ss_ixx << "\"ixx\": " << ixx <<", ";
+      std::stringstream ss_ixx; ss_ixx << "\"ixx\":" << ixx <<",";
       string_echo += ss_ixx.str();
-      std::stringstream ss_ixy; ss_ixy << "\"ixy\": " << ixy <<", ";
+      std::stringstream ss_ixy; ss_ixy << "\"ixy\":" << ixy <<",";
       string_echo += ss_ixy.str();
-      std::stringstream ss_ixz; ss_ixz << "\"ixz\": " << ixz <<", ";
+      std::stringstream ss_ixz; ss_ixz << "\"ixz\":" << ixz <<",";
       string_echo += ss_ixz.str();
-      std::stringstream ss_iyy; ss_iyy << "\"iyy\": " << iyy <<", ";
+      std::stringstream ss_iyy; ss_iyy << "\"iyy\":" << iyy <<",";
       string_echo += ss_iyy.str();
-      std::stringstream ss_iyz; ss_iyz << "\"iyz\": " << iyz <<", ";
+      std::stringstream ss_iyz; ss_iyz << "\"iyz\":" << iyz <<",";
       string_echo += ss_iyz.str();
-      std::stringstream ss_izz; ss_izz << "\"izz\": " << izz <<", ";
+      std::stringstream ss_izz; ss_izz << "\"izz\":" << izz <<",";
       string_echo += ss_izz.str();
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

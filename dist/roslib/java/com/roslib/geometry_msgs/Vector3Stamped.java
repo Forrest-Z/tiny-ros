@@ -32,7 +32,7 @@ public class Vector3Stamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Vector3Stamped"; }
     public java.lang.String getMD5(){ return "4b85025eb6f70f6b1e0cefbb75f69ac2"; }
     public long getID() { return 0; }

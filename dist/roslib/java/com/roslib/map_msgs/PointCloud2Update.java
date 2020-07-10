@@ -47,7 +47,7 @@ public class PointCloud2Update implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "map_msgs/PointCloud2Update"; }
     public java.lang.String getMD5(){ return "e79dfbefd7336861352e1bc7148491c4"; }
     public long getID() { return 0; }

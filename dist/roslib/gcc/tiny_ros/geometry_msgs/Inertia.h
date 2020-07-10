@@ -278,22 +278,22 @@ namespace geometry_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_m; ss_m << "\"m\": " << m <<", ";
+      std::stringstream ss_m; ss_m << "\"m\":" << m <<",";
       string_echo += ss_m.str();
-      string_echo += "\"com\": {";
+      string_echo += "\"com\":";
       string_echo += this->com.echo();
-      string_echo += "}, ";
-      std::stringstream ss_ixx; ss_ixx << "\"ixx\": " << ixx <<", ";
+      string_echo += ",";
+      std::stringstream ss_ixx; ss_ixx << "\"ixx\":" << ixx <<",";
       string_echo += ss_ixx.str();
-      std::stringstream ss_ixy; ss_ixy << "\"ixy\": " << ixy <<", ";
+      std::stringstream ss_ixy; ss_ixy << "\"ixy\":" << ixy <<",";
       string_echo += ss_ixy.str();
-      std::stringstream ss_ixz; ss_ixz << "\"ixz\": " << ixz <<", ";
+      std::stringstream ss_ixz; ss_ixz << "\"ixz\":" << ixz <<",";
       string_echo += ss_ixz.str();
-      std::stringstream ss_iyy; ss_iyy << "\"iyy\": " << iyy <<", ";
+      std::stringstream ss_iyy; ss_iyy << "\"iyy\":" << iyy <<",";
       string_echo += ss_iyy.str();
-      std::stringstream ss_iyz; ss_iyz << "\"iyz\": " << iyz <<", ";
+      std::stringstream ss_iyz; ss_iyz << "\"iyz\":" << iyz <<",";
       string_echo += ss_iyz.str();
-      std::stringstream ss_izz; ss_izz << "\"izz\": " << izz <<"";
+      std::stringstream ss_izz; ss_izz << "\"izz\":" << izz <<"";
       string_echo += ss_izz.str();
       string_echo += "}";
       return string_echo;

@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
     "tiny_ros/trajectory_msgs"
 )
@@ -111,7 +112,11 @@ func (self *SetJointTrajectoryRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetJointTrajectoryRequest) Go_echo() (string) { return "" }
+func (self *SetJointTrajectoryRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetJointTrajectoryRequest) Go_getType() (string) { return "gazebo_msgs/SetJointTrajectory" }
 func (self *SetJointTrajectoryRequest) Go_getMD5() (string) { return "8230e1fcc0295d8d21fbd5df0ccb0af3" }
 func (self *SetJointTrajectoryRequest) Go_getID() (uint32) { return self.__id__ }
@@ -197,7 +202,11 @@ func (self *SetJointTrajectoryResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetJointTrajectoryResponse) Go_echo() (string) { return "" }
+func (self *SetJointTrajectoryResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetJointTrajectoryResponse) Go_getType() (string) { return "gazebo_msgs/SetJointTrajectory" }
 func (self *SetJointTrajectoryResponse) Go_getMD5() (string) { return "2f5fe47400272efd54556969ffe63e7e" }
 func (self *SetJointTrajectoryResponse) Go_getID() (uint32) { return self.__id__ }

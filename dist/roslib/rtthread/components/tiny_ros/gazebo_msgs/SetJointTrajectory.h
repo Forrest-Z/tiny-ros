@@ -84,7 +84,7 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
       arrToVar(length_model_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_model_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_model_name-1]=0;
       this->model_name = (char *)(inbuffer + offset-1);
@@ -192,7 +192,7 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);

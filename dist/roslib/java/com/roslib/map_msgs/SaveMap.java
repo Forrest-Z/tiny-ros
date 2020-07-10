@@ -43,7 +43,7 @@ public static class SaveMapRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SAVEMAP; }
     public java.lang.String getMD5(){ return "6643d8ede81a23998690e6a3ff657316"; }
     public long getID() { return this.__id__; }
@@ -82,7 +82,7 @@ public static class SaveMapResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SAVEMAP; }
     public java.lang.String getMD5(){ return "9cd07446fa1bd59b4758dadf19f196e9"; }
     public long getID() { return this.__id__; }

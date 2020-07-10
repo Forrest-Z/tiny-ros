@@ -19,8 +19,8 @@ public class MultiArrayLayout implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_dim >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_dim >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_dim; i++){
-        offset = this.dim[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_dim; i++) {
+            offset = this.dim[i].serialize(outbuffer, offset);
         }
         outbuffer[offset + 0] = (byte)((this.data_offset >> (8 * 0)) & 0xFF);
         outbuffer[offset + 1] = (byte)((this.data_offset >> (8 * 1)) & 0xFF);
@@ -40,8 +40,8 @@ public class MultiArrayLayout implements com.roslib.ros.Msg {
         if(length_dim > 0) {
             this.dim = new com.roslib.std_msgs.MultiArrayDimension[length_dim];
         }
-        for (int i = 0; i < length_dim; i++){
-        offset = this.dim[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_dim; i++) {
+            offset = this.dim[i].deserialize(inbuffer, offset);
         }
         this.data_offset   = (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         this.data_offset |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -56,13 +56,13 @@ public class MultiArrayLayout implements com.roslib.ros.Msg {
         length += 4;
         int length_dim = this.dim != null ? this.dim.length : 0;
         for (int i = 0; i < length_dim; i++) {
-        length += this.dim[i].serializedLength();
+            length += this.dim[i].serializedLength();
         }
         length += 4;
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/MultiArrayLayout"; }
     public java.lang.String getMD5(){ return "f40f0b5b285a93ca167c98c1012a989a"; }
     public long getID() { return 0; }

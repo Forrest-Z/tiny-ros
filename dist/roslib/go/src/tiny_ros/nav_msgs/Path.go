@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/geometry_msgs"
 )
@@ -8,19 +9,19 @@ import (
 
 type Path struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_poses []geometry_msgs.PoseStamped `json:"poses"`
+    Go_poses []*geometry_msgs.PoseStamped `json:"poses"`
 }
 
 func NewPath() (*Path) {
     newPath := new(Path)
     newPath.Go_header = std_msgs.NewHeader()
-    newPath.Go_poses = []geometry_msgs.PoseStamped{}
+    newPath.Go_poses = []*geometry_msgs.PoseStamped{}
     return newPath
 }
 
 func (self *Path) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_poses = []geometry_msgs.PoseStamped{}
+    self.Go_poses = []*geometry_msgs.PoseStamped{}
 }
 
 func (self *Path) Go_serialize(buff []byte) (int) {
@@ -46,7 +47,10 @@ func (self *Path) Go_deserialize(buff []byte) (int) {
     length_poses |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_poses |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_poses = make([]geometry_msgs.PoseStamped, length_poses, length_poses)
+    self.Go_poses = make([]*geometry_msgs.PoseStamped, length_poses)
+    for i := 0; i < length_poses; i++ {
+        self.Go_poses[i] = geometry_msgs.NewPoseStamped()
+    }
     for i := 0; i < length_poses; i++ {
         offset += self.Go_poses[i].Go_deserialize(buff[offset:])
     }
@@ -64,7 +68,11 @@ func (self *Path) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Path) Go_echo() (string) { return "" }
+func (self *Path) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Path) Go_getType() (string) { return "nav_msgs/Path" }
 func (self *Path) Go_getMD5() (string) { return "4a185240c929c496a7e0d6202e3c89af" }
 func (self *Path) Go_getID() (uint32) { return 0 }

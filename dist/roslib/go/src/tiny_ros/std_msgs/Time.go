@@ -1,22 +1,23 @@
 package std_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
 
 type Time struct {
-    Go_data *tinyros.Time `json:"data"`
+    Go_data *rostime.Time `json:"data"`
 }
 
 func NewTime() (*Time) {
     newTime := new(Time)
-    newTime.Go_data = tinyros.NewTime()
+    newTime.Go_data = rostime.NewTime()
     return newTime
 }
 
 func (self *Time) Go_initialize() {
-    self.Go_data = tinyros.NewTime()
+    self.Go_data = rostime.NewTime()
 }
 
 func (self *Time) Go_serialize(buff []byte) (int) {
@@ -56,7 +57,11 @@ func (self *Time) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Time) Go_echo() (string) { return "" }
+func (self *Time) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Time) Go_getType() (string) { return "std_msgs/Time" }
 func (self *Time) Go_getMD5() (string) { return "64602ed67393e1e61260ab68d6fa2045" }
 func (self *Time) Go_getID() (uint32) { return 0 }

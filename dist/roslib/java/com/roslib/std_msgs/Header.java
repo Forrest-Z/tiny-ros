@@ -85,7 +85,7 @@ public class Header implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Header"; }
     public java.lang.String getMD5(){ return "d33440e88be7b5b8255fc61ebbca06ad"; }
     public long getID() { return 0; }

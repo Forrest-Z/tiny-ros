@@ -37,7 +37,7 @@ public class GetMapActionResult implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/GetMapActionResult"; }
     public java.lang.String getMD5(){ return "9c9f64758f2627a010c16b17ea745028"; }
     public long getID() { return 0; }

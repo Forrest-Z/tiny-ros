@@ -29,8 +29,8 @@ class NodeHandleBase(object):
     TINYROS_LOG_TOPIC   = 'tinyros_log_11315'
     MAX_SUBSCRIBERS = 100
     MAX_PUBLISHERS  = 100
-    INPUT_SIZE  = 65*1024
-    OUTPUT_SIZE = 65*1024
+    INPUT_SIZE  = 64*1024
+    OUTPUT_SIZE = 64*1024
     
     global_ip_addr = "127.0.0.1"
     

@@ -57,9 +57,9 @@ public class Image implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_data >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_data >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_data; i++){
-        outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
-        offset += 1;
+        for (int i = 0; i < length_data; i++) {
+            outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
+            offset += 1;
         }
         return offset;
     }
@@ -103,9 +103,9 @@ public class Image implements com.roslib.ros.Msg {
         if(length_data > 0) {
             this.data = new int[length_data];
         }
-        for (int i = 0; i < length_data; i++){
-        this.data[i]   = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        offset += 1;
+        for (int i = 0; i < length_data; i++) {
+            this.data[i]   = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            offset += 1;
         }
         return offset;
     }
@@ -123,12 +123,12 @@ public class Image implements com.roslib.ros.Msg {
         length += 4;
         int length_data = this.data != null ? this.data.length : 0;
         for (int i = 0; i < length_data; i++) {
-        length += 1;
+            length += 1;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/Image"; }
     public java.lang.String getMD5(){ return "886f928dc81bf7f1496a8b452057c5b2"; }
     public long getID() { return 0; }

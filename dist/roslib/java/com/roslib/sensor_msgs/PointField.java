@@ -89,7 +89,7 @@ public class PointField implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/PointField"; }
     public java.lang.String getMD5(){ return "039974f05fdf0470d9dc865fd01dcc3e"; }
     public long getID() { return 0; }

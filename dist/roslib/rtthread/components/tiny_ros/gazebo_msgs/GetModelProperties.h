@@ -54,7 +54,7 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       arrToVar(length_model_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_model_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_model_name-1]=0;
       this->model_name = (char *)(inbuffer + offset-1);
@@ -149,48 +149,48 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       *(outbuffer + offset + 2) = (this->body_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->body_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->body_names_length);
-      for( uint32_t i = 0; i < body_names_length; i++){
-      uint32_t length_body_namesi = this->body_names[i].size();
-      varToArr(outbuffer + offset, length_body_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->body_names[i].c_str(), length_body_namesi);
-      offset += length_body_namesi;
+      for( uint32_t i = 0; i < body_names_length; i++) {
+        uint32_t length_body_namesi = this->body_names[i].size();
+        varToArr(outbuffer + offset, length_body_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->body_names[i].c_str(), length_body_namesi);
+        offset += length_body_namesi;
       }
       *(outbuffer + offset + 0) = (this->geom_names_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->geom_names_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->geom_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->geom_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->geom_names_length);
-      for( uint32_t i = 0; i < geom_names_length; i++){
-      uint32_t length_geom_namesi = this->geom_names[i].size();
-      varToArr(outbuffer + offset, length_geom_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->geom_names[i].c_str(), length_geom_namesi);
-      offset += length_geom_namesi;
+      for( uint32_t i = 0; i < geom_names_length; i++) {
+        uint32_t length_geom_namesi = this->geom_names[i].size();
+        varToArr(outbuffer + offset, length_geom_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->geom_names[i].c_str(), length_geom_namesi);
+        offset += length_geom_namesi;
       }
       *(outbuffer + offset + 0) = (this->joint_names_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->joint_names_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->joint_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->joint_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->joint_names_length);
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_joint_namesi = this->joint_names[i].size();
-      varToArr(outbuffer + offset, length_joint_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->joint_names[i].c_str(), length_joint_namesi);
-      offset += length_joint_namesi;
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_joint_namesi = this->joint_names[i].size();
+        varToArr(outbuffer + offset, length_joint_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->joint_names[i].c_str(), length_joint_namesi);
+        offset += length_joint_namesi;
       }
       *(outbuffer + offset + 0) = (this->child_model_names_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->child_model_names_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->child_model_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->child_model_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->child_model_names_length);
-      for( uint32_t i = 0; i < child_model_names_length; i++){
-      uint32_t length_child_model_namesi = this->child_model_names[i].size();
-      varToArr(outbuffer + offset, length_child_model_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->child_model_names[i].c_str(), length_child_model_namesi);
-      offset += length_child_model_namesi;
+      for( uint32_t i = 0; i < child_model_names_length; i++) {
+        uint32_t length_child_model_namesi = this->child_model_names[i].size();
+        varToArr(outbuffer + offset, length_child_model_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->child_model_names[i].c_str(), length_child_model_namesi);
+        offset += length_child_model_namesi;
       }
       union {
         bool real;
@@ -226,7 +226,7 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       arrToVar(length_parent_model_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_parent_model_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_parent_model_name-1]=0;
       this->parent_model_name = (char *)(inbuffer + offset-1);
@@ -235,7 +235,7 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       arrToVar(length_canonical_body_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_canonical_body_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_canonical_body_name-1]=0;
       this->canonical_body_name = (char *)(inbuffer + offset-1);
@@ -248,16 +248,16 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       if(body_names_lengthT > body_names_length)
         this->body_names = (tinyros::string*)realloc(this->body_names, body_names_lengthT * sizeof(tinyros::string));
       body_names_length = body_names_lengthT;
-      for( uint32_t i = 0; i < body_names_length; i++){
-      uint32_t length_st_body_names;
-      arrToVar(length_st_body_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_body_names; ++k){
+      for( uint32_t i = 0; i < body_names_length; i++) {
+        uint32_t length_st_body_names;
+        arrToVar(length_st_body_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_body_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_body_names-1]=0;
-      this->st_body_names = (char *)(inbuffer + offset-1);
-      offset += length_st_body_names;
+        }
+        inbuffer[offset+length_st_body_names-1]=0;
+        this->st_body_names = (char *)(inbuffer + offset-1);
+        offset += length_st_body_names;
         memcpy( &(this->body_names[i]), &(this->st_body_names), sizeof(tinyros::string));
       }
       uint32_t geom_names_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -268,16 +268,16 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       if(geom_names_lengthT > geom_names_length)
         this->geom_names = (tinyros::string*)realloc(this->geom_names, geom_names_lengthT * sizeof(tinyros::string));
       geom_names_length = geom_names_lengthT;
-      for( uint32_t i = 0; i < geom_names_length; i++){
-      uint32_t length_st_geom_names;
-      arrToVar(length_st_geom_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_geom_names; ++k){
+      for( uint32_t i = 0; i < geom_names_length; i++) {
+        uint32_t length_st_geom_names;
+        arrToVar(length_st_geom_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_geom_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_geom_names-1]=0;
-      this->st_geom_names = (char *)(inbuffer + offset-1);
-      offset += length_st_geom_names;
+        }
+        inbuffer[offset+length_st_geom_names-1]=0;
+        this->st_geom_names = (char *)(inbuffer + offset-1);
+        offset += length_st_geom_names;
         memcpy( &(this->geom_names[i]), &(this->st_geom_names), sizeof(tinyros::string));
       }
       uint32_t joint_names_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -288,16 +288,16 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       if(joint_names_lengthT > joint_names_length)
         this->joint_names = (tinyros::string*)realloc(this->joint_names, joint_names_lengthT * sizeof(tinyros::string));
       joint_names_length = joint_names_lengthT;
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_st_joint_names;
-      arrToVar(length_st_joint_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_joint_names; ++k){
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_st_joint_names;
+        arrToVar(length_st_joint_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_joint_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_joint_names-1]=0;
-      this->st_joint_names = (char *)(inbuffer + offset-1);
-      offset += length_st_joint_names;
+        }
+        inbuffer[offset+length_st_joint_names-1]=0;
+        this->st_joint_names = (char *)(inbuffer + offset-1);
+        offset += length_st_joint_names;
         memcpy( &(this->joint_names[i]), &(this->st_joint_names), sizeof(tinyros::string));
       }
       uint32_t child_model_names_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -308,16 +308,16 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       if(child_model_names_lengthT > child_model_names_length)
         this->child_model_names = (tinyros::string*)realloc(this->child_model_names, child_model_names_lengthT * sizeof(tinyros::string));
       child_model_names_length = child_model_names_lengthT;
-      for( uint32_t i = 0; i < child_model_names_length; i++){
-      uint32_t length_st_child_model_names;
-      arrToVar(length_st_child_model_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_child_model_names; ++k){
+      for( uint32_t i = 0; i < child_model_names_length; i++) {
+        uint32_t length_st_child_model_names;
+        arrToVar(length_st_child_model_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_child_model_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_child_model_names-1]=0;
-      this->st_child_model_names = (char *)(inbuffer + offset-1);
-      offset += length_st_child_model_names;
+        }
+        inbuffer[offset+length_st_child_model_names-1]=0;
+        this->st_child_model_names = (char *)(inbuffer + offset-1);
+        offset += length_st_child_model_names;
         memcpy( &(this->child_model_names[i]), &(this->st_child_model_names), sizeof(tinyros::string));
       }
       union {
@@ -340,7 +340,7 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -358,28 +358,28 @@ static const char GETMODELPROPERTIES[] = "gazebo_msgs/GetModelProperties";
       length += 4;
       length += length_canonical_body_name;
       length += sizeof(this->body_names_length);
-      for( uint32_t i = 0; i < body_names_length; i++){
-      uint32_t length_body_namesi = this->body_names[i].size();
-      length += 4;
-      length += length_body_namesi;
+      for( uint32_t i = 0; i < body_names_length; i++) {
+        uint32_t length_body_namesi = this->body_names[i].size();
+        length += 4;
+        length += length_body_namesi;
       }
       length += sizeof(this->geom_names_length);
-      for( uint32_t i = 0; i < geom_names_length; i++){
-      uint32_t length_geom_namesi = this->geom_names[i].size();
-      length += 4;
-      length += length_geom_namesi;
+      for( uint32_t i = 0; i < geom_names_length; i++) {
+        uint32_t length_geom_namesi = this->geom_names[i].size();
+        length += 4;
+        length += length_geom_namesi;
       }
       length += sizeof(this->joint_names_length);
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_joint_namesi = this->joint_names[i].size();
-      length += 4;
-      length += length_joint_namesi;
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_joint_namesi = this->joint_names[i].size();
+        length += 4;
+        length += length_joint_namesi;
       }
       length += sizeof(this->child_model_names_length);
-      for( uint32_t i = 0; i < child_model_names_length; i++){
-      uint32_t length_child_model_namesi = this->child_model_names[i].size();
-      length += 4;
-      length += length_child_model_namesi;
+      for( uint32_t i = 0; i < child_model_names_length; i++) {
+        uint32_t length_child_model_namesi = this->child_model_names[i].size();
+        length += 4;
+        length += length_child_model_namesi;
       }
       length += sizeof(this->is_static);
       length += sizeof(this->success);

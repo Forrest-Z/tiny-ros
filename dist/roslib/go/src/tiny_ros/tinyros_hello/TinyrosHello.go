@@ -1,6 +1,7 @@
 package tinyros_hello
 
 import (
+    "encoding/json"
 )
 
 
@@ -51,7 +52,11 @@ func (self *TinyrosHello) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TinyrosHello) Go_echo() (string) { return "" }
+func (self *TinyrosHello) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TinyrosHello) Go_getType() (string) { return "tinyros_hello/TinyrosHello" }
 func (self *TinyrosHello) Go_getMD5() (string) { return "0c68e66a217802ad0c9f648b7a69d090" }
 func (self *TinyrosHello) Go_getID() (uint32) { return 0 }

@@ -17,8 +17,8 @@ public class Polygon implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_points >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_points >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_points; i++){
-        offset = this.points[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_points; i++) {
+            offset = this.points[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -33,8 +33,8 @@ public class Polygon implements com.roslib.ros.Msg {
         if(length_points > 0) {
             this.points = new com.roslib.geometry_msgs.Point32[length_points];
         }
-        for (int i = 0; i < length_points; i++){
-        offset = this.points[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_points; i++) {
+            offset = this.points[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -44,12 +44,12 @@ public class Polygon implements com.roslib.ros.Msg {
         length += 4;
         int length_points = this.points != null ? this.points.length : 0;
         for (int i = 0; i < length_points; i++) {
-        length += this.points[i].serializedLength();
+            length += this.points[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Polygon"; }
     public java.lang.String getMD5(){ return "f94a78a947b7879954bd14397db4bc9d"; }
     public long getID() { return 0; }

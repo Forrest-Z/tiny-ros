@@ -140,13 +140,13 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_r; ss_r << "\"r\": " << r <<", ";
+      std::stringstream ss_r; ss_r << "\"r\":" << r <<",";
       string_echo += ss_r.str();
-      std::stringstream ss_g; ss_g << "\"g\": " << g <<", ";
+      std::stringstream ss_g; ss_g << "\"g\":" << g <<",";
       string_echo += ss_g.str();
-      std::stringstream ss_b; ss_b << "\"b\": " << b <<", ";
+      std::stringstream ss_b; ss_b << "\"b\":" << b <<",";
       string_echo += ss_b.str();
-      std::stringstream ss_a; ss_a << "\"a\": " << a <<"";
+      std::stringstream ss_a; ss_a << "\"a\":" << a <<"";
       string_echo += ss_a.str();
       string_echo += "}";
       return string_echo;

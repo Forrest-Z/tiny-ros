@@ -53,12 +53,12 @@ namespace geometry_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"force\": {";
+      string_echo += "\"force\":";
       string_echo += this->force.echo();
-      string_echo += "}, ";
-      string_echo += "\"torque\": {";
+      string_echo += ",";
+      string_echo += "\"torque\":";
       string_echo += this->torque.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

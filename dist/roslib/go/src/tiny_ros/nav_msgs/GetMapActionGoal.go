@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/actionlib_msgs"
 )
@@ -50,7 +51,11 @@ func (self *GetMapActionGoal) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetMapActionGoal) Go_echo() (string) { return "" }
+func (self *GetMapActionGoal) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetMapActionGoal) Go_getType() (string) { return "nav_msgs/GetMapActionGoal" }
 func (self *GetMapActionGoal) Go_getMD5() (string) { return "8aea83336b4ee626241742bb14b14d90" }
 func (self *GetMapActionGoal) Go_getID() (uint32) { return 0 }

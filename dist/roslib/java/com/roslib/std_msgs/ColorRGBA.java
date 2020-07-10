@@ -86,7 +86,7 @@ public class ColorRGBA implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/ColorRGBA"; }
     public java.lang.String getMD5(){ return "3c740aa311a337bfa4133c69405e0aed"; }
     public long getID() { return 0; }

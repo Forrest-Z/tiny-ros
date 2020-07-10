@@ -1,4 +1,4 @@
-package tinyros
+package rostime
 
 import (
     "math"

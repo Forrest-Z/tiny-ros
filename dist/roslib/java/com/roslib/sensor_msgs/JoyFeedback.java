@@ -55,7 +55,7 @@ public class JoyFeedback implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/JoyFeedback"; }
     public java.lang.String getMD5(){ return "206b65e86c8b195f816ccbe40b3568a2"; }
     public long getID() { return 0; }

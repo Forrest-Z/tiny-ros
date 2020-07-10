@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/nav_msgs"
     "encoding/binary"
     "math"
@@ -59,7 +60,11 @@ func (self *ProjectedMap) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ProjectedMap) Go_echo() (string) { return "" }
+func (self *ProjectedMap) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ProjectedMap) Go_getType() (string) { return "map_msgs/ProjectedMap" }
 func (self *ProjectedMap) Go_getMD5() (string) { return "cbd5598c259cc16f5aa07335587a7367" }
 func (self *ProjectedMap) Go_getID() (uint32) { return 0 }

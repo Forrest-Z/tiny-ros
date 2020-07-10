@@ -38,7 +38,7 @@ public static class SelfTestRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SELFTEST; }
     public java.lang.String getMD5(){ return "049f87742408b36b8ef5f7dd71e3ef5a"; }
     public long getID() { return this.__id__; }
@@ -83,8 +83,8 @@ public static class SelfTestResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_status >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_status >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_status; i++){
-        offset = this.status[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_status; i++) {
+            offset = this.status[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -117,8 +117,8 @@ public static class SelfTestResponse implements com.roslib.ros.Msg {
         if(length_status > 0) {
             this.status = new com.roslib.diagnostic_msgs.DiagnosticStatus[length_status];
         }
-        for (int i = 0; i < length_status; i++){
-        offset = this.status[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_status; i++) {
+            offset = this.status[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -132,12 +132,12 @@ public static class SelfTestResponse implements com.roslib.ros.Msg {
         length += 4;
         int length_status = this.status != null ? this.status.length : 0;
         for (int i = 0; i < length_status; i++) {
-        length += this.status[i].serializedLength();
+            length += this.status[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SELFTEST; }
     public java.lang.String getMD5(){ return "70aaf2a851ccb5e946b2d112ea26f7b9"; }
     public long getID() { return this.__id__; }

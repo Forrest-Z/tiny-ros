@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -65,7 +66,11 @@ func (self *GetModelPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetModelPropertiesRequest) Go_echo() (string) { return "" }
+func (self *GetModelPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetModelPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/GetModelProperties" }
 func (self *GetModelPropertiesRequest) Go_getMD5() (string) { return "fe0194bf75c917c89b820b09c12fe6c1" }
 func (self *GetModelPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -252,7 +257,7 @@ func (self *GetModelPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_body_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_body_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_body_names = make([]string, length_body_names, length_body_names)
+    self.Go_body_names = make([]string, length_body_names)
     for i := 0; i < length_body_names; i++ {
         length_body_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_body_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -267,7 +272,7 @@ func (self *GetModelPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_geom_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_geom_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_geom_names = make([]string, length_geom_names, length_geom_names)
+    self.Go_geom_names = make([]string, length_geom_names)
     for i := 0; i < length_geom_names; i++ {
         length_geom_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_geom_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -282,7 +287,7 @@ func (self *GetModelPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_joint_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_joint_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_joint_names = make([]string, length_joint_names, length_joint_names)
+    self.Go_joint_names = make([]string, length_joint_names)
     for i := 0; i < length_joint_names; i++ {
         length_joint_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_joint_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -297,7 +302,7 @@ func (self *GetModelPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_child_model_names |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_child_model_names |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_child_model_names = make([]string, length_child_model_names, length_child_model_names)
+    self.Go_child_model_names = make([]string, length_child_model_names)
     for i := 0; i < length_child_model_names; i++ {
         length_child_model_namesi := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_child_model_namesi |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -373,7 +378,11 @@ func (self *GetModelPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetModelPropertiesResponse) Go_echo() (string) { return "" }
+func (self *GetModelPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetModelPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/GetModelProperties" }
 func (self *GetModelPropertiesResponse) Go_getMD5() (string) { return "d8f16b08abaf0220a551cf9025748602" }
 func (self *GetModelPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

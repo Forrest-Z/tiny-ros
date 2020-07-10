@@ -102,7 +102,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_body_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_body_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_body_name-1]=0;
       this->body_name = (char *)(inbuffer + offset-1);
@@ -111,7 +111,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_reference_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_reference_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_reference_frame-1]=0;
       this->reference_frame = (char *)(inbuffer + offset-1);
@@ -162,25 +162,35 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"body_name\": \"";
+      std::size_t body_name_pos = body_name.find("\"");
+      while(body_name_pos != std::string::npos){
+        body_name.replace(body_name_pos, 1,"\\\"");
+        body_name_pos = body_name.find("\"", body_name_pos+2);
+      }
+      string_echo += "\"body_name\":\"";
       string_echo += body_name;
-      string_echo += "\", ";
-      string_echo += "\"reference_frame\": \"";
+      string_echo += "\",";
+      std::size_t reference_frame_pos = reference_frame.find("\"");
+      while(reference_frame_pos != std::string::npos){
+        reference_frame.replace(reference_frame_pos, 1,"\\\"");
+        reference_frame_pos = reference_frame.find("\"", reference_frame_pos+2);
+      }
+      string_echo += "\"reference_frame\":\"";
       string_echo += reference_frame;
-      string_echo += "\", ";
-      string_echo += "\"reference_point\": {";
+      string_echo += "\",";
+      string_echo += "\"reference_point\":";
       string_echo += this->reference_point.echo();
-      string_echo += "}, ";
-      string_echo += "\"wrench\": {";
+      string_echo += ",";
+      string_echo += "\"wrench\":";
       string_echo += this->wrench.echo();
-      string_echo += "}, ";
+      string_echo += ",";
       std::stringstream ss_start_time;
-      ss_start_time << "\"start_time.sec\": " << start_time.sec;
-      ss_start_time << ", \"start_time.nsec\": " << start_time.nsec << ", ";
+      ss_start_time << "\"start_time\":{\"sec\":" << start_time.sec;
+      ss_start_time << ",\"nsec\":" << start_time.nsec << "},";
       string_echo += ss_start_time.str();
       std::stringstream ss_duration;
-      ss_duration << "\"duration.sec\": " << duration.sec;
-      ss_duration << ", \"duration.nsec\": " << duration.nsec << "";
+      ss_duration << "\"duration\":{\"sec\":" << duration.sec;
+      ss_duration << ",\"nsec\":" << duration.nsec << "}";
       string_echo += ss_duration.str();
       string_echo += "}";
       return string_echo;
@@ -255,7 +265,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -276,9 +286,14 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

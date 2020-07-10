@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "tiny_ros/geometry_msgs"
     "math"
@@ -79,7 +80,11 @@ func (self *SetPhysicsPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetPhysicsPropertiesRequest) Go_echo() (string) { return "" }
+func (self *SetPhysicsPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetPhysicsPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/SetPhysicsProperties" }
 func (self *SetPhysicsPropertiesRequest) Go_getMD5() (string) { return "373e5371b10119be0a008429a9660679" }
 func (self *SetPhysicsPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -165,7 +170,11 @@ func (self *SetPhysicsPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetPhysicsPropertiesResponse) Go_echo() (string) { return "" }
+func (self *SetPhysicsPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetPhysicsPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/SetPhysicsProperties" }
 func (self *SetPhysicsPropertiesResponse) Go_getMD5() (string) { return "5b1d14bf828ba119319cc03e2bb3473a" }
 func (self *SetPhysicsPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

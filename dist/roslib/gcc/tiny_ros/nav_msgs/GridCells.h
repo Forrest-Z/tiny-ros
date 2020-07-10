@@ -64,8 +64,8 @@ namespace nav_msgs
       *(outbuffer + offset + 2) = (this->cells_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->cells_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->cells_length);
-      for( uint32_t i = 0; i < cells_length; i++){
-      offset += this->cells[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < cells_length; i++) {
+        offset += this->cells[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -104,8 +104,8 @@ namespace nav_msgs
       if(cells_lengthT > cells_length)
         this->cells = (geometry_msgs::Point*)realloc(this->cells, cells_lengthT * sizeof(geometry_msgs::Point));
       cells_length = cells_lengthT;
-      for( uint32_t i = 0; i < cells_length; i++){
-      offset += this->st_cells.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < cells_length; i++) {
+        offset += this->st_cells.deserialize(inbuffer + offset);
         memcpy( &(this->cells[i]), &(this->st_cells), sizeof(geometry_msgs::Point));
       }
       return offset;
@@ -118,8 +118,8 @@ namespace nav_msgs
       length += sizeof(this->cell_width);
       length += sizeof(this->cell_height);
       length += sizeof(this->cells_length);
-      for( uint32_t i = 0; i < cells_length; i++){
-      length += this->cells[i].serializedLength();
+      for( uint32_t i = 0; i < cells_length; i++) {
+        length += this->cells[i].serializedLength();
       }
       return length;
     }
@@ -127,26 +127,22 @@ namespace nav_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_cell_width; ss_cell_width << "\"cell_width\": " << cell_width <<", ";
+      string_echo += ",";
+      std::stringstream ss_cell_width; ss_cell_width << "\"cell_width\":" << cell_width <<",";
       string_echo += ss_cell_width.str();
-      std::stringstream ss_cell_height; ss_cell_height << "\"cell_height\": " << cell_height <<", ";
+      std::stringstream ss_cell_height; ss_cell_height << "\"cell_height\":" << cell_height <<",";
       string_echo += ss_cell_height.str();
-      string_echo += "cells: [";
-      for( uint32_t i = 0; i < cells_length; i++){
-      if( i == (cells_length - 1)) {
-      std::stringstream ss_cellsi; ss_cellsi << "{\"cells" << i <<"\": {";
-      string_echo += ss_cellsi.str();
-      string_echo += this->cells[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_cellsi; ss_cellsi << "{\"cells" << i <<"\": {";
-      string_echo += ss_cellsi.str();
-      string_echo += this->cells[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "cells:[";
+      for( uint32_t i = 0; i < cells_length; i++) {
+        if( i == (cells_length - 1)) {
+          string_echo += this->cells[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->cells[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

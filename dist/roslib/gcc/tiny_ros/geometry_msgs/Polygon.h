@@ -33,8 +33,8 @@ namespace geometry_msgs
       *(outbuffer + offset + 2) = (this->points_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->points_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->points_length);
-      for( uint32_t i = 0; i < points_length; i++){
-      offset += this->points[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < points_length; i++) {
+        offset += this->points[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -50,8 +50,8 @@ namespace geometry_msgs
       if(points_lengthT > points_length)
         this->points = (geometry_msgs::Point32*)realloc(this->points, points_lengthT * sizeof(geometry_msgs::Point32));
       points_length = points_lengthT;
-      for( uint32_t i = 0; i < points_length; i++){
-      offset += this->st_points.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < points_length; i++) {
+        offset += this->st_points.deserialize(inbuffer + offset);
         memcpy( &(this->points[i]), &(this->st_points), sizeof(geometry_msgs::Point32));
       }
       return offset;
@@ -61,8 +61,8 @@ namespace geometry_msgs
     {
       int length = 0;
       length += sizeof(this->points_length);
-      for( uint32_t i = 0; i < points_length; i++){
-      length += this->points[i].serializedLength();
+      for( uint32_t i = 0; i < points_length; i++) {
+        length += this->points[i].serializedLength();
       }
       return length;
     }
@@ -70,19 +70,15 @@ namespace geometry_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "points: [";
-      for( uint32_t i = 0; i < points_length; i++){
-      if( i == (points_length - 1)) {
-      std::stringstream ss_pointsi; ss_pointsi << "{\"points" << i <<"\": {";
-      string_echo += ss_pointsi.str();
-      string_echo += this->points[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_pointsi; ss_pointsi << "{\"points" << i <<"\": {";
-      string_echo += ss_pointsi.str();
-      string_echo += this->points[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "points:[";
+      for( uint32_t i = 0; i < points_length; i++) {
+        if( i == (points_length - 1)) {
+          string_echo += this->points[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->points[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

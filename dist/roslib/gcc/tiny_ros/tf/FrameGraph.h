@@ -111,7 +111,7 @@ static const char FRAMEGRAPH[] = "tf/FrameGraph";
       arrToVar(length_dot_graph, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_dot_graph; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_dot_graph-1]=0;
       this->dot_graph = (char *)(inbuffer + offset-1);
@@ -131,7 +131,12 @@ static const char FRAMEGRAPH[] = "tf/FrameGraph";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"dot_graph\": \"";
+      std::size_t dot_graph_pos = dot_graph.find("\"");
+      while(dot_graph_pos != std::string::npos){
+        dot_graph.replace(dot_graph_pos, 1,"\\\"");
+        dot_graph_pos = dot_graph.find("\"", dot_graph_pos+2);
+      }
+      string_echo += "\"dot_graph\":\"";
       string_echo += dot_graph;
       string_echo += "\"";
       string_echo += "}";

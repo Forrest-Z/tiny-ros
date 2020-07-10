@@ -35,7 +35,7 @@ public class Int32 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Int32"; }
     public java.lang.String getMD5(){ return "8e99256d77b8f00635db2852db07fc9f"; }
     public long getID() { return 0; }

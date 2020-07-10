@@ -32,7 +32,7 @@ public class PolygonStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/PolygonStamped"; }
     public java.lang.String getMD5(){ return "33bdf94066425e572879b25c9a51ed50"; }
     public long getID() { return 0; }

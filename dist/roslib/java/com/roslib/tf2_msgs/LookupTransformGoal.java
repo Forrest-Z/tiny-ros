@@ -179,7 +179,7 @@ public class LookupTransformGoal implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tf2_msgs/LookupTransformGoal"; }
     public java.lang.String getMD5(){ return "677c84a912b788ccaaea5fbc38570182"; }
     public long getID() { return 0; }

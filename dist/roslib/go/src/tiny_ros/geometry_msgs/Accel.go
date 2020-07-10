@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -42,7 +43,11 @@ func (self *Accel) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Accel) Go_echo() (string) { return "" }
+func (self *Accel) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Accel) Go_getType() (string) { return "geometry_msgs/Accel" }
 func (self *Accel) Go_getMD5() (string) { return "580cbad5f3bd2e9f0ca71e14b7ab1b0f" }
 func (self *Accel) Go_getID() (uint32) { return 0 }

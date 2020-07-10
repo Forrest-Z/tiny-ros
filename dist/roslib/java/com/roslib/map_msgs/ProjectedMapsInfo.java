@@ -28,8 +28,8 @@ public static class ProjectedMapsInfoRequest implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_projected_maps_info >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_projected_maps_info >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_projected_maps_info; i++){
-        offset = this.projected_maps_info[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_projected_maps_info; i++) {
+            offset = this.projected_maps_info[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -49,8 +49,8 @@ public static class ProjectedMapsInfoRequest implements com.roslib.ros.Msg {
         if(length_projected_maps_info > 0) {
             this.projected_maps_info = new com.roslib.map_msgs.ProjectedMapInfo[length_projected_maps_info];
         }
-        for (int i = 0; i < length_projected_maps_info; i++){
-        offset = this.projected_maps_info[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_projected_maps_info; i++) {
+            offset = this.projected_maps_info[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -60,12 +60,12 @@ public static class ProjectedMapsInfoRequest implements com.roslib.ros.Msg {
         length += 4;
         int length_projected_maps_info = this.projected_maps_info != null ? this.projected_maps_info.length : 0;
         for (int i = 0; i < length_projected_maps_info; i++) {
-        length += this.projected_maps_info[i].serializedLength();
+            length += this.projected_maps_info[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return PROJECTEDMAPSINFO; }
     public java.lang.String getMD5(){ return "59778fc7286f314a408be52b4611a8b4"; }
     public long getID() { return this.__id__; }
@@ -104,7 +104,7 @@ public static class ProjectedMapsInfoResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return PROJECTEDMAPSINFO; }
     public java.lang.String getMD5(){ return "223a7c48f052c5181dd525823dcc67fc"; }
     public long getID() { return this.__id__; }

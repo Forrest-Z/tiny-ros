@@ -129,7 +129,7 @@ static const char TRIGGER[] = "std_srvs/Trigger";
       arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message-1]=0;
       this->message = (char *)(inbuffer + offset-1);
@@ -150,9 +150,14 @@ static const char TRIGGER[] = "std_srvs/Trigger";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"message\": \"";
+      std::size_t message_pos = message.find("\"");
+      while(message_pos != std::string::npos){
+        message.replace(message_pos, 1,"\\\"");
+        message_pos = message.find("\"", message_pos+2);
+      }
+      string_echo += "\"message\":\"";
       string_echo += message;
       string_echo += "\"";
       string_echo += "}";

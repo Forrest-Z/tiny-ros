@@ -1,25 +1,26 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
 
 type PoseArray struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_poses []Pose `json:"poses"`
+    Go_poses []*Pose `json:"poses"`
 }
 
 func NewPoseArray() (*PoseArray) {
     newPoseArray := new(PoseArray)
     newPoseArray.Go_header = std_msgs.NewHeader()
-    newPoseArray.Go_poses = []Pose{}
+    newPoseArray.Go_poses = []*Pose{}
     return newPoseArray
 }
 
 func (self *PoseArray) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_poses = []Pose{}
+    self.Go_poses = []*Pose{}
 }
 
 func (self *PoseArray) Go_serialize(buff []byte) (int) {
@@ -45,7 +46,10 @@ func (self *PoseArray) Go_deserialize(buff []byte) (int) {
     length_poses |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_poses |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_poses = make([]Pose, length_poses, length_poses)
+    self.Go_poses = make([]*Pose, length_poses)
+    for i := 0; i < length_poses; i++ {
+        self.Go_poses[i] = NewPose()
+    }
     for i := 0; i < length_poses; i++ {
         offset += self.Go_poses[i].Go_deserialize(buff[offset:])
     }
@@ -63,7 +67,11 @@ func (self *PoseArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *PoseArray) Go_echo() (string) { return "" }
+func (self *PoseArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *PoseArray) Go_getType() (string) { return "geometry_msgs/PoseArray" }
 func (self *PoseArray) Go_getMD5() (string) { return "184f43246f3bc9cb5d0613694e6641a6" }
 func (self *PoseArray) Go_getID() (uint32) { return 0 }

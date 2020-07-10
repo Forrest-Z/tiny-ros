@@ -20,8 +20,8 @@ public class GoalStatusArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_status_list >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_status_list >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_status_list; i++){
-        offset = this.status_list[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_status_list; i++) {
+            offset = this.status_list[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -37,8 +37,8 @@ public class GoalStatusArray implements com.roslib.ros.Msg {
         if(length_status_list > 0) {
             this.status_list = new com.roslib.actionlib_msgs.GoalStatus[length_status_list];
         }
-        for (int i = 0; i < length_status_list; i++){
-        offset = this.status_list[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_status_list; i++) {
+            offset = this.status_list[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -49,12 +49,12 @@ public class GoalStatusArray implements com.roslib.ros.Msg {
         length += 4;
         int length_status_list = this.status_list != null ? this.status_list.length : 0;
         for (int i = 0; i < length_status_list; i++) {
-        length += this.status_list[i].serializedLength();
+            length += this.status_list[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "actionlib_msgs/GoalStatusArray"; }
     public java.lang.String getMD5(){ return "53f6501f7c14f5f3963638de4bbe3a71"; }
     public long getID() { return 0; }

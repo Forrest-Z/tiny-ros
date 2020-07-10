@@ -46,7 +46,7 @@ public class Time implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Time"; }
     public java.lang.String getMD5(){ return "64602ed67393e1e61260ab68d6fa2045"; }
     public long getID() { return 0; }

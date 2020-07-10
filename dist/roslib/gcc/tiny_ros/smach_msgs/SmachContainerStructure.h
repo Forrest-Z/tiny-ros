@@ -65,60 +65,60 @@ namespace smach_msgs
       *(outbuffer + offset + 2) = (this->children_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->children_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->children_length);
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_childreni = this->children[i].size();
-      varToArr(outbuffer + offset, length_childreni);
-      offset += 4;
-      memcpy(outbuffer + offset, this->children[i].c_str(), length_childreni);
-      offset += length_childreni;
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_childreni = this->children[i].size();
+        varToArr(outbuffer + offset, length_childreni);
+        offset += 4;
+        memcpy(outbuffer + offset, this->children[i].c_str(), length_childreni);
+        offset += length_childreni;
       }
       *(outbuffer + offset + 0) = (this->internal_outcomes_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->internal_outcomes_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->internal_outcomes_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->internal_outcomes_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->internal_outcomes_length);
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
-      varToArr(outbuffer + offset, length_internal_outcomesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->internal_outcomes[i].c_str(), length_internal_outcomesi);
-      offset += length_internal_outcomesi;
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
+        varToArr(outbuffer + offset, length_internal_outcomesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->internal_outcomes[i].c_str(), length_internal_outcomesi);
+        offset += length_internal_outcomesi;
       }
       *(outbuffer + offset + 0) = (this->outcomes_from_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->outcomes_from_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->outcomes_from_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->outcomes_from_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->outcomes_from_length);
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
-      varToArr(outbuffer + offset, length_outcomes_fromi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->outcomes_from[i].c_str(), length_outcomes_fromi);
-      offset += length_outcomes_fromi;
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
+        varToArr(outbuffer + offset, length_outcomes_fromi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->outcomes_from[i].c_str(), length_outcomes_fromi);
+        offset += length_outcomes_fromi;
       }
       *(outbuffer + offset + 0) = (this->outcomes_to_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->outcomes_to_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->outcomes_to_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->outcomes_to_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->outcomes_to_length);
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_outcomes_toi = this->outcomes_to[i].size();
-      varToArr(outbuffer + offset, length_outcomes_toi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->outcomes_to[i].c_str(), length_outcomes_toi);
-      offset += length_outcomes_toi;
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_outcomes_toi = this->outcomes_to[i].size();
+        varToArr(outbuffer + offset, length_outcomes_toi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->outcomes_to[i].c_str(), length_outcomes_toi);
+        offset += length_outcomes_toi;
       }
       *(outbuffer + offset + 0) = (this->container_outcomes_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->container_outcomes_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->container_outcomes_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->container_outcomes_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->container_outcomes_length);
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_container_outcomesi = this->container_outcomes[i].size();
-      varToArr(outbuffer + offset, length_container_outcomesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->container_outcomes[i].c_str(), length_container_outcomesi);
-      offset += length_container_outcomesi;
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_container_outcomesi = this->container_outcomes[i].size();
+        varToArr(outbuffer + offset, length_container_outcomesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->container_outcomes[i].c_str(), length_container_outcomesi);
+        offset += length_container_outcomesi;
       }
       return offset;
     }
@@ -131,7 +131,7 @@ namespace smach_msgs
       arrToVar(length_path, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_path; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_path-1]=0;
       this->path = (char *)(inbuffer + offset-1);
@@ -144,16 +144,16 @@ namespace smach_msgs
       if(children_lengthT > children_length)
         this->children = (std::string*)realloc(this->children, children_lengthT * sizeof(std::string));
       children_length = children_lengthT;
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_st_children;
-      arrToVar(length_st_children, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_children; ++k){
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_st_children;
+        arrToVar(length_st_children, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_children; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_children-1]=0;
-      this->st_children = (char *)(inbuffer + offset-1);
-      offset += length_st_children;
+        }
+        inbuffer[offset+length_st_children-1]=0;
+        this->st_children = (char *)(inbuffer + offset-1);
+        offset += length_st_children;
         memcpy( &(this->children[i]), &(this->st_children), sizeof(std::string));
       }
       uint32_t internal_outcomes_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -164,16 +164,16 @@ namespace smach_msgs
       if(internal_outcomes_lengthT > internal_outcomes_length)
         this->internal_outcomes = (std::string*)realloc(this->internal_outcomes, internal_outcomes_lengthT * sizeof(std::string));
       internal_outcomes_length = internal_outcomes_lengthT;
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_st_internal_outcomes;
-      arrToVar(length_st_internal_outcomes, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_internal_outcomes; ++k){
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_st_internal_outcomes;
+        arrToVar(length_st_internal_outcomes, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_internal_outcomes; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_internal_outcomes-1]=0;
-      this->st_internal_outcomes = (char *)(inbuffer + offset-1);
-      offset += length_st_internal_outcomes;
+        }
+        inbuffer[offset+length_st_internal_outcomes-1]=0;
+        this->st_internal_outcomes = (char *)(inbuffer + offset-1);
+        offset += length_st_internal_outcomes;
         memcpy( &(this->internal_outcomes[i]), &(this->st_internal_outcomes), sizeof(std::string));
       }
       uint32_t outcomes_from_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -184,16 +184,16 @@ namespace smach_msgs
       if(outcomes_from_lengthT > outcomes_from_length)
         this->outcomes_from = (std::string*)realloc(this->outcomes_from, outcomes_from_lengthT * sizeof(std::string));
       outcomes_from_length = outcomes_from_lengthT;
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_st_outcomes_from;
-      arrToVar(length_st_outcomes_from, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_outcomes_from; ++k){
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_st_outcomes_from;
+        arrToVar(length_st_outcomes_from, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_outcomes_from; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_outcomes_from-1]=0;
-      this->st_outcomes_from = (char *)(inbuffer + offset-1);
-      offset += length_st_outcomes_from;
+        }
+        inbuffer[offset+length_st_outcomes_from-1]=0;
+        this->st_outcomes_from = (char *)(inbuffer + offset-1);
+        offset += length_st_outcomes_from;
         memcpy( &(this->outcomes_from[i]), &(this->st_outcomes_from), sizeof(std::string));
       }
       uint32_t outcomes_to_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -204,16 +204,16 @@ namespace smach_msgs
       if(outcomes_to_lengthT > outcomes_to_length)
         this->outcomes_to = (std::string*)realloc(this->outcomes_to, outcomes_to_lengthT * sizeof(std::string));
       outcomes_to_length = outcomes_to_lengthT;
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_st_outcomes_to;
-      arrToVar(length_st_outcomes_to, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_outcomes_to; ++k){
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_st_outcomes_to;
+        arrToVar(length_st_outcomes_to, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_outcomes_to; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_outcomes_to-1]=0;
-      this->st_outcomes_to = (char *)(inbuffer + offset-1);
-      offset += length_st_outcomes_to;
+        }
+        inbuffer[offset+length_st_outcomes_to-1]=0;
+        this->st_outcomes_to = (char *)(inbuffer + offset-1);
+        offset += length_st_outcomes_to;
         memcpy( &(this->outcomes_to[i]), &(this->st_outcomes_to), sizeof(std::string));
       }
       uint32_t container_outcomes_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -224,16 +224,16 @@ namespace smach_msgs
       if(container_outcomes_lengthT > container_outcomes_length)
         this->container_outcomes = (std::string*)realloc(this->container_outcomes, container_outcomes_lengthT * sizeof(std::string));
       container_outcomes_length = container_outcomes_lengthT;
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_st_container_outcomes;
-      arrToVar(length_st_container_outcomes, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_container_outcomes; ++k){
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_st_container_outcomes;
+        arrToVar(length_st_container_outcomes, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_container_outcomes; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_container_outcomes-1]=0;
-      this->st_container_outcomes = (char *)(inbuffer + offset-1);
-      offset += length_st_container_outcomes;
+        }
+        inbuffer[offset+length_st_container_outcomes-1]=0;
+        this->st_container_outcomes = (char *)(inbuffer + offset-1);
+        offset += length_st_container_outcomes;
         memcpy( &(this->container_outcomes[i]), &(this->st_container_outcomes), sizeof(std::string));
       }
       return offset;
@@ -247,34 +247,34 @@ namespace smach_msgs
       length += 4;
       length += length_path;
       length += sizeof(this->children_length);
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_childreni = this->children[i].size();
-      length += 4;
-      length += length_childreni;
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_childreni = this->children[i].size();
+        length += 4;
+        length += length_childreni;
       }
       length += sizeof(this->internal_outcomes_length);
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
-      length += 4;
-      length += length_internal_outcomesi;
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
+        length += 4;
+        length += length_internal_outcomesi;
       }
       length += sizeof(this->outcomes_from_length);
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
-      length += 4;
-      length += length_outcomes_fromi;
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
+        length += 4;
+        length += length_outcomes_fromi;
       }
       length += sizeof(this->outcomes_to_length);
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_outcomes_toi = this->outcomes_to[i].size();
-      length += 4;
-      length += length_outcomes_toi;
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_outcomes_toi = this->outcomes_to[i].size();
+        length += 4;
+        length += length_outcomes_toi;
       }
       length += sizeof(this->container_outcomes_length);
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_container_outcomesi = this->container_outcomes[i].size();
-      length += 4;
-      length += length_container_outcomesi;
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_container_outcomesi = this->container_outcomes[i].size();
+        length += 4;
+        length += length_container_outcomesi;
       }
       return length;
     }
@@ -282,75 +282,140 @@ namespace smach_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"path\": \"";
+      string_echo += ",";
+      std::size_t path_pos = path.find("\"");
+      while(path_pos != std::string::npos){
+        path.replace(path_pos, 1,"\\\"");
+        path_pos = path.find("\"", path_pos+2);
+      }
+      string_echo += "\"path\":\"";
       string_echo += path;
-      string_echo += "\", ";
-      string_echo += "children: [";
-      for( uint32_t i = 0; i < children_length; i++){
-      if( i == (children_length - 1)) {
-      string_echo += "\"children[i]\": \"";
-      string_echo += children[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"children[i]\": \"";
-      string_echo += children[i];
-      string_echo += "\", ";
+      string_echo += "\",";
+      string_echo += "children:[";
+      for( uint32_t i = 0; i < children_length; i++) {
+        if( i == (children_length - 1)) {
+          std::stringstream ss_childreni; ss_childreni << "\"";
+          string_echo += ss_childreni.str();
+          std::size_t childreni_pos = children[i].find("\"");
+          while(childreni_pos != std::string::npos){
+            children[i].replace(childreni_pos, 1,"\\\"");
+            childreni_pos = children[i].find("\"", childreni_pos+2);
+          }
+          string_echo += children[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_childreni; ss_childreni << "\"";
+          string_echo += ss_childreni.str();
+          std::size_t childreni_pos = children[i].find("\"");
+          while(childreni_pos != std::string::npos){
+            children[i].replace(childreni_pos, 1,"\\\"");
+            childreni_pos = children[i].find("\"", childreni_pos+2);
+          }
+          string_echo += children[i];
+          string_echo += "\",";
+        }
       }
+      string_echo += "],";
+      string_echo += "internal_outcomes:[";
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        if( i == (internal_outcomes_length - 1)) {
+          std::stringstream ss_internal_outcomesi; ss_internal_outcomesi << "\"";
+          string_echo += ss_internal_outcomesi.str();
+          std::size_t internal_outcomesi_pos = internal_outcomes[i].find("\"");
+          while(internal_outcomesi_pos != std::string::npos){
+            internal_outcomes[i].replace(internal_outcomesi_pos, 1,"\\\"");
+            internal_outcomesi_pos = internal_outcomes[i].find("\"", internal_outcomesi_pos+2);
+          }
+          string_echo += internal_outcomes[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_internal_outcomesi; ss_internal_outcomesi << "\"";
+          string_echo += ss_internal_outcomesi.str();
+          std::size_t internal_outcomesi_pos = internal_outcomes[i].find("\"");
+          while(internal_outcomesi_pos != std::string::npos){
+            internal_outcomes[i].replace(internal_outcomesi_pos, 1,"\\\"");
+            internal_outcomesi_pos = internal_outcomes[i].find("\"", internal_outcomesi_pos+2);
+          }
+          string_echo += internal_outcomes[i];
+          string_echo += "\",";
+        }
       }
-      string_echo += "], ";
-      string_echo += "internal_outcomes: [";
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      if( i == (internal_outcomes_length - 1)) {
-      string_echo += "\"internal_outcomes[i]\": \"";
-      string_echo += internal_outcomes[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"internal_outcomes[i]\": \"";
-      string_echo += internal_outcomes[i];
-      string_echo += "\", ";
+      string_echo += "],";
+      string_echo += "outcomes_from:[";
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        if( i == (outcomes_from_length - 1)) {
+          std::stringstream ss_outcomes_fromi; ss_outcomes_fromi << "\"";
+          string_echo += ss_outcomes_fromi.str();
+          std::size_t outcomes_fromi_pos = outcomes_from[i].find("\"");
+          while(outcomes_fromi_pos != std::string::npos){
+            outcomes_from[i].replace(outcomes_fromi_pos, 1,"\\\"");
+            outcomes_fromi_pos = outcomes_from[i].find("\"", outcomes_fromi_pos+2);
+          }
+          string_echo += outcomes_from[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_outcomes_fromi; ss_outcomes_fromi << "\"";
+          string_echo += ss_outcomes_fromi.str();
+          std::size_t outcomes_fromi_pos = outcomes_from[i].find("\"");
+          while(outcomes_fromi_pos != std::string::npos){
+            outcomes_from[i].replace(outcomes_fromi_pos, 1,"\\\"");
+            outcomes_fromi_pos = outcomes_from[i].find("\"", outcomes_fromi_pos+2);
+          }
+          string_echo += outcomes_from[i];
+          string_echo += "\",";
+        }
       }
+      string_echo += "],";
+      string_echo += "outcomes_to:[";
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        if( i == (outcomes_to_length - 1)) {
+          std::stringstream ss_outcomes_toi; ss_outcomes_toi << "\"";
+          string_echo += ss_outcomes_toi.str();
+          std::size_t outcomes_toi_pos = outcomes_to[i].find("\"");
+          while(outcomes_toi_pos != std::string::npos){
+            outcomes_to[i].replace(outcomes_toi_pos, 1,"\\\"");
+            outcomes_toi_pos = outcomes_to[i].find("\"", outcomes_toi_pos+2);
+          }
+          string_echo += outcomes_to[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_outcomes_toi; ss_outcomes_toi << "\"";
+          string_echo += ss_outcomes_toi.str();
+          std::size_t outcomes_toi_pos = outcomes_to[i].find("\"");
+          while(outcomes_toi_pos != std::string::npos){
+            outcomes_to[i].replace(outcomes_toi_pos, 1,"\\\"");
+            outcomes_toi_pos = outcomes_to[i].find("\"", outcomes_toi_pos+2);
+          }
+          string_echo += outcomes_to[i];
+          string_echo += "\",";
+        }
       }
-      string_echo += "], ";
-      string_echo += "outcomes_from: [";
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      if( i == (outcomes_from_length - 1)) {
-      string_echo += "\"outcomes_from[i]\": \"";
-      string_echo += outcomes_from[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"outcomes_from[i]\": \"";
-      string_echo += outcomes_from[i];
-      string_echo += "\", ";
-      }
-      }
-      string_echo += "], ";
-      string_echo += "outcomes_to: [";
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      if( i == (outcomes_to_length - 1)) {
-      string_echo += "\"outcomes_to[i]\": \"";
-      string_echo += outcomes_to[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"outcomes_to[i]\": \"";
-      string_echo += outcomes_to[i];
-      string_echo += "\", ";
-      }
-      }
-      string_echo += "], ";
-      string_echo += "container_outcomes: [";
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      if( i == (container_outcomes_length - 1)) {
-      string_echo += "\"container_outcomes[i]\": \"";
-      string_echo += container_outcomes[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"container_outcomes[i]\": \"";
-      string_echo += container_outcomes[i];
-      string_echo += "\", ";
-      }
+      string_echo += "],";
+      string_echo += "container_outcomes:[";
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        if( i == (container_outcomes_length - 1)) {
+          std::stringstream ss_container_outcomesi; ss_container_outcomesi << "\"";
+          string_echo += ss_container_outcomesi.str();
+          std::size_t container_outcomesi_pos = container_outcomes[i].find("\"");
+          while(container_outcomesi_pos != std::string::npos){
+            container_outcomes[i].replace(container_outcomesi_pos, 1,"\\\"");
+            container_outcomesi_pos = container_outcomes[i].find("\"", container_outcomesi_pos+2);
+          }
+          string_echo += container_outcomes[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_container_outcomesi; ss_container_outcomesi << "\"";
+          string_echo += ss_container_outcomesi.str();
+          std::size_t container_outcomesi_pos = container_outcomes[i].find("\"");
+          while(container_outcomesi_pos != std::string::npos){
+            container_outcomes[i].replace(container_outcomesi_pos, 1,"\\\"");
+            container_outcomesi_pos = container_outcomes[i].find("\"", container_outcomesi_pos+2);
+          }
+          string_echo += container_outcomes[i];
+          string_echo += "\",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

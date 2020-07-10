@@ -78,8 +78,8 @@ public class MultiEchoLaserScan implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_ranges >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_ranges >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_ranges; i++){
-        offset = this.ranges[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_ranges; i++) {
+            offset = this.ranges[i].serialize(outbuffer, offset);
         }
         int length_intensities = this.intensities != null ? this.intensities.length : 0;
         outbuffer[offset + 0] = (byte)((length_intensities >> (8 * 0)) & 0xFF);
@@ -87,8 +87,8 @@ public class MultiEchoLaserScan implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_intensities >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_intensities >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_intensities; i++){
-        offset = this.intensities[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_intensities; i++) {
+            offset = this.intensities[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -153,8 +153,8 @@ public class MultiEchoLaserScan implements com.roslib.ros.Msg {
         if(length_ranges > 0) {
             this.ranges = new com.roslib.sensor_msgs.LaserEcho[length_ranges];
         }
-        for (int i = 0; i < length_ranges; i++){
-        offset = this.ranges[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_ranges; i++) {
+            offset = this.ranges[i].deserialize(inbuffer, offset);
         }
         int length_intensities = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_intensities |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -164,8 +164,8 @@ public class MultiEchoLaserScan implements com.roslib.ros.Msg {
         if(length_intensities > 0) {
             this.intensities = new com.roslib.sensor_msgs.LaserEcho[length_intensities];
         }
-        for (int i = 0; i < length_intensities; i++){
-        offset = this.intensities[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_intensities; i++) {
+            offset = this.intensities[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -183,17 +183,17 @@ public class MultiEchoLaserScan implements com.roslib.ros.Msg {
         length += 4;
         int length_ranges = this.ranges != null ? this.ranges.length : 0;
         for (int i = 0; i < length_ranges; i++) {
-        length += this.ranges[i].serializedLength();
+            length += this.ranges[i].serializedLength();
         }
         length += 4;
         int length_intensities = this.intensities != null ? this.intensities.length : 0;
         for (int i = 0; i < length_intensities; i++) {
-        length += this.intensities[i].serializedLength();
+            length += this.intensities[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/MultiEchoLaserScan"; }
     public java.lang.String getMD5(){ return "92f3933b4fa486e3889b461437899bf5"; }
     public long getID() { return 0; }

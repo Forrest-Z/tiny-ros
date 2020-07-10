@@ -54,12 +54,12 @@ namespace tf2_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"transform\": {";
+      string_echo += "\"transform\":";
       string_echo += this->transform.echo();
-      string_echo += "}, ";
-      string_echo += "\"error\": {";
+      string_echo += ",";
+      string_echo += "\"error\":";
       string_echo += this->error.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

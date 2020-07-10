@@ -117,8 +117,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       *(outbuffer + offset + 2) = (this->status_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->status_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->status[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->status[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -135,7 +135,7 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       arrToVar(length_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_id-1]=0;
       this->id = (char *)(inbuffer + offset-1);
@@ -156,8 +156,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       if(status_lengthT > status_length)
         this->status = (diagnostic_msgs::DiagnosticStatus*)realloc(this->status, status_lengthT * sizeof(diagnostic_msgs::DiagnosticStatus));
       status_length = status_lengthT;
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->st_status.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->st_status.deserialize(inbuffer + offset);
         memcpy( &(this->status[i]), &(this->st_status), sizeof(diagnostic_msgs::DiagnosticStatus));
       }
       return offset;
@@ -171,8 +171,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       length += length_id;
       length += sizeof(this->passed);
       length += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      length += this->status[i].serializedLength();
+      for( uint32_t i = 0; i < status_length; i++) {
+        length += this->status[i].serializedLength();
       }
       return length;
     }
@@ -180,24 +180,25 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"id\": \"";
-      string_echo += id;
-      string_echo += "\", ";
-      std::stringstream ss_passed; ss_passed << "\"passed\": " << (int16_t)passed <<", ";
-      string_echo += ss_passed.str();
-      string_echo += "status: [";
-      for( uint32_t i = 0; i < status_length; i++){
-      if( i == (status_length - 1)) {
-      std::stringstream ss_statusi; ss_statusi << "{\"status" << i <<"\": {";
-      string_echo += ss_statusi.str();
-      string_echo += this->status[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_statusi; ss_statusi << "{\"status" << i <<"\": {";
-      string_echo += ss_statusi.str();
-      string_echo += this->status[i].echo();
-      string_echo += "}}, ";
+      std::size_t id_pos = id.find("\"");
+      while(id_pos != std::string::npos){
+        id.replace(id_pos, 1,"\\\"");
+        id_pos = id.find("\"", id_pos+2);
       }
+      string_echo += "\"id\":\"";
+      string_echo += id;
+      string_echo += "\",";
+      std::stringstream ss_passed; ss_passed << "\"passed\":" << (int16_t)passed <<",";
+      string_echo += ss_passed.str();
+      string_echo += "status:[";
+      for( uint32_t i = 0; i < status_length; i++) {
+        if( i == (status_length - 1)) {
+          string_echo += this->status[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->status[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

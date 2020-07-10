@@ -33,8 +33,8 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->array_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->array_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->array_length);
-      for( uint32_t i = 0; i < array_length; i++){
-      offset += this->array[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < array_length; i++) {
+        offset += this->array[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -50,8 +50,8 @@ namespace sensor_msgs
       if(array_lengthT > array_length)
         this->array = (sensor_msgs::JoyFeedback*)realloc(this->array, array_lengthT * sizeof(sensor_msgs::JoyFeedback));
       array_length = array_lengthT;
-      for( uint32_t i = 0; i < array_length; i++){
-      offset += this->st_array.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < array_length; i++) {
+        offset += this->st_array.deserialize(inbuffer + offset);
         memcpy( &(this->array[i]), &(this->st_array), sizeof(sensor_msgs::JoyFeedback));
       }
       return offset;
@@ -61,8 +61,8 @@ namespace sensor_msgs
     {
       int length = 0;
       length += sizeof(this->array_length);
-      for( uint32_t i = 0; i < array_length; i++){
-      length += this->array[i].serializedLength();
+      for( uint32_t i = 0; i < array_length; i++) {
+        length += this->array[i].serializedLength();
       }
       return length;
     }
@@ -70,19 +70,15 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "array: [";
-      for( uint32_t i = 0; i < array_length; i++){
-      if( i == (array_length - 1)) {
-      std::stringstream ss_arrayi; ss_arrayi << "{\"array" << i <<"\": {";
-      string_echo += ss_arrayi.str();
-      string_echo += this->array[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_arrayi; ss_arrayi << "{\"array" << i <<"\": {";
-      string_echo += ss_arrayi.str();
-      string_echo += this->array[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "array:[";
+      for( uint32_t i = 0; i < array_length; i++) {
+        if( i == (array_length - 1)) {
+          string_echo += this->array[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->array[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

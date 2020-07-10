@@ -75,7 +75,7 @@ public class RelativeHumidity implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/RelativeHumidity"; }
     public java.lang.String getMD5(){ return "d9a3a4b2c3c0c55eede767d38b460110"; }
     public long getID() { return 0; }

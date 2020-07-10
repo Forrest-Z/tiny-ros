@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -61,7 +62,11 @@ func (self *JoyFeedback) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JoyFeedback) Go_echo() (string) { return "" }
+func (self *JoyFeedback) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JoyFeedback) Go_getType() (string) { return "sensor_msgs/JoyFeedback" }
 func (self *JoyFeedback) Go_getMD5() (string) { return "206b65e86c8b195f816ccbe40b3568a2" }
 func (self *JoyFeedback) Go_getID() (uint32) { return 0 }

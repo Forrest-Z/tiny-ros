@@ -1,6 +1,7 @@
 package diagnostic_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -72,7 +73,11 @@ func (self *KeyValue) Go_serializedLength() (int) {
     return length
 }
 
-func (self *KeyValue) Go_echo() (string) { return "" }
+func (self *KeyValue) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *KeyValue) Go_getType() (string) { return "diagnostic_msgs/KeyValue" }
 func (self *KeyValue) Go_getMD5() (string) { return "1baa904b80c685c77d1a42a872ca1d07" }
 func (self *KeyValue) Go_getID() (uint32) { return 0 }

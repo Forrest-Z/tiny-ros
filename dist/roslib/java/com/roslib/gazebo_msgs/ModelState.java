@@ -84,7 +84,7 @@ public class ModelState implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "gazebo_msgs/ModelState"; }
     public java.lang.String getMD5(){ return "dee4d802363b4d6bd1ed61e20c2c4635"; }
     public long getID() { return 0; }

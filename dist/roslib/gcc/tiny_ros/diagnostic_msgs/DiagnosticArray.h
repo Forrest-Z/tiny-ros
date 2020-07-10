@@ -38,8 +38,8 @@ namespace diagnostic_msgs
       *(outbuffer + offset + 2) = (this->status_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->status_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->status[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->status[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -56,8 +56,8 @@ namespace diagnostic_msgs
       if(status_lengthT > status_length)
         this->status = (diagnostic_msgs::DiagnosticStatus*)realloc(this->status, status_lengthT * sizeof(diagnostic_msgs::DiagnosticStatus));
       status_length = status_lengthT;
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->st_status.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->st_status.deserialize(inbuffer + offset);
         memcpy( &(this->status[i]), &(this->st_status), sizeof(diagnostic_msgs::DiagnosticStatus));
       }
       return offset;
@@ -68,8 +68,8 @@ namespace diagnostic_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      length += this->status[i].serializedLength();
+      for( uint32_t i = 0; i < status_length; i++) {
+        length += this->status[i].serializedLength();
       }
       return length;
     }
@@ -77,22 +77,18 @@ namespace diagnostic_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "status: [";
-      for( uint32_t i = 0; i < status_length; i++){
-      if( i == (status_length - 1)) {
-      std::stringstream ss_statusi; ss_statusi << "{\"status" << i <<"\": {";
-      string_echo += ss_statusi.str();
-      string_echo += this->status[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_statusi; ss_statusi << "{\"status" << i <<"\": {";
-      string_echo += ss_statusi.str();
-      string_echo += this->status[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += ",";
+      string_echo += "status:[";
+      for( uint32_t i = 0; i < status_length; i++) {
+        if( i == (status_length - 1)) {
+          string_echo += this->status[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->status[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

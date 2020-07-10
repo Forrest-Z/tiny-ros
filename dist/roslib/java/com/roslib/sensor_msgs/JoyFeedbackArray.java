@@ -17,8 +17,8 @@ public class JoyFeedbackArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_array >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_array >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_array; i++){
-        offset = this.array[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_array; i++) {
+            offset = this.array[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -33,8 +33,8 @@ public class JoyFeedbackArray implements com.roslib.ros.Msg {
         if(length_array > 0) {
             this.array = new com.roslib.sensor_msgs.JoyFeedback[length_array];
         }
-        for (int i = 0; i < length_array; i++){
-        offset = this.array[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_array; i++) {
+            offset = this.array[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -44,12 +44,12 @@ public class JoyFeedbackArray implements com.roslib.ros.Msg {
         length += 4;
         int length_array = this.array != null ? this.array.length : 0;
         for (int i = 0; i < length_array; i++) {
-        length += this.array[i].serializedLength();
+            length += this.array[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/JoyFeedbackArray"; }
     public java.lang.String getMD5(){ return "45361e458d526d5670706a9f083819b6"; }
     public long getID() { return 0; }

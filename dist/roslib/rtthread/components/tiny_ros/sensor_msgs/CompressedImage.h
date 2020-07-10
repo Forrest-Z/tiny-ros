@@ -43,9 +43,9 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->data_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->data_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      *(outbuffer + offset + 0) = (this->data[i] >> (8 * 0)) & 0xFF;
-      offset += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        *(outbuffer + offset + 0) = (this->data[i] >> (8 * 0)) & 0xFF;
+        offset += sizeof(this->data[i]);
       }
       return offset;
     }
@@ -58,7 +58,7 @@ namespace sensor_msgs
       arrToVar(length_format, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_format; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_format-1]=0;
       this->format = (char *)(inbuffer + offset-1);
@@ -71,9 +71,9 @@ namespace sensor_msgs
       if(data_lengthT > data_length)
         this->data = (uint8_t*)realloc(this->data, data_lengthT * sizeof(uint8_t));
       data_length = data_lengthT;
-      for( uint32_t i = 0; i < data_length; i++){
-      this->st_data =  ((uint8_t) (*(inbuffer + offset)));
-      offset += sizeof(this->st_data);
+      for( uint32_t i = 0; i < data_length; i++) {
+        this->st_data =  ((uint8_t) (*(inbuffer + offset)));
+        offset += sizeof(this->st_data);
         memcpy( &(this->data[i]), &(this->st_data), sizeof(uint8_t));
       }
       return offset;
@@ -87,8 +87,8 @@ namespace sensor_msgs
       length += 4;
       length += length_format;
       length += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      length += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        length += sizeof(this->data[i]);
       }
       return length;
     }

@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -38,7 +39,11 @@ func (self *Char) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Char) Go_echo() (string) { return "" }
+func (self *Char) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Char) Go_getType() (string) { return "std_msgs/Char" }
 func (self *Char) Go_getMD5() (string) { return "18741a80dcc02fcae20538073fcb0872" }
 func (self *Char) Go_getID() (uint32) { return 0 }

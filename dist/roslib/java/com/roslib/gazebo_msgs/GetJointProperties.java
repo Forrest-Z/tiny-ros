@@ -64,7 +64,7 @@ public static class GetJointPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETJOINTPROPERTIES; }
     public java.lang.String getMD5(){ return "b07a3ce5fb5aba1cfc56577c9cb3ecc6"; }
     public long getID() { return this.__id__; }
@@ -111,17 +111,17 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_damping >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_damping >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_damping; i++){
-        long bits_dampingi = Double.doubleToRawLongBits(this.damping[i]);
-        outbuffer[offset + 0] = (byte)((bits_dampingi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_dampingi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_dampingi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_dampingi >> (8 * 3)) & 0xFF);
-        outbuffer[offset + 4] = (byte)((bits_dampingi >> (8 * 4)) & 0xFF);
-        outbuffer[offset + 5] = (byte)((bits_dampingi >> (8 * 5)) & 0xFF);
-        outbuffer[offset + 6] = (byte)((bits_dampingi >> (8 * 6)) & 0xFF);
-        outbuffer[offset + 7] = (byte)((bits_dampingi >> (8 * 7)) & 0xFF);
-        offset += 8;
+        for (int i = 0; i < length_damping; i++) {
+            long bits_dampingi = Double.doubleToRawLongBits(this.damping[i]);
+            outbuffer[offset + 0] = (byte)((bits_dampingi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_dampingi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_dampingi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_dampingi >> (8 * 3)) & 0xFF);
+            outbuffer[offset + 4] = (byte)((bits_dampingi >> (8 * 4)) & 0xFF);
+            outbuffer[offset + 5] = (byte)((bits_dampingi >> (8 * 5)) & 0xFF);
+            outbuffer[offset + 6] = (byte)((bits_dampingi >> (8 * 6)) & 0xFF);
+            outbuffer[offset + 7] = (byte)((bits_dampingi >> (8 * 7)) & 0xFF);
+            offset += 8;
         }
         int length_position = this.position != null ? this.position.length : 0;
         outbuffer[offset + 0] = (byte)((length_position >> (8 * 0)) & 0xFF);
@@ -129,17 +129,17 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_position >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_position >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_position; i++){
-        long bits_positioni = Double.doubleToRawLongBits(this.position[i]);
-        outbuffer[offset + 0] = (byte)((bits_positioni >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_positioni >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_positioni >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_positioni >> (8 * 3)) & 0xFF);
-        outbuffer[offset + 4] = (byte)((bits_positioni >> (8 * 4)) & 0xFF);
-        outbuffer[offset + 5] = (byte)((bits_positioni >> (8 * 5)) & 0xFF);
-        outbuffer[offset + 6] = (byte)((bits_positioni >> (8 * 6)) & 0xFF);
-        outbuffer[offset + 7] = (byte)((bits_positioni >> (8 * 7)) & 0xFF);
-        offset += 8;
+        for (int i = 0; i < length_position; i++) {
+            long bits_positioni = Double.doubleToRawLongBits(this.position[i]);
+            outbuffer[offset + 0] = (byte)((bits_positioni >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_positioni >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_positioni >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_positioni >> (8 * 3)) & 0xFF);
+            outbuffer[offset + 4] = (byte)((bits_positioni >> (8 * 4)) & 0xFF);
+            outbuffer[offset + 5] = (byte)((bits_positioni >> (8 * 5)) & 0xFF);
+            outbuffer[offset + 6] = (byte)((bits_positioni >> (8 * 6)) & 0xFF);
+            outbuffer[offset + 7] = (byte)((bits_positioni >> (8 * 7)) & 0xFF);
+            offset += 8;
         }
         int length_rate = this.rate != null ? this.rate.length : 0;
         outbuffer[offset + 0] = (byte)((length_rate >> (8 * 0)) & 0xFF);
@@ -147,17 +147,17 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_rate >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_rate >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_rate; i++){
-        long bits_ratei = Double.doubleToRawLongBits(this.rate[i]);
-        outbuffer[offset + 0] = (byte)((bits_ratei >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_ratei >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_ratei >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_ratei >> (8 * 3)) & 0xFF);
-        outbuffer[offset + 4] = (byte)((bits_ratei >> (8 * 4)) & 0xFF);
-        outbuffer[offset + 5] = (byte)((bits_ratei >> (8 * 5)) & 0xFF);
-        outbuffer[offset + 6] = (byte)((bits_ratei >> (8 * 6)) & 0xFF);
-        outbuffer[offset + 7] = (byte)((bits_ratei >> (8 * 7)) & 0xFF);
-        offset += 8;
+        for (int i = 0; i < length_rate; i++) {
+            long bits_ratei = Double.doubleToRawLongBits(this.rate[i]);
+            outbuffer[offset + 0] = (byte)((bits_ratei >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_ratei >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_ratei >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_ratei >> (8 * 3)) & 0xFF);
+            outbuffer[offset + 4] = (byte)((bits_ratei >> (8 * 4)) & 0xFF);
+            outbuffer[offset + 5] = (byte)((bits_ratei >> (8 * 5)) & 0xFF);
+            outbuffer[offset + 6] = (byte)((bits_ratei >> (8 * 6)) & 0xFF);
+            outbuffer[offset + 7] = (byte)((bits_ratei >> (8 * 7)) & 0xFF);
+            offset += 8;
         }
         outbuffer[offset] = (byte)((success ? 0x01 : 0x00) & 0xFF);
         offset += 1;
@@ -191,18 +191,18 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         if(length_damping > 0) {
             this.damping = new double[length_damping];
         }
-        for (int i = 0; i < length_damping; i++){
-        long bits_dampingi = 0;
-        bits_dampingi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_dampingi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_dampingi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_dampingi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        bits_dampingi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
-        bits_dampingi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
-        bits_dampingi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
-        bits_dampingi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
-        this.damping[i] = Double.longBitsToDouble(bits_dampingi);
-        offset += 8;
+        for (int i = 0; i < length_damping; i++) {
+            long bits_dampingi = 0;
+            bits_dampingi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_dampingi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_dampingi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_dampingi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            bits_dampingi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
+            bits_dampingi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
+            bits_dampingi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
+            bits_dampingi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
+            this.damping[i] = Double.longBitsToDouble(bits_dampingi);
+            offset += 8;
         }
         int length_position = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_position |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -212,18 +212,18 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         if(length_position > 0) {
             this.position = new double[length_position];
         }
-        for (int i = 0; i < length_position; i++){
-        long bits_positioni = 0;
-        bits_positioni |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_positioni |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_positioni |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_positioni |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        bits_positioni |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
-        bits_positioni |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
-        bits_positioni |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
-        bits_positioni |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
-        this.position[i] = Double.longBitsToDouble(bits_positioni);
-        offset += 8;
+        for (int i = 0; i < length_position; i++) {
+            long bits_positioni = 0;
+            bits_positioni |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_positioni |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_positioni |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_positioni |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            bits_positioni |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
+            bits_positioni |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
+            bits_positioni |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
+            bits_positioni |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
+            this.position[i] = Double.longBitsToDouble(bits_positioni);
+            offset += 8;
         }
         int length_rate = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_rate |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -233,18 +233,18 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         if(length_rate > 0) {
             this.rate = new double[length_rate];
         }
-        for (int i = 0; i < length_rate; i++){
-        long bits_ratei = 0;
-        bits_ratei |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_ratei |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_ratei |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_ratei |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        bits_ratei |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
-        bits_ratei |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
-        bits_ratei |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
-        bits_ratei |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
-        this.rate[i] = Double.longBitsToDouble(bits_ratei);
-        offset += 8;
+        for (int i = 0; i < length_rate; i++) {
+            long bits_ratei = 0;
+            bits_ratei |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_ratei |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_ratei |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_ratei |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            bits_ratei |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
+            bits_ratei |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
+            bits_ratei |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
+            bits_ratei |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
+            this.rate[i] = Double.longBitsToDouble(bits_ratei);
+            offset += 8;
         }
         this.success = (boolean)((inbuffer[offset] & 0xFF) != 0 ? true : false);
         offset += 1;
@@ -268,17 +268,17 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         length += 4;
         int length_damping = this.damping != null ? this.damping.length : 0;
         for (int i = 0; i < length_damping; i++) {
-        length += 8;
+            length += 8;
         }
         length += 4;
         int length_position = this.position != null ? this.position.length : 0;
         for (int i = 0; i < length_position; i++) {
-        length += 8;
+            length += 8;
         }
         length += 4;
         int length_rate = this.rate != null ? this.rate.length : 0;
         for (int i = 0; i < length_rate; i++) {
-        length += 8;
+            length += 8;
         }
         length += 1;
         int length_status_message = this.status_message.getBytes().length;
@@ -287,7 +287,7 @@ public static class GetJointPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETJOINTPROPERTIES; }
     public java.lang.String getMD5(){ return "a60fbf691ac539e1355c979ca09b4573"; }
     public long getID() { return this.__id__; }

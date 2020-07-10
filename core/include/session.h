@@ -727,7 +727,7 @@ private:
   AsyncWritebuffer async_write_buffers_;
 
   Socket socket_;
-  enum { buffer_max = 65*1024 };
+  enum { buffer_max = 64*1024 };
   
   std::mutex active_mutex_;
   bool active_;

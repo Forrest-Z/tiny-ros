@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_STATUS_NO_FIX() (int8) { return   -1         }
@@ -56,7 +57,11 @@ func (self *NavSatStatus) Go_serializedLength() (int) {
     return length
 }
 
-func (self *NavSatStatus) Go_echo() (string) { return "" }
+func (self *NavSatStatus) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *NavSatStatus) Go_getType() (string) { return "sensor_msgs/NavSatStatus" }
 func (self *NavSatStatus) Go_getMD5() (string) { return "85ed59cf80532c1c15a2cf735d06279b" }
 func (self *NavSatStatus) Go_getID() (uint32) { return 0 }

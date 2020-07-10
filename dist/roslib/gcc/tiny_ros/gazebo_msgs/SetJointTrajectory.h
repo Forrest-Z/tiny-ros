@@ -86,7 +86,7 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
       arrToVar(length_model_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_model_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_model_name-1]=0;
       this->model_name = (char *)(inbuffer + offset-1);
@@ -128,18 +128,23 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"model_name\": \"";
+      std::size_t model_name_pos = model_name.find("\"");
+      while(model_name_pos != std::string::npos){
+        model_name.replace(model_name_pos, 1,"\\\"");
+        model_name_pos = model_name.find("\"", model_name_pos+2);
+      }
+      string_echo += "\"model_name\":\"";
       string_echo += model_name;
-      string_echo += "\", ";
-      string_echo += "\"joint_trajectory\": {";
+      string_echo += "\",";
+      string_echo += "\"joint_trajectory\":";
       string_echo += this->joint_trajectory.echo();
-      string_echo += "}, ";
-      string_echo += "\"model_pose\": {";
+      string_echo += ",";
+      string_echo += "\"model_pose\":";
       string_echo += this->model_pose.echo();
-      string_echo += "}, ";
-      std::stringstream ss_set_model_pose; ss_set_model_pose << "\"set_model_pose\": " << set_model_pose <<", ";
+      string_echo += ",";
+      std::stringstream ss_set_model_pose; ss_set_model_pose << "\"set_model_pose\":" << set_model_pose <<",";
       string_echo += ss_set_model_pose.str();
-      std::stringstream ss_disable_physics_updates; ss_disable_physics_updates << "\"disable_physics_updates\": " << disable_physics_updates <<"";
+      std::stringstream ss_disable_physics_updates; ss_disable_physics_updates << "\"disable_physics_updates\":" << disable_physics_updates <<"";
       string_echo += ss_disable_physics_updates.str();
       string_echo += "}";
       return string_echo;
@@ -214,7 +219,7 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -235,9 +240,14 @@ static const char SETJOINTTRAJECTORY[] = "gazebo_msgs/SetJointTrajectory";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

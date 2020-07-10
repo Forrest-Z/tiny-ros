@@ -22,8 +22,8 @@ public class PointCloud implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_points >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_points >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_points; i++){
-        offset = this.points[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_points; i++) {
+            offset = this.points[i].serialize(outbuffer, offset);
         }
         int length_channels = this.channels != null ? this.channels.length : 0;
         outbuffer[offset + 0] = (byte)((length_channels >> (8 * 0)) & 0xFF);
@@ -31,8 +31,8 @@ public class PointCloud implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_channels >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_channels >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_channels; i++){
-        offset = this.channels[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_channels; i++) {
+            offset = this.channels[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -48,8 +48,8 @@ public class PointCloud implements com.roslib.ros.Msg {
         if(length_points > 0) {
             this.points = new com.roslib.geometry_msgs.Point32[length_points];
         }
-        for (int i = 0; i < length_points; i++){
-        offset = this.points[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_points; i++) {
+            offset = this.points[i].deserialize(inbuffer, offset);
         }
         int length_channels = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_channels |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -59,8 +59,8 @@ public class PointCloud implements com.roslib.ros.Msg {
         if(length_channels > 0) {
             this.channels = new com.roslib.sensor_msgs.ChannelFloat32[length_channels];
         }
-        for (int i = 0; i < length_channels; i++){
-        offset = this.channels[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_channels; i++) {
+            offset = this.channels[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -71,17 +71,17 @@ public class PointCloud implements com.roslib.ros.Msg {
         length += 4;
         int length_points = this.points != null ? this.points.length : 0;
         for (int i = 0; i < length_points; i++) {
-        length += this.points[i].serializedLength();
+            length += this.points[i].serializedLength();
         }
         length += 4;
         int length_channels = this.channels != null ? this.channels.length : 0;
         for (int i = 0; i < length_channels; i++) {
-        length += this.channels[i].serializedLength();
+            length += this.channels[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/PointCloud"; }
     public java.lang.String getMD5(){ return "b01249148cae0106a561ab36cd1e48a8"; }
     public long getID() { return 0; }

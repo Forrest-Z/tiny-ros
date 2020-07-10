@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -65,7 +66,11 @@ func (self *DeleteModelRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *DeleteModelRequest) Go_echo() (string) { return "" }
+func (self *DeleteModelRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *DeleteModelRequest) Go_getType() (string) { return "gazebo_msgs/DeleteModel" }
 func (self *DeleteModelRequest) Go_getMD5() (string) { return "c4e25cd35d75c6c2f51ee0d986d8e556" }
 func (self *DeleteModelRequest) Go_getID() (uint32) { return self.__id__ }
@@ -151,7 +156,11 @@ func (self *DeleteModelResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *DeleteModelResponse) Go_echo() (string) { return "" }
+func (self *DeleteModelResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *DeleteModelResponse) Go_getType() (string) { return "gazebo_msgs/DeleteModel" }
 func (self *DeleteModelResponse) Go_getMD5() (string) { return "3feb2eeea1c45bcf64067e4dd162726f" }
 func (self *DeleteModelResponse) Go_getID() (uint32) { return self.__id__ }

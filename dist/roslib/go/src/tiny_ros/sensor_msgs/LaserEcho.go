@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -43,7 +44,7 @@ func (self *LaserEcho) Go_deserialize(buff []byte) (int) {
     length_echoes |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_echoes |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_echoes = make([]float32, length_echoes, length_echoes)
+    self.Go_echoes = make([]float32, length_echoes)
     for i := 0; i < length_echoes; i++ {
         bits_echoesi := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_echoes[i] = math.Float32frombits(bits_echoesi)
@@ -62,7 +63,11 @@ func (self *LaserEcho) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LaserEcho) Go_echo() (string) { return "" }
+func (self *LaserEcho) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LaserEcho) Go_getType() (string) { return "sensor_msgs/LaserEcho" }
 func (self *LaserEcho) Go_getMD5() (string) { return "a8537b388573845b3240b44db5bc4905" }
 func (self *LaserEcho) Go_getID() (uint32) { return 0 }

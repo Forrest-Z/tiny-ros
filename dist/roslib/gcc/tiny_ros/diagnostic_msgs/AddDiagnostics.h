@@ -56,7 +56,7 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
       arrToVar(length_load_namespace, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_load_namespace; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_load_namespace-1]=0;
       this->load_namespace = (char *)(inbuffer + offset-1);
@@ -76,7 +76,12 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"load_namespace\": \"";
+      std::size_t load_namespace_pos = load_namespace.find("\"");
+      while(load_namespace_pos != std::string::npos){
+        load_namespace.replace(load_namespace_pos, 1,"\\\"");
+        load_namespace_pos = load_namespace.find("\"", load_namespace_pos+2);
+      }
+      string_echo += "\"load_namespace\":\"";
       string_echo += load_namespace;
       string_echo += "\"";
       string_echo += "}";
@@ -152,7 +157,7 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
       arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message-1]=0;
       this->message = (char *)(inbuffer + offset-1);
@@ -173,9 +178,14 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"message\": \"";
+      std::size_t message_pos = message.find("\"");
+      while(message_pos != std::string::npos){
+        message.replace(message_pos, 1,"\\\"");
+        message_pos = message.find("\"", message_pos+2);
+      }
+      string_echo += "\"message\":\"";
       string_echo += message;
       string_echo += "\"";
       string_echo += "}";

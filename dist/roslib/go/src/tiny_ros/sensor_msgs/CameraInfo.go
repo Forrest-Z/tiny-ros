@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -137,7 +138,7 @@ func (self *CameraInfo) Go_deserialize(buff []byte) (int) {
     length_D |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_D |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_D = make([]float64, length_D, length_D)
+    self.Go_D = make([]float64, length_D)
     for i := 0; i < length_D; i++ {
         bits_Di := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_D[i] = math.Float64frombits(bits_Di)
@@ -200,7 +201,11 @@ func (self *CameraInfo) Go_serializedLength() (int) {
     return length
 }
 
-func (self *CameraInfo) Go_echo() (string) { return "" }
+func (self *CameraInfo) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *CameraInfo) Go_getType() (string) { return "sensor_msgs/CameraInfo" }
 func (self *CameraInfo) Go_getMD5() (string) { return "57d2553deec0a7842f00837f40032798" }
 func (self *CameraInfo) Go_getID() (uint32) { return 0 }

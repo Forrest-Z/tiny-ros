@@ -63,7 +63,7 @@ public class Odometry implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/Odometry"; }
     public java.lang.String getMD5(){ return "8fbd8c2e0caeb7be9b30b66a3e735193"; }
     public long getID() { return 0; }

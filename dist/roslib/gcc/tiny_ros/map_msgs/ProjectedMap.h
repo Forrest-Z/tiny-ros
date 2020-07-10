@@ -113,12 +113,12 @@ namespace map_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"map\": {";
+      string_echo += "\"map\":";
       string_echo += this->map.echo();
-      string_echo += "}, ";
-      std::stringstream ss_min_z; ss_min_z << "\"min_z\": " << min_z <<", ";
+      string_echo += ",";
+      std::stringstream ss_min_z; ss_min_z << "\"min_z\":" << min_z <<",";
       string_echo += ss_min_z.str();
-      std::stringstream ss_max_z; ss_max_z << "\"max_z\": " << max_z <<"";
+      std::stringstream ss_max_z; ss_max_z << "\"max_z\":" << max_z <<"";
       string_echo += ss_max_z.str();
       string_echo += "}";
       return string_echo;

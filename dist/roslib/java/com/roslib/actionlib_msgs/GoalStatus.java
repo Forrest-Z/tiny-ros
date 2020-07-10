@@ -70,7 +70,7 @@ public class GoalStatus implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "actionlib_msgs/GoalStatus"; }
     public java.lang.String getMD5(){ return "086be35ea957e692de83fc3477e4ef0b"; }
     public long getID() { return 0; }

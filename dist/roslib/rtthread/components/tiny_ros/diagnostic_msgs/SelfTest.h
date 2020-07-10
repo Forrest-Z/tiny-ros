@@ -108,8 +108,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       *(outbuffer + offset + 2) = (this->status_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->status_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->status[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->status[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -126,7 +126,7 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       arrToVar(length_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_id-1]=0;
       this->id = (char *)(inbuffer + offset-1);
@@ -147,8 +147,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       if(status_lengthT > status_length)
         this->status = (diagnostic_msgs::DiagnosticStatus*)realloc(this->status, status_lengthT * sizeof(diagnostic_msgs::DiagnosticStatus));
       status_length = status_lengthT;
-      for( uint32_t i = 0; i < status_length; i++){
-      offset += this->st_status.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < status_length; i++) {
+        offset += this->st_status.deserialize(inbuffer + offset);
         memcpy( &(this->status[i]), &(this->st_status), sizeof(diagnostic_msgs::DiagnosticStatus));
       }
       return offset;
@@ -162,8 +162,8 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       length += length_id;
       length += sizeof(this->passed);
       length += sizeof(this->status_length);
-      for( uint32_t i = 0; i < status_length; i++){
-      length += this->status[i].serializedLength();
+      for( uint32_t i = 0; i < status_length; i++) {
+        length += this->status[i].serializedLength();
       }
       return length;
     }

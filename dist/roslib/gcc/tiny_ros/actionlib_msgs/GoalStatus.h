@@ -63,7 +63,7 @@ namespace actionlib_msgs
       arrToVar(length_text, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_text; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_text-1]=0;
       this->text = (char *)(inbuffer + offset-1);
@@ -85,12 +85,17 @@ namespace actionlib_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"goal_id\": {";
+      string_echo += "\"goal_id\":";
       string_echo += this->goal_id.echo();
-      string_echo += "}, ";
-      std::stringstream ss_status; ss_status << "\"status\": " << (uint16_t)status <<", ";
+      string_echo += ",";
+      std::stringstream ss_status; ss_status << "\"status\":" << (uint16_t)status <<",";
       string_echo += ss_status.str();
-      string_echo += "\"text\": \"";
+      std::size_t text_pos = text.find("\"");
+      while(text_pos != std::string::npos){
+        text.replace(text_pos, 1,"\\\"");
+        text_pos = text.find("\"", text_pos+2);
+      }
+      string_echo += "\"text\":\"";
       string_echo += text;
       string_echo += "\"";
       string_echo += "}";

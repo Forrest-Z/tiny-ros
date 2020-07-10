@@ -22,7 +22,7 @@ public class GetMapGoal implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/GetMapGoal"; }
     public java.lang.String getMD5(){ return "b39e6b705afaad0184bd2c87f4bd870f"; }
     public long getID() { return 0; }

@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -65,7 +66,11 @@ func (self *BodyRequestRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *BodyRequestRequest) Go_echo() (string) { return "" }
+func (self *BodyRequestRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *BodyRequestRequest) Go_getType() (string) { return "gazebo_msgs/BodyRequest" }
 func (self *BodyRequestRequest) Go_getMD5() (string) { return "d1c66fbceb0ee1b51e3b09ac030dedec" }
 func (self *BodyRequestRequest) Go_getID() (uint32) { return self.__id__ }
@@ -114,7 +119,11 @@ func (self *BodyRequestResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *BodyRequestResponse) Go_echo() (string) { return "" }
+func (self *BodyRequestResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *BodyRequestResponse) Go_getType() (string) { return "gazebo_msgs/BodyRequest" }
 func (self *BodyRequestResponse) Go_getMD5() (string) { return "e0caf2eb9951542b962f95924c6eeb34" }
 func (self *BodyRequestResponse) Go_getID() (uint32) { return self.__id__ }

@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
     "encoding/binary"
     "math"
@@ -9,7 +10,7 @@ import (
 
 
 type MapMetaData struct {
-    Go_map_load_time *tinyros.Time `json:"map_load_time"`
+    Go_map_load_time *rostime.Time `json:"map_load_time"`
     Go_resolution float32 `json:"resolution"`
     Go_width uint32 `json:"width"`
     Go_height uint32 `json:"height"`
@@ -18,7 +19,7 @@ type MapMetaData struct {
 
 func NewMapMetaData() (*MapMetaData) {
     newMapMetaData := new(MapMetaData)
-    newMapMetaData.Go_map_load_time = tinyros.NewTime()
+    newMapMetaData.Go_map_load_time = rostime.NewTime()
     newMapMetaData.Go_resolution = 0.0
     newMapMetaData.Go_width = 0
     newMapMetaData.Go_height = 0
@@ -27,7 +28,7 @@ func NewMapMetaData() (*MapMetaData) {
 }
 
 func (self *MapMetaData) Go_initialize() {
-    self.Go_map_load_time = tinyros.NewTime()
+    self.Go_map_load_time = rostime.NewTime()
     self.Go_resolution = 0.0
     self.Go_width = 0
     self.Go_height = 0
@@ -103,7 +104,11 @@ func (self *MapMetaData) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MapMetaData) Go_echo() (string) { return "" }
+func (self *MapMetaData) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MapMetaData) Go_getType() (string) { return "nav_msgs/MapMetaData" }
 func (self *MapMetaData) Go_getMD5() (string) { return "328f5a1f2242fff4676d48189bd8b309" }
 func (self *MapMetaData) Go_getID() (uint32) { return 0 }

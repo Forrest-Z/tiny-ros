@@ -22,7 +22,7 @@ public class GetMapFeedback implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/GetMapFeedback"; }
     public java.lang.String getMD5(){ return "f561626803919fb2f269eb497bfdfea4"; }
     public long getID() { return 0; }

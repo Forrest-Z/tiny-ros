@@ -100,7 +100,7 @@ namespace tinyros_msgs
       arrToVar(length_topic_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_topic_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_topic_name-1]=0;
       this->topic_name = (char *)(inbuffer + offset-1);
@@ -109,7 +109,7 @@ namespace tinyros_msgs
       arrToVar(length_message_type, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message_type; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message_type-1]=0;
       this->message_type = (char *)(inbuffer + offset-1);
@@ -118,7 +118,7 @@ namespace tinyros_msgs
       arrToVar(length_md5sum, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_md5sum; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_md5sum-1]=0;
       this->md5sum = (char *)(inbuffer + offset-1);

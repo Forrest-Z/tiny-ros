@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/geometry_msgs"
 )
@@ -71,7 +72,11 @@ func (self *Odometry) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Odometry) Go_echo() (string) { return "" }
+func (self *Odometry) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Odometry) Go_getType() (string) { return "nav_msgs/Odometry" }
 func (self *Odometry) Go_getMD5() (string) { return "8fbd8c2e0caeb7be9b30b66a3e735193" }
 func (self *Odometry) Go_getID() (uint32) { return 0 }

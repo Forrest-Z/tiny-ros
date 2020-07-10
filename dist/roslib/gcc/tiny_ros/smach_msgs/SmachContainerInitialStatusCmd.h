@@ -43,12 +43,12 @@ namespace smach_msgs
       *(outbuffer + offset + 2) = (this->initial_states_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->initial_states_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->initial_states_length);
-      for( uint32_t i = 0; i < initial_states_length; i++){
-      uint32_t length_initial_statesi = this->initial_states[i].size();
-      varToArr(outbuffer + offset, length_initial_statesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->initial_states[i].c_str(), length_initial_statesi);
-      offset += length_initial_statesi;
+      for( uint32_t i = 0; i < initial_states_length; i++) {
+        uint32_t length_initial_statesi = this->initial_states[i].size();
+        varToArr(outbuffer + offset, length_initial_statesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->initial_states[i].c_str(), length_initial_statesi);
+        offset += length_initial_statesi;
       }
       uint32_t length_local_data = this->local_data.size();
       varToArr(outbuffer + offset, length_local_data);
@@ -65,7 +65,7 @@ namespace smach_msgs
       arrToVar(length_path, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_path; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_path-1]=0;
       this->path = (char *)(inbuffer + offset-1);
@@ -78,23 +78,23 @@ namespace smach_msgs
       if(initial_states_lengthT > initial_states_length)
         this->initial_states = (std::string*)realloc(this->initial_states, initial_states_lengthT * sizeof(std::string));
       initial_states_length = initial_states_lengthT;
-      for( uint32_t i = 0; i < initial_states_length; i++){
-      uint32_t length_st_initial_states;
-      arrToVar(length_st_initial_states, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_initial_states; ++k){
+      for( uint32_t i = 0; i < initial_states_length; i++) {
+        uint32_t length_st_initial_states;
+        arrToVar(length_st_initial_states, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_initial_states; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_initial_states-1]=0;
-      this->st_initial_states = (char *)(inbuffer + offset-1);
-      offset += length_st_initial_states;
+        }
+        inbuffer[offset+length_st_initial_states-1]=0;
+        this->st_initial_states = (char *)(inbuffer + offset-1);
+        offset += length_st_initial_states;
         memcpy( &(this->initial_states[i]), &(this->st_initial_states), sizeof(std::string));
       }
       uint32_t length_local_data;
       arrToVar(length_local_data, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_local_data; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_local_data-1]=0;
       this->local_data = (char *)(inbuffer + offset-1);
@@ -109,10 +109,10 @@ namespace smach_msgs
       length += 4;
       length += length_path;
       length += sizeof(this->initial_states_length);
-      for( uint32_t i = 0; i < initial_states_length; i++){
-      uint32_t length_initial_statesi = this->initial_states[i].size();
-      length += 4;
-      length += length_initial_statesi;
+      for( uint32_t i = 0; i < initial_states_length; i++) {
+        uint32_t length_initial_statesi = this->initial_states[i].size();
+        length += 4;
+        length += length_initial_statesi;
       }
       uint32_t length_local_data = this->local_data.size();
       length += 4;
@@ -123,23 +123,45 @@ namespace smach_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"path\": \"";
+      std::size_t path_pos = path.find("\"");
+      while(path_pos != std::string::npos){
+        path.replace(path_pos, 1,"\\\"");
+        path_pos = path.find("\"", path_pos+2);
+      }
+      string_echo += "\"path\":\"";
       string_echo += path;
-      string_echo += "\", ";
-      string_echo += "initial_states: [";
-      for( uint32_t i = 0; i < initial_states_length; i++){
-      if( i == (initial_states_length - 1)) {
-      string_echo += "\"initial_states[i]\": \"";
-      string_echo += initial_states[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"initial_states[i]\": \"";
-      string_echo += initial_states[i];
-      string_echo += "\", ";
+      string_echo += "\",";
+      string_echo += "initial_states:[";
+      for( uint32_t i = 0; i < initial_states_length; i++) {
+        if( i == (initial_states_length - 1)) {
+          std::stringstream ss_initial_statesi; ss_initial_statesi << "\"";
+          string_echo += ss_initial_statesi.str();
+          std::size_t initial_statesi_pos = initial_states[i].find("\"");
+          while(initial_statesi_pos != std::string::npos){
+            initial_states[i].replace(initial_statesi_pos, 1,"\\\"");
+            initial_statesi_pos = initial_states[i].find("\"", initial_statesi_pos+2);
+          }
+          string_echo += initial_states[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_initial_statesi; ss_initial_statesi << "\"";
+          string_echo += ss_initial_statesi.str();
+          std::size_t initial_statesi_pos = initial_states[i].find("\"");
+          while(initial_statesi_pos != std::string::npos){
+            initial_states[i].replace(initial_statesi_pos, 1,"\\\"");
+            initial_statesi_pos = initial_states[i].find("\"", initial_statesi_pos+2);
+          }
+          string_echo += initial_states[i];
+          string_echo += "\",";
+        }
       }
+      string_echo += "],";
+      std::size_t local_data_pos = local_data.find("\"");
+      while(local_data_pos != std::string::npos){
+        local_data.replace(local_data_pos, 1,"\\\"");
+        local_data_pos = local_data.find("\"", local_data_pos+2);
       }
-      string_echo += "], ";
-      string_echo += "\"local_data\": \"";
+      string_echo += "\"local_data\":\"";
       string_echo += local_data;
       string_echo += "\"";
       string_echo += "}";

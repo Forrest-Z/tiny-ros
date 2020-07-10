@@ -1,6 +1,7 @@
 package diagnostic_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_OK() (byte) { return 0 }
@@ -13,7 +14,7 @@ type DiagnosticStatus struct {
     Go_name string `json:"name"`
     Go_message string `json:"message"`
     Go_hardware_id string `json:"hardware_id"`
-    Go_values []KeyValue `json:"values"`
+    Go_values []*KeyValue `json:"values"`
 }
 
 func NewDiagnosticStatus() (*DiagnosticStatus) {
@@ -22,7 +23,7 @@ func NewDiagnosticStatus() (*DiagnosticStatus) {
     newDiagnosticStatus.Go_name = ""
     newDiagnosticStatus.Go_message = ""
     newDiagnosticStatus.Go_hardware_id = ""
-    newDiagnosticStatus.Go_values = []KeyValue{}
+    newDiagnosticStatus.Go_values = []*KeyValue{}
     return newDiagnosticStatus
 }
 
@@ -31,7 +32,7 @@ func (self *DiagnosticStatus) Go_initialize() {
     self.Go_name = ""
     self.Go_message = ""
     self.Go_hardware_id = ""
-    self.Go_values = []KeyValue{}
+    self.Go_values = []*KeyValue{}
 }
 
 func (self *DiagnosticStatus) Go_serialize(buff []byte) (int) {
@@ -104,7 +105,10 @@ func (self *DiagnosticStatus) Go_deserialize(buff []byte) (int) {
     length_values |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_values |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_values = make([]KeyValue, length_values, length_values)
+    self.Go_values = make([]*KeyValue, length_values)
+    for i := 0; i < length_values; i++ {
+        self.Go_values[i] = NewKeyValue()
+    }
     for i := 0; i < length_values; i++ {
         offset += self.Go_values[i].Go_deserialize(buff[offset:])
     }
@@ -131,7 +135,11 @@ func (self *DiagnosticStatus) Go_serializedLength() (int) {
     return length
 }
 
-func (self *DiagnosticStatus) Go_echo() (string) { return "" }
+func (self *DiagnosticStatus) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *DiagnosticStatus) Go_getType() (string) { return "diagnostic_msgs/DiagnosticStatus" }
 func (self *DiagnosticStatus) Go_getMD5() (string) { return "9ec892d2145f478061efd60bb1762361" }
 func (self *DiagnosticStatus) Go_getID() (uint32) { return 0 }

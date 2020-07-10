@@ -118,7 +118,7 @@ public class Quaternion implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Quaternion"; }
     public java.lang.String getMD5(){ return "175c1571887d10ebed42ba6c042ddd88"; }
     public long getID() { return 0; }

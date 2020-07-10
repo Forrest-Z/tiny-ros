@@ -38,8 +38,8 @@ namespace gazebo_msgs
       *(outbuffer + offset + 2) = (this->states_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->states_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->states_length);
-      for( uint32_t i = 0; i < states_length; i++){
-      offset += this->states[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < states_length; i++) {
+        offset += this->states[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -56,8 +56,8 @@ namespace gazebo_msgs
       if(states_lengthT > states_length)
         this->states = (gazebo_msgs::ContactState*)realloc(this->states, states_lengthT * sizeof(gazebo_msgs::ContactState));
       states_length = states_lengthT;
-      for( uint32_t i = 0; i < states_length; i++){
-      offset += this->st_states.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < states_length; i++) {
+        offset += this->st_states.deserialize(inbuffer + offset);
         memcpy( &(this->states[i]), &(this->st_states), sizeof(gazebo_msgs::ContactState));
       }
       return offset;
@@ -68,8 +68,8 @@ namespace gazebo_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->states_length);
-      for( uint32_t i = 0; i < states_length; i++){
-      length += this->states[i].serializedLength();
+      for( uint32_t i = 0; i < states_length; i++) {
+        length += this->states[i].serializedLength();
       }
       return length;
     }
@@ -77,22 +77,18 @@ namespace gazebo_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "states: [";
-      for( uint32_t i = 0; i < states_length; i++){
-      if( i == (states_length - 1)) {
-      std::stringstream ss_statesi; ss_statesi << "{\"states" << i <<"\": {";
-      string_echo += ss_statesi.str();
-      string_echo += this->states[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_statesi; ss_statesi << "{\"states" << i <<"\": {";
-      string_echo += ss_statesi.str();
-      string_echo += this->states[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += ",";
+      string_echo += "states:[";
+      for( uint32_t i = 0; i < states_length; i++) {
+        if( i == (states_length - 1)) {
+          string_echo += this->states[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->states[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

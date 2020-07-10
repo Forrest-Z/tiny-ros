@@ -115,12 +115,12 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       *(outbuffer + offset + 2) = (this->model_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->model_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->model_names_length);
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_model_namesi = this->model_names[i].size();
-      varToArr(outbuffer + offset, length_model_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->model_names[i].c_str(), length_model_namesi);
-      offset += length_model_namesi;
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_model_namesi = this->model_names[i].size();
+        varToArr(outbuffer + offset, length_model_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->model_names[i].c_str(), length_model_namesi);
+        offset += length_model_namesi;
       }
       union {
         bool real;
@@ -175,16 +175,16 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       if(model_names_lengthT > model_names_length)
         this->model_names = (tinyros::string*)realloc(this->model_names, model_names_lengthT * sizeof(tinyros::string));
       model_names_length = model_names_lengthT;
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_st_model_names;
-      arrToVar(length_st_model_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_model_names; ++k){
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_st_model_names;
+        arrToVar(length_st_model_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_model_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_model_names-1]=0;
-      this->st_model_names = (char *)(inbuffer + offset-1);
-      offset += length_st_model_names;
+        }
+        inbuffer[offset+length_st_model_names-1]=0;
+        this->st_model_names = (char *)(inbuffer + offset-1);
+        offset += length_st_model_names;
         memcpy( &(this->model_names[i]), &(this->st_model_names), sizeof(tinyros::string));
       }
       union {
@@ -207,7 +207,7 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -220,10 +220,10 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       int length = 0;
       length += sizeof(this->sim_time);
       length += sizeof(this->model_names_length);
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_model_namesi = this->model_names[i].size();
-      length += 4;
-      length += length_model_namesi;
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_model_namesi = this->model_names[i].size();
+        length += 4;
+        length += length_model_namesi;
       }
       length += sizeof(this->rendering_enabled);
       length += sizeof(this->success);

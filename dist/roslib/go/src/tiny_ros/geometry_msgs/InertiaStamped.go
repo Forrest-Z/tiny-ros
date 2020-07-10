@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *InertiaStamped) Go_serializedLength() (int) {
     return length
 }
 
-func (self *InertiaStamped) Go_echo() (string) { return "" }
+func (self *InertiaStamped) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *InertiaStamped) Go_getType() (string) { return "geometry_msgs/InertiaStamped" }
 func (self *InertiaStamped) Go_getMD5() (string) { return "2b3c9b263c59f65da44508cd041d18a0" }
 func (self *InertiaStamped) Go_getID() (uint32) { return 0 }

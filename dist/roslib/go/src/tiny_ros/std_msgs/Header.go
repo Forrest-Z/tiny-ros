@@ -1,27 +1,28 @@
 package std_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
 
 type Header struct {
     Go_seq uint32 `json:"seq"`
-    Go_stamp *tinyros.Time `json:"stamp"`
+    Go_stamp *rostime.Time `json:"stamp"`
     Go_frame_id string `json:"frame_id"`
 }
 
 func NewHeader() (*Header) {
     newHeader := new(Header)
     newHeader.Go_seq = 0
-    newHeader.Go_stamp = tinyros.NewTime()
+    newHeader.Go_stamp = rostime.NewTime()
     newHeader.Go_frame_id = ""
     return newHeader
 }
 
 func (self *Header) Go_initialize() {
     self.Go_seq = 0
-    self.Go_stamp = tinyros.NewTime()
+    self.Go_stamp = rostime.NewTime()
     self.Go_frame_id = ""
 }
 
@@ -91,7 +92,11 @@ func (self *Header) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Header) Go_echo() (string) { return "" }
+func (self *Header) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Header) Go_getType() (string) { return "std_msgs/Header" }
 func (self *Header) Go_getMD5() (string) { return "d33440e88be7b5b8255fc61ebbca06ad" }
 func (self *Header) Go_getID() (uint32) { return 0 }

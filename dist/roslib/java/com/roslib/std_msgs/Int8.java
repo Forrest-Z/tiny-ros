@@ -29,7 +29,7 @@ public class Int8 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Int8"; }
     public java.lang.String getMD5(){ return "36c967b84bec6cd7c260bffc7f4dfbe0"; }
     public long getID() { return 0; }

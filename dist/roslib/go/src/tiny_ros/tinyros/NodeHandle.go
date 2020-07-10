@@ -13,8 +13,8 @@ var (
     MAX_SUBSCRIBERS    int = 100
     MAX_PUBLISHERS     int = 100
     
-    INPUT_SIZE         int = 65*1024
-    OUTPUT_SIZE        int = 65*1024
+    INPUT_SIZE         int = 64*1024
+    OUTPUT_SIZE        int = 64*1024
     
     MODE_FIRST_FF      int = 0
     MODE_PROTOCOL_VER  int = 1
@@ -650,8 +650,10 @@ var (
     go_ipaddr string = "127.0.0.1"
 )
 
-func Go_init(ip string) {
-    go_ipaddr = ip
+func Go_init(ip ...string) {
+    if len(ip) > 0 {
+        go_ipaddr = ip[0]
+    }
     Go_nh()
 }
 

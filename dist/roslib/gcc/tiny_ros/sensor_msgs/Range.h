@@ -157,18 +157,18 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_radiation_type; ss_radiation_type << "\"radiation_type\": " << (uint16_t)radiation_type <<", ";
+      string_echo += ",";
+      std::stringstream ss_radiation_type; ss_radiation_type << "\"radiation_type\":" << (uint16_t)radiation_type <<",";
       string_echo += ss_radiation_type.str();
-      std::stringstream ss_field_of_view; ss_field_of_view << "\"field_of_view\": " << field_of_view <<", ";
+      std::stringstream ss_field_of_view; ss_field_of_view << "\"field_of_view\":" << field_of_view <<",";
       string_echo += ss_field_of_view.str();
-      std::stringstream ss_min_range; ss_min_range << "\"min_range\": " << min_range <<", ";
+      std::stringstream ss_min_range; ss_min_range << "\"min_range\":" << min_range <<",";
       string_echo += ss_min_range.str();
-      std::stringstream ss_max_range; ss_max_range << "\"max_range\": " << max_range <<", ";
+      std::stringstream ss_max_range; ss_max_range << "\"max_range\":" << max_range <<",";
       string_echo += ss_max_range.str();
-      std::stringstream ss_range; ss_range << "\"range\": " << range <<"";
+      std::stringstream ss_range; ss_range << "\"range\":" << range <<"";
       string_echo += ss_range.str();
       string_echo += "}";
       return string_echo;

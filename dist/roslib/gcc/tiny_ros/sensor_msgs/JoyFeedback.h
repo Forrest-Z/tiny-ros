@@ -84,11 +84,11 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_type; ss_type << "\"type\": " << (uint16_t)type <<", ";
+      std::stringstream ss_type; ss_type << "\"type\":" << (uint16_t)type <<",";
       string_echo += ss_type.str();
-      std::stringstream ss_id; ss_id << "\"id\": " << (uint16_t)id <<", ";
+      std::stringstream ss_id; ss_id << "\"id\":" << (uint16_t)id <<",";
       string_echo += ss_id.str();
-      std::stringstream ss_intensity; ss_intensity << "\"intensity\": " << intensity <<"";
+      std::stringstream ss_intensity; ss_intensity << "\"intensity\":" << intensity <<"";
       string_echo += ss_intensity.str();
       string_echo += "}";
       return string_echo;

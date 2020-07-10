@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/sensor_msgs"
 )
 
@@ -45,7 +46,11 @@ func (self *GetPointMapRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPointMapRequest) Go_echo() (string) { return "" }
+func (self *GetPointMapRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPointMapRequest) Go_getType() (string) { return "map_msgs/GetPointMap" }
 func (self *GetPointMapRequest) Go_getMD5() (string) { return "418d4ee8c9d758b7ef1aab3e068c7568" }
 func (self *GetPointMapRequest) Go_getID() (uint32) { return self.__id__ }
@@ -100,7 +105,11 @@ func (self *GetPointMapResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetPointMapResponse) Go_echo() (string) { return "" }
+func (self *GetPointMapResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetPointMapResponse) Go_getType() (string) { return "map_msgs/GetPointMap" }
 func (self *GetPointMapResponse) Go_getMD5() (string) { return "abc97e6c5b25f536248da280bdf271d7" }
 func (self *GetPointMapResponse) Go_getID() (uint32) { return self.__id__ }

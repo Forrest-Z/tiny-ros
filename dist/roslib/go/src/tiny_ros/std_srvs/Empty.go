@@ -1,6 +1,7 @@
 package std_srvs
 
 import (
+    "encoding/json"
 )
 
 
@@ -44,7 +45,11 @@ func (self *EmptyRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *EmptyRequest) Go_echo() (string) { return "" }
+func (self *EmptyRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *EmptyRequest) Go_getType() (string) { return "std_srvs/Empty" }
 func (self *EmptyRequest) Go_getMD5() (string) { return "6a9da448a5a2256d30e815f50a75bc57" }
 func (self *EmptyRequest) Go_getID() (uint32) { return self.__id__ }
@@ -93,7 +98,11 @@ func (self *EmptyResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *EmptyResponse) Go_echo() (string) { return "" }
+func (self *EmptyResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *EmptyResponse) Go_getType() (string) { return "std_srvs/Empty" }
 func (self *EmptyResponse) Go_getMD5() (string) { return "1b9fedd0c70a6b7846f790471f388d15" }
 func (self *EmptyResponse) Go_getID() (uint32) { return self.__id__ }

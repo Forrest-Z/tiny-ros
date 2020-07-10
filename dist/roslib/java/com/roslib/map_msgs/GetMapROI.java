@@ -134,7 +134,7 @@ public static class GetMapROIRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMAPROI; }
     public java.lang.String getMD5(){ return "f74ea8c8dc9b857aae7ea10033520d28"; }
     public long getID() { return this.__id__; }
@@ -178,7 +178,7 @@ public static class GetMapROIResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMAPROI; }
     public java.lang.String getMD5(){ return "a178ec520c3d0d99d9d85c70ed4b535a"; }
     public long getID() { return this.__id__; }

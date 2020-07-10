@@ -72,7 +72,7 @@ public class GoalID implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "actionlib_msgs/GoalID"; }
     public java.lang.String getMD5(){ return "a6cee90e5a185f4cb050de49bc4fa1f4"; }
     public long getID() { return 0; }

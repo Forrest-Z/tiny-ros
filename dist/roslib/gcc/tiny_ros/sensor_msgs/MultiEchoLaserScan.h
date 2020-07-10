@@ -134,16 +134,16 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->ranges_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->ranges_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      offset += this->ranges[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        offset += this->ranges[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->intensities_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->intensities_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->intensities_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->intensities_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      offset += this->intensities[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        offset += this->intensities[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -237,8 +237,8 @@ namespace sensor_msgs
       if(ranges_lengthT > ranges_length)
         this->ranges = (sensor_msgs::LaserEcho*)realloc(this->ranges, ranges_lengthT * sizeof(sensor_msgs::LaserEcho));
       ranges_length = ranges_lengthT;
-      for( uint32_t i = 0; i < ranges_length; i++){
-      offset += this->st_ranges.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        offset += this->st_ranges.deserialize(inbuffer + offset);
         memcpy( &(this->ranges[i]), &(this->st_ranges), sizeof(sensor_msgs::LaserEcho));
       }
       uint32_t intensities_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -249,8 +249,8 @@ namespace sensor_msgs
       if(intensities_lengthT > intensities_length)
         this->intensities = (sensor_msgs::LaserEcho*)realloc(this->intensities, intensities_lengthT * sizeof(sensor_msgs::LaserEcho));
       intensities_length = intensities_lengthT;
-      for( uint32_t i = 0; i < intensities_length; i++){
-      offset += this->st_intensities.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        offset += this->st_intensities.deserialize(inbuffer + offset);
         memcpy( &(this->intensities[i]), &(this->st_intensities), sizeof(sensor_msgs::LaserEcho));
       }
       return offset;
@@ -268,12 +268,12 @@ namespace sensor_msgs
       length += sizeof(this->range_min);
       length += sizeof(this->range_max);
       length += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      length += this->ranges[i].serializedLength();
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        length += this->ranges[i].serializedLength();
       }
       length += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      length += this->intensities[i].serializedLength();
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        length += this->intensities[i].serializedLength();
       }
       return length;
     }
@@ -281,51 +281,43 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_angle_min; ss_angle_min << "\"angle_min\": " << angle_min <<", ";
+      string_echo += ",";
+      std::stringstream ss_angle_min; ss_angle_min << "\"angle_min\":" << angle_min <<",";
       string_echo += ss_angle_min.str();
-      std::stringstream ss_angle_max; ss_angle_max << "\"angle_max\": " << angle_max <<", ";
+      std::stringstream ss_angle_max; ss_angle_max << "\"angle_max\":" << angle_max <<",";
       string_echo += ss_angle_max.str();
-      std::stringstream ss_angle_increment; ss_angle_increment << "\"angle_increment\": " << angle_increment <<", ";
+      std::stringstream ss_angle_increment; ss_angle_increment << "\"angle_increment\":" << angle_increment <<",";
       string_echo += ss_angle_increment.str();
-      std::stringstream ss_time_increment; ss_time_increment << "\"time_increment\": " << time_increment <<", ";
+      std::stringstream ss_time_increment; ss_time_increment << "\"time_increment\":" << time_increment <<",";
       string_echo += ss_time_increment.str();
-      std::stringstream ss_scan_time; ss_scan_time << "\"scan_time\": " << scan_time <<", ";
+      std::stringstream ss_scan_time; ss_scan_time << "\"scan_time\":" << scan_time <<",";
       string_echo += ss_scan_time.str();
-      std::stringstream ss_range_min; ss_range_min << "\"range_min\": " << range_min <<", ";
+      std::stringstream ss_range_min; ss_range_min << "\"range_min\":" << range_min <<",";
       string_echo += ss_range_min.str();
-      std::stringstream ss_range_max; ss_range_max << "\"range_max\": " << range_max <<", ";
+      std::stringstream ss_range_max; ss_range_max << "\"range_max\":" << range_max <<",";
       string_echo += ss_range_max.str();
-      string_echo += "ranges: [";
-      for( uint32_t i = 0; i < ranges_length; i++){
-      if( i == (ranges_length - 1)) {
-      std::stringstream ss_rangesi; ss_rangesi << "{\"ranges" << i <<"\": {";
-      string_echo += ss_rangesi.str();
-      string_echo += this->ranges[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_rangesi; ss_rangesi << "{\"ranges" << i <<"\": {";
-      string_echo += ss_rangesi.str();
-      string_echo += this->ranges[i].echo();
-      string_echo += "}}, ";
+      string_echo += "ranges:[";
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        if( i == (ranges_length - 1)) {
+          string_echo += this->ranges[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->ranges[i].echo();
+          string_echo += ",";
+        }
       }
-      }
-      string_echo += "], ";
-      string_echo += "intensities: [";
-      for( uint32_t i = 0; i < intensities_length; i++){
-      if( i == (intensities_length - 1)) {
-      std::stringstream ss_intensitiesi; ss_intensitiesi << "{\"intensities" << i <<"\": {";
-      string_echo += ss_intensitiesi.str();
-      string_echo += this->intensities[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_intensitiesi; ss_intensitiesi << "{\"intensities" << i <<"\": {";
-      string_echo += ss_intensitiesi.str();
-      string_echo += this->intensities[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "],";
+      string_echo += "intensities:[";
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        if( i == (intensities_length - 1)) {
+          string_echo += this->intensities[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->intensities[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

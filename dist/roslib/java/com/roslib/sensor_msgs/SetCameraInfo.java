@@ -43,7 +43,7 @@ public static class SetCameraInfoRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETCAMERAINFO; }
     public java.lang.String getMD5(){ return "7c09688f428450a1ac49eacdbb57c012"; }
     public long getID() { return this.__id__; }
@@ -115,7 +115,7 @@ public static class SetCameraInfoResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETCAMERAINFO; }
     public java.lang.String getMD5(){ return "e03fdc9555d1e3c7347a728e913775f6"; }
     public long getID() { return this.__id__; }

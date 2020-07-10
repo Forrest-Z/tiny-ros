@@ -61,8 +61,8 @@ public class ContactState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_wrenches >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_wrenches >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_wrenches; i++){
-        offset = this.wrenches[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_wrenches; i++) {
+            offset = this.wrenches[i].serialize(outbuffer, offset);
         }
         offset = this.total_wrench.serialize(outbuffer, offset);
         int length_contact_positions = this.contact_positions != null ? this.contact_positions.length : 0;
@@ -71,8 +71,8 @@ public class ContactState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_contact_positions >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_contact_positions >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_contact_positions; i++){
-        offset = this.contact_positions[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_contact_positions; i++) {
+            offset = this.contact_positions[i].serialize(outbuffer, offset);
         }
         int length_contact_normals = this.contact_normals != null ? this.contact_normals.length : 0;
         outbuffer[offset + 0] = (byte)((length_contact_normals >> (8 * 0)) & 0xFF);
@@ -80,8 +80,8 @@ public class ContactState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_contact_normals >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_contact_normals >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_contact_normals; i++){
-        offset = this.contact_normals[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_contact_normals; i++) {
+            offset = this.contact_normals[i].serialize(outbuffer, offset);
         }
         int length_depths = this.depths != null ? this.depths.length : 0;
         outbuffer[offset + 0] = (byte)((length_depths >> (8 * 0)) & 0xFF);
@@ -89,17 +89,17 @@ public class ContactState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_depths >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_depths >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_depths; i++){
-        long bits_depthsi = Double.doubleToRawLongBits(this.depths[i]);
-        outbuffer[offset + 0] = (byte)((bits_depthsi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_depthsi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_depthsi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_depthsi >> (8 * 3)) & 0xFF);
-        outbuffer[offset + 4] = (byte)((bits_depthsi >> (8 * 4)) & 0xFF);
-        outbuffer[offset + 5] = (byte)((bits_depthsi >> (8 * 5)) & 0xFF);
-        outbuffer[offset + 6] = (byte)((bits_depthsi >> (8 * 6)) & 0xFF);
-        outbuffer[offset + 7] = (byte)((bits_depthsi >> (8 * 7)) & 0xFF);
-        offset += 8;
+        for (int i = 0; i < length_depths; i++) {
+            long bits_depthsi = Double.doubleToRawLongBits(this.depths[i]);
+            outbuffer[offset + 0] = (byte)((bits_depthsi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_depthsi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_depthsi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_depthsi >> (8 * 3)) & 0xFF);
+            outbuffer[offset + 4] = (byte)((bits_depthsi >> (8 * 4)) & 0xFF);
+            outbuffer[offset + 5] = (byte)((bits_depthsi >> (8 * 5)) & 0xFF);
+            outbuffer[offset + 6] = (byte)((bits_depthsi >> (8 * 6)) & 0xFF);
+            outbuffer[offset + 7] = (byte)((bits_depthsi >> (8 * 7)) & 0xFF);
+            offset += 8;
         }
         return offset;
     }
@@ -147,8 +147,8 @@ public class ContactState implements com.roslib.ros.Msg {
         if(length_wrenches > 0) {
             this.wrenches = new com.roslib.geometry_msgs.Wrench[length_wrenches];
         }
-        for (int i = 0; i < length_wrenches; i++){
-        offset = this.wrenches[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_wrenches; i++) {
+            offset = this.wrenches[i].deserialize(inbuffer, offset);
         }
         offset = this.total_wrench.deserialize(inbuffer, offset);
         int length_contact_positions = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
@@ -159,8 +159,8 @@ public class ContactState implements com.roslib.ros.Msg {
         if(length_contact_positions > 0) {
             this.contact_positions = new com.roslib.geometry_msgs.Vector3[length_contact_positions];
         }
-        for (int i = 0; i < length_contact_positions; i++){
-        offset = this.contact_positions[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_contact_positions; i++) {
+            offset = this.contact_positions[i].deserialize(inbuffer, offset);
         }
         int length_contact_normals = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_contact_normals |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -170,8 +170,8 @@ public class ContactState implements com.roslib.ros.Msg {
         if(length_contact_normals > 0) {
             this.contact_normals = new com.roslib.geometry_msgs.Vector3[length_contact_normals];
         }
-        for (int i = 0; i < length_contact_normals; i++){
-        offset = this.contact_normals[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_contact_normals; i++) {
+            offset = this.contact_normals[i].deserialize(inbuffer, offset);
         }
         int length_depths = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_depths |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -181,18 +181,18 @@ public class ContactState implements com.roslib.ros.Msg {
         if(length_depths > 0) {
             this.depths = new double[length_depths];
         }
-        for (int i = 0; i < length_depths; i++){
-        long bits_depthsi = 0;
-        bits_depthsi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_depthsi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_depthsi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_depthsi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        bits_depthsi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
-        bits_depthsi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
-        bits_depthsi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
-        bits_depthsi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
-        this.depths[i] = Double.longBitsToDouble(bits_depthsi);
-        offset += 8;
+        for (int i = 0; i < length_depths; i++) {
+            long bits_depthsi = 0;
+            bits_depthsi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_depthsi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_depthsi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_depthsi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            bits_depthsi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
+            bits_depthsi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
+            bits_depthsi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
+            bits_depthsi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
+            this.depths[i] = Double.longBitsToDouble(bits_depthsi);
+            offset += 8;
         }
         return offset;
     }
@@ -211,28 +211,28 @@ public class ContactState implements com.roslib.ros.Msg {
         length += 4;
         int length_wrenches = this.wrenches != null ? this.wrenches.length : 0;
         for (int i = 0; i < length_wrenches; i++) {
-        length += this.wrenches[i].serializedLength();
+            length += this.wrenches[i].serializedLength();
         }
         length += this.total_wrench.serializedLength();
         length += 4;
         int length_contact_positions = this.contact_positions != null ? this.contact_positions.length : 0;
         for (int i = 0; i < length_contact_positions; i++) {
-        length += this.contact_positions[i].serializedLength();
+            length += this.contact_positions[i].serializedLength();
         }
         length += 4;
         int length_contact_normals = this.contact_normals != null ? this.contact_normals.length : 0;
         for (int i = 0; i < length_contact_normals; i++) {
-        length += this.contact_normals[i].serializedLength();
+            length += this.contact_normals[i].serializedLength();
         }
         length += 4;
         int length_depths = this.depths != null ? this.depths.length : 0;
         for (int i = 0; i < length_depths; i++) {
-        length += 8;
+            length += 8;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "gazebo_msgs/ContactState"; }
     public java.lang.String getMD5(){ return "d82d0f0cae88aebf6b2cc86caea33a2b"; }
     public long getID() { return 0; }

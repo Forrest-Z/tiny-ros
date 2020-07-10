@@ -1,6 +1,7 @@
 package std_srvs
 
 import (
+    "encoding/json"
 )
 
 
@@ -44,7 +45,11 @@ func (self *TriggerRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TriggerRequest) Go_echo() (string) { return "" }
+func (self *TriggerRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TriggerRequest) Go_getType() (string) { return "std_srvs/Trigger" }
 func (self *TriggerRequest) Go_getMD5() (string) { return "23ce35174a691cb0bfbbdb21395edbac" }
 func (self *TriggerRequest) Go_getID() (uint32) { return self.__id__ }
@@ -130,7 +135,11 @@ func (self *TriggerResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TriggerResponse) Go_echo() (string) { return "" }
+func (self *TriggerResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TriggerResponse) Go_getType() (string) { return "std_srvs/Trigger" }
 func (self *TriggerResponse) Go_getMD5() (string) { return "08d111154ed595049573252ba929a6d8" }
 func (self *TriggerResponse) Go_getID() (uint32) { return self.__id__ }

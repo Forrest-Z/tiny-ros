@@ -46,7 +46,7 @@ public class Float64 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Float64"; }
     public java.lang.String getMD5(){ return "3439fe880debfd63cf4e61e62e285345"; }
     public long getID() { return 0; }

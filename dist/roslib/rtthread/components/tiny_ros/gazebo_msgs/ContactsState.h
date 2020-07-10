@@ -36,8 +36,8 @@ namespace gazebo_msgs
       *(outbuffer + offset + 2) = (this->states_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->states_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->states_length);
-      for( uint32_t i = 0; i < states_length; i++){
-      offset += this->states[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < states_length; i++) {
+        offset += this->states[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -54,8 +54,8 @@ namespace gazebo_msgs
       if(states_lengthT > states_length)
         this->states = (gazebo_msgs::ContactState*)realloc(this->states, states_lengthT * sizeof(gazebo_msgs::ContactState));
       states_length = states_lengthT;
-      for( uint32_t i = 0; i < states_length; i++){
-      offset += this->st_states.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < states_length; i++) {
+        offset += this->st_states.deserialize(inbuffer + offset);
         memcpy( &(this->states[i]), &(this->st_states), sizeof(gazebo_msgs::ContactState));
       }
       return offset;
@@ -66,8 +66,8 @@ namespace gazebo_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->states_length);
-      for( uint32_t i = 0; i < states_length; i++){
-      length += this->states[i].serializedLength();
+      for( uint32_t i = 0; i < states_length; i++) {
+        length += this->states[i].serializedLength();
       }
       return length;
     }

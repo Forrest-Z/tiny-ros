@@ -20,8 +20,8 @@ public class Path implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_poses >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_poses >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_poses; i++){
-        offset = this.poses[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_poses; i++) {
+            offset = this.poses[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -37,8 +37,8 @@ public class Path implements com.roslib.ros.Msg {
         if(length_poses > 0) {
             this.poses = new com.roslib.geometry_msgs.PoseStamped[length_poses];
         }
-        for (int i = 0; i < length_poses; i++){
-        offset = this.poses[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_poses; i++) {
+            offset = this.poses[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -49,12 +49,12 @@ public class Path implements com.roslib.ros.Msg {
         length += 4;
         int length_poses = this.poses != null ? this.poses.length : 0;
         for (int i = 0; i < length_poses; i++) {
-        length += this.poses[i].serializedLength();
+            length += this.poses[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/Path"; }
     public java.lang.String getMD5(){ return "4a185240c929c496a7e0d6202e3c89af"; }
     public long getID() { return 0; }

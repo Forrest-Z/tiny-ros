@@ -77,7 +77,7 @@ public class TimeReference implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/TimeReference"; }
     public java.lang.String getMD5(){ return "8e1576e01de57cd0d55758112f0e84ec"; }
     public long getID() { return 0; }

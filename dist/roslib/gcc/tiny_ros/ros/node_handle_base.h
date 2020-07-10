@@ -16,8 +16,8 @@
 namespace tinyros {
 const int MAX_SUBSCRIBERS = 100;
 const int MAX_PUBLISHERS = 100;
-const int INPUT_SIZE = 65*1024; // bytes
-const int OUTPUT_SIZE = 65*1024; // bytes
+const int INPUT_SIZE = 64*1024; // bytes
+const int OUTPUT_SIZE = 64*1024; // bytes
 
 const uint8_t MODE_FIRST_FF = 0;
 const uint8_t MODE_PROTOCOL_VER   = 1;

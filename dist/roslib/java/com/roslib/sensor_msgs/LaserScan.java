@@ -78,13 +78,13 @@ public class LaserScan implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_ranges >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_ranges >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_ranges; i++){
-        int bits_rangesi = Float.floatToRawIntBits(ranges[i]);
-        outbuffer[offset + 0] = (byte)((bits_rangesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_rangesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_rangesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_rangesi >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_ranges; i++) {
+            int bits_rangesi = Float.floatToRawIntBits(ranges[i]);
+            outbuffer[offset + 0] = (byte)((bits_rangesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_rangesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_rangesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_rangesi >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         int length_intensities = this.intensities != null ? this.intensities.length : 0;
         outbuffer[offset + 0] = (byte)((length_intensities >> (8 * 0)) & 0xFF);
@@ -92,13 +92,13 @@ public class LaserScan implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_intensities >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_intensities >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_intensities; i++){
-        int bits_intensitiesi = Float.floatToRawIntBits(intensities[i]);
-        outbuffer[offset + 0] = (byte)((bits_intensitiesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_intensitiesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_intensitiesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_intensitiesi >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_intensities; i++) {
+            int bits_intensitiesi = Float.floatToRawIntBits(intensities[i]);
+            outbuffer[offset + 0] = (byte)((bits_intensitiesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_intensitiesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_intensitiesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_intensitiesi >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         return offset;
     }
@@ -163,14 +163,14 @@ public class LaserScan implements com.roslib.ros.Msg {
         if(length_ranges > 0) {
             this.ranges = new float[length_ranges];
         }
-        for (int i = 0; i < length_ranges; i++){
-        int bits_rangesi = 0;
-        bits_rangesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_rangesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_rangesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_rangesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        this.ranges[i] = Float.intBitsToFloat(bits_rangesi);
-        offset += 4;
+        for (int i = 0; i < length_ranges; i++) {
+            int bits_rangesi = 0;
+            bits_rangesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_rangesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_rangesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_rangesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            this.ranges[i] = Float.intBitsToFloat(bits_rangesi);
+            offset += 4;
         }
         int length_intensities = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_intensities |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -180,14 +180,14 @@ public class LaserScan implements com.roslib.ros.Msg {
         if(length_intensities > 0) {
             this.intensities = new float[length_intensities];
         }
-        for (int i = 0; i < length_intensities; i++){
-        int bits_intensitiesi = 0;
-        bits_intensitiesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_intensitiesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_intensitiesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_intensitiesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        this.intensities[i] = Float.intBitsToFloat(bits_intensitiesi);
-        offset += 4;
+        for (int i = 0; i < length_intensities; i++) {
+            int bits_intensitiesi = 0;
+            bits_intensitiesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_intensitiesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_intensitiesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_intensitiesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            this.intensities[i] = Float.intBitsToFloat(bits_intensitiesi);
+            offset += 4;
         }
         return offset;
     }
@@ -205,17 +205,17 @@ public class LaserScan implements com.roslib.ros.Msg {
         length += 4;
         int length_ranges = this.ranges != null ? this.ranges.length : 0;
         for (int i = 0; i < length_ranges; i++) {
-        length += 4;
+            length += 4;
         }
         length += 4;
         int length_intensities = this.intensities != null ? this.intensities.length : 0;
         for (int i = 0; i < length_intensities; i++) {
-        length += 4;
+            length += 4;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/LaserScan"; }
     public java.lang.String getMD5(){ return "9387943977c16b7fa134689acd87f1a2"; }
     public long getID() { return 0; }

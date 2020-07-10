@@ -44,16 +44,16 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->points_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->points_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->points_length);
-      for( uint32_t i = 0; i < points_length; i++){
-      offset += this->points[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < points_length; i++) {
+        offset += this->points[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->channels_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->channels_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->channels_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->channels_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->channels_length);
-      for( uint32_t i = 0; i < channels_length; i++){
-      offset += this->channels[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < channels_length; i++) {
+        offset += this->channels[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -70,8 +70,8 @@ namespace sensor_msgs
       if(points_lengthT > points_length)
         this->points = (geometry_msgs::Point32*)realloc(this->points, points_lengthT * sizeof(geometry_msgs::Point32));
       points_length = points_lengthT;
-      for( uint32_t i = 0; i < points_length; i++){
-      offset += this->st_points.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < points_length; i++) {
+        offset += this->st_points.deserialize(inbuffer + offset);
         memcpy( &(this->points[i]), &(this->st_points), sizeof(geometry_msgs::Point32));
       }
       uint32_t channels_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -82,8 +82,8 @@ namespace sensor_msgs
       if(channels_lengthT > channels_length)
         this->channels = (sensor_msgs::ChannelFloat32*)realloc(this->channels, channels_lengthT * sizeof(sensor_msgs::ChannelFloat32));
       channels_length = channels_lengthT;
-      for( uint32_t i = 0; i < channels_length; i++){
-      offset += this->st_channels.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < channels_length; i++) {
+        offset += this->st_channels.deserialize(inbuffer + offset);
         memcpy( &(this->channels[i]), &(this->st_channels), sizeof(sensor_msgs::ChannelFloat32));
       }
       return offset;
@@ -94,12 +94,12 @@ namespace sensor_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->points_length);
-      for( uint32_t i = 0; i < points_length; i++){
-      length += this->points[i].serializedLength();
+      for( uint32_t i = 0; i < points_length; i++) {
+        length += this->points[i].serializedLength();
       }
       length += sizeof(this->channels_length);
-      for( uint32_t i = 0; i < channels_length; i++){
-      length += this->channels[i].serializedLength();
+      for( uint32_t i = 0; i < channels_length; i++) {
+        length += this->channels[i].serializedLength();
       }
       return length;
     }
@@ -107,37 +107,29 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "points: [";
-      for( uint32_t i = 0; i < points_length; i++){
-      if( i == (points_length - 1)) {
-      std::stringstream ss_pointsi; ss_pointsi << "{\"points" << i <<"\": {";
-      string_echo += ss_pointsi.str();
-      string_echo += this->points[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_pointsi; ss_pointsi << "{\"points" << i <<"\": {";
-      string_echo += ss_pointsi.str();
-      string_echo += this->points[i].echo();
-      string_echo += "}}, ";
+      string_echo += ",";
+      string_echo += "points:[";
+      for( uint32_t i = 0; i < points_length; i++) {
+        if( i == (points_length - 1)) {
+          string_echo += this->points[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->points[i].echo();
+          string_echo += ",";
+        }
       }
-      }
-      string_echo += "], ";
-      string_echo += "channels: [";
-      for( uint32_t i = 0; i < channels_length; i++){
-      if( i == (channels_length - 1)) {
-      std::stringstream ss_channelsi; ss_channelsi << "{\"channels" << i <<"\": {";
-      string_echo += ss_channelsi.str();
-      string_echo += this->channels[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_channelsi; ss_channelsi << "{\"channels" << i <<"\": {";
-      string_echo += ss_channelsi.str();
-      string_echo += this->channels[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "],";
+      string_echo += "channels:[";
+      for( uint32_t i = 0; i < channels_length; i++) {
+        if( i == (channels_length - 1)) {
+          string_echo += this->channels[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->channels[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

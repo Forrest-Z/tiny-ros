@@ -75,7 +75,7 @@ public class Illuminance implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/Illuminance"; }
     public java.lang.String getMD5(){ return "08ab9e71fcfbed30d5e337886c3f07f2"; }
     public long getID() { return 0; }

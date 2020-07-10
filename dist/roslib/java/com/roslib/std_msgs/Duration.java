@@ -46,7 +46,7 @@ public class Duration implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Duration"; }
     public java.lang.String getMD5(){ return "5dc598a1f3dfbcf0b7343c41b15d6ab2"; }
     public long getID() { return 0; }

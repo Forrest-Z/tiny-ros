@@ -1,6 +1,7 @@
 package tinyros_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_ID_PUBLISHER() (uint32) { return 0 }
@@ -147,7 +148,11 @@ func (self *TopicInfo) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TopicInfo) Go_echo() (string) { return "" }
+func (self *TopicInfo) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TopicInfo) Go_getType() (string) { return "tinyros_msgs/TopicInfo" }
 func (self *TopicInfo) Go_getMD5() (string) { return "a46a053b53f4cc6fca4b0329acf85d51" }
 func (self *TopicInfo) Go_getID() (uint32) { return 0 }

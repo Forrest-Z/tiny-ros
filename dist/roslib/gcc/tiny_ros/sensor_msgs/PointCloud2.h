@@ -71,8 +71,8 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->fields_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->fields_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->fields_length);
-      for( uint32_t i = 0; i < fields_length; i++){
-      offset += this->fields[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < fields_length; i++) {
+        offset += this->fields[i].serialize(outbuffer + offset);
       }
       union {
         bool real;
@@ -96,9 +96,9 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->data_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->data_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      *(outbuffer + offset + 0) = (this->data[i] >> (8 * 0)) & 0xFF;
-      offset += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        *(outbuffer + offset + 0) = (this->data[i] >> (8 * 0)) & 0xFF;
+        offset += sizeof(this->data[i]);
       }
       union {
         bool real;
@@ -132,8 +132,8 @@ namespace sensor_msgs
       if(fields_lengthT > fields_length)
         this->fields = (sensor_msgs::PointField*)realloc(this->fields, fields_lengthT * sizeof(sensor_msgs::PointField));
       fields_length = fields_lengthT;
-      for( uint32_t i = 0; i < fields_length; i++){
-      offset += this->st_fields.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < fields_length; i++) {
+        offset += this->st_fields.deserialize(inbuffer + offset);
         memcpy( &(this->fields[i]), &(this->st_fields), sizeof(sensor_msgs::PointField));
       }
       union {
@@ -162,9 +162,9 @@ namespace sensor_msgs
       if(data_lengthT > data_length)
         this->data = (uint8_t*)realloc(this->data, data_lengthT * sizeof(uint8_t));
       data_length = data_lengthT;
-      for( uint32_t i = 0; i < data_length; i++){
-      this->st_data =  ((uint8_t) (*(inbuffer + offset)));
-      offset += sizeof(this->st_data);
+      for( uint32_t i = 0; i < data_length; i++) {
+        this->st_data =  ((uint8_t) (*(inbuffer + offset)));
+        offset += sizeof(this->st_data);
         memcpy( &(this->data[i]), &(this->st_data), sizeof(uint8_t));
       }
       union {
@@ -185,15 +185,15 @@ namespace sensor_msgs
       length += sizeof(this->height);
       length += sizeof(this->width);
       length += sizeof(this->fields_length);
-      for( uint32_t i = 0; i < fields_length; i++){
-      length += this->fields[i].serializedLength();
+      for( uint32_t i = 0; i < fields_length; i++) {
+        length += this->fields[i].serializedLength();
       }
       length += sizeof(this->is_bigendian);
       length += sizeof(this->point_step);
       length += sizeof(this->row_step);
       length += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      length += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        length += sizeof(this->data[i]);
       }
       length += sizeof(this->is_dense);
       return length;
@@ -202,46 +202,42 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_height; ss_height << "\"height\": " << height <<", ";
+      string_echo += ",";
+      std::stringstream ss_height; ss_height << "\"height\":" << height <<",";
       string_echo += ss_height.str();
-      std::stringstream ss_width; ss_width << "\"width\": " << width <<", ";
+      std::stringstream ss_width; ss_width << "\"width\":" << width <<",";
       string_echo += ss_width.str();
-      string_echo += "fields: [";
-      for( uint32_t i = 0; i < fields_length; i++){
-      if( i == (fields_length - 1)) {
-      std::stringstream ss_fieldsi; ss_fieldsi << "{\"fields" << i <<"\": {";
-      string_echo += ss_fieldsi.str();
-      string_echo += this->fields[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_fieldsi; ss_fieldsi << "{\"fields" << i <<"\": {";
-      string_echo += ss_fieldsi.str();
-      string_echo += this->fields[i].echo();
-      string_echo += "}}, ";
+      string_echo += "fields:[";
+      for( uint32_t i = 0; i < fields_length; i++) {
+        if( i == (fields_length - 1)) {
+          string_echo += this->fields[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->fields[i].echo();
+          string_echo += ",";
+        }
       }
-      }
-      string_echo += "], ";
-      std::stringstream ss_is_bigendian; ss_is_bigendian << "\"is_bigendian\": " << is_bigendian <<", ";
+      string_echo += "],";
+      std::stringstream ss_is_bigendian; ss_is_bigendian << "\"is_bigendian\":" << is_bigendian <<",";
       string_echo += ss_is_bigendian.str();
-      std::stringstream ss_point_step; ss_point_step << "\"point_step\": " << point_step <<", ";
+      std::stringstream ss_point_step; ss_point_step << "\"point_step\":" << point_step <<",";
       string_echo += ss_point_step.str();
-      std::stringstream ss_row_step; ss_row_step << "\"row_step\": " << row_step <<", ";
+      std::stringstream ss_row_step; ss_row_step << "\"row_step\":" << row_step <<",";
       string_echo += ss_row_step.str();
-      string_echo += "data: [";
-      for( uint32_t i = 0; i < data_length; i++){
-      if( i == (data_length - 1)) {
-      std::stringstream ss_datai; ss_datai << "{\"data" << i <<"\": " << (uint16_t)data[i] <<"}";
-      string_echo += ss_datai.str();
-      } else {
-      std::stringstream ss_datai; ss_datai << "{\"data" << i <<"\": " << (uint16_t)data[i] <<"}, ";
-      string_echo += ss_datai.str();
+      string_echo += "data:[";
+      for( uint32_t i = 0; i < data_length; i++) {
+        if( i == (data_length - 1)) {
+          std::stringstream ss_datai; ss_datai << (uint16_t)data[i] <<"";
+          string_echo += ss_datai.str();
+        } else {
+          std::stringstream ss_datai; ss_datai << (uint16_t)data[i] <<",";
+          string_echo += ss_datai.str();
+        }
       }
-      }
-      string_echo += "], ";
-      std::stringstream ss_is_dense; ss_is_dense << "\"is_dense\": " << is_dense <<"";
+      string_echo += "],";
+      std::stringstream ss_is_dense; ss_is_dense << "\"is_dense\":" << is_dense <<"";
       string_echo += ss_is_dense.str();
       string_echo += "}";
       return string_echo;

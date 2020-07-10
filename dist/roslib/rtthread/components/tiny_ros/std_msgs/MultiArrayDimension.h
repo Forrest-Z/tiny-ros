@@ -54,7 +54,7 @@ namespace std_msgs
       arrToVar(length_label, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_label; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_label-1]=0;
       this->label = (char *)(inbuffer + offset-1);

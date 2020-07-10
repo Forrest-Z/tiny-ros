@@ -64,7 +64,7 @@ public static class BodyRequestRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return BODYREQUEST; }
     public java.lang.String getMD5(){ return "d1c66fbceb0ee1b51e3b09ac030dedec"; }
     public long getID() { return this.__id__; }
@@ -103,7 +103,7 @@ public static class BodyRequestResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return BODYREQUEST; }
     public java.lang.String getMD5(){ return "e0caf2eb9951542b962f95924c6eeb34"; }
     public long getID() { return this.__id__; }

@@ -288,19 +288,19 @@ static const char GETPOINTMAPROI[] = "map_msgs/GetPointMapROI";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_x; ss_x << "\"x\": " << x <<", ";
+      std::stringstream ss_x; ss_x << "\"x\":" << x <<",";
       string_echo += ss_x.str();
-      std::stringstream ss_y; ss_y << "\"y\": " << y <<", ";
+      std::stringstream ss_y; ss_y << "\"y\":" << y <<",";
       string_echo += ss_y.str();
-      std::stringstream ss_z; ss_z << "\"z\": " << z <<", ";
+      std::stringstream ss_z; ss_z << "\"z\":" << z <<",";
       string_echo += ss_z.str();
-      std::stringstream ss_r; ss_r << "\"r\": " << r <<", ";
+      std::stringstream ss_r; ss_r << "\"r\":" << r <<",";
       string_echo += ss_r.str();
-      std::stringstream ss_l_x; ss_l_x << "\"l_x\": " << l_x <<", ";
+      std::stringstream ss_l_x; ss_l_x << "\"l_x\":" << l_x <<",";
       string_echo += ss_l_x.str();
-      std::stringstream ss_l_y; ss_l_y << "\"l_y\": " << l_y <<", ";
+      std::stringstream ss_l_y; ss_l_y << "\"l_y\":" << l_y <<",";
       string_echo += ss_l_y.str();
-      std::stringstream ss_l_z; ss_l_z << "\"l_z\": " << l_z <<"";
+      std::stringstream ss_l_z; ss_l_z << "\"l_z\":" << l_z <<"";
       string_echo += ss_l_z.str();
       string_echo += "}";
       return string_echo;
@@ -363,9 +363,9 @@ static const char GETPOINTMAPROI[] = "map_msgs/GetPointMapROI";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"sub_map\": {";
+      string_echo += "\"sub_map\":";
       string_echo += this->sub_map.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

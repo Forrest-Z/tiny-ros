@@ -62,7 +62,7 @@ public class TF2Error implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tf2_msgs/TF2Error"; }
     public java.lang.String getMD5(){ return "ed32adf5a372962d977aea0e5630d1d6"; }
     public long getID() { return 0; }

@@ -165,17 +165,17 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->cell_voltage_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->cell_voltage_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->cell_voltage_length);
-      for( uint32_t i = 0; i < cell_voltage_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_cell_voltagei;
-      u_cell_voltagei.real = this->cell_voltage[i];
-      *(outbuffer + offset + 0) = (u_cell_voltagei.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_cell_voltagei.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_cell_voltagei.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_cell_voltagei.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->cell_voltage[i]);
+      for( uint32_t i = 0; i < cell_voltage_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_cell_voltagei;
+        u_cell_voltagei.real = this->cell_voltage[i];
+        *(outbuffer + offset + 0) = (u_cell_voltagei.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_cell_voltagei.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_cell_voltagei.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_cell_voltagei.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->cell_voltage[i]);
       }
       uint32_t length_location = this->location.size();
       varToArr(outbuffer + offset, length_location);
@@ -282,25 +282,25 @@ namespace sensor_msgs
       if(cell_voltage_lengthT > cell_voltage_length)
         this->cell_voltage = (float*)realloc(this->cell_voltage, cell_voltage_lengthT * sizeof(float));
       cell_voltage_length = cell_voltage_lengthT;
-      for( uint32_t i = 0; i < cell_voltage_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_cell_voltage;
-      u_st_cell_voltage.base = 0;
-      u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_cell_voltage = u_st_cell_voltage.real;
-      offset += sizeof(this->st_cell_voltage);
+      for( uint32_t i = 0; i < cell_voltage_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_cell_voltage;
+        u_st_cell_voltage.base = 0;
+        u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_cell_voltage.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_cell_voltage = u_st_cell_voltage.real;
+        offset += sizeof(this->st_cell_voltage);
         memcpy( &(this->cell_voltage[i]), &(this->st_cell_voltage), sizeof(float));
       }
       uint32_t length_location;
       arrToVar(length_location, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_location; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_location-1]=0;
       this->location = (char *)(inbuffer + offset-1);
@@ -309,7 +309,7 @@ namespace sensor_msgs
       arrToVar(length_serial_number, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_serial_number; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_serial_number-1]=0;
       this->serial_number = (char *)(inbuffer + offset-1);
@@ -332,8 +332,8 @@ namespace sensor_msgs
       length += sizeof(this->power_supply_technology);
       length += sizeof(this->present);
       length += sizeof(this->cell_voltage_length);
-      for( uint32_t i = 0; i < cell_voltage_length; i++){
-      length += sizeof(this->cell_voltage[i]);
+      for( uint32_t i = 0; i < cell_voltage_length; i++) {
+        length += sizeof(this->cell_voltage[i]);
       }
       uint32_t length_location = this->location.size();
       length += 4;

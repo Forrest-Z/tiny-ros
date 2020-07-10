@@ -64,7 +64,7 @@ public static class GetLinkPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETLINKPROPERTIES; }
     public java.lang.String getMD5(){ return "30b187ce76c283d51c190e8f7d59f0ff"; }
     public long getID() { return this.__id__; }
@@ -316,7 +316,7 @@ public static class GetLinkPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETLINKPROPERTIES; }
     public java.lang.String getMD5(){ return "d45a9e2f72bfb95f519b2d0cbaac4512"; }
     public long getID() { return this.__id__; }

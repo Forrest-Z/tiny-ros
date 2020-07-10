@@ -32,7 +32,7 @@ public class TwistStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/TwistStamped"; }
     public java.lang.String getMD5(){ return "2e3e0a57a69306091cb5c65e92d048e1"; }
     public long getID() { return 0; }

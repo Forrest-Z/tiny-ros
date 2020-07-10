@@ -140,7 +140,7 @@ namespace map_msgs
       arrToVar(length_frame_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_frame_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_frame_id-1]=0;
       this->frame_id = (char *)(inbuffer + offset-1);

@@ -37,7 +37,7 @@ public class LookupTransformActionResult implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tf2_msgs/LookupTransformActionResult"; }
     public java.lang.String getMD5(){ return "5a8abe079c2126ea9966563c5cae6d29"; }
     public long getID() { return 0; }

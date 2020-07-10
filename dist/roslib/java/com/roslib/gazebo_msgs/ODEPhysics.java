@@ -212,7 +212,7 @@ public class ODEPhysics implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "gazebo_msgs/ODEPhysics"; }
     public java.lang.String getMD5(){ return "67a077e58362b50f63dc189c25d01418"; }
     public long getID() { return 0; }

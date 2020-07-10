@@ -1,6 +1,7 @@
 package tf2_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -48,7 +49,11 @@ func (self *LookupTransformAction) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LookupTransformAction) Go_echo() (string) { return "" }
+func (self *LookupTransformAction) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LookupTransformAction) Go_getType() (string) { return "tf2_msgs/LookupTransformAction" }
 func (self *LookupTransformAction) Go_getMD5() (string) { return "49655e848adf6c64870a8eb763b94484" }
 func (self *LookupTransformAction) Go_getID() (uint32) { return 0 }

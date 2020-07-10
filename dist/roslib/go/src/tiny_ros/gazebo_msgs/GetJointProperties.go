@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -67,7 +68,11 @@ func (self *GetJointPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetJointPropertiesRequest) Go_echo() (string) { return "" }
+func (self *GetJointPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetJointPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/GetJointProperties" }
 func (self *GetJointPropertiesRequest) Go_getMD5() (string) { return "b07a3ce5fb5aba1cfc56577c9cb3ecc6" }
 func (self *GetJointPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -188,7 +193,7 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_damping |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_damping |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_damping = make([]float64, length_damping, length_damping)
+    self.Go_damping = make([]float64, length_damping)
     for i := 0; i < length_damping; i++ {
         bits_dampingi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_damping[i] = math.Float64frombits(bits_dampingi)
@@ -199,7 +204,7 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_position |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_position |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_position = make([]float64, length_position, length_position)
+    self.Go_position = make([]float64, length_position)
     for i := 0; i < length_position; i++ {
         bits_positioni := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_position[i] = math.Float64frombits(bits_positioni)
@@ -210,7 +215,7 @@ func (self *GetJointPropertiesResponse) Go_deserialize(buff []byte) (int) {
     length_rate |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_rate |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_rate = make([]float64, length_rate, length_rate)
+    self.Go_rate = make([]float64, length_rate)
     for i := 0; i < length_rate; i++ {
         bits_ratei := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_rate[i] = math.Float64frombits(bits_ratei)
@@ -257,7 +262,11 @@ func (self *GetJointPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetJointPropertiesResponse) Go_echo() (string) { return "" }
+func (self *GetJointPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetJointPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/GetJointProperties" }
 func (self *GetJointPropertiesResponse) Go_getMD5() (string) { return "a60fbf691ac539e1355c979ca09b4573" }
 func (self *GetJointPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

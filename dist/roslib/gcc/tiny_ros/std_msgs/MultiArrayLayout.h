@@ -36,8 +36,8 @@ namespace std_msgs
       *(outbuffer + offset + 2) = (this->dim_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->dim_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->dim_length);
-      for( uint32_t i = 0; i < dim_length; i++){
-      offset += this->dim[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < dim_length; i++) {
+        offset += this->dim[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->data_offset >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->data_offset >> (8 * 1)) & 0xFF;
@@ -58,8 +58,8 @@ namespace std_msgs
       if(dim_lengthT > dim_length)
         this->dim = (std_msgs::MultiArrayDimension*)realloc(this->dim, dim_lengthT * sizeof(std_msgs::MultiArrayDimension));
       dim_length = dim_lengthT;
-      for( uint32_t i = 0; i < dim_length; i++){
-      offset += this->st_dim.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < dim_length; i++) {
+        offset += this->st_dim.deserialize(inbuffer + offset);
         memcpy( &(this->dim[i]), &(this->st_dim), sizeof(std_msgs::MultiArrayDimension));
       }
       this->data_offset =  ((uint32_t) (*(inbuffer + offset)));
@@ -74,8 +74,8 @@ namespace std_msgs
     {
       int length = 0;
       length += sizeof(this->dim_length);
-      for( uint32_t i = 0; i < dim_length; i++){
-      length += this->dim[i].serializedLength();
+      for( uint32_t i = 0; i < dim_length; i++) {
+        length += this->dim[i].serializedLength();
       }
       length += sizeof(this->data_offset);
       return length;
@@ -84,22 +84,18 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "dim: [";
-      for( uint32_t i = 0; i < dim_length; i++){
-      if( i == (dim_length - 1)) {
-      std::stringstream ss_dimi; ss_dimi << "{\"dim" << i <<"\": {";
-      string_echo += ss_dimi.str();
-      string_echo += this->dim[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_dimi; ss_dimi << "{\"dim" << i <<"\": {";
-      string_echo += ss_dimi.str();
-      string_echo += this->dim[i].echo();
-      string_echo += "}}, ";
+      string_echo += "dim:[";
+      for( uint32_t i = 0; i < dim_length; i++) {
+        if( i == (dim_length - 1)) {
+          string_echo += this->dim[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->dim[i].echo();
+          string_echo += ",";
+        }
       }
-      }
-      string_echo += "], ";
-      std::stringstream ss_data_offset; ss_data_offset << "\"data_offset\": " << data_offset <<"";
+      string_echo += "],";
+      std::stringstream ss_data_offset; ss_data_offset << "\"data_offset\":" << data_offset <<"";
       string_echo += ss_data_offset.str();
       string_echo += "}";
       return string_echo;

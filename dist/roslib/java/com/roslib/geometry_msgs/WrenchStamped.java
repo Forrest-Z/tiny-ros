@@ -32,7 +32,7 @@ public class WrenchStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/WrenchStamped"; }
     public java.lang.String getMD5(){ return "cf53874aa63609de4155ec8e9cf2c540"; }
     public long getID() { return 0; }

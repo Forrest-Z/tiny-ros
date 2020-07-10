@@ -1,6 +1,7 @@
 package shape_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -62,7 +63,7 @@ func (self *SolidPrimitive) Go_deserialize(buff []byte) (int) {
     length_dimensions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_dimensions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_dimensions = make([]float64, length_dimensions, length_dimensions)
+    self.Go_dimensions = make([]float64, length_dimensions)
     for i := 0; i < length_dimensions; i++ {
         bits_dimensionsi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_dimensions[i] = math.Float64frombits(bits_dimensionsi)
@@ -82,7 +83,11 @@ func (self *SolidPrimitive) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SolidPrimitive) Go_echo() (string) { return "" }
+func (self *SolidPrimitive) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SolidPrimitive) Go_getType() (string) { return "shape_msgs/SolidPrimitive" }
 func (self *SolidPrimitive) Go_getMD5() (string) { return "f40805922065416be24909fd8fd751b5" }
 func (self *SolidPrimitive) Go_getID() (uint32) { return 0 }

@@ -62,7 +62,7 @@ namespace actionlib_msgs
       arrToVar(length_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_id-1]=0;
       this->id = (char *)(inbuffer + offset-1);

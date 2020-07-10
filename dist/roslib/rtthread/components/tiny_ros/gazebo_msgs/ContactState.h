@@ -74,8 +74,8 @@ namespace gazebo_msgs
       *(outbuffer + offset + 2) = (this->wrenches_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->wrenches_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->wrenches_length);
-      for( uint32_t i = 0; i < wrenches_length; i++){
-      offset += this->wrenches[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < wrenches_length; i++) {
+        offset += this->wrenches[i].serialize(outbuffer + offset);
       }
       offset += this->total_wrench.serialize(outbuffer + offset);
       *(outbuffer + offset + 0) = (this->contact_positions_length >> (8 * 0)) & 0xFF;
@@ -83,37 +83,37 @@ namespace gazebo_msgs
       *(outbuffer + offset + 2) = (this->contact_positions_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->contact_positions_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->contact_positions_length);
-      for( uint32_t i = 0; i < contact_positions_length; i++){
-      offset += this->contact_positions[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < contact_positions_length; i++) {
+        offset += this->contact_positions[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->contact_normals_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->contact_normals_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->contact_normals_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->contact_normals_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->contact_normals_length);
-      for( uint32_t i = 0; i < contact_normals_length; i++){
-      offset += this->contact_normals[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < contact_normals_length; i++) {
+        offset += this->contact_normals[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->depths_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->depths_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->depths_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->depths_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->depths_length);
-      for( uint32_t i = 0; i < depths_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_depthsi;
-      u_depthsi.real = this->depths[i];
-      *(outbuffer + offset + 0) = (u_depthsi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_depthsi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_depthsi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_depthsi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_depthsi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_depthsi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_depthsi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_depthsi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->depths[i]);
+      for( uint32_t i = 0; i < depths_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_depthsi;
+        u_depthsi.real = this->depths[i];
+        *(outbuffer + offset + 0) = (u_depthsi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_depthsi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_depthsi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_depthsi.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_depthsi.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_depthsi.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_depthsi.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_depthsi.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->depths[i]);
       }
       return offset;
     }
@@ -125,7 +125,7 @@ namespace gazebo_msgs
       arrToVar(length_info, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_info; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_info-1]=0;
       this->info = (char *)(inbuffer + offset-1);
@@ -134,7 +134,7 @@ namespace gazebo_msgs
       arrToVar(length_collision1_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_collision1_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_collision1_name-1]=0;
       this->collision1_name = (char *)(inbuffer + offset-1);
@@ -143,7 +143,7 @@ namespace gazebo_msgs
       arrToVar(length_collision2_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_collision2_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_collision2_name-1]=0;
       this->collision2_name = (char *)(inbuffer + offset-1);
@@ -156,8 +156,8 @@ namespace gazebo_msgs
       if(wrenches_lengthT > wrenches_length)
         this->wrenches = (geometry_msgs::Wrench*)realloc(this->wrenches, wrenches_lengthT * sizeof(geometry_msgs::Wrench));
       wrenches_length = wrenches_lengthT;
-      for( uint32_t i = 0; i < wrenches_length; i++){
-      offset += this->st_wrenches.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < wrenches_length; i++) {
+        offset += this->st_wrenches.deserialize(inbuffer + offset);
         memcpy( &(this->wrenches[i]), &(this->st_wrenches), sizeof(geometry_msgs::Wrench));
       }
       offset += this->total_wrench.deserialize(inbuffer + offset);
@@ -169,8 +169,8 @@ namespace gazebo_msgs
       if(contact_positions_lengthT > contact_positions_length)
         this->contact_positions = (geometry_msgs::Vector3*)realloc(this->contact_positions, contact_positions_lengthT * sizeof(geometry_msgs::Vector3));
       contact_positions_length = contact_positions_lengthT;
-      for( uint32_t i = 0; i < contact_positions_length; i++){
-      offset += this->st_contact_positions.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < contact_positions_length; i++) {
+        offset += this->st_contact_positions.deserialize(inbuffer + offset);
         memcpy( &(this->contact_positions[i]), &(this->st_contact_positions), sizeof(geometry_msgs::Vector3));
       }
       uint32_t contact_normals_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -181,8 +181,8 @@ namespace gazebo_msgs
       if(contact_normals_lengthT > contact_normals_length)
         this->contact_normals = (geometry_msgs::Vector3*)realloc(this->contact_normals, contact_normals_lengthT * sizeof(geometry_msgs::Vector3));
       contact_normals_length = contact_normals_lengthT;
-      for( uint32_t i = 0; i < contact_normals_length; i++){
-      offset += this->st_contact_normals.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < contact_normals_length; i++) {
+        offset += this->st_contact_normals.deserialize(inbuffer + offset);
         memcpy( &(this->contact_normals[i]), &(this->st_contact_normals), sizeof(geometry_msgs::Vector3));
       }
       uint32_t depths_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -193,22 +193,22 @@ namespace gazebo_msgs
       if(depths_lengthT > depths_length)
         this->depths = (double*)realloc(this->depths, depths_lengthT * sizeof(double));
       depths_length = depths_lengthT;
-      for( uint32_t i = 0; i < depths_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_depths;
-      u_st_depths.base = 0;
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_depths = u_st_depths.real;
-      offset += sizeof(this->st_depths);
+      for( uint32_t i = 0; i < depths_length; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_st_depths;
+        u_st_depths.base = 0;
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_st_depths.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->st_depths = u_st_depths.real;
+        offset += sizeof(this->st_depths);
         memcpy( &(this->depths[i]), &(this->st_depths), sizeof(double));
       }
       return offset;
@@ -227,21 +227,21 @@ namespace gazebo_msgs
       length += 4;
       length += length_collision2_name;
       length += sizeof(this->wrenches_length);
-      for( uint32_t i = 0; i < wrenches_length; i++){
-      length += this->wrenches[i].serializedLength();
+      for( uint32_t i = 0; i < wrenches_length; i++) {
+        length += this->wrenches[i].serializedLength();
       }
       length += this->total_wrench.serializedLength();
       length += sizeof(this->contact_positions_length);
-      for( uint32_t i = 0; i < contact_positions_length; i++){
-      length += this->contact_positions[i].serializedLength();
+      for( uint32_t i = 0; i < contact_positions_length; i++) {
+        length += this->contact_positions[i].serializedLength();
       }
       length += sizeof(this->contact_normals_length);
-      for( uint32_t i = 0; i < contact_normals_length; i++){
-      length += this->contact_normals[i].serializedLength();
+      for( uint32_t i = 0; i < contact_normals_length; i++) {
+        length += this->contact_normals[i].serializedLength();
       }
       length += sizeof(this->depths_length);
-      for( uint32_t i = 0; i < depths_length; i++){
-      length += sizeof(this->depths[i]);
+      for( uint32_t i = 0; i < depths_length; i++) {
+        length += sizeof(this->depths[i]);
       }
       return length;
     }

@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/geometry_msgs"
     "encoding/binary"
@@ -62,7 +63,11 @@ func (self *MagneticField) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MagneticField) Go_echo() (string) { return "" }
+func (self *MagneticField) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MagneticField) Go_getType() (string) { return "sensor_msgs/MagneticField" }
 func (self *MagneticField) Go_getMD5() (string) { return "f8e051d776de1349146122759c66db92" }
 func (self *MagneticField) Go_getID() (uint32) { return 0 }

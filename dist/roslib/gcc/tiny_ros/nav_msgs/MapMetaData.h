@@ -127,18 +127,18 @@ namespace nav_msgs
     {
       std::string string_echo = "{";
       std::stringstream ss_map_load_time;
-      ss_map_load_time << "\"map_load_time.sec\": " << map_load_time.sec;
-      ss_map_load_time << ", \"map_load_time.nsec\": " << map_load_time.nsec << ", ";
+      ss_map_load_time << "\"map_load_time\":{\"sec\":" << map_load_time.sec;
+      ss_map_load_time << ",\"nsec\":" << map_load_time.nsec << "},";
       string_echo += ss_map_load_time.str();
-      std::stringstream ss_resolution; ss_resolution << "\"resolution\": " << resolution <<", ";
+      std::stringstream ss_resolution; ss_resolution << "\"resolution\":" << resolution <<",";
       string_echo += ss_resolution.str();
-      std::stringstream ss_width; ss_width << "\"width\": " << width <<", ";
+      std::stringstream ss_width; ss_width << "\"width\":" << width <<",";
       string_echo += ss_width.str();
-      std::stringstream ss_height; ss_height << "\"height\": " << height <<", ";
+      std::stringstream ss_height; ss_height << "\"height\":" << height <<",";
       string_echo += ss_height.str();
-      string_echo += "\"origin\": {";
+      string_echo += "\"origin\":";
       string_echo += this->origin.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

@@ -61,15 +61,15 @@ namespace tf2_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"action_goal\": {";
+      string_echo += "\"action_goal\":";
       string_echo += this->action_goal.echo();
-      string_echo += "}, ";
-      string_echo += "\"action_result\": {";
+      string_echo += ",";
+      string_echo += "\"action_result\":";
       string_echo += this->action_result.echo();
-      string_echo += "}, ";
-      string_echo += "\"action_feedback\": {";
+      string_echo += ",";
+      string_echo += "\"action_feedback\":";
       string_echo += this->action_feedback.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

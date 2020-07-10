@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_INT8() (uint8) { return  1 }
@@ -95,7 +96,11 @@ func (self *PointField) Go_serializedLength() (int) {
     return length
 }
 
-func (self *PointField) Go_echo() (string) { return "" }
+func (self *PointField) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *PointField) Go_getType() (string) { return "sensor_msgs/PointField" }
 func (self *PointField) Go_getMD5() (string) { return "039974f05fdf0470d9dc865fd01dcc3e" }
 func (self *PointField) Go_getID() (uint32) { return 0 }

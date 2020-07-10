@@ -38,7 +38,7 @@ namespace tinyros_hello
       arrToVar(length_hello, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_hello; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_hello-1]=0;
       this->hello = (char *)(inbuffer + offset-1);

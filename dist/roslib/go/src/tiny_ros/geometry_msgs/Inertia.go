@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -108,7 +109,11 @@ func (self *Inertia) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Inertia) Go_echo() (string) { return "" }
+func (self *Inertia) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Inertia) Go_getType() (string) { return "geometry_msgs/Inertia" }
 func (self *Inertia) Go_getMD5() (string) { return "9116c935782bc29999dad1927624dff0" }
 func (self *Inertia) Go_getID() (uint32) { return 0 }

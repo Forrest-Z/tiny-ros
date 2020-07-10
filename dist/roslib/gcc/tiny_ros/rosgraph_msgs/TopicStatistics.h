@@ -201,7 +201,7 @@ namespace rosgraph_msgs
       arrToVar(length_topic, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_topic; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_topic-1]=0;
       this->topic = (char *)(inbuffer + offset-1);
@@ -210,7 +210,7 @@ namespace rosgraph_msgs
       arrToVar(length_node_pub, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_node_pub; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_node_pub-1]=0;
       this->node_pub = (char *)(inbuffer + offset-1);
@@ -219,7 +219,7 @@ namespace rosgraph_msgs
       arrToVar(length_node_sub, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_node_sub; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_node_sub-1]=0;
       this->node_sub = (char *)(inbuffer + offset-1);
@@ -377,52 +377,67 @@ namespace rosgraph_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"topic\": \"";
+      std::size_t topic_pos = topic.find("\"");
+      while(topic_pos != std::string::npos){
+        topic.replace(topic_pos, 1,"\\\"");
+        topic_pos = topic.find("\"", topic_pos+2);
+      }
+      string_echo += "\"topic\":\"";
       string_echo += topic;
-      string_echo += "\", ";
-      string_echo += "\"node_pub\": \"";
+      string_echo += "\",";
+      std::size_t node_pub_pos = node_pub.find("\"");
+      while(node_pub_pos != std::string::npos){
+        node_pub.replace(node_pub_pos, 1,"\\\"");
+        node_pub_pos = node_pub.find("\"", node_pub_pos+2);
+      }
+      string_echo += "\"node_pub\":\"";
       string_echo += node_pub;
-      string_echo += "\", ";
-      string_echo += "\"node_sub\": \"";
+      string_echo += "\",";
+      std::size_t node_sub_pos = node_sub.find("\"");
+      while(node_sub_pos != std::string::npos){
+        node_sub.replace(node_sub_pos, 1,"\\\"");
+        node_sub_pos = node_sub.find("\"", node_sub_pos+2);
+      }
+      string_echo += "\"node_sub\":\"";
       string_echo += node_sub;
-      string_echo += "\", ";
+      string_echo += "\",";
       std::stringstream ss_window_start;
-      ss_window_start << "\"window_start.sec\": " << window_start.sec;
-      ss_window_start << ", \"window_start.nsec\": " << window_start.nsec << ", ";
+      ss_window_start << "\"window_start\":{\"sec\":" << window_start.sec;
+      ss_window_start << ",\"nsec\":" << window_start.nsec << "},";
       string_echo += ss_window_start.str();
       std::stringstream ss_window_stop;
-      ss_window_stop << "\"window_stop.sec\": " << window_stop.sec;
-      ss_window_stop << ", \"window_stop.nsec\": " << window_stop.nsec << ", ";
+      ss_window_stop << "\"window_stop\":{\"sec\":" << window_stop.sec;
+      ss_window_stop << ",\"nsec\":" << window_stop.nsec << "},";
       string_echo += ss_window_stop.str();
-      std::stringstream ss_delivered_msgs; ss_delivered_msgs << "\"delivered_msgs\": " << delivered_msgs <<", ";
+      std::stringstream ss_delivered_msgs; ss_delivered_msgs << "\"delivered_msgs\":" << delivered_msgs <<",";
       string_echo += ss_delivered_msgs.str();
-      std::stringstream ss_dropped_msgs; ss_dropped_msgs << "\"dropped_msgs\": " << dropped_msgs <<", ";
+      std::stringstream ss_dropped_msgs; ss_dropped_msgs << "\"dropped_msgs\":" << dropped_msgs <<",";
       string_echo += ss_dropped_msgs.str();
-      std::stringstream ss_traffic; ss_traffic << "\"traffic\": " << traffic <<", ";
+      std::stringstream ss_traffic; ss_traffic << "\"traffic\":" << traffic <<",";
       string_echo += ss_traffic.str();
       std::stringstream ss_period_mean;
-      ss_period_mean << "\"period_mean.sec\": " << period_mean.sec;
-      ss_period_mean << ", \"period_mean.nsec\": " << period_mean.nsec << ", ";
+      ss_period_mean << "\"period_mean\":{\"sec\":" << period_mean.sec;
+      ss_period_mean << ",\"nsec\":" << period_mean.nsec << "},";
       string_echo += ss_period_mean.str();
       std::stringstream ss_period_stddev;
-      ss_period_stddev << "\"period_stddev.sec\": " << period_stddev.sec;
-      ss_period_stddev << ", \"period_stddev.nsec\": " << period_stddev.nsec << ", ";
+      ss_period_stddev << "\"period_stddev\":{\"sec\":" << period_stddev.sec;
+      ss_period_stddev << ",\"nsec\":" << period_stddev.nsec << "},";
       string_echo += ss_period_stddev.str();
       std::stringstream ss_period_max;
-      ss_period_max << "\"period_max.sec\": " << period_max.sec;
-      ss_period_max << ", \"period_max.nsec\": " << period_max.nsec << ", ";
+      ss_period_max << "\"period_max\":{\"sec\":" << period_max.sec;
+      ss_period_max << ",\"nsec\":" << period_max.nsec << "},";
       string_echo += ss_period_max.str();
       std::stringstream ss_stamp_age_mean;
-      ss_stamp_age_mean << "\"stamp_age_mean.sec\": " << stamp_age_mean.sec;
-      ss_stamp_age_mean << ", \"stamp_age_mean.nsec\": " << stamp_age_mean.nsec << ", ";
+      ss_stamp_age_mean << "\"stamp_age_mean\":{\"sec\":" << stamp_age_mean.sec;
+      ss_stamp_age_mean << ",\"nsec\":" << stamp_age_mean.nsec << "},";
       string_echo += ss_stamp_age_mean.str();
       std::stringstream ss_stamp_age_stddev;
-      ss_stamp_age_stddev << "\"stamp_age_stddev.sec\": " << stamp_age_stddev.sec;
-      ss_stamp_age_stddev << ", \"stamp_age_stddev.nsec\": " << stamp_age_stddev.nsec << ", ";
+      ss_stamp_age_stddev << "\"stamp_age_stddev\":{\"sec\":" << stamp_age_stddev.sec;
+      ss_stamp_age_stddev << ",\"nsec\":" << stamp_age_stddev.nsec << "},";
       string_echo += ss_stamp_age_stddev.str();
       std::stringstream ss_stamp_age_max;
-      ss_stamp_age_max << "\"stamp_age_max.sec\": " << stamp_age_max.sec;
-      ss_stamp_age_max << ", \"stamp_age_max.nsec\": " << stamp_age_max.nsec << "";
+      ss_stamp_age_max << "\"stamp_age_max\":{\"sec\":" << stamp_age_max.sec;
+      ss_stamp_age_max << ",\"nsec\":" << stamp_age_max.nsec << "}";
       string_echo += ss_stamp_age_max.str();
       string_echo += "}";
       return string_echo;

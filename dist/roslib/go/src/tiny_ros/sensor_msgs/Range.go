@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -89,7 +90,11 @@ func (self *Range) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Range) Go_echo() (string) { return "" }
+func (self *Range) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Range) Go_getType() (string) { return "sensor_msgs/Range" }
 func (self *Range) Go_getMD5() (string) { return "54d647e3a481f5b87ce39d1b97e84d53" }
 func (self *Range) Go_getID() (uint32) { return 0 }

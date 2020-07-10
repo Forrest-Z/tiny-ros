@@ -29,7 +29,7 @@ public class Char implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Char"; }
     public java.lang.String getMD5(){ return "18741a80dcc02fcae20538073fcb0872"; }
     public long getID() { return 0; }

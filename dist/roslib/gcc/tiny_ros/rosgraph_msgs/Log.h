@@ -92,12 +92,12 @@ namespace rosgraph_msgs
       *(outbuffer + offset + 2) = (this->topics_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->topics_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->topics_length);
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = this->topics[i].size();
-      varToArr(outbuffer + offset, length_topicsi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->topics[i].c_str(), length_topicsi);
-      offset += length_topicsi;
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_topicsi = this->topics[i].size();
+        varToArr(outbuffer + offset, length_topicsi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->topics[i].c_str(), length_topicsi);
+        offset += length_topicsi;
       }
       return offset;
     }
@@ -118,7 +118,7 @@ namespace rosgraph_msgs
       arrToVar(length_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_name-1]=0;
       this->name = (char *)(inbuffer + offset-1);
@@ -127,7 +127,7 @@ namespace rosgraph_msgs
       arrToVar(length_msg, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_msg; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_msg-1]=0;
       this->msg = (char *)(inbuffer + offset-1);
@@ -136,7 +136,7 @@ namespace rosgraph_msgs
       arrToVar(length_file, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_file; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_file-1]=0;
       this->file = (char *)(inbuffer + offset-1);
@@ -145,7 +145,7 @@ namespace rosgraph_msgs
       arrToVar(length_function, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_function; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_function-1]=0;
       this->function = (char *)(inbuffer + offset-1);
@@ -163,16 +163,16 @@ namespace rosgraph_msgs
       if(topics_lengthT > topics_length)
         this->topics = (std::string*)realloc(this->topics, topics_lengthT * sizeof(std::string));
       topics_length = topics_lengthT;
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_st_topics;
-      arrToVar(length_st_topics, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_topics; ++k){
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_st_topics;
+        arrToVar(length_st_topics, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_topics; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_topics-1]=0;
-      this->st_topics = (char *)(inbuffer + offset-1);
-      offset += length_st_topics;
+        }
+        inbuffer[offset+length_st_topics-1]=0;
+        this->st_topics = (char *)(inbuffer + offset-1);
+        offset += length_st_topics;
         memcpy( &(this->topics[i]), &(this->st_topics), sizeof(std::string));
       }
       return offset;
@@ -197,10 +197,10 @@ namespace rosgraph_msgs
       length += length_function;
       length += sizeof(this->line);
       length += sizeof(this->topics_length);
-      for( uint32_t i = 0; i < topics_length; i++){
-      uint32_t length_topicsi = this->topics[i].size();
-      length += 4;
-      length += length_topicsi;
+      for( uint32_t i = 0; i < topics_length; i++) {
+        uint32_t length_topicsi = this->topics[i].size();
+        length += 4;
+        length += length_topicsi;
       }
       return length;
     }
@@ -208,36 +208,68 @@ namespace rosgraph_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_level; ss_level << "\"level\": " << (int16_t)level <<", ";
+      string_echo += ",";
+      std::stringstream ss_level; ss_level << "\"level\":" << (int16_t)level <<",";
       string_echo += ss_level.str();
-      string_echo += "\"name\": \"";
-      string_echo += name;
-      string_echo += "\", ";
-      string_echo += "\"msg\": \"";
-      string_echo += msg;
-      string_echo += "\", ";
-      string_echo += "\"file\": \"";
-      string_echo += file;
-      string_echo += "\", ";
-      string_echo += "\"function\": \"";
-      string_echo += function;
-      string_echo += "\", ";
-      std::stringstream ss_line; ss_line << "\"line\": " << line <<", ";
-      string_echo += ss_line.str();
-      string_echo += "topics: [";
-      for( uint32_t i = 0; i < topics_length; i++){
-      if( i == (topics_length - 1)) {
-      string_echo += "\"topics[i]\": \"";
-      string_echo += topics[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"topics[i]\": \"";
-      string_echo += topics[i];
-      string_echo += "\", ";
+      std::size_t name_pos = name.find("\"");
+      while(name_pos != std::string::npos){
+        name.replace(name_pos, 1,"\\\"");
+        name_pos = name.find("\"", name_pos+2);
       }
+      string_echo += "\"name\":\"";
+      string_echo += name;
+      string_echo += "\",";
+      std::size_t msg_pos = msg.find("\"");
+      while(msg_pos != std::string::npos){
+        msg.replace(msg_pos, 1,"\\\"");
+        msg_pos = msg.find("\"", msg_pos+2);
+      }
+      string_echo += "\"msg\":\"";
+      string_echo += msg;
+      string_echo += "\",";
+      std::size_t file_pos = file.find("\"");
+      while(file_pos != std::string::npos){
+        file.replace(file_pos, 1,"\\\"");
+        file_pos = file.find("\"", file_pos+2);
+      }
+      string_echo += "\"file\":\"";
+      string_echo += file;
+      string_echo += "\",";
+      std::size_t function_pos = function.find("\"");
+      while(function_pos != std::string::npos){
+        function.replace(function_pos, 1,"\\\"");
+        function_pos = function.find("\"", function_pos+2);
+      }
+      string_echo += "\"function\":\"";
+      string_echo += function;
+      string_echo += "\",";
+      std::stringstream ss_line; ss_line << "\"line\":" << line <<",";
+      string_echo += ss_line.str();
+      string_echo += "topics:[";
+      for( uint32_t i = 0; i < topics_length; i++) {
+        if( i == (topics_length - 1)) {
+          std::stringstream ss_topicsi; ss_topicsi << "\"";
+          string_echo += ss_topicsi.str();
+          std::size_t topicsi_pos = topics[i].find("\"");
+          while(topicsi_pos != std::string::npos){
+            topics[i].replace(topicsi_pos, 1,"\\\"");
+            topicsi_pos = topics[i].find("\"", topicsi_pos+2);
+          }
+          string_echo += topics[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_topicsi; ss_topicsi << "\"";
+          string_echo += ss_topicsi.str();
+          std::size_t topicsi_pos = topics[i].find("\"");
+          while(topicsi_pos != std::string::npos){
+            topics[i].replace(topicsi_pos, 1,"\\\"");
+            topicsi_pos = topics[i].find("\"", topicsi_pos+2);
+          }
+          string_echo += topics[i];
+          string_echo += "\",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

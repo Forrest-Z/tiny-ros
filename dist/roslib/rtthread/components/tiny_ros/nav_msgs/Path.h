@@ -36,8 +36,8 @@ namespace nav_msgs
       *(outbuffer + offset + 2) = (this->poses_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->poses_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->poses_length);
-      for( uint32_t i = 0; i < poses_length; i++){
-      offset += this->poses[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < poses_length; i++) {
+        offset += this->poses[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -54,8 +54,8 @@ namespace nav_msgs
       if(poses_lengthT > poses_length)
         this->poses = (geometry_msgs::PoseStamped*)realloc(this->poses, poses_lengthT * sizeof(geometry_msgs::PoseStamped));
       poses_length = poses_lengthT;
-      for( uint32_t i = 0; i < poses_length; i++){
-      offset += this->st_poses.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < poses_length; i++) {
+        offset += this->st_poses.deserialize(inbuffer + offset);
         memcpy( &(this->poses[i]), &(this->st_poses), sizeof(geometry_msgs::PoseStamped));
       }
       return offset;
@@ -66,8 +66,8 @@ namespace nav_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->poses_length);
-      for( uint32_t i = 0; i < poses_length; i++){
-      length += this->poses[i].serializedLength();
+      for( uint32_t i = 0; i < poses_length; i++) {
+        length += this->poses[i].serializedLength();
       }
       return length;
     }

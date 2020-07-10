@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -126,7 +127,7 @@ func (self *LaserScan) Go_deserialize(buff []byte) (int) {
     length_ranges |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_ranges |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_ranges = make([]float32, length_ranges, length_ranges)
+    self.Go_ranges = make([]float32, length_ranges)
     for i := 0; i < length_ranges; i++ {
         bits_rangesi := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_ranges[i] = math.Float32frombits(bits_rangesi)
@@ -137,7 +138,7 @@ func (self *LaserScan) Go_deserialize(buff []byte) (int) {
     length_intensities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_intensities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_intensities = make([]float32, length_intensities, length_intensities)
+    self.Go_intensities = make([]float32, length_intensities)
     for i := 0; i < length_intensities; i++ {
         bits_intensitiesi := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_intensities[i] = math.Float32frombits(bits_intensitiesi)
@@ -169,7 +170,11 @@ func (self *LaserScan) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LaserScan) Go_echo() (string) { return "" }
+func (self *LaserScan) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LaserScan) Go_getType() (string) { return "sensor_msgs/LaserScan" }
 func (self *LaserScan) Go_getMD5() (string) { return "9387943977c16b7fa134689acd87f1a2" }
 func (self *LaserScan) Go_getID() (uint32) { return 0 }

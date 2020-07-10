@@ -43,7 +43,7 @@ public static class SetLinkStateRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETLINKSTATE; }
     public java.lang.String getMD5(){ return "09e18d697b151a98db1e31fb5e89444f"; }
     public long getID() { return this.__id__; }
@@ -115,7 +115,7 @@ public static class SetLinkStateResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETLINKSTATE; }
     public java.lang.String getMD5(){ return "daf8f1df20722a4f504ceb200701e404"; }
     public long getID() { return this.__id__; }

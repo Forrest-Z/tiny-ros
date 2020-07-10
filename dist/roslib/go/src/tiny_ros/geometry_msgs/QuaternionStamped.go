@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *QuaternionStamped) Go_serializedLength() (int) {
     return length
 }
 
-func (self *QuaternionStamped) Go_echo() (string) { return "" }
+func (self *QuaternionStamped) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *QuaternionStamped) Go_getType() (string) { return "geometry_msgs/QuaternionStamped" }
 func (self *QuaternionStamped) Go_getMD5() (string) { return "69e39922feb9ec6eaf93755f93fce2cf" }
 func (self *QuaternionStamped) Go_getID() (uint32) { return 0 }

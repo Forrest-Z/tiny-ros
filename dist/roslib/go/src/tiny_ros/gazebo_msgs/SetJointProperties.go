@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -71,7 +72,11 @@ func (self *SetJointPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetJointPropertiesRequest) Go_echo() (string) { return "" }
+func (self *SetJointPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetJointPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/SetJointProperties" }
 func (self *SetJointPropertiesRequest) Go_getMD5() (string) { return "e9063603bda4e7bdd2b5530ad7705661" }
 func (self *SetJointPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -157,7 +162,11 @@ func (self *SetJointPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetJointPropertiesResponse) Go_echo() (string) { return "" }
+func (self *SetJointPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetJointPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/SetJointProperties" }
 func (self *SetJointPropertiesResponse) Go_getMD5() (string) { return "7e8650b70fd2dfc24b249dddf8f45cee" }
 func (self *SetJointPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

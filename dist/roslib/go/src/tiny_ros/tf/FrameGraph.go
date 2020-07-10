@@ -1,6 +1,7 @@
 package tf
 
 import (
+    "encoding/json"
 )
 
 
@@ -44,7 +45,11 @@ func (self *FrameGraphRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *FrameGraphRequest) Go_echo() (string) { return "" }
+func (self *FrameGraphRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *FrameGraphRequest) Go_getType() (string) { return "tf/FrameGraph" }
 func (self *FrameGraphRequest) Go_getMD5() (string) { return "d66179e20d21cee31291f40363976e1d" }
 func (self *FrameGraphRequest) Go_getID() (uint32) { return self.__id__ }
@@ -114,7 +119,11 @@ func (self *FrameGraphResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *FrameGraphResponse) Go_echo() (string) { return "" }
+func (self *FrameGraphResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *FrameGraphResponse) Go_getType() (string) { return "tf/FrameGraph" }
 func (self *FrameGraphResponse) Go_getMD5() (string) { return "8528671f80a5c0815f9700a446efbc36" }
 func (self *FrameGraphResponse) Go_getID() (uint32) { return self.__id__ }

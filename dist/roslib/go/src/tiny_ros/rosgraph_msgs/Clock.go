@@ -1,22 +1,23 @@
 package rosgraph_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
 
 type Clock struct {
-    Go_clock *tinyros.Time `json:"clock"`
+    Go_clock *rostime.Time `json:"clock"`
 }
 
 func NewClock() (*Clock) {
     newClock := new(Clock)
-    newClock.Go_clock = tinyros.NewTime()
+    newClock.Go_clock = rostime.NewTime()
     return newClock
 }
 
 func (self *Clock) Go_initialize() {
-    self.Go_clock = tinyros.NewTime()
+    self.Go_clock = rostime.NewTime()
 }
 
 func (self *Clock) Go_serialize(buff []byte) (int) {
@@ -56,7 +57,11 @@ func (self *Clock) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Clock) Go_echo() (string) { return "" }
+func (self *Clock) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Clock) Go_getType() (string) { return "rosgraph_msgs/Clock" }
 func (self *Clock) Go_getMD5() (string) { return "d3bedbe03b904b8181e3fef4bbe0a73e" }
 func (self *Clock) Go_getID() (uint32) { return 0 }

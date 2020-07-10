@@ -1,21 +1,22 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
 )
 
 
 type Polygon struct {
-    Go_points []Point32 `json:"points"`
+    Go_points []*Point32 `json:"points"`
 }
 
 func NewPolygon() (*Polygon) {
     newPolygon := new(Polygon)
-    newPolygon.Go_points = []Point32{}
+    newPolygon.Go_points = []*Point32{}
     return newPolygon
 }
 
 func (self *Polygon) Go_initialize() {
-    self.Go_points = []Point32{}
+    self.Go_points = []*Point32{}
 }
 
 func (self *Polygon) Go_serialize(buff []byte) (int) {
@@ -39,7 +40,10 @@ func (self *Polygon) Go_deserialize(buff []byte) (int) {
     length_points |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_points |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_points = make([]Point32, length_points, length_points)
+    self.Go_points = make([]*Point32, length_points)
+    for i := 0; i < length_points; i++ {
+        self.Go_points[i] = NewPoint32()
+    }
     for i := 0; i < length_points; i++ {
         offset += self.Go_points[i].Go_deserialize(buff[offset:])
     }
@@ -56,7 +60,11 @@ func (self *Polygon) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Polygon) Go_echo() (string) { return "" }
+func (self *Polygon) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Polygon) Go_getType() (string) { return "geometry_msgs/Polygon" }
 func (self *Polygon) Go_getMD5() (string) { return "f94a78a947b7879954bd14397db4bc9d" }
 func (self *Polygon) Go_getID() (uint32) { return 0 }

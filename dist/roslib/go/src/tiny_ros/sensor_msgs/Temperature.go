@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -59,7 +60,11 @@ func (self *Temperature) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Temperature) Go_echo() (string) { return "" }
+func (self *Temperature) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Temperature) Go_getType() (string) { return "sensor_msgs/Temperature" }
 func (self *Temperature) Go_getMD5() (string) { return "898a0e5950c8e4073c0c3cf2d7e7bf26" }
 func (self *Temperature) Go_getID() (uint32) { return 0 }

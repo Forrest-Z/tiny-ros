@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
@@ -85,7 +86,11 @@ func (self *LinkState) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LinkState) Go_echo() (string) { return "" }
+func (self *LinkState) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LinkState) Go_getType() (string) { return "gazebo_msgs/LinkState" }
 func (self *LinkState) Go_getMD5() (string) { return "eb3584856a5c068877b12eba5fc9372d" }
 func (self *LinkState) Go_getID() (uint32) { return 0 }

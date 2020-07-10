@@ -52,7 +52,7 @@ namespace tf2_msgs
       arrToVar(length_error_string, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_error_string; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_error_string-1]=0;
       this->error_string = (char *)(inbuffer + offset-1);

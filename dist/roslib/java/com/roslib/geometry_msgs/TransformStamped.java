@@ -58,7 +58,7 @@ public class TransformStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/TransformStamped"; }
     public java.lang.String getMD5(){ return "e46d447d8e8afc726d6013a3ae4146dd"; }
     public long getID() { return 0; }

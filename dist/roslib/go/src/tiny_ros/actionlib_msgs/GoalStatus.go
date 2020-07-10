@@ -1,6 +1,7 @@
 package actionlib_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_PENDING() (uint8) { return  0    }
@@ -75,7 +76,11 @@ func (self *GoalStatus) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GoalStatus) Go_echo() (string) { return "" }
+func (self *GoalStatus) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GoalStatus) Go_getType() (string) { return "actionlib_msgs/GoalStatus" }
 func (self *GoalStatus) Go_getMD5() (string) { return "086be35ea957e692de83fc3477e4ef0b" }
 func (self *GoalStatus) Go_getID() (uint32) { return 0 }

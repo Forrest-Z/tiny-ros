@@ -107,7 +107,7 @@ namespace tf2_msgs
       arrToVar(length_target_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_target_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_target_frame-1]=0;
       this->target_frame = (char *)(inbuffer + offset-1);
@@ -116,7 +116,7 @@ namespace tf2_msgs
       arrToVar(length_source_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_source_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_source_frame-1]=0;
       this->source_frame = (char *)(inbuffer + offset-1);
@@ -155,7 +155,7 @@ namespace tf2_msgs
       arrToVar(length_fixed_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_fixed_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_fixed_frame-1]=0;
       this->fixed_frame = (char *)(inbuffer + offset-1);
@@ -196,28 +196,43 @@ namespace tf2_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"target_frame\": \"";
+      std::size_t target_frame_pos = target_frame.find("\"");
+      while(target_frame_pos != std::string::npos){
+        target_frame.replace(target_frame_pos, 1,"\\\"");
+        target_frame_pos = target_frame.find("\"", target_frame_pos+2);
+      }
+      string_echo += "\"target_frame\":\"";
       string_echo += target_frame;
-      string_echo += "\", ";
-      string_echo += "\"source_frame\": \"";
+      string_echo += "\",";
+      std::size_t source_frame_pos = source_frame.find("\"");
+      while(source_frame_pos != std::string::npos){
+        source_frame.replace(source_frame_pos, 1,"\\\"");
+        source_frame_pos = source_frame.find("\"", source_frame_pos+2);
+      }
+      string_echo += "\"source_frame\":\"";
       string_echo += source_frame;
-      string_echo += "\", ";
+      string_echo += "\",";
       std::stringstream ss_source_time;
-      ss_source_time << "\"source_time.sec\": " << source_time.sec;
-      ss_source_time << ", \"source_time.nsec\": " << source_time.nsec << ", ";
+      ss_source_time << "\"source_time\":{\"sec\":" << source_time.sec;
+      ss_source_time << ",\"nsec\":" << source_time.nsec << "},";
       string_echo += ss_source_time.str();
       std::stringstream ss_timeout;
-      ss_timeout << "\"timeout.sec\": " << timeout.sec;
-      ss_timeout << ", \"timeout.nsec\": " << timeout.nsec << ", ";
+      ss_timeout << "\"timeout\":{\"sec\":" << timeout.sec;
+      ss_timeout << ",\"nsec\":" << timeout.nsec << "},";
       string_echo += ss_timeout.str();
       std::stringstream ss_target_time;
-      ss_target_time << "\"target_time.sec\": " << target_time.sec;
-      ss_target_time << ", \"target_time.nsec\": " << target_time.nsec << ", ";
+      ss_target_time << "\"target_time\":{\"sec\":" << target_time.sec;
+      ss_target_time << ",\"nsec\":" << target_time.nsec << "},";
       string_echo += ss_target_time.str();
-      string_echo += "\"fixed_frame\": \"";
+      std::size_t fixed_frame_pos = fixed_frame.find("\"");
+      while(fixed_frame_pos != std::string::npos){
+        fixed_frame.replace(fixed_frame_pos, 1,"\\\"");
+        fixed_frame_pos = fixed_frame.find("\"", fixed_frame_pos+2);
+      }
+      string_echo += "\"fixed_frame\":\"";
       string_echo += fixed_frame;
-      string_echo += "\", ";
-      std::stringstream ss_advanced; ss_advanced << "\"advanced\": " << advanced <<"";
+      string_echo += "\",";
+      std::stringstream ss_advanced; ss_advanced << "\"advanced\":" << advanced <<"";
       string_echo += ss_advanced.str();
       string_echo += "}";
       return string_echo;

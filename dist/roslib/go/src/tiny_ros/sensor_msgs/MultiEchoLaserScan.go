@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -16,8 +17,8 @@ type MultiEchoLaserScan struct {
     Go_scan_time float32 `json:"scan_time"`
     Go_range_min float32 `json:"range_min"`
     Go_range_max float32 `json:"range_max"`
-    Go_ranges []LaserEcho `json:"ranges"`
-    Go_intensities []LaserEcho `json:"intensities"`
+    Go_ranges []*LaserEcho `json:"ranges"`
+    Go_intensities []*LaserEcho `json:"intensities"`
 }
 
 func NewMultiEchoLaserScan() (*MultiEchoLaserScan) {
@@ -30,8 +31,8 @@ func NewMultiEchoLaserScan() (*MultiEchoLaserScan) {
     newMultiEchoLaserScan.Go_scan_time = 0.0
     newMultiEchoLaserScan.Go_range_min = 0.0
     newMultiEchoLaserScan.Go_range_max = 0.0
-    newMultiEchoLaserScan.Go_ranges = []LaserEcho{}
-    newMultiEchoLaserScan.Go_intensities = []LaserEcho{}
+    newMultiEchoLaserScan.Go_ranges = []*LaserEcho{}
+    newMultiEchoLaserScan.Go_intensities = []*LaserEcho{}
     return newMultiEchoLaserScan
 }
 
@@ -44,8 +45,8 @@ func (self *MultiEchoLaserScan) Go_initialize() {
     self.Go_scan_time = 0.0
     self.Go_range_min = 0.0
     self.Go_range_max = 0.0
-    self.Go_ranges = []LaserEcho{}
-    self.Go_intensities = []LaserEcho{}
+    self.Go_ranges = []*LaserEcho{}
+    self.Go_intensities = []*LaserEcho{}
 }
 
 func (self *MultiEchoLaserScan) Go_serialize(buff []byte) (int) {
@@ -122,7 +123,10 @@ func (self *MultiEchoLaserScan) Go_deserialize(buff []byte) (int) {
     length_ranges |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_ranges |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_ranges = make([]LaserEcho, length_ranges, length_ranges)
+    self.Go_ranges = make([]*LaserEcho, length_ranges)
+    for i := 0; i < length_ranges; i++ {
+        self.Go_ranges[i] = NewLaserEcho()
+    }
     for i := 0; i < length_ranges; i++ {
         offset += self.Go_ranges[i].Go_deserialize(buff[offset:])
     }
@@ -131,7 +135,10 @@ func (self *MultiEchoLaserScan) Go_deserialize(buff []byte) (int) {
     length_intensities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_intensities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_intensities = make([]LaserEcho, length_intensities, length_intensities)
+    self.Go_intensities = make([]*LaserEcho, length_intensities)
+    for i := 0; i < length_intensities; i++ {
+        self.Go_intensities[i] = NewLaserEcho()
+    }
     for i := 0; i < length_intensities; i++ {
         offset += self.Go_intensities[i].Go_deserialize(buff[offset:])
     }
@@ -161,7 +168,11 @@ func (self *MultiEchoLaserScan) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MultiEchoLaserScan) Go_echo() (string) { return "" }
+func (self *MultiEchoLaserScan) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MultiEchoLaserScan) Go_getType() (string) { return "sensor_msgs/MultiEchoLaserScan" }
 func (self *MultiEchoLaserScan) Go_getMD5() (string) { return "92f3933b4fa486e3889b461437899bf5" }
 func (self *MultiEchoLaserScan) Go_getID() (uint32) { return 0 }

@@ -54,17 +54,17 @@ public static class SetModelConfigurationRequest implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_joint_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_joint_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_joint_names; i++){
-        int length_joint_namesi = this.joint_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_joint_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_joint_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_joint_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_joint_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_joint_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.joint_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_joint_namesi;
+        for (int i = 0; i < length_joint_names; i++) {
+            int length_joint_namesi = this.joint_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_joint_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_joint_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_joint_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_joint_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_joint_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.joint_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_joint_namesi;
         }
         int length_joint_positions = this.joint_positions != null ? this.joint_positions.length : 0;
         outbuffer[offset + 0] = (byte)((length_joint_positions >> (8 * 0)) & 0xFF);
@@ -72,17 +72,17 @@ public static class SetModelConfigurationRequest implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_joint_positions >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_joint_positions >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_joint_positions; i++){
-        long bits_joint_positionsi = Double.doubleToRawLongBits(this.joint_positions[i]);
-        outbuffer[offset + 0] = (byte)((bits_joint_positionsi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_joint_positionsi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_joint_positionsi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_joint_positionsi >> (8 * 3)) & 0xFF);
-        outbuffer[offset + 4] = (byte)((bits_joint_positionsi >> (8 * 4)) & 0xFF);
-        outbuffer[offset + 5] = (byte)((bits_joint_positionsi >> (8 * 5)) & 0xFF);
-        outbuffer[offset + 6] = (byte)((bits_joint_positionsi >> (8 * 6)) & 0xFF);
-        outbuffer[offset + 7] = (byte)((bits_joint_positionsi >> (8 * 7)) & 0xFF);
-        offset += 8;
+        for (int i = 0; i < length_joint_positions; i++) {
+            long bits_joint_positionsi = Double.doubleToRawLongBits(this.joint_positions[i]);
+            outbuffer[offset + 0] = (byte)((bits_joint_positionsi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_joint_positionsi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_joint_positionsi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_joint_positionsi >> (8 * 3)) & 0xFF);
+            outbuffer[offset + 4] = (byte)((bits_joint_positionsi >> (8 * 4)) & 0xFF);
+            outbuffer[offset + 5] = (byte)((bits_joint_positionsi >> (8 * 5)) & 0xFF);
+            outbuffer[offset + 6] = (byte)((bits_joint_positionsi >> (8 * 6)) & 0xFF);
+            outbuffer[offset + 7] = (byte)((bits_joint_positionsi >> (8 * 7)) & 0xFF);
+            offset += 8;
         }
         return offset;
     }
@@ -124,18 +124,18 @@ public static class SetModelConfigurationRequest implements com.roslib.ros.Msg {
         if(length_joint_names > 0) {
             this.joint_names = new java.lang.String[length_joint_names];
         }
-        for (int i = 0; i < length_joint_names; i++){
-        int length_joint_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_joint_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_joint_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_joint_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_joint_namesi = new byte[length_joint_namesi];
-        for(int k= 0; k< length_joint_namesi; k++){
-            bytes_joint_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.joint_names[i] = new java.lang.String(bytes_joint_namesi);
-        offset += length_joint_namesi;
+        for (int i = 0; i < length_joint_names; i++) {
+            int length_joint_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_joint_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_joint_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_joint_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_joint_namesi = new byte[length_joint_namesi];
+            for(int k= 0; k< length_joint_namesi; k++){
+                bytes_joint_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.joint_names[i] = new java.lang.String(bytes_joint_namesi);
+            offset += length_joint_namesi;
         }
         int length_joint_positions = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_joint_positions |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -145,18 +145,18 @@ public static class SetModelConfigurationRequest implements com.roslib.ros.Msg {
         if(length_joint_positions > 0) {
             this.joint_positions = new double[length_joint_positions];
         }
-        for (int i = 0; i < length_joint_positions; i++){
-        long bits_joint_positionsi = 0;
-        bits_joint_positionsi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
-        bits_joint_positionsi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
-        this.joint_positions[i] = Double.longBitsToDouble(bits_joint_positionsi);
-        offset += 8;
+        for (int i = 0; i < length_joint_positions; i++) {
+            long bits_joint_positionsi = 0;
+            bits_joint_positionsi |= (long)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 4] & 0xFF) << (8 * 4));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 5] & 0xFF) << (8 * 5));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 6] & 0xFF) << (8 * 6));
+            bits_joint_positionsi |= (long)((inbuffer[offset + 7] & 0xFF) << (8 * 7));
+            this.joint_positions[i] = Double.longBitsToDouble(bits_joint_positionsi);
+            offset += 8;
         }
         return offset;
     }
@@ -172,19 +172,19 @@ public static class SetModelConfigurationRequest implements com.roslib.ros.Msg {
         length += 4;
         int length_joint_names = this.joint_names != null ? this.joint_names.length : 0;
         for (int i = 0; i < length_joint_names; i++) {
-        int length_joint_namesi = this.joint_names[i].getBytes().length;
-        length += 4;
-        length += length_joint_namesi;
+            int length_joint_namesi = this.joint_names[i].getBytes().length;
+            length += 4;
+            length += length_joint_namesi;
         }
         length += 4;
         int length_joint_positions = this.joint_positions != null ? this.joint_positions.length : 0;
         for (int i = 0; i < length_joint_positions; i++) {
-        length += 8;
+            length += 8;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETMODELCONFIGURATION; }
     public java.lang.String getMD5(){ return "74db6184ae83468b540d4c02d244ada7"; }
     public long getID() { return this.__id__; }
@@ -256,7 +256,7 @@ public static class SetModelConfigurationResponse implements com.roslib.ros.Msg 
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETMODELCONFIGURATION; }
     public java.lang.String getMD5(){ return "6f12aefa315c8b37040d5d47471e39ee"; }
     public long getID() { return this.__id__; }

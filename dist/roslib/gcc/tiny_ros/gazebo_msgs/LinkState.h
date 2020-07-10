@@ -58,7 +58,7 @@ namespace gazebo_msgs
       arrToVar(length_link_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_link_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_link_name-1]=0;
       this->link_name = (char *)(inbuffer + offset-1);
@@ -69,7 +69,7 @@ namespace gazebo_msgs
       arrToVar(length_reference_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_reference_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_reference_frame-1]=0;
       this->reference_frame = (char *)(inbuffer + offset-1);
@@ -94,16 +94,26 @@ namespace gazebo_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"link_name\": \"";
+      std::size_t link_name_pos = link_name.find("\"");
+      while(link_name_pos != std::string::npos){
+        link_name.replace(link_name_pos, 1,"\\\"");
+        link_name_pos = link_name.find("\"", link_name_pos+2);
+      }
+      string_echo += "\"link_name\":\"";
       string_echo += link_name;
-      string_echo += "\", ";
-      string_echo += "\"pose\": {";
+      string_echo += "\",";
+      string_echo += "\"pose\":";
       string_echo += this->pose.echo();
-      string_echo += "}, ";
-      string_echo += "\"twist\": {";
+      string_echo += ",";
+      string_echo += "\"twist\":";
       string_echo += this->twist.echo();
-      string_echo += "}, ";
-      string_echo += "\"reference_frame\": \"";
+      string_echo += ",";
+      std::size_t reference_frame_pos = reference_frame.find("\"");
+      while(reference_frame_pos != std::string::npos){
+        reference_frame.replace(reference_frame_pos, 1,"\\\"");
+        reference_frame_pos = reference_frame.find("\"", reference_frame_pos+2);
+      }
+      string_echo += "\"reference_frame\":\"";
       string_echo += reference_frame;
       string_echo += "\"";
       string_echo += "}";

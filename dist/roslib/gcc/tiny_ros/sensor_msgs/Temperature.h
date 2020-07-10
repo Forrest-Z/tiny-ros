@@ -113,12 +113,12 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_temperature; ss_temperature << "\"temperature\": " << temperature <<", ";
+      string_echo += ",";
+      std::stringstream ss_temperature; ss_temperature << "\"temperature\":" << temperature <<",";
       string_echo += ss_temperature.str();
-      std::stringstream ss_variance; ss_variance << "\"variance\": " << variance <<"";
+      std::stringstream ss_variance; ss_variance << "\"variance\":" << variance <<"";
       string_echo += ss_variance.str();
       string_echo += "}";
       return string_echo;

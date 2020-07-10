@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -150,7 +151,11 @@ func (self *ODEPhysics) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ODEPhysics) Go_echo() (string) { return "" }
+func (self *ODEPhysics) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ODEPhysics) Go_getType() (string) { return "gazebo_msgs/ODEPhysics" }
 func (self *ODEPhysics) Go_getMD5() (string) { return "67a077e58362b50f63dc189c25d01418" }
 func (self *ODEPhysics) Go_getID() (uint32) { return 0 }

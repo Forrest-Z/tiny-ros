@@ -102,7 +102,7 @@ namespace tinyros_msgs
       arrToVar(length_topic_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_topic_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_topic_name-1]=0;
       this->topic_name = (char *)(inbuffer + offset-1);
@@ -111,7 +111,7 @@ namespace tinyros_msgs
       arrToVar(length_message_type, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message_type; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message_type-1]=0;
       this->message_type = (char *)(inbuffer + offset-1);
@@ -120,7 +120,7 @@ namespace tinyros_msgs
       arrToVar(length_md5sum, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_md5sum; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_md5sum-1]=0;
       this->md5sum = (char *)(inbuffer + offset-1);
@@ -168,20 +168,35 @@ namespace tinyros_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_topic_id; ss_topic_id << "\"topic_id\": " << topic_id <<", ";
+      std::stringstream ss_topic_id; ss_topic_id << "\"topic_id\":" << topic_id <<",";
       string_echo += ss_topic_id.str();
-      string_echo += "\"topic_name\": \"";
+      std::size_t topic_name_pos = topic_name.find("\"");
+      while(topic_name_pos != std::string::npos){
+        topic_name.replace(topic_name_pos, 1,"\\\"");
+        topic_name_pos = topic_name.find("\"", topic_name_pos+2);
+      }
+      string_echo += "\"topic_name\":\"";
       string_echo += topic_name;
-      string_echo += "\", ";
-      string_echo += "\"message_type\": \"";
+      string_echo += "\",";
+      std::size_t message_type_pos = message_type.find("\"");
+      while(message_type_pos != std::string::npos){
+        message_type.replace(message_type_pos, 1,"\\\"");
+        message_type_pos = message_type.find("\"", message_type_pos+2);
+      }
+      string_echo += "\"message_type\":\"";
       string_echo += message_type;
-      string_echo += "\", ";
-      string_echo += "\"md5sum\": \"";
+      string_echo += "\",";
+      std::size_t md5sum_pos = md5sum.find("\"");
+      while(md5sum_pos != std::string::npos){
+        md5sum.replace(md5sum_pos, 1,"\\\"");
+        md5sum_pos = md5sum.find("\"", md5sum_pos+2);
+      }
+      string_echo += "\"md5sum\":\"";
       string_echo += md5sum;
-      string_echo += "\", ";
-      std::stringstream ss_buffer_size; ss_buffer_size << "\"buffer_size\": " << buffer_size <<", ";
+      string_echo += "\",";
+      std::stringstream ss_buffer_size; ss_buffer_size << "\"buffer_size\":" << buffer_size <<",";
       string_echo += ss_buffer_size.str();
-      std::stringstream ss_negotiated; ss_negotiated << "\"negotiated\": " << negotiated <<"";
+      std::stringstream ss_negotiated; ss_negotiated << "\"negotiated\":" << negotiated <<"";
       string_echo += ss_negotiated.str();
       string_echo += "}";
       return string_echo;

@@ -56,7 +56,7 @@ static const char TEST[] = "tinyros_hello/Test";
       arrToVar(length_input, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_input; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_input-1]=0;
       this->input = (char *)(inbuffer + offset-1);
@@ -76,7 +76,12 @@ static const char TEST[] = "tinyros_hello/Test";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"input\": \"";
+      std::size_t input_pos = input.find("\"");
+      while(input_pos != std::string::npos){
+        input.replace(input_pos, 1,"\\\"");
+        input_pos = input.find("\"", input_pos+2);
+      }
+      string_echo += "\"input\":\"";
       string_echo += input;
       string_echo += "\"";
       string_echo += "}";
@@ -134,7 +139,7 @@ static const char TEST[] = "tinyros_hello/Test";
       arrToVar(length_output, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_output; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_output-1]=0;
       this->output = (char *)(inbuffer + offset-1);
@@ -154,7 +159,12 @@ static const char TEST[] = "tinyros_hello/Test";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"output\": \"";
+      std::size_t output_pos = output.find("\"");
+      while(output_pos != std::string::npos){
+        output.replace(output_pos, 1,"\\\"");
+        output_pos = output.find("\"", output_pos+2);
+      }
+      string_echo += "\"output\":\"";
       string_echo += output;
       string_echo += "\"";
       string_echo += "}";

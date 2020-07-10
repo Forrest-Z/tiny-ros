@@ -133,34 +133,34 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->ranges_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->ranges_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_rangesi;
-      u_rangesi.real = this->ranges[i];
-      *(outbuffer + offset + 0) = (u_rangesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_rangesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_rangesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_rangesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->ranges[i]);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_rangesi;
+        u_rangesi.real = this->ranges[i];
+        *(outbuffer + offset + 0) = (u_rangesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_rangesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_rangesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_rangesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->ranges[i]);
       }
       *(outbuffer + offset + 0) = (this->intensities_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->intensities_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->intensities_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->intensities_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_intensitiesi;
-      u_intensitiesi.real = this->intensities[i];
-      *(outbuffer + offset + 0) = (u_intensitiesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_intensitiesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_intensitiesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_intensitiesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->intensities[i]);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_intensitiesi;
+        u_intensitiesi.real = this->intensities[i];
+        *(outbuffer + offset + 0) = (u_intensitiesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_intensitiesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_intensitiesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_intensitiesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->intensities[i]);
       }
       return offset;
     }
@@ -254,18 +254,18 @@ namespace sensor_msgs
       if(ranges_lengthT > ranges_length)
         this->ranges = (float*)realloc(this->ranges, ranges_lengthT * sizeof(float));
       ranges_length = ranges_lengthT;
-      for( uint32_t i = 0; i < ranges_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_ranges;
-      u_st_ranges.base = 0;
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_ranges = u_st_ranges.real;
-      offset += sizeof(this->st_ranges);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_ranges;
+        u_st_ranges.base = 0;
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_ranges = u_st_ranges.real;
+        offset += sizeof(this->st_ranges);
         memcpy( &(this->ranges[i]), &(this->st_ranges), sizeof(float));
       }
       uint32_t intensities_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -276,18 +276,18 @@ namespace sensor_msgs
       if(intensities_lengthT > intensities_length)
         this->intensities = (float*)realloc(this->intensities, intensities_lengthT * sizeof(float));
       intensities_length = intensities_lengthT;
-      for( uint32_t i = 0; i < intensities_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_intensities;
-      u_st_intensities.base = 0;
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_intensities = u_st_intensities.real;
-      offset += sizeof(this->st_intensities);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_intensities;
+        u_st_intensities.base = 0;
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_intensities = u_st_intensities.real;
+        offset += sizeof(this->st_intensities);
         memcpy( &(this->intensities[i]), &(this->st_intensities), sizeof(float));
       }
       return offset;
@@ -305,12 +305,12 @@ namespace sensor_msgs
       length += sizeof(this->range_min);
       length += sizeof(this->range_max);
       length += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      length += sizeof(this->ranges[i]);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        length += sizeof(this->ranges[i]);
       }
       length += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      length += sizeof(this->intensities[i]);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        length += sizeof(this->intensities[i]);
       }
       return length;
     }
@@ -318,43 +318,43 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_angle_min; ss_angle_min << "\"angle_min\": " << angle_min <<", ";
+      string_echo += ",";
+      std::stringstream ss_angle_min; ss_angle_min << "\"angle_min\":" << angle_min <<",";
       string_echo += ss_angle_min.str();
-      std::stringstream ss_angle_max; ss_angle_max << "\"angle_max\": " << angle_max <<", ";
+      std::stringstream ss_angle_max; ss_angle_max << "\"angle_max\":" << angle_max <<",";
       string_echo += ss_angle_max.str();
-      std::stringstream ss_angle_increment; ss_angle_increment << "\"angle_increment\": " << angle_increment <<", ";
+      std::stringstream ss_angle_increment; ss_angle_increment << "\"angle_increment\":" << angle_increment <<",";
       string_echo += ss_angle_increment.str();
-      std::stringstream ss_time_increment; ss_time_increment << "\"time_increment\": " << time_increment <<", ";
+      std::stringstream ss_time_increment; ss_time_increment << "\"time_increment\":" << time_increment <<",";
       string_echo += ss_time_increment.str();
-      std::stringstream ss_scan_time; ss_scan_time << "\"scan_time\": " << scan_time <<", ";
+      std::stringstream ss_scan_time; ss_scan_time << "\"scan_time\":" << scan_time <<",";
       string_echo += ss_scan_time.str();
-      std::stringstream ss_range_min; ss_range_min << "\"range_min\": " << range_min <<", ";
+      std::stringstream ss_range_min; ss_range_min << "\"range_min\":" << range_min <<",";
       string_echo += ss_range_min.str();
-      std::stringstream ss_range_max; ss_range_max << "\"range_max\": " << range_max <<", ";
+      std::stringstream ss_range_max; ss_range_max << "\"range_max\":" << range_max <<",";
       string_echo += ss_range_max.str();
-      string_echo += "ranges: [";
-      for( uint32_t i = 0; i < ranges_length; i++){
-      if( i == (ranges_length - 1)) {
-      std::stringstream ss_rangesi; ss_rangesi << "{\"ranges" << i <<"\": " << ranges[i] <<"}";
-      string_echo += ss_rangesi.str();
-      } else {
-      std::stringstream ss_rangesi; ss_rangesi << "{\"ranges" << i <<"\": " << ranges[i] <<"}, ";
-      string_echo += ss_rangesi.str();
+      string_echo += "ranges:[";
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        if( i == (ranges_length - 1)) {
+          std::stringstream ss_rangesi; ss_rangesi << ranges[i] <<"";
+          string_echo += ss_rangesi.str();
+        } else {
+          std::stringstream ss_rangesi; ss_rangesi << ranges[i] <<",";
+          string_echo += ss_rangesi.str();
+        }
       }
-      }
-      string_echo += "], ";
-      string_echo += "intensities: [";
-      for( uint32_t i = 0; i < intensities_length; i++){
-      if( i == (intensities_length - 1)) {
-      std::stringstream ss_intensitiesi; ss_intensitiesi << "{\"intensities" << i <<"\": " << intensities[i] <<"}";
-      string_echo += ss_intensitiesi.str();
-      } else {
-      std::stringstream ss_intensitiesi; ss_intensitiesi << "{\"intensities" << i <<"\": " << intensities[i] <<"}, ";
-      string_echo += ss_intensitiesi.str();
-      }
+      string_echo += "],";
+      string_echo += "intensities:[";
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        if( i == (intensities_length - 1)) {
+          std::stringstream ss_intensitiesi; ss_intensitiesi << intensities[i] <<"";
+          string_echo += ss_intensitiesi.str();
+        } else {
+          std::stringstream ss_intensitiesi; ss_intensitiesi << intensities[i] <<",";
+          string_echo += ss_intensitiesi.str();
+        }
       }
       string_echo += "]";
       string_echo += "}";

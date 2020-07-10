@@ -32,7 +32,7 @@ public class LookupTransformResult implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tf2_msgs/LookupTransformResult"; }
     public java.lang.String getMD5(){ return "7be4fc6719f512bc94491db1ccda6aee"; }
     public long getID() { return 0; }

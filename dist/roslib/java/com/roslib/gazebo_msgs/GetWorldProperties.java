@@ -38,7 +38,7 @@ public static class GetWorldPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETWORLDPROPERTIES; }
     public java.lang.String getMD5(){ return "3aa5de7106eec5dae41ad1c9ae681123"; }
     public long getID() { return this.__id__; }
@@ -85,17 +85,17 @@ public static class GetWorldPropertiesResponse implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_model_names >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_model_names >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_model_names; i++){
-        int length_model_namesi = this.model_names[i].getBytes().length;
-        outbuffer[offset + 0] = (byte)((length_model_namesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((length_model_namesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((length_model_namesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((length_model_namesi >> (8 * 3)) & 0xFF);
-        offset += 4;
-        for (int k=0; k<length_model_namesi; k++) {
-            outbuffer[offset + k] = (byte)((this.model_names[i].getBytes())[k] & 0xFF);
-        }
-        offset += length_model_namesi;
+        for (int i = 0; i < length_model_names; i++) {
+            int length_model_namesi = this.model_names[i].getBytes().length;
+            outbuffer[offset + 0] = (byte)((length_model_namesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((length_model_namesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((length_model_namesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((length_model_namesi >> (8 * 3)) & 0xFF);
+            offset += 4;
+            for (int k=0; k<length_model_namesi; k++) {
+                outbuffer[offset + k] = (byte)((this.model_names[i].getBytes())[k] & 0xFF);
+            }
+            offset += length_model_namesi;
         }
         outbuffer[offset] = (byte)((rendering_enabled ? 0x01 : 0x00) & 0xFF);
         offset += 1;
@@ -140,18 +140,18 @@ public static class GetWorldPropertiesResponse implements com.roslib.ros.Msg {
         if(length_model_names > 0) {
             this.model_names = new java.lang.String[length_model_names];
         }
-        for (int i = 0; i < length_model_names; i++){
-        int length_model_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        length_model_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        length_model_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        length_model_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
-        byte[] bytes_model_namesi = new byte[length_model_namesi];
-        for(int k= 0; k< length_model_namesi; k++){
-            bytes_model_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
-        }
-        this.model_names[i] = new java.lang.String(bytes_model_namesi);
-        offset += length_model_namesi;
+        for (int i = 0; i < length_model_names; i++) {
+            int length_model_namesi = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            length_model_namesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            length_model_namesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            length_model_namesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
+            byte[] bytes_model_namesi = new byte[length_model_namesi];
+            for(int k= 0; k< length_model_namesi; k++){
+                bytes_model_namesi[k] = (byte)(inbuffer[k + offset] & 0xFF);
+            }
+            this.model_names[i] = new java.lang.String(bytes_model_namesi);
+            offset += length_model_namesi;
         }
         this.rendering_enabled = (boolean)((inbuffer[offset] & 0xFF) != 0 ? true : false);
         offset += 1;
@@ -177,9 +177,9 @@ public static class GetWorldPropertiesResponse implements com.roslib.ros.Msg {
         length += 4;
         int length_model_names = this.model_names != null ? this.model_names.length : 0;
         for (int i = 0; i < length_model_names; i++) {
-        int length_model_namesi = this.model_names[i].getBytes().length;
-        length += 4;
-        length += length_model_namesi;
+            int length_model_namesi = this.model_names[i].getBytes().length;
+            length += 4;
+            length += length_model_namesi;
         }
         length += 1;
         length += 1;
@@ -189,7 +189,7 @@ public static class GetWorldPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETWORLDPROPERTIES; }
     public java.lang.String getMD5(){ return "fe944c1c210919291ad14bc43b6c10cf"; }
     public long getID() { return this.__id__; }

@@ -20,9 +20,9 @@ public class ByteMultiArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_data >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_data >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_data; i++){
-        outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
-        offset += 1;
+        for (int i = 0; i < length_data; i++) {
+            outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
+            offset += 1;
         }
         return offset;
     }
@@ -38,9 +38,9 @@ public class ByteMultiArray implements com.roslib.ros.Msg {
         if(length_data > 0) {
             this.data = new byte[length_data];
         }
-        for (int i = 0; i < length_data; i++){
-        this.data[i]   = (byte)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        offset += 1;
+        for (int i = 0; i < length_data; i++) {
+            this.data[i]   = (byte)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            offset += 1;
         }
         return offset;
     }
@@ -51,12 +51,12 @@ public class ByteMultiArray implements com.roslib.ros.Msg {
         length += 4;
         int length_data = this.data != null ? this.data.length : 0;
         for (int i = 0; i < length_data; i++) {
-        length += 1;
+            length += 1;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/ByteMultiArray"; }
     public java.lang.String getMD5(){ return "87f5f1a1253d2ff75093b9a005c3a9a4"; }
     public long getID() { return 0; }

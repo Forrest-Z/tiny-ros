@@ -63,60 +63,60 @@ namespace smach_msgs
       *(outbuffer + offset + 2) = (this->children_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->children_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->children_length);
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_childreni = this->children[i].size();
-      varToArr(outbuffer + offset, length_childreni);
-      offset += 4;
-      memcpy(outbuffer + offset, this->children[i].c_str(), length_childreni);
-      offset += length_childreni;
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_childreni = this->children[i].size();
+        varToArr(outbuffer + offset, length_childreni);
+        offset += 4;
+        memcpy(outbuffer + offset, this->children[i].c_str(), length_childreni);
+        offset += length_childreni;
       }
       *(outbuffer + offset + 0) = (this->internal_outcomes_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->internal_outcomes_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->internal_outcomes_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->internal_outcomes_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->internal_outcomes_length);
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
-      varToArr(outbuffer + offset, length_internal_outcomesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->internal_outcomes[i].c_str(), length_internal_outcomesi);
-      offset += length_internal_outcomesi;
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
+        varToArr(outbuffer + offset, length_internal_outcomesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->internal_outcomes[i].c_str(), length_internal_outcomesi);
+        offset += length_internal_outcomesi;
       }
       *(outbuffer + offset + 0) = (this->outcomes_from_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->outcomes_from_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->outcomes_from_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->outcomes_from_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->outcomes_from_length);
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
-      varToArr(outbuffer + offset, length_outcomes_fromi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->outcomes_from[i].c_str(), length_outcomes_fromi);
-      offset += length_outcomes_fromi;
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
+        varToArr(outbuffer + offset, length_outcomes_fromi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->outcomes_from[i].c_str(), length_outcomes_fromi);
+        offset += length_outcomes_fromi;
       }
       *(outbuffer + offset + 0) = (this->outcomes_to_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->outcomes_to_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->outcomes_to_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->outcomes_to_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->outcomes_to_length);
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_outcomes_toi = this->outcomes_to[i].size();
-      varToArr(outbuffer + offset, length_outcomes_toi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->outcomes_to[i].c_str(), length_outcomes_toi);
-      offset += length_outcomes_toi;
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_outcomes_toi = this->outcomes_to[i].size();
+        varToArr(outbuffer + offset, length_outcomes_toi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->outcomes_to[i].c_str(), length_outcomes_toi);
+        offset += length_outcomes_toi;
       }
       *(outbuffer + offset + 0) = (this->container_outcomes_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->container_outcomes_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->container_outcomes_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->container_outcomes_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->container_outcomes_length);
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_container_outcomesi = this->container_outcomes[i].size();
-      varToArr(outbuffer + offset, length_container_outcomesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->container_outcomes[i].c_str(), length_container_outcomesi);
-      offset += length_container_outcomesi;
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_container_outcomesi = this->container_outcomes[i].size();
+        varToArr(outbuffer + offset, length_container_outcomesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->container_outcomes[i].c_str(), length_container_outcomesi);
+        offset += length_container_outcomesi;
       }
       return offset;
     }
@@ -129,7 +129,7 @@ namespace smach_msgs
       arrToVar(length_path, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_path; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_path-1]=0;
       this->path = (char *)(inbuffer + offset-1);
@@ -142,16 +142,16 @@ namespace smach_msgs
       if(children_lengthT > children_length)
         this->children = (tinyros::string*)realloc(this->children, children_lengthT * sizeof(tinyros::string));
       children_length = children_lengthT;
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_st_children;
-      arrToVar(length_st_children, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_children; ++k){
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_st_children;
+        arrToVar(length_st_children, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_children; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_children-1]=0;
-      this->st_children = (char *)(inbuffer + offset-1);
-      offset += length_st_children;
+        }
+        inbuffer[offset+length_st_children-1]=0;
+        this->st_children = (char *)(inbuffer + offset-1);
+        offset += length_st_children;
         memcpy( &(this->children[i]), &(this->st_children), sizeof(tinyros::string));
       }
       uint32_t internal_outcomes_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -162,16 +162,16 @@ namespace smach_msgs
       if(internal_outcomes_lengthT > internal_outcomes_length)
         this->internal_outcomes = (tinyros::string*)realloc(this->internal_outcomes, internal_outcomes_lengthT * sizeof(tinyros::string));
       internal_outcomes_length = internal_outcomes_lengthT;
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_st_internal_outcomes;
-      arrToVar(length_st_internal_outcomes, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_internal_outcomes; ++k){
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_st_internal_outcomes;
+        arrToVar(length_st_internal_outcomes, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_internal_outcomes; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_internal_outcomes-1]=0;
-      this->st_internal_outcomes = (char *)(inbuffer + offset-1);
-      offset += length_st_internal_outcomes;
+        }
+        inbuffer[offset+length_st_internal_outcomes-1]=0;
+        this->st_internal_outcomes = (char *)(inbuffer + offset-1);
+        offset += length_st_internal_outcomes;
         memcpy( &(this->internal_outcomes[i]), &(this->st_internal_outcomes), sizeof(tinyros::string));
       }
       uint32_t outcomes_from_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -182,16 +182,16 @@ namespace smach_msgs
       if(outcomes_from_lengthT > outcomes_from_length)
         this->outcomes_from = (tinyros::string*)realloc(this->outcomes_from, outcomes_from_lengthT * sizeof(tinyros::string));
       outcomes_from_length = outcomes_from_lengthT;
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_st_outcomes_from;
-      arrToVar(length_st_outcomes_from, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_outcomes_from; ++k){
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_st_outcomes_from;
+        arrToVar(length_st_outcomes_from, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_outcomes_from; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_outcomes_from-1]=0;
-      this->st_outcomes_from = (char *)(inbuffer + offset-1);
-      offset += length_st_outcomes_from;
+        }
+        inbuffer[offset+length_st_outcomes_from-1]=0;
+        this->st_outcomes_from = (char *)(inbuffer + offset-1);
+        offset += length_st_outcomes_from;
         memcpy( &(this->outcomes_from[i]), &(this->st_outcomes_from), sizeof(tinyros::string));
       }
       uint32_t outcomes_to_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -202,16 +202,16 @@ namespace smach_msgs
       if(outcomes_to_lengthT > outcomes_to_length)
         this->outcomes_to = (tinyros::string*)realloc(this->outcomes_to, outcomes_to_lengthT * sizeof(tinyros::string));
       outcomes_to_length = outcomes_to_lengthT;
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_st_outcomes_to;
-      arrToVar(length_st_outcomes_to, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_outcomes_to; ++k){
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_st_outcomes_to;
+        arrToVar(length_st_outcomes_to, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_outcomes_to; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_outcomes_to-1]=0;
-      this->st_outcomes_to = (char *)(inbuffer + offset-1);
-      offset += length_st_outcomes_to;
+        }
+        inbuffer[offset+length_st_outcomes_to-1]=0;
+        this->st_outcomes_to = (char *)(inbuffer + offset-1);
+        offset += length_st_outcomes_to;
         memcpy( &(this->outcomes_to[i]), &(this->st_outcomes_to), sizeof(tinyros::string));
       }
       uint32_t container_outcomes_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -222,16 +222,16 @@ namespace smach_msgs
       if(container_outcomes_lengthT > container_outcomes_length)
         this->container_outcomes = (tinyros::string*)realloc(this->container_outcomes, container_outcomes_lengthT * sizeof(tinyros::string));
       container_outcomes_length = container_outcomes_lengthT;
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_st_container_outcomes;
-      arrToVar(length_st_container_outcomes, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_container_outcomes; ++k){
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_st_container_outcomes;
+        arrToVar(length_st_container_outcomes, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_container_outcomes; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_container_outcomes-1]=0;
-      this->st_container_outcomes = (char *)(inbuffer + offset-1);
-      offset += length_st_container_outcomes;
+        }
+        inbuffer[offset+length_st_container_outcomes-1]=0;
+        this->st_container_outcomes = (char *)(inbuffer + offset-1);
+        offset += length_st_container_outcomes;
         memcpy( &(this->container_outcomes[i]), &(this->st_container_outcomes), sizeof(tinyros::string));
       }
       return offset;
@@ -245,34 +245,34 @@ namespace smach_msgs
       length += 4;
       length += length_path;
       length += sizeof(this->children_length);
-      for( uint32_t i = 0; i < children_length; i++){
-      uint32_t length_childreni = this->children[i].size();
-      length += 4;
-      length += length_childreni;
+      for( uint32_t i = 0; i < children_length; i++) {
+        uint32_t length_childreni = this->children[i].size();
+        length += 4;
+        length += length_childreni;
       }
       length += sizeof(this->internal_outcomes_length);
-      for( uint32_t i = 0; i < internal_outcomes_length; i++){
-      uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
-      length += 4;
-      length += length_internal_outcomesi;
+      for( uint32_t i = 0; i < internal_outcomes_length; i++) {
+        uint32_t length_internal_outcomesi = this->internal_outcomes[i].size();
+        length += 4;
+        length += length_internal_outcomesi;
       }
       length += sizeof(this->outcomes_from_length);
-      for( uint32_t i = 0; i < outcomes_from_length; i++){
-      uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
-      length += 4;
-      length += length_outcomes_fromi;
+      for( uint32_t i = 0; i < outcomes_from_length; i++) {
+        uint32_t length_outcomes_fromi = this->outcomes_from[i].size();
+        length += 4;
+        length += length_outcomes_fromi;
       }
       length += sizeof(this->outcomes_to_length);
-      for( uint32_t i = 0; i < outcomes_to_length; i++){
-      uint32_t length_outcomes_toi = this->outcomes_to[i].size();
-      length += 4;
-      length += length_outcomes_toi;
+      for( uint32_t i = 0; i < outcomes_to_length; i++) {
+        uint32_t length_outcomes_toi = this->outcomes_to[i].size();
+        length += 4;
+        length += length_outcomes_toi;
       }
       length += sizeof(this->container_outcomes_length);
-      for( uint32_t i = 0; i < container_outcomes_length; i++){
-      uint32_t length_container_outcomesi = this->container_outcomes[i].size();
-      length += 4;
-      length += length_container_outcomesi;
+      for( uint32_t i = 0; i < container_outcomes_length; i++) {
+        uint32_t length_container_outcomesi = this->container_outcomes[i].size();
+        length += 4;
+        length += length_container_outcomesi;
       }
       return length;
     }

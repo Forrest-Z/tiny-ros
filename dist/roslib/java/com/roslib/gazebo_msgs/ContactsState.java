@@ -20,8 +20,8 @@ public class ContactsState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_states >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_states >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_states; i++){
-        offset = this.states[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_states; i++) {
+            offset = this.states[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -37,8 +37,8 @@ public class ContactsState implements com.roslib.ros.Msg {
         if(length_states > 0) {
             this.states = new com.roslib.gazebo_msgs.ContactState[length_states];
         }
-        for (int i = 0; i < length_states; i++){
-        offset = this.states[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_states; i++) {
+            offset = this.states[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -49,12 +49,12 @@ public class ContactsState implements com.roslib.ros.Msg {
         length += 4;
         int length_states = this.states != null ? this.states.length : 0;
         for (int i = 0; i < length_states; i++) {
-        length += this.states[i].serializedLength();
+            length += this.states[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "gazebo_msgs/ContactsState"; }
     public java.lang.String getMD5(){ return "d19cd2a086cbd43da4252eb8d5cc64f5"; }
     public long getID() { return 0; }

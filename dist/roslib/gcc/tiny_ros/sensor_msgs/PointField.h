@@ -69,7 +69,7 @@ namespace sensor_msgs
       arrToVar(length_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_name-1]=0;
       this->name = (char *)(inbuffer + offset-1);
@@ -104,14 +104,19 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"name\": \"";
+      std::size_t name_pos = name.find("\"");
+      while(name_pos != std::string::npos){
+        name.replace(name_pos, 1,"\\\"");
+        name_pos = name.find("\"", name_pos+2);
+      }
+      string_echo += "\"name\":\"";
       string_echo += name;
-      string_echo += "\", ";
-      std::stringstream ss_offset; ss_offset << "\"offset\": " << offset <<", ";
+      string_echo += "\",";
+      std::stringstream ss_offset; ss_offset << "\"offset\":" << offset <<",";
       string_echo += ss_offset.str();
-      std::stringstream ss_datatype; ss_datatype << "\"datatype\": " << (uint16_t)datatype <<", ";
+      std::stringstream ss_datatype; ss_datatype << "\"datatype\":" << (uint16_t)datatype <<",";
       string_echo += ss_datatype.str();
-      std::stringstream ss_count; ss_count << "\"count\": " << count <<"";
+      std::stringstream ss_count; ss_count << "\"count\":" << count <<"";
       string_echo += ss_count.str();
       string_echo += "}";
       return string_echo;

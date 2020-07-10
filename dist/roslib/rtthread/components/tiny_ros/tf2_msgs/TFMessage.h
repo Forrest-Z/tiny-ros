@@ -31,8 +31,8 @@ namespace tf2_msgs
       *(outbuffer + offset + 2) = (this->transforms_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->transforms_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->transforms[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->transforms[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -48,8 +48,8 @@ namespace tf2_msgs
       if(transforms_lengthT > transforms_length)
         this->transforms = (geometry_msgs::TransformStamped*)realloc(this->transforms, transforms_lengthT * sizeof(geometry_msgs::TransformStamped));
       transforms_length = transforms_lengthT;
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->st_transforms.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->st_transforms.deserialize(inbuffer + offset);
         memcpy( &(this->transforms[i]), &(this->st_transforms), sizeof(geometry_msgs::TransformStamped));
       }
       return offset;
@@ -59,8 +59,8 @@ namespace tf2_msgs
     {
       int length = 0;
       length += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      length += this->transforms[i].serializedLength();
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        length += this->transforms[i].serializedLength();
       }
       return length;
     }

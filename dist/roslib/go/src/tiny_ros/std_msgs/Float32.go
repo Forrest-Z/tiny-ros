@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -42,7 +43,11 @@ func (self *Float32) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Float32) Go_echo() (string) { return "" }
+func (self *Float32) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Float32) Go_getType() (string) { return "std_msgs/Float32" }
 func (self *Float32) Go_getMD5() (string) { return "2aff5d2343e8e80ceea1362fc770035c" }
 func (self *Float32) Go_getID() (uint32) { return 0 }

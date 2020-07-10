@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
@@ -85,7 +86,11 @@ func (self *ModelState) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ModelState) Go_echo() (string) { return "" }
+func (self *ModelState) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ModelState) Go_getType() (string) { return "gazebo_msgs/ModelState" }
 func (self *ModelState) Go_getMD5() (string) { return "dee4d802363b4d6bd1ed61e20c2c4635" }
 func (self *ModelState) Go_getID() (uint32) { return 0 }

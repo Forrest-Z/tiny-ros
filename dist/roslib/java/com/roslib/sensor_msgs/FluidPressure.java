@@ -75,7 +75,7 @@ public class FluidPressure implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/FluidPressure"; }
     public java.lang.String getMD5(){ return "0fdea137019d78ebf8c2cb91c31a458a"; }
     public long getID() { return 0; }

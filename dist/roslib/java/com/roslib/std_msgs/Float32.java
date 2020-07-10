@@ -38,7 +38,7 @@ public class Float32 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Float32"; }
     public java.lang.String getMD5(){ return "2aff5d2343e8e80ceea1362fc770035c"; }
     public long getID() { return 0; }

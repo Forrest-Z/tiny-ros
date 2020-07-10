@@ -1,6 +1,7 @@
 package rosgraph_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
@@ -9,17 +10,17 @@ type TopicStatistics struct {
     Go_topic string `json:"topic"`
     Go_node_pub string `json:"node_pub"`
     Go_node_sub string `json:"node_sub"`
-    Go_window_start *tinyros.Time `json:"window_start"`
-    Go_window_stop *tinyros.Time `json:"window_stop"`
+    Go_window_start *rostime.Time `json:"window_start"`
+    Go_window_stop *rostime.Time `json:"window_stop"`
     Go_delivered_msgs int32 `json:"delivered_msgs"`
     Go_dropped_msgs int32 `json:"dropped_msgs"`
     Go_traffic int32 `json:"traffic"`
-    Go_period_mean *tinyros.Duration `json:"period_mean"`
-    Go_period_stddev *tinyros.Duration `json:"period_stddev"`
-    Go_period_max *tinyros.Duration `json:"period_max"`
-    Go_stamp_age_mean *tinyros.Duration `json:"stamp_age_mean"`
-    Go_stamp_age_stddev *tinyros.Duration `json:"stamp_age_stddev"`
-    Go_stamp_age_max *tinyros.Duration `json:"stamp_age_max"`
+    Go_period_mean *rostime.Duration `json:"period_mean"`
+    Go_period_stddev *rostime.Duration `json:"period_stddev"`
+    Go_period_max *rostime.Duration `json:"period_max"`
+    Go_stamp_age_mean *rostime.Duration `json:"stamp_age_mean"`
+    Go_stamp_age_stddev *rostime.Duration `json:"stamp_age_stddev"`
+    Go_stamp_age_max *rostime.Duration `json:"stamp_age_max"`
 }
 
 func NewTopicStatistics() (*TopicStatistics) {
@@ -27,17 +28,17 @@ func NewTopicStatistics() (*TopicStatistics) {
     newTopicStatistics.Go_topic = ""
     newTopicStatistics.Go_node_pub = ""
     newTopicStatistics.Go_node_sub = ""
-    newTopicStatistics.Go_window_start = tinyros.NewTime()
-    newTopicStatistics.Go_window_stop = tinyros.NewTime()
+    newTopicStatistics.Go_window_start = rostime.NewTime()
+    newTopicStatistics.Go_window_stop = rostime.NewTime()
     newTopicStatistics.Go_delivered_msgs = 0
     newTopicStatistics.Go_dropped_msgs = 0
     newTopicStatistics.Go_traffic = 0
-    newTopicStatistics.Go_period_mean = tinyros.NewDuration()
-    newTopicStatistics.Go_period_stddev = tinyros.NewDuration()
-    newTopicStatistics.Go_period_max = tinyros.NewDuration()
-    newTopicStatistics.Go_stamp_age_mean = tinyros.NewDuration()
-    newTopicStatistics.Go_stamp_age_stddev = tinyros.NewDuration()
-    newTopicStatistics.Go_stamp_age_max = tinyros.NewDuration()
+    newTopicStatistics.Go_period_mean = rostime.NewDuration()
+    newTopicStatistics.Go_period_stddev = rostime.NewDuration()
+    newTopicStatistics.Go_period_max = rostime.NewDuration()
+    newTopicStatistics.Go_stamp_age_mean = rostime.NewDuration()
+    newTopicStatistics.Go_stamp_age_stddev = rostime.NewDuration()
+    newTopicStatistics.Go_stamp_age_max = rostime.NewDuration()
     return newTopicStatistics
 }
 
@@ -45,17 +46,17 @@ func (self *TopicStatistics) Go_initialize() {
     self.Go_topic = ""
     self.Go_node_pub = ""
     self.Go_node_sub = ""
-    self.Go_window_start = tinyros.NewTime()
-    self.Go_window_stop = tinyros.NewTime()
+    self.Go_window_start = rostime.NewTime()
+    self.Go_window_stop = rostime.NewTime()
     self.Go_delivered_msgs = 0
     self.Go_dropped_msgs = 0
     self.Go_traffic = 0
-    self.Go_period_mean = tinyros.NewDuration()
-    self.Go_period_stddev = tinyros.NewDuration()
-    self.Go_period_max = tinyros.NewDuration()
-    self.Go_stamp_age_mean = tinyros.NewDuration()
-    self.Go_stamp_age_stddev = tinyros.NewDuration()
-    self.Go_stamp_age_max = tinyros.NewDuration()
+    self.Go_period_mean = rostime.NewDuration()
+    self.Go_period_stddev = rostime.NewDuration()
+    self.Go_period_max = rostime.NewDuration()
+    self.Go_stamp_age_mean = rostime.NewDuration()
+    self.Go_stamp_age_stddev = rostime.NewDuration()
+    self.Go_stamp_age_max = rostime.NewDuration()
 }
 
 func (self *TopicStatistics) Go_serialize(buff []byte) (int) {
@@ -336,7 +337,11 @@ func (self *TopicStatistics) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TopicStatistics) Go_echo() (string) { return "" }
+func (self *TopicStatistics) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TopicStatistics) Go_getType() (string) { return "rosgraph_msgs/TopicStatistics" }
 func (self *TopicStatistics) Go_getMD5() (string) { return "8b30d3f22284a3bee7679b7194bd38a3" }
 func (self *TopicStatistics) Go_getID() (uint32) { return 0 }

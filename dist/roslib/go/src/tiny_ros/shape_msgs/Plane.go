@@ -1,6 +1,7 @@
 package shape_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -48,7 +49,11 @@ func (self *Plane) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Plane) Go_echo() (string) { return "" }
+func (self *Plane) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Plane) Go_getType() (string) { return "shape_msgs/Plane" }
 func (self *Plane) Go_getMD5() (string) { return "770421286b7c90effe8aac9f1c37eac0" }
 func (self *Plane) Go_getID() (uint32) { return 0 }

@@ -70,7 +70,7 @@ public class Point32 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Point32"; }
     public java.lang.String getMD5(){ return "b17f2230f465fce816e3773d7d59a841"; }
     public long getID() { return 0; }

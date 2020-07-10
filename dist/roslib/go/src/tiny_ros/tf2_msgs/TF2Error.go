@@ -1,6 +1,7 @@
 package tf2_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_NO_ERROR() (uint8) { return  0 }
@@ -66,7 +67,11 @@ func (self *TF2Error) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TF2Error) Go_echo() (string) { return "" }
+func (self *TF2Error) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TF2Error) Go_getType() (string) { return "tf2_msgs/TF2Error" }
 func (self *TF2Error) Go_getMD5() (string) { return "ed32adf5a372962d977aea0e5630d1d6" }
 func (self *TF2Error) Go_getID() (uint32) { return 0 }

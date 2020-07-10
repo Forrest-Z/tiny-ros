@@ -46,7 +46,7 @@ public class NavSatStatus implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/NavSatStatus"; }
     public java.lang.String getMD5(){ return "85ed59cf80532c1c15a2cf735d06279b"; }
     public long getID() { return 0; }

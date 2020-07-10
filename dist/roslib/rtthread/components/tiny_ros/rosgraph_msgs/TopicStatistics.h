@@ -199,7 +199,7 @@ namespace rosgraph_msgs
       arrToVar(length_topic, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_topic; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_topic-1]=0;
       this->topic = (char *)(inbuffer + offset-1);
@@ -208,7 +208,7 @@ namespace rosgraph_msgs
       arrToVar(length_node_pub, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_node_pub; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_node_pub-1]=0;
       this->node_pub = (char *)(inbuffer + offset-1);
@@ -217,7 +217,7 @@ namespace rosgraph_msgs
       arrToVar(length_node_sub, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_node_sub; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_node_sub-1]=0;
       this->node_sub = (char *)(inbuffer + offset-1);

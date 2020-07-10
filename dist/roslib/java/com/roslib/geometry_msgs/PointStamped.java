@@ -32,7 +32,7 @@ public class PointStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/PointStamped"; }
     public java.lang.String getMD5(){ return "d34e83bdbef7bf4b617a6293aab8390e"; }
     public long getID() { return 0; }

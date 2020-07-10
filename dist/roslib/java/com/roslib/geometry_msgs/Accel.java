@@ -32,7 +32,7 @@ public class Accel implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Accel"; }
     public java.lang.String getMD5(){ return "580cbad5f3bd2e9f0ca71e14b7ab1b0f"; }
     public long getID() { return 0; }

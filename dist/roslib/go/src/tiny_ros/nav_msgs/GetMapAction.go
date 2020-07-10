@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -48,7 +49,11 @@ func (self *GetMapAction) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GetMapAction) Go_echo() (string) { return "" }
+func (self *GetMapAction) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GetMapAction) Go_getType() (string) { return "nav_msgs/GetMapAction" }
 func (self *GetMapAction) Go_getMD5() (string) { return "10a4e277d7b8e53bfc3df54d98b3edb1" }
 func (self *GetMapAction) Go_getID() (uint32) { return 0 }

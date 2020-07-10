@@ -56,7 +56,7 @@ static const char JOINTREQUEST[] = "gazebo_msgs/JointRequest";
       arrToVar(length_joint_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_joint_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_joint_name-1]=0;
       this->joint_name = (char *)(inbuffer + offset-1);
@@ -76,7 +76,12 @@ static const char JOINTREQUEST[] = "gazebo_msgs/JointRequest";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"joint_name\": \"";
+      std::size_t joint_name_pos = joint_name.find("\"");
+      while(joint_name_pos != std::string::npos){
+        joint_name.replace(joint_name_pos, 1,"\\\"");
+        joint_name_pos = joint_name.find("\"", joint_name_pos+2);
+      }
+      string_echo += "\"joint_name\":\"";
       string_echo += joint_name;
       string_echo += "\"";
       string_echo += "}";

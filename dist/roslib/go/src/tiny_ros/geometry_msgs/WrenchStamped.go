@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *WrenchStamped) Go_serializedLength() (int) {
     return length
 }
 
-func (self *WrenchStamped) Go_echo() (string) { return "" }
+func (self *WrenchStamped) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *WrenchStamped) Go_getType() (string) { return "geometry_msgs/WrenchStamped" }
 func (self *WrenchStamped) Go_getMD5() (string) { return "cf53874aa63609de4155ec8e9cf2c540" }
 func (self *WrenchStamped) Go_getID() (uint32) { return 0 }

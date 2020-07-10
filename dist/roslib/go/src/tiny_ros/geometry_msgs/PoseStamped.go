@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *PoseStamped) Go_serializedLength() (int) {
     return length
 }
 
-func (self *PoseStamped) Go_echo() (string) { return "" }
+func (self *PoseStamped) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *PoseStamped) Go_getType() (string) { return "geometry_msgs/PoseStamped" }
 func (self *PoseStamped) Go_getMD5() (string) { return "c7084e6b27c3d6e62efd9bf6d2f6540f" }
 func (self *PoseStamped) Go_getID() (uint32) { return 0 }

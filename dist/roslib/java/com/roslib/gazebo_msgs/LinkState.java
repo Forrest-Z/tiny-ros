@@ -84,7 +84,7 @@ public class LinkState implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "gazebo_msgs/LinkState"; }
     public java.lang.String getMD5(){ return "eb3584856a5c068877b12eba5fc9372d"; }
     public long getID() { return 0; }

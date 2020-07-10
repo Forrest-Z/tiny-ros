@@ -31,7 +31,7 @@ public class Int16 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Int16"; }
     public java.lang.String getMD5(){ return "156735359f7b6d347f113a1090134af3"; }
     public long getID() { return 0; }

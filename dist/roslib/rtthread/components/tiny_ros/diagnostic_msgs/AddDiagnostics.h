@@ -54,7 +54,7 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
       arrToVar(length_load_namespace, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_load_namespace; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_load_namespace-1]=0;
       this->load_namespace = (char *)(inbuffer + offset-1);
@@ -140,7 +140,7 @@ static const char ADDDIAGNOSTICS[] = "diagnostic_msgs/AddDiagnostics";
       arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message-1]=0;
       this->message = (char *)(inbuffer + offset-1);

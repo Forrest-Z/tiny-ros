@@ -94,7 +94,7 @@ public class Pose2D implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Pose2D"; }
     public java.lang.String getMD5(){ return "509f362ff66c4d3df21020fa7c01f8c6"; }
     public long getID() { return 0; }

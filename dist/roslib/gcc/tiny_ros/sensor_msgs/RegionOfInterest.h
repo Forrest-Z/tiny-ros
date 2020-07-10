@@ -115,15 +115,15 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_x_offset; ss_x_offset << "\"x_offset\": " << x_offset <<", ";
+      std::stringstream ss_x_offset; ss_x_offset << "\"x_offset\":" << x_offset <<",";
       string_echo += ss_x_offset.str();
-      std::stringstream ss_y_offset; ss_y_offset << "\"y_offset\": " << y_offset <<", ";
+      std::stringstream ss_y_offset; ss_y_offset << "\"y_offset\":" << y_offset <<",";
       string_echo += ss_y_offset.str();
-      std::stringstream ss_height; ss_height << "\"height\": " << height <<", ";
+      std::stringstream ss_height; ss_height << "\"height\":" << height <<",";
       string_echo += ss_height.str();
-      std::stringstream ss_width; ss_width << "\"width\": " << width <<", ";
+      std::stringstream ss_width; ss_width << "\"width\":" << width <<",";
       string_echo += ss_width.str();
-      std::stringstream ss_do_rectify; ss_do_rectify << "\"do_rectify\": " << do_rectify <<"";
+      std::stringstream ss_do_rectify; ss_do_rectify << "\"do_rectify\":" << do_rectify <<"";
       string_echo += ss_do_rectify.str();
       string_echo += "}";
       return string_echo;

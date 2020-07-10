@@ -38,7 +38,7 @@ public static class EmptyRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return EMPTY; }
     public java.lang.String getMD5(){ return "6a9da448a5a2256d30e815f50a75bc57"; }
     public long getID() { return this.__id__; }
@@ -77,7 +77,7 @@ public static class EmptyResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return EMPTY; }
     public java.lang.String getMD5(){ return "1b9fedd0c70a6b7846f790471f388d15"; }
     public long getID() { return this.__id__; }

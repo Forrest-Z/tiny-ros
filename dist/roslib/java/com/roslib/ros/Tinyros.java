@@ -39,6 +39,10 @@ public class Tinyros {
         }
     }
 
+    public static void init() {
+        Tinyros.nh();
+    }
+
     public static void init(java.lang.String ipaddr) {
         Tinyros.ipaddr_ = ipaddr;
         Tinyros.nh();

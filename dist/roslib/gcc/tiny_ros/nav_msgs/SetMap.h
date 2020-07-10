@@ -70,12 +70,12 @@ static const char SETMAP[] = "nav_msgs/SetMap";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"map\": {";
+      string_echo += "\"map\":";
       string_echo += this->map.echo();
-      string_echo += "}, ";
-      string_echo += "\"initial_pose\": {";
+      string_echo += ",";
+      string_echo += "\"initial_pose\":";
       string_echo += this->initial_pose.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }
@@ -150,7 +150,7 @@ static const char SETMAP[] = "nav_msgs/SetMap";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<"";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<"";
       string_echo += ss_success.str();
       string_echo += "}";
       return string_echo;

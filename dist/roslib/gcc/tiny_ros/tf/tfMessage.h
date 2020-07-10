@@ -33,8 +33,8 @@ namespace tf
       *(outbuffer + offset + 2) = (this->transforms_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->transforms_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->transforms[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->transforms[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -50,8 +50,8 @@ namespace tf
       if(transforms_lengthT > transforms_length)
         this->transforms = (geometry_msgs::TransformStamped*)realloc(this->transforms, transforms_lengthT * sizeof(geometry_msgs::TransformStamped));
       transforms_length = transforms_lengthT;
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->st_transforms.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->st_transforms.deserialize(inbuffer + offset);
         memcpy( &(this->transforms[i]), &(this->st_transforms), sizeof(geometry_msgs::TransformStamped));
       }
       return offset;
@@ -61,8 +61,8 @@ namespace tf
     {
       int length = 0;
       length += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      length += this->transforms[i].serializedLength();
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        length += this->transforms[i].serializedLength();
       }
       return length;
     }
@@ -70,19 +70,15 @@ namespace tf
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "transforms: [";
-      for( uint32_t i = 0; i < transforms_length; i++){
-      if( i == (transforms_length - 1)) {
-      std::stringstream ss_transformsi; ss_transformsi << "{\"transforms" << i <<"\": {";
-      string_echo += ss_transformsi.str();
-      string_echo += this->transforms[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_transformsi; ss_transformsi << "{\"transforms" << i <<"\": {";
-      string_echo += ss_transformsi.str();
-      string_echo += this->transforms[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "transforms:[";
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        if( i == (transforms_length - 1)) {
+          string_echo += this->transforms[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->transforms[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

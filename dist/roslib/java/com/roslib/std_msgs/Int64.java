@@ -43,7 +43,7 @@ public class Int64 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Int64"; }
     public java.lang.String getMD5(){ return "3dd57e1dfe8b2ebcc4764deb44bda243"; }
     public long getID() { return 0; }

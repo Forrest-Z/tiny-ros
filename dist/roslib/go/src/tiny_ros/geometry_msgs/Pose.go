@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -42,7 +43,11 @@ func (self *Pose) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Pose) Go_echo() (string) { return "" }
+func (self *Pose) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Pose) Go_getType() (string) { return "geometry_msgs/Pose" }
 func (self *Pose) Go_getMD5() (string) { return "0b42fb88be8cac0efa6e446e13befcae" }
 func (self *Pose) Go_getID() (uint32) { return 0 }

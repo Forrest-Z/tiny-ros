@@ -100,7 +100,7 @@ public class Range implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/Range"; }
     public java.lang.String getMD5(){ return "54d647e3a481f5b87ce39d1b97e84d53"; }
     public long getID() { return 0; }

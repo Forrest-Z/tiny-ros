@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -50,7 +51,11 @@ func (self *SetLinkStateRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetLinkStateRequest) Go_echo() (string) { return "" }
+func (self *SetLinkStateRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetLinkStateRequest) Go_getType() (string) { return "gazebo_msgs/SetLinkState" }
 func (self *SetLinkStateRequest) Go_getMD5() (string) { return "09e18d697b151a98db1e31fb5e89444f" }
 func (self *SetLinkStateRequest) Go_getID() (uint32) { return self.__id__ }
@@ -136,7 +141,11 @@ func (self *SetLinkStateResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetLinkStateResponse) Go_echo() (string) { return "" }
+func (self *SetLinkStateResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetLinkStateResponse) Go_getType() (string) { return "gazebo_msgs/SetLinkState" }
 func (self *SetLinkStateResponse) Go_getMD5() (string) { return "daf8f1df20722a4f504ceb200701e404" }
 func (self *SetLinkStateResponse) Go_getID() (uint32) { return self.__id__ }

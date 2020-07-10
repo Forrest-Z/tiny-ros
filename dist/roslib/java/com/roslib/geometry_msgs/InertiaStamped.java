@@ -32,7 +32,7 @@ public class InertiaStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/InertiaStamped"; }
     public java.lang.String getMD5(){ return "2b3c9b263c59f65da44508cd041d18a0"; }
     public long getID() { return 0; }

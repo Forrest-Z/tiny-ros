@@ -92,21 +92,21 @@ namespace sensor_msgs
       *(outbuffer + offset + 6) = (u_altitude.base >> (8 * 6)) & 0xFF;
       *(outbuffer + offset + 7) = (u_altitude.base >> (8 * 7)) & 0xFF;
       offset += sizeof(this->altitude);
-      for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_position_covariancei;
-      u_position_covariancei.real = this->position_covariance[i];
-      *(outbuffer + offset + 0) = (u_position_covariancei.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_position_covariancei.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_position_covariancei.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_position_covariancei.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_position_covariancei.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_position_covariancei.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_position_covariancei.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_position_covariancei.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->position_covariance[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        union {
+          double real;
+          uint64_t base;
+        } u_position_covariancei;
+        u_position_covariancei.real = this->position_covariance[i];
+        *(outbuffer + offset + 0) = (u_position_covariancei.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_position_covariancei.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_position_covariancei.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_position_covariancei.base >> (8 * 3)) & 0xFF;
+        *(outbuffer + offset + 4) = (u_position_covariancei.base >> (8 * 4)) & 0xFF;
+        *(outbuffer + offset + 5) = (u_position_covariancei.base >> (8 * 5)) & 0xFF;
+        *(outbuffer + offset + 6) = (u_position_covariancei.base >> (8 * 6)) & 0xFF;
+        *(outbuffer + offset + 7) = (u_position_covariancei.base >> (8 * 7)) & 0xFF;
+        offset += sizeof(this->position_covariance[i]);
       }
       *(outbuffer + offset + 0) = (this->position_covariance_type >> (8 * 0)) & 0xFF;
       offset += sizeof(this->position_covariance_type);
@@ -164,21 +164,21 @@ namespace sensor_msgs
       this->altitude = u_altitude.real;
       offset += sizeof(this->altitude);
       for( uint32_t i = 0; i < 9; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_position_covariancei;
-      u_position_covariancei.base = 0;
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->position_covariance[i] = u_position_covariancei.real;
-      offset += sizeof(this->position_covariance[i]);
+        union {
+          double real;
+          uint64_t base;
+        } u_position_covariancei;
+        u_position_covariancei.base = 0;
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
+        u_position_covariancei.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
+        this->position_covariance[i] = u_position_covariancei.real;
+        offset += sizeof(this->position_covariance[i]);
       }
       this->position_covariance_type =  ((uint8_t) (*(inbuffer + offset)));
       offset += sizeof(this->position_covariance_type);
@@ -193,8 +193,8 @@ namespace sensor_msgs
       length += sizeof(this->latitude);
       length += sizeof(this->longitude);
       length += sizeof(this->altitude);
-      for( uint32_t i = 0; i < 9; i++){
-      length += sizeof(this->position_covariance[i]);
+      for( uint32_t i = 0; i < 9; i++) {
+        length += sizeof(this->position_covariance[i]);
       }
       length += sizeof(this->position_covariance_type);
       return length;
@@ -203,30 +203,30 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"status\": {";
+      string_echo += ",";
+      string_echo += "\"status\":";
       string_echo += this->status.echo();
-      string_echo += "}, ";
-      std::stringstream ss_latitude; ss_latitude << "\"latitude\": " << latitude <<", ";
+      string_echo += ",";
+      std::stringstream ss_latitude; ss_latitude << "\"latitude\":" << latitude <<",";
       string_echo += ss_latitude.str();
-      std::stringstream ss_longitude; ss_longitude << "\"longitude\": " << longitude <<", ";
+      std::stringstream ss_longitude; ss_longitude << "\"longitude\":" << longitude <<",";
       string_echo += ss_longitude.str();
-      std::stringstream ss_altitude; ss_altitude << "\"altitude\": " << altitude <<", ";
+      std::stringstream ss_altitude; ss_altitude << "\"altitude\":" << altitude <<",";
       string_echo += ss_altitude.str();
-      string_echo += "position_covariance: [";
-      for( uint32_t i = 0; i < 9; i++){
-      if( i == (9 - 1)) {
-      std::stringstream ss_position_covariancei; ss_position_covariancei << "{\"position_covariance" << i <<"\": " << position_covariance[i] <<"}";
-      string_echo += ss_position_covariancei.str();
-      } else {
-      std::stringstream ss_position_covariancei; ss_position_covariancei << "{\"position_covariance" << i <<"\": " << position_covariance[i] <<"}, ";
-      string_echo += ss_position_covariancei.str();
+      string_echo += "position_covariance:[";
+      for( uint32_t i = 0; i < 9; i++) {
+        if( i == (9 - 1)) {
+          std::stringstream ss_position_covariancei; ss_position_covariancei << position_covariance[i] <<"";
+          string_echo += ss_position_covariancei.str();
+        } else {
+          std::stringstream ss_position_covariancei; ss_position_covariancei << position_covariance[i] <<",";
+          string_echo += ss_position_covariancei.str();
+        }
       }
-      }
-      string_echo += "], ";
-      std::stringstream ss_position_covariance_type; ss_position_covariance_type << "\"position_covariance_type\": " << (uint16_t)position_covariance_type <<"";
+      string_echo += "],";
+      std::stringstream ss_position_covariance_type; ss_position_covariance_type << "\"position_covariance_type\":" << (uint16_t)position_covariance_type <<"";
       string_echo += ss_position_covariance_type.str();
       string_echo += "}";
       return string_echo;

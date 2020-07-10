@@ -32,7 +32,7 @@ public class PoseWithCovarianceStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/PoseWithCovarianceStamped"; }
     public java.lang.String getMD5(){ return "14ff1431078f35103bf1b202333b4704"; }
     public long getID() { return 0; }

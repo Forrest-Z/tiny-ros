@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/tinyros/time"
 )
@@ -8,21 +9,21 @@ import (
 
 type TimeReference struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_time_ref *tinyros.Time `json:"time_ref"`
+    Go_time_ref *rostime.Time `json:"time_ref"`
     Go_source string `json:"source"`
 }
 
 func NewTimeReference() (*TimeReference) {
     newTimeReference := new(TimeReference)
     newTimeReference.Go_header = std_msgs.NewHeader()
-    newTimeReference.Go_time_ref = tinyros.NewTime()
+    newTimeReference.Go_time_ref = rostime.NewTime()
     newTimeReference.Go_source = ""
     return newTimeReference
 }
 
 func (self *TimeReference) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_time_ref = tinyros.NewTime()
+    self.Go_time_ref = rostime.NewTime()
     self.Go_source = ""
 }
 
@@ -84,7 +85,11 @@ func (self *TimeReference) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TimeReference) Go_echo() (string) { return "" }
+func (self *TimeReference) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TimeReference) Go_getType() (string) { return "sensor_msgs/TimeReference" }
 func (self *TimeReference) Go_getMD5() (string) { return "8e1576e01de57cd0d55758112f0e84ec" }
 func (self *TimeReference) Go_getID() (uint32) { return 0 }

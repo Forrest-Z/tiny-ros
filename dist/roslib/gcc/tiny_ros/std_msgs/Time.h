@@ -67,8 +67,8 @@ namespace std_msgs
     {
       std::string string_echo = "{";
       std::stringstream ss_data;
-      ss_data << "\"data.sec\": " << data.sec;
-      ss_data << ", \"data.nsec\": " << data.nsec << "";
+      ss_data << "\"data\":{\"sec\":" << data.sec;
+      ss_data << ",\"nsec\":" << data.nsec << "}";
       string_echo += ss_data.str();
       string_echo += "}";
       return string_echo;

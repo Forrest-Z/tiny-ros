@@ -136,16 +136,16 @@ static const char SETPHYSICSPROPERTIES[] = "gazebo_msgs/SetPhysicsProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_time_step; ss_time_step << "\"time_step\": " << time_step <<", ";
+      std::stringstream ss_time_step; ss_time_step << "\"time_step\":" << time_step <<",";
       string_echo += ss_time_step.str();
-      std::stringstream ss_max_update_rate; ss_max_update_rate << "\"max_update_rate\": " << max_update_rate <<", ";
+      std::stringstream ss_max_update_rate; ss_max_update_rate << "\"max_update_rate\":" << max_update_rate <<",";
       string_echo += ss_max_update_rate.str();
-      string_echo += "\"gravity\": {";
+      string_echo += "\"gravity\":";
       string_echo += this->gravity.echo();
-      string_echo += "}, ";
-      string_echo += "\"ode_config\": {";
+      string_echo += ",";
+      string_echo += "\"ode_config\":";
       string_echo += this->ode_config.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }
@@ -219,7 +219,7 @@ static const char SETPHYSICSPROPERTIES[] = "gazebo_msgs/SetPhysicsProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -240,9 +240,14 @@ static const char SETPHYSICSPROPERTIES[] = "gazebo_msgs/SetPhysicsProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

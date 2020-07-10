@@ -20,12 +20,12 @@ public class Int32MultiArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_data >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_data >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_data; i++){
-        outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((this.data[i] >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((this.data[i] >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((this.data[i] >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_data; i++) {
+            outbuffer[offset + 0] = (byte)((this.data[i] >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((this.data[i] >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((this.data[i] >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((this.data[i] >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         return offset;
     }
@@ -41,12 +41,12 @@ public class Int32MultiArray implements com.roslib.ros.Msg {
         if(length_data > 0) {
             this.data = new int[length_data];
         }
-        for (int i = 0; i < length_data; i++){
-        this.data[i]   = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        this.data[i] |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        this.data[i] |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        this.data[i] |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        offset += 4;
+        for (int i = 0; i < length_data; i++) {
+            this.data[i]   = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            this.data[i] |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            this.data[i] |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            this.data[i] |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            offset += 4;
         }
         return offset;
     }
@@ -57,12 +57,12 @@ public class Int32MultiArray implements com.roslib.ros.Msg {
         length += 4;
         int length_data = this.data != null ? this.data.length : 0;
         for (int i = 0; i < length_data; i++) {
-        length += 4;
+            length += 4;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Int32MultiArray"; }
     public java.lang.String getMD5(){ return "d09b4e71ff2be4c9c957c4e4d889034d"; }
     public long getID() { return 0; }

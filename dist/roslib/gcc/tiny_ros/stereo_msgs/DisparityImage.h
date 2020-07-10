@@ -186,24 +186,24 @@ namespace stereo_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"image\": {";
+      string_echo += ",";
+      string_echo += "\"image\":";
       string_echo += this->image.echo();
-      string_echo += "}, ";
-      std::stringstream ss_f; ss_f << "\"f\": " << f <<", ";
+      string_echo += ",";
+      std::stringstream ss_f; ss_f << "\"f\":" << f <<",";
       string_echo += ss_f.str();
-      std::stringstream ss_T; ss_T << "\"T\": " << T <<", ";
+      std::stringstream ss_T; ss_T << "\"T\":" << T <<",";
       string_echo += ss_T.str();
-      string_echo += "\"valid_window\": {";
+      string_echo += "\"valid_window\":";
       string_echo += this->valid_window.echo();
-      string_echo += "}, ";
-      std::stringstream ss_min_disparity; ss_min_disparity << "\"min_disparity\": " << min_disparity <<", ";
+      string_echo += ",";
+      std::stringstream ss_min_disparity; ss_min_disparity << "\"min_disparity\":" << min_disparity <<",";
       string_echo += ss_min_disparity.str();
-      std::stringstream ss_max_disparity; ss_max_disparity << "\"max_disparity\": " << max_disparity <<", ";
+      std::stringstream ss_max_disparity; ss_max_disparity << "\"max_disparity\":" << max_disparity <<",";
       string_echo += ss_max_disparity.str();
-      std::stringstream ss_delta_d; ss_delta_d << "\"delta_d\": " << delta_d <<"";
+      std::stringstream ss_delta_d; ss_delta_d << "\"delta_d\":" << delta_d <<"";
       string_echo += ss_delta_d.str();
       string_echo += "}";
       return string_echo;

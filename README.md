@@ -25,10 +25,10 @@ make clean清除项目，通过make重新编译安装。编译完成后目标文
 
 ## 支持平台
 
-Tinyros分布式操作系统提供由Java、C++11、Python和RTThread实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
+Tinyros分布式操作系统提供由C/C++、Java、Python、Go语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
 
 - Windows (msvc 2013+,  cygwin, Qt msvc2013+)
-- Linux, FreeBSD, OpenBSD，,Solaris
+- Linux, FreeBSD, OpenBSD, Solaris
 - macOS (clang 3.5+)
 - MCU RTThread （LwIP 1.4.1+）
 - Android

@@ -32,7 +32,7 @@ public class AccelWithCovarianceStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/AccelWithCovarianceStamped"; }
     public java.lang.String getMD5(){ return "efd9e7d0b5ca262cc8b05aa8e97c984f"; }
     public long getID() { return 0; }

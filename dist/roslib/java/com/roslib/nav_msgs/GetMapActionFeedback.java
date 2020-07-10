@@ -37,7 +37,7 @@ public class GetMapActionFeedback implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/GetMapActionFeedback"; }
     public java.lang.String getMD5(){ return "9ebb88ff2cf2120160bf2197071a69b6"; }
     public long getID() { return 0; }

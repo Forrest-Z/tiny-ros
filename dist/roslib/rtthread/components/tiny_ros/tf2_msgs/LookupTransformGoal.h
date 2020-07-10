@@ -105,7 +105,7 @@ namespace tf2_msgs
       arrToVar(length_target_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_target_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_target_frame-1]=0;
       this->target_frame = (char *)(inbuffer + offset-1);
@@ -114,7 +114,7 @@ namespace tf2_msgs
       arrToVar(length_source_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_source_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_source_frame-1]=0;
       this->source_frame = (char *)(inbuffer + offset-1);
@@ -153,7 +153,7 @@ namespace tf2_msgs
       arrToVar(length_fixed_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_fixed_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_fixed_frame-1]=0;
       this->fixed_frame = (char *)(inbuffer + offset-1);

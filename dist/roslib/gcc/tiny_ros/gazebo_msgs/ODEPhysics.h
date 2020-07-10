@@ -299,25 +299,25 @@ namespace gazebo_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_auto_disable_bodies; ss_auto_disable_bodies << "\"auto_disable_bodies\": " << auto_disable_bodies <<", ";
+      std::stringstream ss_auto_disable_bodies; ss_auto_disable_bodies << "\"auto_disable_bodies\":" << auto_disable_bodies <<",";
       string_echo += ss_auto_disable_bodies.str();
-      std::stringstream ss_sor_pgs_precon_iters; ss_sor_pgs_precon_iters << "\"sor_pgs_precon_iters\": " << sor_pgs_precon_iters <<", ";
+      std::stringstream ss_sor_pgs_precon_iters; ss_sor_pgs_precon_iters << "\"sor_pgs_precon_iters\":" << sor_pgs_precon_iters <<",";
       string_echo += ss_sor_pgs_precon_iters.str();
-      std::stringstream ss_sor_pgs_iters; ss_sor_pgs_iters << "\"sor_pgs_iters\": " << sor_pgs_iters <<", ";
+      std::stringstream ss_sor_pgs_iters; ss_sor_pgs_iters << "\"sor_pgs_iters\":" << sor_pgs_iters <<",";
       string_echo += ss_sor_pgs_iters.str();
-      std::stringstream ss_sor_pgs_w; ss_sor_pgs_w << "\"sor_pgs_w\": " << sor_pgs_w <<", ";
+      std::stringstream ss_sor_pgs_w; ss_sor_pgs_w << "\"sor_pgs_w\":" << sor_pgs_w <<",";
       string_echo += ss_sor_pgs_w.str();
-      std::stringstream ss_sor_pgs_rms_error_tol; ss_sor_pgs_rms_error_tol << "\"sor_pgs_rms_error_tol\": " << sor_pgs_rms_error_tol <<", ";
+      std::stringstream ss_sor_pgs_rms_error_tol; ss_sor_pgs_rms_error_tol << "\"sor_pgs_rms_error_tol\":" << sor_pgs_rms_error_tol <<",";
       string_echo += ss_sor_pgs_rms_error_tol.str();
-      std::stringstream ss_contact_surface_layer; ss_contact_surface_layer << "\"contact_surface_layer\": " << contact_surface_layer <<", ";
+      std::stringstream ss_contact_surface_layer; ss_contact_surface_layer << "\"contact_surface_layer\":" << contact_surface_layer <<",";
       string_echo += ss_contact_surface_layer.str();
-      std::stringstream ss_contact_max_correcting_vel; ss_contact_max_correcting_vel << "\"contact_max_correcting_vel\": " << contact_max_correcting_vel <<", ";
+      std::stringstream ss_contact_max_correcting_vel; ss_contact_max_correcting_vel << "\"contact_max_correcting_vel\":" << contact_max_correcting_vel <<",";
       string_echo += ss_contact_max_correcting_vel.str();
-      std::stringstream ss_cfm; ss_cfm << "\"cfm\": " << cfm <<", ";
+      std::stringstream ss_cfm; ss_cfm << "\"cfm\":" << cfm <<",";
       string_echo += ss_cfm.str();
-      std::stringstream ss_erp; ss_erp << "\"erp\": " << erp <<", ";
+      std::stringstream ss_erp; ss_erp << "\"erp\":" << erp <<",";
       string_echo += ss_erp.str();
-      std::stringstream ss_max_contacts; ss_max_contacts << "\"max_contacts\": " << max_contacts <<"";
+      std::stringstream ss_max_contacts; ss_max_contacts << "\"max_contacts\":" << max_contacts <<"";
       string_echo += ss_max_contacts.str();
       string_echo += "}";
       return string_echo;

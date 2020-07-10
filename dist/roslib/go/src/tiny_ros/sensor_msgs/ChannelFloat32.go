@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -61,7 +62,7 @@ func (self *ChannelFloat32) Go_deserialize(buff []byte) (int) {
     length_values |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_values |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_values = make([]float32, length_values, length_values)
+    self.Go_values = make([]float32, length_values)
     for i := 0; i < length_values; i++ {
         bits_valuesi := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_values[i] = math.Float32frombits(bits_valuesi)
@@ -83,7 +84,11 @@ func (self *ChannelFloat32) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ChannelFloat32) Go_echo() (string) { return "" }
+func (self *ChannelFloat32) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ChannelFloat32) Go_getType() (string) { return "sensor_msgs/ChannelFloat32" }
 func (self *ChannelFloat32) Go_getMD5() (string) { return "c4cf01c81334c609dca1afd3a227daff" }
 func (self *ChannelFloat32) Go_getID() (uint32) { return 0 }

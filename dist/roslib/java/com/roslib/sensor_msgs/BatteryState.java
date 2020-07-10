@@ -109,13 +109,13 @@ public class BatteryState implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_cell_voltage >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_cell_voltage >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_cell_voltage; i++){
-        int bits_cell_voltagei = Float.floatToRawIntBits(cell_voltage[i]);
-        outbuffer[offset + 0] = (byte)((bits_cell_voltagei >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_cell_voltagei >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_cell_voltagei >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_cell_voltagei >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_cell_voltage; i++) {
+            int bits_cell_voltagei = Float.floatToRawIntBits(cell_voltage[i]);
+            outbuffer[offset + 0] = (byte)((bits_cell_voltagei >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_cell_voltagei >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_cell_voltagei >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_cell_voltagei >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         int length_location = this.location.getBytes().length;
         outbuffer[offset + 0] = (byte)((length_location >> (8 * 0)) & 0xFF);
@@ -201,14 +201,14 @@ public class BatteryState implements com.roslib.ros.Msg {
         if(length_cell_voltage > 0) {
             this.cell_voltage = new float[length_cell_voltage];
         }
-        for (int i = 0; i < length_cell_voltage; i++){
-        int bits_cell_voltagei = 0;
-        bits_cell_voltagei |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_cell_voltagei |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_cell_voltagei |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_cell_voltagei |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        this.cell_voltage[i] = Float.intBitsToFloat(bits_cell_voltagei);
-        offset += 4;
+        for (int i = 0; i < length_cell_voltage; i++) {
+            int bits_cell_voltagei = 0;
+            bits_cell_voltagei |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_cell_voltagei |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_cell_voltagei |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_cell_voltagei |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            this.cell_voltage[i] = Float.intBitsToFloat(bits_cell_voltagei);
+            offset += 4;
         }
         int length_location = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
         length_location |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
@@ -251,7 +251,7 @@ public class BatteryState implements com.roslib.ros.Msg {
         length += 4;
         int length_cell_voltage = this.cell_voltage != null ? this.cell_voltage.length : 0;
         for (int i = 0; i < length_cell_voltage; i++) {
-        length += 4;
+            length += 4;
         }
         int length_location = this.location.getBytes().length;
         length += 4;
@@ -262,7 +262,7 @@ public class BatteryState implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/BatteryState"; }
     public java.lang.String getMD5(){ return "715c4769cacd76e4b679cc3ea4c347b4"; }
     public long getID() { return 0; }

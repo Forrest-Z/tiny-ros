@@ -37,14 +37,14 @@ namespace std_msgs
       *(outbuffer + offset + 2) = (this->data_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->data_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_datai;
-      u_datai.real = this->data[i];
-      *(outbuffer + offset + 0) = (u_datai.base >> (8 * 0)) & 0xFF;
-      offset += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        union {
+          int8_t real;
+          uint8_t base;
+        } u_datai;
+        u_datai.real = this->data[i];
+        *(outbuffer + offset + 0) = (u_datai.base >> (8 * 0)) & 0xFF;
+        offset += sizeof(this->data[i]);
       }
       return offset;
     }
@@ -61,15 +61,15 @@ namespace std_msgs
       if(data_lengthT > data_length)
         this->data = (int8_t*)realloc(this->data, data_lengthT * sizeof(int8_t));
       data_length = data_lengthT;
-      for( uint32_t i = 0; i < data_length; i++){
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_st_data;
-      u_st_data.base = 0;
-      u_st_data.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      this->st_data = u_st_data.real;
-      offset += sizeof(this->st_data);
+      for( uint32_t i = 0; i < data_length; i++) {
+        union {
+          int8_t real;
+          uint8_t base;
+        } u_st_data;
+        u_st_data.base = 0;
+        u_st_data.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        this->st_data = u_st_data.real;
+        offset += sizeof(this->st_data);
         memcpy( &(this->data[i]), &(this->st_data), sizeof(int8_t));
       }
       return offset;
@@ -80,8 +80,8 @@ namespace std_msgs
       int length = 0;
       length += this->layout.serializedLength();
       length += sizeof(this->data_length);
-      for( uint32_t i = 0; i < data_length; i++){
-      length += sizeof(this->data[i]);
+      for( uint32_t i = 0; i < data_length; i++) {
+        length += sizeof(this->data[i]);
       }
       return length;
     }
@@ -89,18 +89,18 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"layout\": {";
+      string_echo += "\"layout\":";
       string_echo += this->layout.echo();
-      string_echo += "}, ";
-      string_echo += "data: [";
-      for( uint32_t i = 0; i < data_length; i++){
-      if( i == (data_length - 1)) {
-      std::stringstream ss_datai; ss_datai << "{\"data" << i <<"\": " << (int16_t)data[i] <<"}";
-      string_echo += ss_datai.str();
-      } else {
-      std::stringstream ss_datai; ss_datai << "{\"data" << i <<"\": " << (int16_t)data[i] <<"}, ";
-      string_echo += ss_datai.str();
-      }
+      string_echo += ",";
+      string_echo += "data:[";
+      for( uint32_t i = 0; i < data_length; i++) {
+        if( i == (data_length - 1)) {
+          std::stringstream ss_datai; ss_datai <<(int16_t)data[i] <<"";
+          string_echo += ss_datai.str();
+        } else {
+          std::stringstream ss_datai; ss_datai <<(int16_t)data[i] <<",";
+          string_echo += ss_datai.str();
+        }
       }
       string_echo += "]";
       string_echo += "}";

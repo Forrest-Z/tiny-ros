@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -113,7 +114,11 @@ func (self *ProjectedMapInfo) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ProjectedMapInfo) Go_echo() (string) { return "" }
+func (self *ProjectedMapInfo) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ProjectedMapInfo) Go_getType() (string) { return "map_msgs/ProjectedMapInfo" }
 func (self *ProjectedMapInfo) Go_getMD5() (string) { return "f661365637fb759e63cb5d179a4461e1" }
 func (self *ProjectedMapInfo) Go_getID() (uint32) { return 0 }

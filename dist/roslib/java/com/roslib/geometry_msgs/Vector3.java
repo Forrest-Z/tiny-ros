@@ -94,7 +94,7 @@ public class Vector3 implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Vector3"; }
     public java.lang.String getMD5(){ return "b5c8c5b484ec7d5e36a4d9de9124c561"; }
     public long getID() { return 0; }

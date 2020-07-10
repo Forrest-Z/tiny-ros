@@ -46,7 +46,7 @@ public class Clock implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "rosgraph_msgs/Clock"; }
     public java.lang.String getMD5(){ return "d3bedbe03b904b8181e3fef4bbe0a73e"; }
     public long getID() { return 0; }

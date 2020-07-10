@@ -59,7 +59,7 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_data; ss_data << "\"data\": " << (int16_t)data <<"";
+      std::stringstream ss_data; ss_data << "\"data\":" << (int16_t)data <<"";
       string_echo += ss_data.str();
       string_echo += "}";
       return string_echo;

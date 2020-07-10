@@ -147,7 +147,7 @@ public static class SpawnModelRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SPAWNMODEL; }
     public java.lang.String getMD5(){ return "da34e61c8813e52ac159e5f31fbf55be"; }
     public long getID() { return this.__id__; }
@@ -219,7 +219,7 @@ public static class SpawnModelResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SPAWNMODEL; }
     public java.lang.String getMD5(){ return "d59d46cc4e5a64f978a429dd7c306d30"; }
     public long getID() { return this.__id__; }

@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -96,7 +97,7 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
     length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_name = make([]string, length_name, length_name)
+    self.Go_name = make([]string, length_name)
     for i := 0; i < length_name; i++ {
         length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -111,7 +112,7 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
     length_position |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_position |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_position = make([]float64, length_position, length_position)
+    self.Go_position = make([]float64, length_position)
     for i := 0; i < length_position; i++ {
         bits_positioni := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_position[i] = math.Float64frombits(bits_positioni)
@@ -122,7 +123,7 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
     length_velocity |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_velocity |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_velocity = make([]float64, length_velocity, length_velocity)
+    self.Go_velocity = make([]float64, length_velocity)
     for i := 0; i < length_velocity; i++ {
         bits_velocityi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_velocity[i] = math.Float64frombits(bits_velocityi)
@@ -133,7 +134,7 @@ func (self *JointState) Go_deserialize(buff []byte) (int) {
     length_effort |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_effort |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_effort = make([]float64, length_effort, length_effort)
+    self.Go_effort = make([]float64, length_effort)
     for i := 0; i < length_effort; i++ {
         bits_efforti := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_effort[i] = math.Float64frombits(bits_efforti)
@@ -170,7 +171,11 @@ func (self *JointState) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JointState) Go_echo() (string) { return "" }
+func (self *JointState) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JointState) Go_getType() (string) { return "sensor_msgs/JointState" }
 func (self *JointState) Go_getMD5() (string) { return "6df7130a6d6a4c2f2037ce4a6e061fb9" }
 func (self *JointState) Go_getID() (uint32) { return 0 }

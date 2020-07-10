@@ -90,65 +90,63 @@ class PrimitiveDataType:
     def make_declaration(self, f):
         f.write('      typedef %s _%s_type;\n      _%s_type %s;\n' % (self.type, self.name, self.name, self.name) )
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         cn = self.name.replace("[","").replace("]","").split(".")[-1]
         if self.type != type_to_var(self.bytes):
-            f.write('      union {\n')
-            f.write('        %s real;\n' % self.type)
-            f.write('        %s base;\n' % type_to_var(self.bytes))
-            f.write('      } u_%s;\n' % cn)
-            f.write('      u_%s.real = this->%s;\n' % (cn,self.name))
+            f.write('%s      union {\n' % header)
+            f.write('%s        %s real;\n' % (header, self.type))
+            f.write('%s        %s base;\n' % (header, type_to_var(self.bytes)))
+            f.write('%s      } u_%s;\n' % (header, cn))
+            f.write('%s      u_%s.real = this->%s;\n' % (header, cn, self.name))
             for i in range(self.bytes):
-                f.write('      *(outbuffer + offset + %d) = (u_%s.base >> (8 * %d)) & 0xFF;\n' % (i, cn, i) )
+                f.write('%s      *(outbuffer + offset + %d) = (u_%s.base >> (8 * %d)) & 0xFF;\n' % (header, i, cn, i) )
         else:
             for i in range(self.bytes):
-                f.write('      *(outbuffer + offset + %d) = (this->%s >> (8 * %d)) & 0xFF;\n' % (i, self.name, i) )
-        f.write('      offset += sizeof(this->%s);\n' % self.name)
+                f.write('%s      *(outbuffer + offset + %d) = (this->%s >> (8 * %d)) & 0xFF;\n' % (header, i, self.name, i) )
+        f.write('%s      offset += sizeof(this->%s);\n' % (header, self.name))
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         cn = self.name.replace("[","").replace("]","").split(".")[-1]
         if self.type != type_to_var(self.bytes):
-            f.write('      union {\n')
-            f.write('        %s real;\n' % self.type)
-            f.write('        %s base;\n' % type_to_var(self.bytes))
-            f.write('      } u_%s;\n' % cn)
-            f.write('      u_%s.base = 0;\n' % cn)
+            f.write('%s      union {\n' % header)
+            f.write('%s        %s real;\n' % (header, self.type))
+            f.write('%s        %s base;\n' % (header, type_to_var(self.bytes)))
+            f.write('%s      } u_%s;\n' % (header, cn))
+            f.write('%s      u_%s.base = 0;\n' % (header, cn))
             for i in range(self.bytes):
-                f.write('      u_%s.base |= ((%s) (*(inbuffer + offset + %d))) << (8 * %d);\n' % (cn,type_to_var(self.bytes),i,i) )
-            f.write('      this->%s = u_%s.real;\n' % (self.name, cn) )
+                f.write('%s      u_%s.base |= ((%s) (*(inbuffer + offset + %d))) << (8 * %d);\n' % (header, cn,type_to_var(self.bytes),i,i) )
+            f.write('%s      this->%s = u_%s.real;\n' % (header, self.name, cn) )
         else:
-            f.write('      this->%s =  ((%s) (*(inbuffer + offset)));\n' % (self.name,self.type) )
+            f.write('%s      this->%s =  ((%s) (*(inbuffer + offset)));\n' % (header, self.name,self.type) )
             for i in range(self.bytes-1):
-                f.write('      this->%s |= ((%s) (*(inbuffer + offset + %d))) << (8 * %d);\n' % (self.name,self.type,i+1,i+1) )
-        f.write('      offset += sizeof(this->%s);\n' % self.name)
+                f.write('%s      this->%s |= ((%s) (*(inbuffer + offset + %d))) << (8 * %d);\n' % (header, self.name,self.type,i+1,i+1) )
+        f.write('%s      offset += sizeof(this->%s);\n' % (header, self.name))
 
-    def serializedLength(self, f):
-        f.write('      length += sizeof(this->%s);\n' % self.name)
+    def serializedLength(self, f, header):
+        f.write('%s      length += sizeof(this->%s);\n' % (header, self.name))
 
-    def echo(self, f, trailer):
+    def echo(self, f, header, trailer):
         if self.name.find('[') > 0:
-            tn = self.name[0:self.name.find('[')]
             cn = self.name.replace("[","").replace("]","").split(".")[-1]
-            idx = self.name[self.name.find('[')+1:self.name.find(']')]
             if self.type == 'int8_t':
-                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << (int16_t)%s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s <<(int16_t)%s <<"%s";\n' % (header, cn, cn, self.name, trailer))
             elif self.type == 'uint8_t':
-                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << (uint16_t)%s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s << (uint16_t)%s <<"%s";\n' % (header, cn, cn, self.name, trailer))
             elif self.type == 'char':
-                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": \\"" << %s <<"\\"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s <<"\\"" << %s <<"\\"%s";\n' % (header, cn, cn, self.name, trailer))
             else:
-                f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": " << %s <<"}%s";\n' % (cn, cn, tn, idx, self.name, trailer))
-            f.write('      string_echo += ss_%s.str();\n' % (cn))
+                f.write('%s      std::stringstream ss_%s; ss_%s << %s <<"%s";\n' % (header, cn, cn, self.name, trailer))
+            f.write('%s      string_echo += ss_%s.str();\n' % (header, cn))
         else:
             if self.type == 'int8_t':
-                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << (int16_t)%s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s << "\\"%s\\":" << (int16_t)%s <<"%s";\n' % (header, self.name, self.name, self.name, self.name, trailer))
             elif self.type == 'uint8_t':
-                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << (uint16_t)%s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s << "\\"%s\\":" << (uint16_t)%s <<"%s";\n' % (header, self.name, self.name, self.name, self.name, trailer))
             elif self.type == 'char':
-                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": \\"" << %s <<"\\"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
+                f.write('%s      std::stringstream ss_%s; ss_%s << "\\"%s\\":\\"" << %s <<"\\"%s";\n' % (header, self.name, self.name, self.name, self.name, trailer))
             else:
-                f.write('      std::stringstream ss_%s; ss_%s << "\\"%s\\": " << %s <<"%s";\n' % (self.name, self.name, self.name, self.name, trailer))
-            f.write('      string_echo += ss_%s.str();\n' % (self.name)) 
+                f.write('%s      std::stringstream ss_%s; ss_%s << "\\"%s\\":" << %s <<"%s";\n' % (header, self.name, self.name, self.name, self.name, trailer))
+            f.write('%s      string_echo += ss_%s.str();\n' % (header, self.name)) 
 
 class MessageDataType(PrimitiveDataType):
     """ For when our data type is another message. """
@@ -156,28 +154,23 @@ class MessageDataType(PrimitiveDataType):
     def make_initializer(self, f, trailer):
         f.write('      %s()%s\n' % (self.name, trailer))
 
-    def serialize(self, f):
-        f.write('      offset += this->%s.serialize(outbuffer + offset);\n' % self.name)
+    def serialize(self, f, header):
+        f.write('%s      offset += this->%s.serialize(outbuffer + offset);\n' % (header, self.name))
 
-    def deserialize(self, f):
-        f.write('      offset += this->%s.deserialize(inbuffer + offset);\n' % self.name)
+    def deserialize(self, f, header):
+        f.write('%s      offset += this->%s.deserialize(inbuffer + offset);\n' % (header, self.name))
 
-    def serializedLength(self, f):
-        f.write('      length += this->%s.serializedLength();\n' % self.name)
+    def serializedLength(self, f, header):
+        f.write('%s      length += this->%s.serializedLength();\n' % (header, self.name))
 
-    def echo(self, f, trailer):
+    def echo(self, f, header, trailer):
         if self.name.find('[') > 0:
-            tn = self.name[0:self.name.find('[')]
-            cn = self.name.replace("[","").replace("]","").split(".")[-1]
-            idx = self.name[self.name.find('[')+1:self.name.find(']')]
-            f.write('      std::stringstream ss_%s; ss_%s << "{\\"%s" << %s <<"\\": {";\n' % (cn, cn, tn, idx))
-            f.write('      string_echo += ss_%s.str();\n' % (cn))
-            f.write('      string_echo += this->%s.echo();\n' % self.name)
-            f.write('      string_echo += "}}%s";\n' % trailer)
+            f.write('%s      string_echo += this->%s.echo();\n' % (header, self.name))
+            f.write('%s      string_echo += "%s";\n' % (header, trailer))
         else:
-            f.write('      string_echo += "\\"%s\\": {";\n' % self.name)
-            f.write('      string_echo += this->%s.echo();\n' % self.name)
-            f.write('      string_echo += "}%s";\n' % trailer)
+            f.write('%s      string_echo += "\\"%s\\":";\n' % (header, self.name))
+            f.write('%s      string_echo += this->%s.echo();\n' % (header, self.name))
+            f.write('%s      string_echo += "%s";\n' % (header, trailer))
 
 class StringDataType(PrimitiveDataType):
     def make_initializer(self, f, trailer):
@@ -186,41 +179,53 @@ class StringDataType(PrimitiveDataType):
     def make_declaration(self, f):
         f.write('      typedef std::string _%s_type;\n      _%s_type %s;\n' % (self.name, self.name, self.name) )
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('      uint32_t length_%s = this->%s.size();\n' % (cn,self.name))
-        f.write('      varToArr(outbuffer + offset, length_%s);\n' % cn)
-        f.write('      offset += 4;\n')
-        f.write('      memcpy(outbuffer + offset, this->%s.c_str(), length_%s);\n' % (self.name,cn))
-        f.write('      offset += length_%s;\n' % cn)
+        f.write('%s      uint32_t length_%s = this->%s.size();\n' % (header, cn,self.name))
+        f.write('%s      varToArr(outbuffer + offset, length_%s);\n' % (header, cn))
+        f.write('%s      offset += 4;\n' % header)
+        f.write('%s      memcpy(outbuffer + offset, this->%s.c_str(), length_%s);\n' % (header, self.name,cn))
+        f.write('%s      offset += length_%s;\n' % (header, cn))
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('      uint32_t length_%s;\n' % cn)
-        f.write('      arrToVar(length_%s, (inbuffer + offset));\n' % cn)
-        f.write('      offset += 4;\n')
-        f.write('      for(unsigned int k= offset; k< offset+length_%s; ++k){\n'%cn) #shift for null character
-        f.write('          inbuffer[k-1]=inbuffer[k];\n')
-        f.write('      }\n')
-        f.write('      inbuffer[offset+length_%s-1]=0;\n'%cn)
-        f.write('      this->%s = (char *)(inbuffer + offset-1);\n' % self.name)
-        f.write('      offset += length_%s;\n' % cn)
+        f.write('%s      uint32_t length_%s;\n' % (header, cn))
+        f.write('%s      arrToVar(length_%s, (inbuffer + offset));\n' % (header, cn))
+        f.write('%s      offset += 4;\n' % header)
+        f.write('%s      for(unsigned int k= offset; k< offset+length_%s; ++k){\n' % (header, cn))
+        f.write('%s        inbuffer[k-1]=inbuffer[k];\n' % header)
+        f.write('%s      }\n' % header)
+        f.write('%s      inbuffer[offset+length_%s-1]=0;\n' % (header, cn))
+        f.write('%s      this->%s = (char *)(inbuffer + offset-1);\n' % (header, self.name))
+        f.write('%s      offset += length_%s;\n' % (header, cn))
 
-    def serializedLength(self, f):
+    def serializedLength(self, f, header):
         cn = self.name.replace("[","").replace("]","")
-        f.write('      uint32_t length_%s = this->%s.size();\n' % (cn,self.name))
-        f.write('      length += 4;\n')
-        f.write('      length += length_%s;\n' % cn)
+        f.write('%s      uint32_t length_%s = this->%s.size();\n' % (header, cn, self.name))
+        f.write('%s      length += 4;\n' % header)
+        f.write('%s      length += length_%s;\n' % (header, cn))
 
-    def echo(self, f, trailer):
-        #f.write('      std::size_t %s_pos = %s.find("\\"");\n' % (self.name, self.name))
-        #f.write('      while(%s_pos != std::string::npos){\n' % self.name)
-        #f.write('          %s.replace(%s_pos, 1,"\\\\\\"");\n' % (self.name, self.name))
-        #f.write('          %s_pos = %s.find("\\"", %s_pos+2);\n' % (self.name, self.name, self.name))
-        #f.write('      }\n')
-        f.write('      string_echo += "\\"%s\\": \\"";\n' % self.name)
-        f.write('      string_echo += %s;\n' % self.name)
-        f.write('      string_echo += "\\"%s";\n' % trailer)
+    def echo(self, f, header, trailer):
+        if self.name.find('[') > 0:
+            cn = self.name.replace("[","").replace("]","").split(".")[-1]
+            f.write('%s      std::stringstream ss_%s; ss_%s << "\\"";\n' % (header, cn, cn))
+            f.write('%s      string_echo += ss_%s.str();\n' % (header, cn))
+            f.write('%s      std::size_t %s_pos = %s.find("\\"");\n' % (header, cn, self.name))
+            f.write('%s      while(%s_pos != std::string::npos){\n' % (header, cn))
+            f.write('%s        %s.replace(%s_pos, 1,"\\\\\\"");\n' % (header, self.name, cn))
+            f.write('%s        %s_pos = %s.find("\\"", %s_pos+2);\n' % (header, cn, self.name, cn))
+            f.write('%s      }\n' % header)
+            f.write('%s      string_echo += %s;\n' % (header, self.name))
+            f.write('%s      string_echo += "\\"%s";\n' % (header, trailer))
+        else:
+            f.write('%s      std::size_t %s_pos = %s.find("\\"");\n' % (header, self.name, self.name))
+            f.write('%s      while(%s_pos != std::string::npos){\n' % (header, self.name))
+            f.write('%s        %s.replace(%s_pos, 1,"\\\\\\"");\n' % (header, self.name, self.name))
+            f.write('%s        %s_pos = %s.find("\\"", %s_pos+2);\n' % (header, self.name, self.name, self.name))
+            f.write('%s      }\n' % header)
+            f.write('%s      string_echo += "\\"%s\\":\\"";\n' % (header, self.name))
+            f.write('%s      string_echo += %s;\n' % (header, self.name))
+            f.write('%s      string_echo += "\\"%s";\n' % (header, trailer))
 
 class TimeDataType(PrimitiveDataType):
 
@@ -236,23 +241,30 @@ class TimeDataType(PrimitiveDataType):
     def make_declaration(self, f):
         f.write('      typedef %s _%s_type;\n      _%s_type %s;\n' % (self.type, self.name, self.name, self.name) )
 
-    def serialize(self, f):
-        self.sec.serialize(f)
-        self.nsec.serialize(f)
+    def serialize(self, f, header):
+        self.sec.serialize(f, header)
+        self.nsec.serialize(f, header)
 
-    def deserialize(self, f):
-        self.sec.deserialize(f)
-        self.nsec.deserialize(f)
+    def deserialize(self, f, header):
+        self.sec.deserialize(f, header)
+        self.nsec.deserialize(f, header)
 
-    def serializedLength(self, f):
-        self.sec.serializedLength(f)
-        self.nsec.serializedLength(f)
+    def serializedLength(self, f, header):
+        self.sec.serializedLength(f, header)
+        self.nsec.serializedLength(f, header)
 
-    def echo(self, f, trailer):
-        f.write('      std::stringstream ss_%s;\n' % (self.name))
-        f.write('      ss_%s << "\\"%s.sec\\": " << %s.sec;\n' % (self.name, self.name, self.name))
-        f.write('      ss_%s << ", \\"%s.nsec\\": " << %s.nsec << "%s";\n' % (self.name, self.name, self.name, trailer))
-        f.write('      string_echo += ss_%s.str();\n' % (self.name))
+    def echo(self, f, header, trailer):
+        if self.name.find('[') > 0:
+            cn = self.name.replace("[","").replace("]","").split(".")[-1]
+            f.write('%s      std::stringstream ss_%s; ss_%s << "{";\n' % (header, cn, cn))
+            f.write('%s      ss_%s << "\\"sec\\":" << %s.sec;\n' % (header, cn, self.name))
+            f.write('%s      ss_%s << ",\\"nsec\\":" << %s.nsec << "}%s";\n' % (header, cn, self.name, trailer))
+            f.write('%s      string_echo += ss_%s.str();\n' % (header, cn))
+        else:
+            f.write('%s      std::stringstream ss_%s;\n' % (header, self.name))
+            f.write('%s      ss_%s << "\\"%s\\":{\\"sec\\":" << %s.sec;\n' % (header, self.name, self.name, self.name))
+            f.write('%s      ss_%s << ",\\"nsec\\":" << %s.nsec << "}%s";\n' % (header, self.name, self.name, trailer))
+            f.write('%s      string_echo += ss_%s.str();\n' % (header, self.name))
 
 class ArrayDataType(PrimitiveDataType):
 
@@ -278,81 +290,80 @@ class ArrayDataType(PrimitiveDataType):
         else:
             f.write('      %s %s[%d];\n' % (self.type, self.name, self.size))
 
-    def serialize(self, f):
+    def serialize(self, f, header):
         c = self.cls(self.name+"[i]", self.type, self.bytes)
         if self.size == None:
             # serialize length
-            f.write('      *(outbuffer + offset + 0) = (this->%s_length >> (8 * 0)) & 0xFF;\n' % self.name)
-            f.write('      *(outbuffer + offset + 1) = (this->%s_length >> (8 * 1)) & 0xFF;\n' % self.name)
-            f.write('      *(outbuffer + offset + 2) = (this->%s_length >> (8 * 2)) & 0xFF;\n' % self.name)
-            f.write('      *(outbuffer + offset + 3) = (this->%s_length >> (8 * 3)) & 0xFF;\n' % self.name)
-            f.write('      offset += sizeof(this->%s_length);\n' % self.name)
-            f.write('      for( uint32_t i = 0; i < %s_length; i++){\n' % self.name)
-            c.serialize(f)
-            f.write('      }\n')
+            f.write('%s      *(outbuffer + offset + 0) = (this->%s_length >> (8 * 0)) & 0xFF;\n' % (header, self.name))
+            f.write('%s      *(outbuffer + offset + 1) = (this->%s_length >> (8 * 1)) & 0xFF;\n' % (header, self.name))
+            f.write('%s      *(outbuffer + offset + 2) = (this->%s_length >> (8 * 2)) & 0xFF;\n' % (header, self.name))
+            f.write('%s      *(outbuffer + offset + 3) = (this->%s_length >> (8 * 3)) & 0xFF;\n' % (header, self.name))
+            f.write('%s      offset += sizeof(this->%s_length);\n' % (header, self.name))
+            f.write('%s      for( uint32_t i = 0; i < %s_length; i++) {\n' % (header, self.name))
+            c.serialize(f, header + "  ")
+            f.write('%s      }\n' % header)
         else:
-            f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
-            c.serialize(f)
-            f.write('      }\n')
+            f.write('%s      for( uint32_t i = 0; i < %d; i++) {\n' % (header, self.size) )
+            c.serialize(f, header + "  ")
+            f.write('%s      }\n' % header)
 
-    def deserialize(self, f):
+    def deserialize(self, f, header):
         if self.size == None:
             c = self.cls("st_"+self.name, self.type, self.bytes)
             # deserialize length
-            f.write('      uint32_t %s_lengthT = ((uint32_t) (*(inbuffer + offset))); \n' % self.name)
-            f.write('      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); \n' % self.name)
-            f.write('      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); \n' % self.name)
-            f.write('      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); \n' % self.name)
-            f.write('      offset += sizeof(this->%s_length);\n' % self.name)
-            f.write('      if(%s_lengthT > %s_length)\n' % (self.name, self.name))
-            f.write('        this->%s = (%s*)realloc(this->%s, %s_lengthT * sizeof(%s));\n' % (self.name, self.type, self.name, self.name, self.type))
-            f.write('      %s_length = %s_lengthT;\n' % (self.name, self.name))
-            # copy to array
-            f.write('      for( uint32_t i = 0; i < %s_length; i++){\n' % (self.name) )
-            c.deserialize(f)
-            f.write('        memcpy( &(this->%s[i]), &(this->st_%s), sizeof(%s));\n' % (self.name, self.name, self.type))
-            f.write('      }\n')
+            f.write('%s      uint32_t %s_lengthT = ((uint32_t) (*(inbuffer + offset))); \n' % (header, self.name))
+            f.write('%s      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); \n' % (header, self.name))
+            f.write('%s      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); \n' % (header, self.name))
+            f.write('%s      %s_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); \n' % (header, self.name))
+            f.write('%s      offset += sizeof(this->%s_length);\n' % (header, self.name))
+            f.write('%s      if(%s_lengthT > %s_length)\n' % (header, self.name, self.name))
+            f.write('%s        this->%s = (%s*)realloc(this->%s, %s_lengthT * sizeof(%s));\n' % (header, self.name, self.type, self.name, self.name, self.type))
+            f.write('%s      %s_length = %s_lengthT;\n' % (header, self.name, self.name))
+            f.write('%s      for( uint32_t i = 0; i < %s_length; i++) {\n' % (header, self.name))
+            c.deserialize(f, header + "  ")
+            f.write('%s        memcpy( &(this->%s[i]), &(this->st_%s), sizeof(%s));\n' % (header, self.name, self.name, self.type))
+            f.write('%s      }\n' % header)
         else:
             c = self.cls(self.name+"[i]", self.type, self.bytes)
-            f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
-            c.deserialize(f)
-            f.write('      }\n')
+            f.write('%s      for( uint32_t i = 0; i < %d; i++){\n' % (header, self.size) )
+            c.deserialize(f, header + "  ")
+            f.write('%s      }\n' % header)
 
-    def serializedLength(self, f):
+    def serializedLength(self, f, header):
         c = self.cls(self.name+"[i]", self.type, self.bytes)
         if self.size == None:
             # serialize length
-            f.write('      length += sizeof(this->%s_length);\n' % self.name)
-            f.write('      for( uint32_t i = 0; i < %s_length; i++){\n' % self.name)
-            c.serializedLength(f)
-            f.write('      }\n')
+            f.write('%s      length += sizeof(this->%s_length);\n' % (header, self.name))
+            f.write('%s      for( uint32_t i = 0; i < %s_length; i++) {\n' % (header, self.name))
+            c.serializedLength(f, header + "  ")
+            f.write('%s      }\n' % header)
         else:
-            f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
-            c.serializedLength(f)
-            f.write('      }\n')
+            f.write('%s      for( uint32_t i = 0; i < %d; i++) {\n' % (header, self.size) )
+            c.serializedLength(f, header + "  ")
+            f.write('%s      }\n' % header)
 
-    def echo(self, f, trailer):
+    def echo(self, f, header, trailer):
         c = self.cls(self.name+"[i]", self.type, self.bytes)
         if self.size == None:
-            f.write('      string_echo += "%s: [";\n' % (self.name))
-            f.write('      for( uint32_t i = 0; i < %s_length; i++){\n' % self.name)
-            f.write('      if( i == (%s_length - 1)) {\n' % self.name)
-            c.echo(f, '')
-            f.write('      } else {\n')
-            c.echo(f, ', ')
-            f.write('      }\n')
-            f.write('      }\n')
-            f.write('      string_echo += "]%s";\n' % (trailer))
+            f.write('%s      string_echo += "%s:[";\n' % (header, self.name))
+            f.write('%s      for( uint32_t i = 0; i < %s_length; i++) {\n' % (header, self.name))
+            f.write('%s        if( i == (%s_length - 1)) {\n' % (header, self.name))
+            c.echo(f, header + "    ", "")
+            f.write('%s        } else {\n' % header)
+            c.echo(f, header + "    ", ",")
+            f.write('%s        }\n' % header)
+            f.write('%s      }\n' % header)
+            f.write('%s      string_echo += "]%s";\n' % (header, trailer))
         else:
-            f.write('      string_echo += "%s: [";\n' % (self.name))
-            f.write('      for( uint32_t i = 0; i < %d; i++){\n' % (self.size) )
-            f.write('      if( i == (%d - 1)) {\n' % self.size)
-            c.echo(f, '')
-            f.write('      } else {\n')
-            c.echo(f, ', ')
-            f.write('      }\n')
-            f.write('      }\n')
-            f.write('      string_echo += "]%s";\n' % (trailer))
+            f.write('%s      string_echo += "%s:[";\n' % (header, self.name))
+            f.write('%s      for( uint32_t i = 0; i < %d; i++) {\n' % (header, self.size) )
+            f.write('%s        if( i == (%d - 1)) {\n' % (header, self.size))
+            c.echo(f, header + "    ", "")
+            f.write('%s        } else {\n' % header)
+            c.echo(f, header + "    ", ",")
+            f.write('%s        }\n' % header)
+            f.write('%s      }\n' % header)
+            f.write('%s      string_echo += "]%s";\n' % (header, trailer))
 
 ROS_TO_EMBEDDED_TYPES = {
     'bool'    :   ('bool',              1, PrimitiveDataType, []),
@@ -475,7 +486,7 @@ class Message:
         f.write('      int offset = 0;\n')
         self._write_id_serializer(f)
         for d in self.data:
-            d.serialize(f)
+            d.serialize(f, "")
         f.write('      return offset;\n');
         f.write('    }\n')
         f.write('\n')
@@ -487,7 +498,7 @@ class Message:
         f.write('      int offset = 0;\n')
         self._write_id_deserializer(f)
         for d in self.data:
-            d.deserialize(f)
+            d.deserialize(f, "")
         f.write('      return offset;\n');
         f.write('    }\n')
         f.write('\n')
@@ -498,7 +509,7 @@ class Message:
         f.write('    {\n')
         f.write('      int length = 0;\n')
         for d in self.data:
-            d.serializedLength(f)
+            d.serializedLength(f, "")
         f.write('      return length;\n');
         f.write('    }\n')
         f.write('\n')
@@ -509,8 +520,8 @@ class Message:
         f.write('      std::string string_echo = "{";\n');
         if self.data:
             for d in self.data[:-1]:
-                d.echo(f, ', ')
-            self.data[-1].echo(f, '')
+                d.echo(f, "", ",")
+            self.data[-1].echo(f, "", "")
         f.write('      string_echo += "}";\n');
         f.write('      return string_echo;\n');
         f.write('    }\n')

@@ -32,7 +32,7 @@ public class Transform implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Transform"; }
     public java.lang.String getMD5(){ return "2526ee1b1cc2e723e386c3c1b048ba72"; }
     public long getID() { return 0; }

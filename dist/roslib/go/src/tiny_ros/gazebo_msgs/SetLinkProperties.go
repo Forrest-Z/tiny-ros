@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "tiny_ros/geometry_msgs"
     "math"
@@ -160,7 +161,11 @@ func (self *SetLinkPropertiesRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetLinkPropertiesRequest) Go_echo() (string) { return "" }
+func (self *SetLinkPropertiesRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetLinkPropertiesRequest) Go_getType() (string) { return "gazebo_msgs/SetLinkProperties" }
 func (self *SetLinkPropertiesRequest) Go_getMD5() (string) { return "03d7e308476601832a9e1ce9d7eab722" }
 func (self *SetLinkPropertiesRequest) Go_getID() (uint32) { return self.__id__ }
@@ -246,7 +251,11 @@ func (self *SetLinkPropertiesResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetLinkPropertiesResponse) Go_echo() (string) { return "" }
+func (self *SetLinkPropertiesResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetLinkPropertiesResponse) Go_getType() (string) { return "gazebo_msgs/SetLinkProperties" }
 func (self *SetLinkPropertiesResponse) Go_getMD5() (string) { return "777dea05607e1bca37e3206f97801d89" }
 func (self *SetLinkPropertiesResponse) Go_getID() (uint32) { return self.__id__ }

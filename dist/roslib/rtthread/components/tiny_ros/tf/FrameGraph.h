@@ -102,7 +102,7 @@ static const char FRAMEGRAPH[] = "tf/FrameGraph";
       arrToVar(length_dot_graph, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_dot_graph; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_dot_graph-1]=0;
       this->dot_graph = (char *)(inbuffer + offset-1);

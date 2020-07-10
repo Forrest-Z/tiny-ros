@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/geometry_msgs"
 )
@@ -8,22 +9,22 @@ import (
 
 type PointCloud struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_points []geometry_msgs.Point32 `json:"points"`
-    Go_channels []ChannelFloat32 `json:"channels"`
+    Go_points []*geometry_msgs.Point32 `json:"points"`
+    Go_channels []*ChannelFloat32 `json:"channels"`
 }
 
 func NewPointCloud() (*PointCloud) {
     newPointCloud := new(PointCloud)
     newPointCloud.Go_header = std_msgs.NewHeader()
-    newPointCloud.Go_points = []geometry_msgs.Point32{}
-    newPointCloud.Go_channels = []ChannelFloat32{}
+    newPointCloud.Go_points = []*geometry_msgs.Point32{}
+    newPointCloud.Go_channels = []*ChannelFloat32{}
     return newPointCloud
 }
 
 func (self *PointCloud) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_points = []geometry_msgs.Point32{}
-    self.Go_channels = []ChannelFloat32{}
+    self.Go_points = []*geometry_msgs.Point32{}
+    self.Go_channels = []*ChannelFloat32{}
 }
 
 func (self *PointCloud) Go_serialize(buff []byte) (int) {
@@ -58,7 +59,10 @@ func (self *PointCloud) Go_deserialize(buff []byte) (int) {
     length_points |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_points |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_points = make([]geometry_msgs.Point32, length_points, length_points)
+    self.Go_points = make([]*geometry_msgs.Point32, length_points)
+    for i := 0; i < length_points; i++ {
+        self.Go_points[i] = geometry_msgs.NewPoint32()
+    }
     for i := 0; i < length_points; i++ {
         offset += self.Go_points[i].Go_deserialize(buff[offset:])
     }
@@ -67,7 +71,10 @@ func (self *PointCloud) Go_deserialize(buff []byte) (int) {
     length_channels |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_channels |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_channels = make([]ChannelFloat32, length_channels, length_channels)
+    self.Go_channels = make([]*ChannelFloat32, length_channels)
+    for i := 0; i < length_channels; i++ {
+        self.Go_channels[i] = NewChannelFloat32()
+    }
     for i := 0; i < length_channels; i++ {
         offset += self.Go_channels[i].Go_deserialize(buff[offset:])
     }
@@ -90,7 +97,11 @@ func (self *PointCloud) Go_serializedLength() (int) {
     return length
 }
 
-func (self *PointCloud) Go_echo() (string) { return "" }
+func (self *PointCloud) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *PointCloud) Go_getType() (string) { return "sensor_msgs/PointCloud" }
 func (self *PointCloud) Go_getMD5() (string) { return "b01249148cae0106a561ab36cd1e48a8" }
 func (self *PointCloud) Go_getID() (uint32) { return 0 }

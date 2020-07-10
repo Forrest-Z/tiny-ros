@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -52,7 +53,7 @@ func (self *Int64MultiArray) Go_deserialize(buff []byte) (int) {
     length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data = make([]int64, length_data, length_data)
+    self.Go_data = make([]int64, length_data)
     for i := 0; i < length_data; i++ {
         self.Go_data[i] = int64(buff[offset + 0] & 0xFF) << (8 * 0)
         self.Go_data[i] |= int64(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -78,7 +79,11 @@ func (self *Int64MultiArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Int64MultiArray) Go_echo() (string) { return "" }
+func (self *Int64MultiArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Int64MultiArray) Go_getType() (string) { return "std_msgs/Int64MultiArray" }
 func (self *Int64MultiArray) Go_getMD5() (string) { return "c06d166bcec6ac0d57a5122b314c9f5c" }
 func (self *Int64MultiArray) Go_getID() (uint32) { return 0 }

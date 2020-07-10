@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -50,7 +51,11 @@ func (self *SetCameraInfoRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetCameraInfoRequest) Go_echo() (string) { return "" }
+func (self *SetCameraInfoRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetCameraInfoRequest) Go_getType() (string) { return "sensor_msgs/SetCameraInfo" }
 func (self *SetCameraInfoRequest) Go_getMD5() (string) { return "7c09688f428450a1ac49eacdbb57c012" }
 func (self *SetCameraInfoRequest) Go_getID() (uint32) { return self.__id__ }
@@ -136,7 +141,11 @@ func (self *SetCameraInfoResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetCameraInfoResponse) Go_echo() (string) { return "" }
+func (self *SetCameraInfoResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetCameraInfoResponse) Go_getType() (string) { return "sensor_msgs/SetCameraInfo" }
 func (self *SetCameraInfoResponse) Go_getMD5() (string) { return "e03fdc9555d1e3c7347a728e913775f6" }
 func (self *SetCameraInfoResponse) Go_getID() (uint32) { return self.__id__ }

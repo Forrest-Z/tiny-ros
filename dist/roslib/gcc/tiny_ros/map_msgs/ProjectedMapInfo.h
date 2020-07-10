@@ -142,7 +142,7 @@ namespace map_msgs
       arrToVar(length_frame_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_frame_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_frame_id-1]=0;
       this->frame_id = (char *)(inbuffer + offset-1);
@@ -258,20 +258,25 @@ namespace map_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"frame_id\": \"";
+      std::size_t frame_id_pos = frame_id.find("\"");
+      while(frame_id_pos != std::string::npos){
+        frame_id.replace(frame_id_pos, 1,"\\\"");
+        frame_id_pos = frame_id.find("\"", frame_id_pos+2);
+      }
+      string_echo += "\"frame_id\":\"";
       string_echo += frame_id;
-      string_echo += "\", ";
-      std::stringstream ss_x; ss_x << "\"x\": " << x <<", ";
+      string_echo += "\",";
+      std::stringstream ss_x; ss_x << "\"x\":" << x <<",";
       string_echo += ss_x.str();
-      std::stringstream ss_y; ss_y << "\"y\": " << y <<", ";
+      std::stringstream ss_y; ss_y << "\"y\":" << y <<",";
       string_echo += ss_y.str();
-      std::stringstream ss_width; ss_width << "\"width\": " << width <<", ";
+      std::stringstream ss_width; ss_width << "\"width\":" << width <<",";
       string_echo += ss_width.str();
-      std::stringstream ss_height; ss_height << "\"height\": " << height <<", ";
+      std::stringstream ss_height; ss_height << "\"height\":" << height <<",";
       string_echo += ss_height.str();
-      std::stringstream ss_min_z; ss_min_z << "\"min_z\": " << min_z <<", ";
+      std::stringstream ss_min_z; ss_min_z << "\"min_z\":" << min_z <<",";
       string_echo += ss_min_z.str();
-      std::stringstream ss_max_z; ss_max_z << "\"max_z\": " << max_z <<"";
+      std::stringstream ss_max_z; ss_max_z << "\"max_z\":" << max_z <<"";
       string_echo += ss_max_z.str();
       string_echo += "}";
       return string_echo;

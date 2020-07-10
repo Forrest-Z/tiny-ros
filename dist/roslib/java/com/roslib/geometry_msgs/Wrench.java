@@ -32,7 +32,7 @@ public class Wrench implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Wrench"; }
     public java.lang.String getMD5(){ return "02d01d4a8dc253c7b42d4c9866201aee"; }
     public long getID() { return 0; }

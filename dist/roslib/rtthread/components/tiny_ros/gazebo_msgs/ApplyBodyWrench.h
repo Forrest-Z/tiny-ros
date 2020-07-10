@@ -100,7 +100,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_body_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_body_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_body_name-1]=0;
       this->body_name = (char *)(inbuffer + offset-1);
@@ -109,7 +109,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_reference_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_reference_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_reference_frame-1]=0;
       this->reference_frame = (char *)(inbuffer + offset-1);
@@ -226,7 +226,7 @@ static const char APPLYBODYWRENCH[] = "gazebo_msgs/ApplyBodyWrench";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);

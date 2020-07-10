@@ -36,8 +36,8 @@ public class GridCells implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_cells >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_cells >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_cells; i++){
-        offset = this.cells[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_cells; i++) {
+            offset = this.cells[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -67,8 +67,8 @@ public class GridCells implements com.roslib.ros.Msg {
         if(length_cells > 0) {
             this.cells = new com.roslib.geometry_msgs.Point[length_cells];
         }
-        for (int i = 0; i < length_cells; i++){
-        offset = this.cells[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_cells; i++) {
+            offset = this.cells[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -81,12 +81,12 @@ public class GridCells implements com.roslib.ros.Msg {
         length += 4;
         int length_cells = this.cells != null ? this.cells.length : 0;
         for (int i = 0; i < length_cells; i++) {
-        length += this.cells[i].serializedLength();
+            length += this.cells[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/GridCells"; }
     public java.lang.String getMD5(){ return "13ce9063aaf922c39d3a2207d3926427"; }
     public long getID() { return 0; }

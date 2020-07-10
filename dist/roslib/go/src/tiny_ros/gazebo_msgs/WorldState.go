@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/geometry_msgs"
 )
@@ -9,27 +10,27 @@ import (
 type WorldState struct {
     Go_header *std_msgs.Header `json:"header"`
     Go_name []string `json:"name"`
-    Go_pose []geometry_msgs.Pose `json:"pose"`
-    Go_twist []geometry_msgs.Twist `json:"twist"`
-    Go_wrench []geometry_msgs.Wrench `json:"wrench"`
+    Go_pose []*geometry_msgs.Pose `json:"pose"`
+    Go_twist []*geometry_msgs.Twist `json:"twist"`
+    Go_wrench []*geometry_msgs.Wrench `json:"wrench"`
 }
 
 func NewWorldState() (*WorldState) {
     newWorldState := new(WorldState)
     newWorldState.Go_header = std_msgs.NewHeader()
     newWorldState.Go_name = []string{}
-    newWorldState.Go_pose = []geometry_msgs.Pose{}
-    newWorldState.Go_twist = []geometry_msgs.Twist{}
-    newWorldState.Go_wrench = []geometry_msgs.Wrench{}
+    newWorldState.Go_pose = []*geometry_msgs.Pose{}
+    newWorldState.Go_twist = []*geometry_msgs.Twist{}
+    newWorldState.Go_wrench = []*geometry_msgs.Wrench{}
     return newWorldState
 }
 
 func (self *WorldState) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
     self.Go_name = []string{}
-    self.Go_pose = []geometry_msgs.Pose{}
-    self.Go_twist = []geometry_msgs.Twist{}
-    self.Go_wrench = []geometry_msgs.Wrench{}
+    self.Go_pose = []*geometry_msgs.Pose{}
+    self.Go_twist = []*geometry_msgs.Twist{}
+    self.Go_wrench = []*geometry_msgs.Wrench{}
 }
 
 func (self *WorldState) Go_serialize(buff []byte) (int) {
@@ -89,7 +90,7 @@ func (self *WorldState) Go_deserialize(buff []byte) (int) {
     length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_name = make([]string, length_name, length_name)
+    self.Go_name = make([]string, length_name)
     for i := 0; i < length_name; i++ {
         length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -104,7 +105,10 @@ func (self *WorldState) Go_deserialize(buff []byte) (int) {
     length_pose |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_pose |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_pose = make([]geometry_msgs.Pose, length_pose, length_pose)
+    self.Go_pose = make([]*geometry_msgs.Pose, length_pose)
+    for i := 0; i < length_pose; i++ {
+        self.Go_pose[i] = geometry_msgs.NewPose()
+    }
     for i := 0; i < length_pose; i++ {
         offset += self.Go_pose[i].Go_deserialize(buff[offset:])
     }
@@ -113,7 +117,10 @@ func (self *WorldState) Go_deserialize(buff []byte) (int) {
     length_twist |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_twist |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_twist = make([]geometry_msgs.Twist, length_twist, length_twist)
+    self.Go_twist = make([]*geometry_msgs.Twist, length_twist)
+    for i := 0; i < length_twist; i++ {
+        self.Go_twist[i] = geometry_msgs.NewTwist()
+    }
     for i := 0; i < length_twist; i++ {
         offset += self.Go_twist[i].Go_deserialize(buff[offset:])
     }
@@ -122,7 +129,10 @@ func (self *WorldState) Go_deserialize(buff []byte) (int) {
     length_wrench |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_wrench |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_wrench = make([]geometry_msgs.Wrench, length_wrench, length_wrench)
+    self.Go_wrench = make([]*geometry_msgs.Wrench, length_wrench)
+    for i := 0; i < length_wrench; i++ {
+        self.Go_wrench[i] = geometry_msgs.NewWrench()
+    }
     for i := 0; i < length_wrench; i++ {
         offset += self.Go_wrench[i].Go_deserialize(buff[offset:])
     }
@@ -157,7 +167,11 @@ func (self *WorldState) Go_serializedLength() (int) {
     return length
 }
 
-func (self *WorldState) Go_echo() (string) { return "" }
+func (self *WorldState) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *WorldState) Go_getType() (string) { return "gazebo_msgs/WorldState" }
 func (self *WorldState) Go_getMD5() (string) { return "0e1997127271c4d021f99645c28f1c09" }
 func (self *WorldState) Go_getID() (uint32) { return 0 }

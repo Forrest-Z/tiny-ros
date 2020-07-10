@@ -77,9 +77,9 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_status; ss_status << "\"status\": " << (int16_t)status <<", ";
+      std::stringstream ss_status; ss_status << "\"status\":" << (int16_t)status <<",";
       string_echo += ss_status.str();
-      std::stringstream ss_service; ss_service << "\"service\": " << service <<"";
+      std::stringstream ss_service; ss_service << "\"service\":" << service <<"";
       string_echo += ss_service.str();
       string_echo += "}";
       return string_echo;

@@ -61,8 +61,8 @@ public class DiagnosticStatus implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_values >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_values >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_values; i++){
-        offset = this.values[i].serialize(outbuffer, offset);
+        for (int i = 0; i < length_values; i++) {
+            offset = this.values[i].serialize(outbuffer, offset);
         }
         return offset;
     }
@@ -112,8 +112,8 @@ public class DiagnosticStatus implements com.roslib.ros.Msg {
         if(length_values > 0) {
             this.values = new com.roslib.diagnostic_msgs.KeyValue[length_values];
         }
-        for (int i = 0; i < length_values; i++){
-        offset = this.values[i].deserialize(inbuffer, offset);
+        for (int i = 0; i < length_values; i++) {
+            offset = this.values[i].deserialize(inbuffer, offset);
         }
         return offset;
     }
@@ -133,12 +133,12 @@ public class DiagnosticStatus implements com.roslib.ros.Msg {
         length += 4;
         int length_values = this.values != null ? this.values.length : 0;
         for (int i = 0; i < length_values; i++) {
-        length += this.values[i].serializedLength();
+            length += this.values[i].serializedLength();
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "diagnostic_msgs/DiagnosticStatus"; }
     public java.lang.String getMD5(){ return "9ec892d2145f478061efd60bb1762361"; }
     public long getID() { return 0; }

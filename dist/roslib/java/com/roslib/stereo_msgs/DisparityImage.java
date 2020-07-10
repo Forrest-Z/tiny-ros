@@ -117,7 +117,7 @@ public class DisparityImage implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "stereo_msgs/DisparityImage"; }
     public java.lang.String getMD5(){ return "03545cef8df8d20bea21fdbbf9482b4b"; }
     public long getID() { return 0; }

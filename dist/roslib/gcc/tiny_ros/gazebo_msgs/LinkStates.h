@@ -44,28 +44,28 @@ namespace gazebo_msgs
       *(outbuffer + offset + 2) = (this->name_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->name_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->name_length);
-      for( uint32_t i = 0; i < name_length; i++){
-      uint32_t length_namei = this->name[i].size();
-      varToArr(outbuffer + offset, length_namei);
-      offset += 4;
-      memcpy(outbuffer + offset, this->name[i].c_str(), length_namei);
-      offset += length_namei;
+      for( uint32_t i = 0; i < name_length; i++) {
+        uint32_t length_namei = this->name[i].size();
+        varToArr(outbuffer + offset, length_namei);
+        offset += 4;
+        memcpy(outbuffer + offset, this->name[i].c_str(), length_namei);
+        offset += length_namei;
       }
       *(outbuffer + offset + 0) = (this->pose_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->pose_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->pose_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->pose_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->pose_length);
-      for( uint32_t i = 0; i < pose_length; i++){
-      offset += this->pose[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < pose_length; i++) {
+        offset += this->pose[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->twist_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->twist_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->twist_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->twist_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->twist_length);
-      for( uint32_t i = 0; i < twist_length; i++){
-      offset += this->twist[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < twist_length; i++) {
+        offset += this->twist[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -81,16 +81,16 @@ namespace gazebo_msgs
       if(name_lengthT > name_length)
         this->name = (std::string*)realloc(this->name, name_lengthT * sizeof(std::string));
       name_length = name_lengthT;
-      for( uint32_t i = 0; i < name_length; i++){
-      uint32_t length_st_name;
-      arrToVar(length_st_name, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_name; ++k){
+      for( uint32_t i = 0; i < name_length; i++) {
+        uint32_t length_st_name;
+        arrToVar(length_st_name, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_name; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_name-1]=0;
-      this->st_name = (char *)(inbuffer + offset-1);
-      offset += length_st_name;
+        }
+        inbuffer[offset+length_st_name-1]=0;
+        this->st_name = (char *)(inbuffer + offset-1);
+        offset += length_st_name;
         memcpy( &(this->name[i]), &(this->st_name), sizeof(std::string));
       }
       uint32_t pose_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -101,8 +101,8 @@ namespace gazebo_msgs
       if(pose_lengthT > pose_length)
         this->pose = (geometry_msgs::Pose*)realloc(this->pose, pose_lengthT * sizeof(geometry_msgs::Pose));
       pose_length = pose_lengthT;
-      for( uint32_t i = 0; i < pose_length; i++){
-      offset += this->st_pose.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < pose_length; i++) {
+        offset += this->st_pose.deserialize(inbuffer + offset);
         memcpy( &(this->pose[i]), &(this->st_pose), sizeof(geometry_msgs::Pose));
       }
       uint32_t twist_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -113,8 +113,8 @@ namespace gazebo_msgs
       if(twist_lengthT > twist_length)
         this->twist = (geometry_msgs::Twist*)realloc(this->twist, twist_lengthT * sizeof(geometry_msgs::Twist));
       twist_length = twist_lengthT;
-      for( uint32_t i = 0; i < twist_length; i++){
-      offset += this->st_twist.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < twist_length; i++) {
+        offset += this->st_twist.deserialize(inbuffer + offset);
         memcpy( &(this->twist[i]), &(this->st_twist), sizeof(geometry_msgs::Twist));
       }
       return offset;
@@ -124,18 +124,18 @@ namespace gazebo_msgs
     {
       int length = 0;
       length += sizeof(this->name_length);
-      for( uint32_t i = 0; i < name_length; i++){
-      uint32_t length_namei = this->name[i].size();
-      length += 4;
-      length += length_namei;
+      for( uint32_t i = 0; i < name_length; i++) {
+        uint32_t length_namei = this->name[i].size();
+        length += 4;
+        length += length_namei;
       }
       length += sizeof(this->pose_length);
-      for( uint32_t i = 0; i < pose_length; i++){
-      length += this->pose[i].serializedLength();
+      for( uint32_t i = 0; i < pose_length; i++) {
+        length += this->pose[i].serializedLength();
       }
       length += sizeof(this->twist_length);
-      for( uint32_t i = 0; i < twist_length; i++){
-      length += this->twist[i].serializedLength();
+      for( uint32_t i = 0; i < twist_length; i++) {
+        length += this->twist[i].serializedLength();
       }
       return length;
     }
@@ -143,47 +143,51 @@ namespace gazebo_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "name: [";
-      for( uint32_t i = 0; i < name_length; i++){
-      if( i == (name_length - 1)) {
-      string_echo += "\"name[i]\": \"";
-      string_echo += name[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"name[i]\": \"";
-      string_echo += name[i];
-      string_echo += "\", ";
+      string_echo += "name:[";
+      for( uint32_t i = 0; i < name_length; i++) {
+        if( i == (name_length - 1)) {
+          std::stringstream ss_namei; ss_namei << "\"";
+          string_echo += ss_namei.str();
+          std::size_t namei_pos = name[i].find("\"");
+          while(namei_pos != std::string::npos){
+            name[i].replace(namei_pos, 1,"\\\"");
+            namei_pos = name[i].find("\"", namei_pos+2);
+          }
+          string_echo += name[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_namei; ss_namei << "\"";
+          string_echo += ss_namei.str();
+          std::size_t namei_pos = name[i].find("\"");
+          while(namei_pos != std::string::npos){
+            name[i].replace(namei_pos, 1,"\\\"");
+            namei_pos = name[i].find("\"", namei_pos+2);
+          }
+          string_echo += name[i];
+          string_echo += "\",";
+        }
       }
+      string_echo += "],";
+      string_echo += "pose:[";
+      for( uint32_t i = 0; i < pose_length; i++) {
+        if( i == (pose_length - 1)) {
+          string_echo += this->pose[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->pose[i].echo();
+          string_echo += ",";
+        }
       }
-      string_echo += "], ";
-      string_echo += "pose: [";
-      for( uint32_t i = 0; i < pose_length; i++){
-      if( i == (pose_length - 1)) {
-      std::stringstream ss_posei; ss_posei << "{\"pose" << i <<"\": {";
-      string_echo += ss_posei.str();
-      string_echo += this->pose[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_posei; ss_posei << "{\"pose" << i <<"\": {";
-      string_echo += ss_posei.str();
-      string_echo += this->pose[i].echo();
-      string_echo += "}}, ";
-      }
-      }
-      string_echo += "], ";
-      string_echo += "twist: [";
-      for( uint32_t i = 0; i < twist_length; i++){
-      if( i == (twist_length - 1)) {
-      std::stringstream ss_twisti; ss_twisti << "{\"twist" << i <<"\": {";
-      string_echo += ss_twisti.str();
-      string_echo += this->twist[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_twisti; ss_twisti << "{\"twist" << i <<"\": {";
-      string_echo += ss_twisti.str();
-      string_echo += this->twist[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "],";
+      string_echo += "twist:[";
+      for( uint32_t i = 0; i < twist_length; i++) {
+        if( i == (twist_length - 1)) {
+          string_echo += this->twist[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->twist[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

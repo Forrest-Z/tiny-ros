@@ -1,6 +1,7 @@
 package tf2_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *LookupTransformResult) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LookupTransformResult) Go_echo() (string) { return "" }
+func (self *LookupTransformResult) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LookupTransformResult) Go_getType() (string) { return "tf2_msgs/LookupTransformResult" }
 func (self *LookupTransformResult) Go_getMD5() (string) { return "7be4fc6719f512bc94491db1ccda6aee" }
 func (self *LookupTransformResult) Go_getID() (uint32) { return 0 }

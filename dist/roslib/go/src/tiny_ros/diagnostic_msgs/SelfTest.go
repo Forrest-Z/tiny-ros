@@ -1,6 +1,7 @@
 package diagnostic_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -44,7 +45,11 @@ func (self *SelfTestRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SelfTestRequest) Go_echo() (string) { return "" }
+func (self *SelfTestRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SelfTestRequest) Go_getType() (string) { return "diagnostic_msgs/SelfTest" }
 func (self *SelfTestRequest) Go_getMD5() (string) { return "049f87742408b36b8ef5f7dd71e3ef5a" }
 func (self *SelfTestRequest) Go_getID() (uint32) { return self.__id__ }
@@ -58,14 +63,14 @@ type SelfTestResponse struct {
     __id__ uint32 `json:"__id__"`
     Go_id string `json:"id"`
     Go_passed byte `json:"passed"`
-    Go_status []DiagnosticStatus `json:"status"`
+    Go_status []*DiagnosticStatus `json:"status"`
 }
 
 func NewSelfTestResponse() (*SelfTestResponse) {
     newSelfTestResponse := new(SelfTestResponse)
     newSelfTestResponse.Go_id = ""
     newSelfTestResponse.Go_passed = 0
-    newSelfTestResponse.Go_status = []DiagnosticStatus{}
+    newSelfTestResponse.Go_status = []*DiagnosticStatus{}
     newSelfTestResponse.__id__ = 0
     return newSelfTestResponse
 }
@@ -73,7 +78,7 @@ func NewSelfTestResponse() (*SelfTestResponse) {
 func (self *SelfTestResponse) Go_initialize() {
     self.Go_id = ""
     self.Go_passed = 0
-    self.Go_status = []DiagnosticStatus{}
+    self.Go_status = []*DiagnosticStatus{}
     self.__id__ = 0
 }
 
@@ -127,7 +132,10 @@ func (self *SelfTestResponse) Go_deserialize(buff []byte) (int) {
     length_status |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_status |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status = make([]DiagnosticStatus, length_status, length_status)
+    self.Go_status = make([]*DiagnosticStatus, length_status)
+    for i := 0; i < length_status; i++ {
+        self.Go_status[i] = NewDiagnosticStatus()
+    }
     for i := 0; i < length_status; i++ {
         offset += self.Go_status[i].Go_deserialize(buff[offset:])
     }
@@ -148,7 +156,11 @@ func (self *SelfTestResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SelfTestResponse) Go_echo() (string) { return "" }
+func (self *SelfTestResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SelfTestResponse) Go_getType() (string) { return "diagnostic_msgs/SelfTest" }
 func (self *SelfTestResponse) Go_getMD5() (string) { return "70aaf2a851ccb5e946b2d112ea26f7b9" }
 func (self *SelfTestResponse) Go_getID() (uint32) { return self.__id__ }

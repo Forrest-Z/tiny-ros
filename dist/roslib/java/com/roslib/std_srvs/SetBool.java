@@ -45,7 +45,7 @@ public static class SetBoolRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETBOOL; }
     public java.lang.String getMD5(){ return "2600271ce244b6b0d236894ec6f04373"; }
     public long getID() { return this.__id__; }
@@ -117,7 +117,7 @@ public static class SetBoolResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETBOOL; }
     public java.lang.String getMD5(){ return "51cf1b5cb67d107350442299d694fd1d"; }
     public long getID() { return this.__id__; }

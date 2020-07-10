@@ -38,17 +38,17 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->values_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->values_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->values_length);
-      for( uint32_t i = 0; i < values_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_valuesi;
-      u_valuesi.real = this->values[i];
-      *(outbuffer + offset + 0) = (u_valuesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_valuesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_valuesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_valuesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->values[i]);
+      for( uint32_t i = 0; i < values_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_valuesi;
+        u_valuesi.real = this->values[i];
+        *(outbuffer + offset + 0) = (u_valuesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_valuesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_valuesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_valuesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->values[i]);
       }
       return offset;
     }
@@ -60,7 +60,7 @@ namespace sensor_msgs
       arrToVar(length_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_name-1]=0;
       this->name = (char *)(inbuffer + offset-1);
@@ -73,18 +73,18 @@ namespace sensor_msgs
       if(values_lengthT > values_length)
         this->values = (float*)realloc(this->values, values_lengthT * sizeof(float));
       values_length = values_lengthT;
-      for( uint32_t i = 0; i < values_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_values;
-      u_st_values.base = 0;
-      u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_values = u_st_values.real;
-      offset += sizeof(this->st_values);
+      for( uint32_t i = 0; i < values_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_values;
+        u_st_values.base = 0;
+        u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_values.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_values = u_st_values.real;
+        offset += sizeof(this->st_values);
         memcpy( &(this->values[i]), &(this->st_values), sizeof(float));
       }
       return offset;
@@ -97,8 +97,8 @@ namespace sensor_msgs
       length += 4;
       length += length_name;
       length += sizeof(this->values_length);
-      for( uint32_t i = 0; i < values_length; i++){
-      length += sizeof(this->values[i]);
+      for( uint32_t i = 0; i < values_length; i++) {
+        length += sizeof(this->values[i]);
       }
       return length;
     }

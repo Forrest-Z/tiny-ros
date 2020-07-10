@@ -54,12 +54,12 @@ namespace geometry_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"position\": {";
+      string_echo += "\"position\":";
       string_echo += this->position.echo();
-      string_echo += "}, ";
-      string_echo += "\"orientation\": {";
+      string_echo += ",";
+      string_echo += "\"orientation\":";
       string_echo += this->orientation.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

@@ -1,21 +1,22 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
 )
 
 
 type JoyFeedbackArray struct {
-    Go_array []JoyFeedback `json:"array"`
+    Go_array []*JoyFeedback `json:"array"`
 }
 
 func NewJoyFeedbackArray() (*JoyFeedbackArray) {
     newJoyFeedbackArray := new(JoyFeedbackArray)
-    newJoyFeedbackArray.Go_array = []JoyFeedback{}
+    newJoyFeedbackArray.Go_array = []*JoyFeedback{}
     return newJoyFeedbackArray
 }
 
 func (self *JoyFeedbackArray) Go_initialize() {
-    self.Go_array = []JoyFeedback{}
+    self.Go_array = []*JoyFeedback{}
 }
 
 func (self *JoyFeedbackArray) Go_serialize(buff []byte) (int) {
@@ -39,7 +40,10 @@ func (self *JoyFeedbackArray) Go_deserialize(buff []byte) (int) {
     length_array |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_array |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_array = make([]JoyFeedback, length_array, length_array)
+    self.Go_array = make([]*JoyFeedback, length_array)
+    for i := 0; i < length_array; i++ {
+        self.Go_array[i] = NewJoyFeedback()
+    }
     for i := 0; i < length_array; i++ {
         offset += self.Go_array[i].Go_deserialize(buff[offset:])
     }
@@ -56,7 +60,11 @@ func (self *JoyFeedbackArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JoyFeedbackArray) Go_echo() (string) { return "" }
+func (self *JoyFeedbackArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JoyFeedbackArray) Go_getType() (string) { return "sensor_msgs/JoyFeedbackArray" }
 func (self *JoyFeedbackArray) Go_getMD5() (string) { return "45361e458d526d5670706a9f083819b6" }
 func (self *JoyFeedbackArray) Go_getID() (uint32) { return 0 }

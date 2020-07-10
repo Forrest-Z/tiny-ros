@@ -56,7 +56,7 @@ static const char BODYREQUEST[] = "gazebo_msgs/BodyRequest";
       arrToVar(length_body_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_body_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_body_name-1]=0;
       this->body_name = (char *)(inbuffer + offset-1);
@@ -76,7 +76,12 @@ static const char BODYREQUEST[] = "gazebo_msgs/BodyRequest";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"body_name\": \"";
+      std::size_t body_name_pos = body_name.find("\"");
+      while(body_name_pos != std::string::npos){
+        body_name.replace(body_name_pos, 1,"\\\"");
+        body_name_pos = body_name.find("\"", body_name_pos+2);
+      }
+      string_echo += "\"body_name\":\"";
       string_echo += body_name;
       string_echo += "\"";
       string_echo += "}";

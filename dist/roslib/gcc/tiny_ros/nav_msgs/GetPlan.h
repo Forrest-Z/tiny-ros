@@ -95,13 +95,13 @@ static const char GETPLAN[] = "nav_msgs/GetPlan";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"start\": {";
+      string_echo += "\"start\":";
       string_echo += this->start.echo();
-      string_echo += "}, ";
-      string_echo += "\"goal\": {";
+      string_echo += ",";
+      string_echo += "\"goal\":";
       string_echo += this->goal.echo();
-      string_echo += "}, ";
-      std::stringstream ss_tolerance; ss_tolerance << "\"tolerance\": " << tolerance <<"";
+      string_echo += ",";
+      std::stringstream ss_tolerance; ss_tolerance << "\"tolerance\":" << tolerance <<"";
       string_echo += ss_tolerance.str();
       string_echo += "}";
       return string_echo;
@@ -164,9 +164,9 @@ static const char GETPLAN[] = "nav_msgs/GetPlan";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"plan\": {";
+      string_echo += "\"plan\":";
       string_echo += this->plan.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

@@ -22,7 +22,7 @@ public class LookupTransformFeedback implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tf2_msgs/LookupTransformFeedback"; }
     public java.lang.String getMD5(){ return "e6217f8a8e77aa218a8d6f594d08ba08"; }
     public long getID() { return 0; }

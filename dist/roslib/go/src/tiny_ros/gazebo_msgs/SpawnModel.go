@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
@@ -135,7 +136,11 @@ func (self *SpawnModelRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SpawnModelRequest) Go_echo() (string) { return "" }
+func (self *SpawnModelRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SpawnModelRequest) Go_getType() (string) { return "gazebo_msgs/SpawnModel" }
 func (self *SpawnModelRequest) Go_getMD5() (string) { return "da34e61c8813e52ac159e5f31fbf55be" }
 func (self *SpawnModelRequest) Go_getID() (uint32) { return self.__id__ }
@@ -221,7 +226,11 @@ func (self *SpawnModelResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SpawnModelResponse) Go_echo() (string) { return "" }
+func (self *SpawnModelResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SpawnModelResponse) Go_getType() (string) { return "gazebo_msgs/SpawnModel" }
 func (self *SpawnModelResponse) Go_getMD5() (string) { return "d59d46cc4e5a64f978a429dd7c306d30" }
 func (self *SpawnModelResponse) Go_getID() (uint32) { return self.__id__ }

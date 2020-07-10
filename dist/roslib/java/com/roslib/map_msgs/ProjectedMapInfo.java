@@ -192,7 +192,7 @@ public class ProjectedMapInfo implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "map_msgs/ProjectedMapInfo"; }
     public java.lang.String getMD5(){ return "f661365637fb759e63cb5d179a4461e1"; }
     public long getID() { return 0; }

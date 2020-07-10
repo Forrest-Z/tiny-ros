@@ -24,12 +24,12 @@ namespace shape_msgs
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      for( uint32_t i = 0; i < 3; i++){
-      *(outbuffer + offset + 0) = (this->vertex_indices[i] >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (this->vertex_indices[i] >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (this->vertex_indices[i] >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (this->vertex_indices[i] >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->vertex_indices[i]);
+      for( uint32_t i = 0; i < 3; i++) {
+        *(outbuffer + offset + 0) = (this->vertex_indices[i] >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (this->vertex_indices[i] >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (this->vertex_indices[i] >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (this->vertex_indices[i] >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->vertex_indices[i]);
       }
       return offset;
     }
@@ -38,11 +38,11 @@ namespace shape_msgs
     {
       int offset = 0;
       for( uint32_t i = 0; i < 3; i++){
-      this->vertex_indices[i] =  ((uint32_t) (*(inbuffer + offset)));
-      this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      offset += sizeof(this->vertex_indices[i]);
+        this->vertex_indices[i] =  ((uint32_t) (*(inbuffer + offset)));
+        this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        this->vertex_indices[i] |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        offset += sizeof(this->vertex_indices[i]);
       }
       return offset;
     }
@@ -50,8 +50,8 @@ namespace shape_msgs
     virtual int serializedLength() const
     {
       int length = 0;
-      for( uint32_t i = 0; i < 3; i++){
-      length += sizeof(this->vertex_indices[i]);
+      for( uint32_t i = 0; i < 3; i++) {
+        length += sizeof(this->vertex_indices[i]);
       }
       return length;
     }
@@ -59,15 +59,15 @@ namespace shape_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "vertex_indices: [";
-      for( uint32_t i = 0; i < 3; i++){
-      if( i == (3 - 1)) {
-      std::stringstream ss_vertex_indicesi; ss_vertex_indicesi << "{\"vertex_indices" << i <<"\": " << vertex_indices[i] <<"}";
-      string_echo += ss_vertex_indicesi.str();
-      } else {
-      std::stringstream ss_vertex_indicesi; ss_vertex_indicesi << "{\"vertex_indices" << i <<"\": " << vertex_indices[i] <<"}, ";
-      string_echo += ss_vertex_indicesi.str();
-      }
+      string_echo += "vertex_indices:[";
+      for( uint32_t i = 0; i < 3; i++) {
+        if( i == (3 - 1)) {
+          std::stringstream ss_vertex_indicesi; ss_vertex_indicesi << vertex_indices[i] <<"";
+          string_echo += ss_vertex_indicesi.str();
+        } else {
+          std::stringstream ss_vertex_indicesi; ss_vertex_indicesi << vertex_indices[i] <<",";
+          string_echo += ss_vertex_indicesi.str();
+        }
       }
       string_echo += "]";
       string_echo += "}";

@@ -1,32 +1,33 @@
 package trajectory_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
     "tiny_ros/tinyros/time"
 )
 
 
 type MultiDOFJointTrajectoryPoint struct {
-    Go_transforms []geometry_msgs.Transform `json:"transforms"`
-    Go_velocities []geometry_msgs.Twist `json:"velocities"`
-    Go_accelerations []geometry_msgs.Twist `json:"accelerations"`
-    Go_time_from_start *tinyros.Duration `json:"time_from_start"`
+    Go_transforms []*geometry_msgs.Transform `json:"transforms"`
+    Go_velocities []*geometry_msgs.Twist `json:"velocities"`
+    Go_accelerations []*geometry_msgs.Twist `json:"accelerations"`
+    Go_time_from_start *rostime.Duration `json:"time_from_start"`
 }
 
 func NewMultiDOFJointTrajectoryPoint() (*MultiDOFJointTrajectoryPoint) {
     newMultiDOFJointTrajectoryPoint := new(MultiDOFJointTrajectoryPoint)
-    newMultiDOFJointTrajectoryPoint.Go_transforms = []geometry_msgs.Transform{}
-    newMultiDOFJointTrajectoryPoint.Go_velocities = []geometry_msgs.Twist{}
-    newMultiDOFJointTrajectoryPoint.Go_accelerations = []geometry_msgs.Twist{}
-    newMultiDOFJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
+    newMultiDOFJointTrajectoryPoint.Go_transforms = []*geometry_msgs.Transform{}
+    newMultiDOFJointTrajectoryPoint.Go_velocities = []*geometry_msgs.Twist{}
+    newMultiDOFJointTrajectoryPoint.Go_accelerations = []*geometry_msgs.Twist{}
+    newMultiDOFJointTrajectoryPoint.Go_time_from_start = rostime.NewDuration()
     return newMultiDOFJointTrajectoryPoint
 }
 
 func (self *MultiDOFJointTrajectoryPoint) Go_initialize() {
-    self.Go_transforms = []geometry_msgs.Transform{}
-    self.Go_velocities = []geometry_msgs.Twist{}
-    self.Go_accelerations = []geometry_msgs.Twist{}
-    self.Go_time_from_start = tinyros.NewDuration()
+    self.Go_transforms = []*geometry_msgs.Transform{}
+    self.Go_velocities = []*geometry_msgs.Twist{}
+    self.Go_accelerations = []*geometry_msgs.Twist{}
+    self.Go_time_from_start = rostime.NewDuration()
 }
 
 func (self *MultiDOFJointTrajectoryPoint) Go_serialize(buff []byte) (int) {
@@ -78,7 +79,10 @@ func (self *MultiDOFJointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_transforms |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_transforms |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_transforms = make([]geometry_msgs.Transform, length_transforms, length_transforms)
+    self.Go_transforms = make([]*geometry_msgs.Transform, length_transforms)
+    for i := 0; i < length_transforms; i++ {
+        self.Go_transforms[i] = geometry_msgs.NewTransform()
+    }
     for i := 0; i < length_transforms; i++ {
         offset += self.Go_transforms[i].Go_deserialize(buff[offset:])
     }
@@ -87,7 +91,10 @@ func (self *MultiDOFJointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_velocities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_velocities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_velocities = make([]geometry_msgs.Twist, length_velocities, length_velocities)
+    self.Go_velocities = make([]*geometry_msgs.Twist, length_velocities)
+    for i := 0; i < length_velocities; i++ {
+        self.Go_velocities[i] = geometry_msgs.NewTwist()
+    }
     for i := 0; i < length_velocities; i++ {
         offset += self.Go_velocities[i].Go_deserialize(buff[offset:])
     }
@@ -96,7 +103,10 @@ func (self *MultiDOFJointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_accelerations |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_accelerations |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_accelerations = make([]geometry_msgs.Twist, length_accelerations, length_accelerations)
+    self.Go_accelerations = make([]*geometry_msgs.Twist, length_accelerations)
+    for i := 0; i < length_accelerations; i++ {
+        self.Go_accelerations[i] = geometry_msgs.NewTwist()
+    }
     for i := 0; i < length_accelerations; i++ {
         offset += self.Go_accelerations[i].Go_deserialize(buff[offset:])
     }
@@ -135,7 +145,11 @@ func (self *MultiDOFJointTrajectoryPoint) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MultiDOFJointTrajectoryPoint) Go_echo() (string) { return "" }
+func (self *MultiDOFJointTrajectoryPoint) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MultiDOFJointTrajectoryPoint) Go_getType() (string) { return "trajectory_msgs/MultiDOFJointTrajectoryPoint" }
 func (self *MultiDOFJointTrajectoryPoint) Go_getMD5() (string) { return "f8b4a74b416279b5c5d565029308ff08" }
 func (self *MultiDOFJointTrajectoryPoint) Go_getID() (uint32) { return 0 }

@@ -331,7 +331,7 @@ public class TopicStatistics implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "rosgraph_msgs/TopicStatistics"; }
     public java.lang.String getMD5(){ return "8b30d3f22284a3bee7679b7194bd38a3"; }
     public long getID() { return 0; }

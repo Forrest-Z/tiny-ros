@@ -70,14 +70,14 @@ namespace map_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      std::stringstream ss_type; ss_type << "\"type\": " << type <<", ";
+      string_echo += ",";
+      std::stringstream ss_type; ss_type << "\"type\":" << type <<",";
       string_echo += ss_type.str();
-      string_echo += "\"points\": {";
+      string_echo += "\"points\":";
       string_echo += this->points.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

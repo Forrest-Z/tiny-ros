@@ -54,7 +54,7 @@ namespace tf2_msgs
       arrToVar(length_error_string, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_error_string; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_error_string-1]=0;
       this->error_string = (char *)(inbuffer + offset-1);
@@ -75,9 +75,14 @@ namespace tf2_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_error; ss_error << "\"error\": " << (uint16_t)error <<", ";
+      std::stringstream ss_error; ss_error << "\"error\":" << (uint16_t)error <<",";
       string_echo += ss_error.str();
-      string_echo += "\"error_string\": \"";
+      std::size_t error_string_pos = error_string.find("\"");
+      while(error_string_pos != std::string::npos){
+        error_string.replace(error_string_pos, 1,"\\\"");
+        error_string_pos = error_string.find("\"", error_string_pos+2);
+      }
+      string_echo += "\"error_string\":\"";
       string_echo += error_string;
       string_echo += "\"";
       string_echo += "}";

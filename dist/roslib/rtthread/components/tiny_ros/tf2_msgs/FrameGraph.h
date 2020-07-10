@@ -102,7 +102,7 @@ static const char FRAMEGRAPH[] = "tf2_msgs/FrameGraph";
       arrToVar(length_frame_yaml, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_frame_yaml; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_frame_yaml-1]=0;
       this->frame_yaml = (char *)(inbuffer + offset-1);

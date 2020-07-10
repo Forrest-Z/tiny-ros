@@ -1,23 +1,24 @@
 package std_msgs
 
 import (
+    "encoding/json"
 )
 
 
 type MultiArrayLayout struct {
-    Go_dim []MultiArrayDimension `json:"dim"`
+    Go_dim []*MultiArrayDimension `json:"dim"`
     Go_data_offset uint32 `json:"data_offset"`
 }
 
 func NewMultiArrayLayout() (*MultiArrayLayout) {
     newMultiArrayLayout := new(MultiArrayLayout)
-    newMultiArrayLayout.Go_dim = []MultiArrayDimension{}
+    newMultiArrayLayout.Go_dim = []*MultiArrayDimension{}
     newMultiArrayLayout.Go_data_offset = 0
     return newMultiArrayLayout
 }
 
 func (self *MultiArrayLayout) Go_initialize() {
-    self.Go_dim = []MultiArrayDimension{}
+    self.Go_dim = []*MultiArrayDimension{}
     self.Go_data_offset = 0
 }
 
@@ -47,7 +48,10 @@ func (self *MultiArrayLayout) Go_deserialize(buff []byte) (int) {
     length_dim |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_dim |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_dim = make([]MultiArrayDimension, length_dim, length_dim)
+    self.Go_dim = make([]*MultiArrayDimension, length_dim)
+    for i := 0; i < length_dim; i++ {
+        self.Go_dim[i] = NewMultiArrayDimension()
+    }
     for i := 0; i < length_dim; i++ {
         offset += self.Go_dim[i].Go_deserialize(buff[offset:])
     }
@@ -70,7 +74,11 @@ func (self *MultiArrayLayout) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MultiArrayLayout) Go_echo() (string) { return "" }
+func (self *MultiArrayLayout) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MultiArrayLayout) Go_getType() (string) { return "std_msgs/MultiArrayLayout" }
 func (self *MultiArrayLayout) Go_getMD5() (string) { return "f40f0b5b285a93ca167c98c1012a989a" }
 func (self *MultiArrayLayout) Go_getID() (uint32) { return 0 }

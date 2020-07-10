@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -42,7 +43,11 @@ func (self *Wrench) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Wrench) Go_echo() (string) { return "" }
+func (self *Wrench) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Wrench) Go_getType() (string) { return "geometry_msgs/Wrench" }
 func (self *Wrench) Go_getMD5() (string) { return "02d01d4a8dc253c7b42d4c9866201aee" }
 func (self *Wrench) Go_getID() (uint32) { return 0 }

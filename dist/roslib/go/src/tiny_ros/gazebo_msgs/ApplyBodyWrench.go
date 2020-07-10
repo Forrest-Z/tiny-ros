@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
     "tiny_ros/geometry_msgs"
 )
@@ -13,8 +14,8 @@ type ApplyBodyWrenchRequest struct {
     Go_reference_frame string `json:"reference_frame"`
     Go_reference_point *geometry_msgs.Point `json:"reference_point"`
     Go_wrench *geometry_msgs.Wrench `json:"wrench"`
-    Go_start_time *tinyros.Time `json:"start_time"`
-    Go_duration *tinyros.Duration `json:"duration"`
+    Go_start_time *rostime.Time `json:"start_time"`
+    Go_duration *rostime.Duration `json:"duration"`
 }
 
 func NewApplyBodyWrenchRequest() (*ApplyBodyWrenchRequest) {
@@ -23,8 +24,8 @@ func NewApplyBodyWrenchRequest() (*ApplyBodyWrenchRequest) {
     newApplyBodyWrenchRequest.Go_reference_frame = ""
     newApplyBodyWrenchRequest.Go_reference_point = geometry_msgs.NewPoint()
     newApplyBodyWrenchRequest.Go_wrench = geometry_msgs.NewWrench()
-    newApplyBodyWrenchRequest.Go_start_time = tinyros.NewTime()
-    newApplyBodyWrenchRequest.Go_duration = tinyros.NewDuration()
+    newApplyBodyWrenchRequest.Go_start_time = rostime.NewTime()
+    newApplyBodyWrenchRequest.Go_duration = rostime.NewDuration()
     newApplyBodyWrenchRequest.__id__ = 0
     return newApplyBodyWrenchRequest
 }
@@ -34,8 +35,8 @@ func (self *ApplyBodyWrenchRequest) Go_initialize() {
     self.Go_reference_frame = ""
     self.Go_reference_point = geometry_msgs.NewPoint()
     self.Go_wrench = geometry_msgs.NewWrench()
-    self.Go_start_time = tinyros.NewTime()
-    self.Go_duration = tinyros.NewDuration()
+    self.Go_start_time = rostime.NewTime()
+    self.Go_duration = rostime.NewDuration()
     self.__id__ = 0
 }
 
@@ -150,7 +151,11 @@ func (self *ApplyBodyWrenchRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ApplyBodyWrenchRequest) Go_echo() (string) { return "" }
+func (self *ApplyBodyWrenchRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ApplyBodyWrenchRequest) Go_getType() (string) { return "gazebo_msgs/ApplyBodyWrench" }
 func (self *ApplyBodyWrenchRequest) Go_getMD5() (string) { return "434adb4bdbb64c5610c7fadb31f0fa7d" }
 func (self *ApplyBodyWrenchRequest) Go_getID() (uint32) { return self.__id__ }
@@ -236,7 +241,11 @@ func (self *ApplyBodyWrenchResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ApplyBodyWrenchResponse) Go_echo() (string) { return "" }
+func (self *ApplyBodyWrenchResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ApplyBodyWrenchResponse) Go_getType() (string) { return "gazebo_msgs/ApplyBodyWrench" }
 func (self *ApplyBodyWrenchResponse) Go_getMD5() (string) { return "f29b3c75e7d692065eda02aae6d3a3a0" }
 func (self *ApplyBodyWrenchResponse) Go_getID() (uint32) { return self.__id__ }

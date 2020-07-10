@@ -32,7 +32,7 @@ public class PoseStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/PoseStamped"; }
     public java.lang.String getMD5(){ return "c7084e6b27c3d6e62efd9bf6d2f6540f"; }
     public long getID() { return 0; }

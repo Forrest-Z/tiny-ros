@@ -54,7 +54,7 @@ static const char JOINTREQUEST[] = "gazebo_msgs/JointRequest";
       arrToVar(length_joint_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_joint_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_joint_name-1]=0;
       this->joint_name = (char *)(inbuffer + offset-1);

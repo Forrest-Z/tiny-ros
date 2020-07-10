@@ -64,7 +64,7 @@ public static class JointRequestRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return JOINTREQUEST; }
     public java.lang.String getMD5(){ return "e0bdc37edb92be07f3069573364a169f"; }
     public long getID() { return this.__id__; }
@@ -103,7 +103,7 @@ public static class JointRequestResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return JOINTREQUEST; }
     public java.lang.String getMD5(){ return "ac5876a62df51a76c2828bb62894779d"; }
     public long getID() { return this.__id__; }

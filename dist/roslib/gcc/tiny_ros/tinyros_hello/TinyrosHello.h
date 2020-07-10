@@ -40,7 +40,7 @@ namespace tinyros_hello
       arrToVar(length_hello, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_hello; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_hello-1]=0;
       this->hello = (char *)(inbuffer + offset-1);
@@ -60,7 +60,12 @@ namespace tinyros_hello
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"hello\": \"";
+      std::size_t hello_pos = hello.find("\"");
+      while(hello_pos != std::string::npos){
+        hello.replace(hello_pos, 1,"\\\"");
+        hello_pos = hello.find("\"", hello_pos+2);
+      }
+      string_echo += "\"hello\":\"";
       string_echo += hello;
       string_echo += "\"";
       string_echo += "}";

@@ -195,7 +195,7 @@ public class Inertia implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Inertia"; }
     public java.lang.String getMD5(){ return "9116c935782bc29999dad1927624dff0"; }
     public long getID() { return 0; }

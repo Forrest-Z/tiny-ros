@@ -47,9 +47,9 @@ namespace nav_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"map\": {";
+      string_echo += "\"map\":";
       string_echo += this->map.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

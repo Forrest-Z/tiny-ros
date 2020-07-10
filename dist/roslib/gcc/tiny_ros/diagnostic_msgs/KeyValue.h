@@ -48,7 +48,7 @@ namespace diagnostic_msgs
       arrToVar(length_key, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_key; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_key-1]=0;
       this->key = (char *)(inbuffer + offset-1);
@@ -57,7 +57,7 @@ namespace diagnostic_msgs
       arrToVar(length_value, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_value; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_value-1]=0;
       this->value = (char *)(inbuffer + offset-1);
@@ -80,10 +80,20 @@ namespace diagnostic_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"key\": \"";
+      std::size_t key_pos = key.find("\"");
+      while(key_pos != std::string::npos){
+        key.replace(key_pos, 1,"\\\"");
+        key_pos = key.find("\"", key_pos+2);
+      }
+      string_echo += "\"key\":\"";
       string_echo += key;
-      string_echo += "\", ";
-      string_echo += "\"value\": \"";
+      string_echo += "\",";
+      std::size_t value_pos = value.find("\"");
+      while(value_pos != std::string::npos){
+        value.replace(value_pos, 1,"\\\"");
+        value_pos = value.find("\"", value_pos+2);
+      }
+      string_echo += "\"value\":\"";
       string_echo += value;
       string_echo += "\"";
       string_echo += "}";

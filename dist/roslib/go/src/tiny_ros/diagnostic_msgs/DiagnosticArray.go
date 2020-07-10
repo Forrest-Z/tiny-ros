@@ -1,25 +1,26 @@
 package diagnostic_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
 
 type DiagnosticArray struct {
     Go_header *std_msgs.Header `json:"header"`
-    Go_status []DiagnosticStatus `json:"status"`
+    Go_status []*DiagnosticStatus `json:"status"`
 }
 
 func NewDiagnosticArray() (*DiagnosticArray) {
     newDiagnosticArray := new(DiagnosticArray)
     newDiagnosticArray.Go_header = std_msgs.NewHeader()
-    newDiagnosticArray.Go_status = []DiagnosticStatus{}
+    newDiagnosticArray.Go_status = []*DiagnosticStatus{}
     return newDiagnosticArray
 }
 
 func (self *DiagnosticArray) Go_initialize() {
     self.Go_header = std_msgs.NewHeader()
-    self.Go_status = []DiagnosticStatus{}
+    self.Go_status = []*DiagnosticStatus{}
 }
 
 func (self *DiagnosticArray) Go_serialize(buff []byte) (int) {
@@ -45,7 +46,10 @@ func (self *DiagnosticArray) Go_deserialize(buff []byte) (int) {
     length_status |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_status |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_status = make([]DiagnosticStatus, length_status, length_status)
+    self.Go_status = make([]*DiagnosticStatus, length_status)
+    for i := 0; i < length_status; i++ {
+        self.Go_status[i] = NewDiagnosticStatus()
+    }
     for i := 0; i < length_status; i++ {
         offset += self.Go_status[i].Go_deserialize(buff[offset:])
     }
@@ -63,7 +67,11 @@ func (self *DiagnosticArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *DiagnosticArray) Go_echo() (string) { return "" }
+func (self *DiagnosticArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *DiagnosticArray) Go_getType() (string) { return "diagnostic_msgs/DiagnosticArray" }
 func (self *DiagnosticArray) Go_getMD5() (string) { return "79a87210f85eb6afbd600eb2ba49dd85" }
 func (self *DiagnosticArray) Go_getID() (uint32) { return 0 }

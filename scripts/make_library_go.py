@@ -62,6 +62,13 @@ def hashlib_md5sum_definition(definition):
     hl.update(str)
     return hl.hexdigest()
 
+def primitive_type(base_type):
+    if base_type in ['bool', 'byte', 'int8', 'int16', 'int32', 'int64', 'float32',\
+                     'uint8', 'uint16', 'uint32', 'uint64', 'float64', 'string']:
+        return True
+    else:
+        return False
+
 def parse_type(msg_type):
     if not msg_type:
         raise ValueError("Invalid empty type")
@@ -83,7 +90,7 @@ def parse_type(msg_type):
 
 def primitive_default_value(field_type):
     if field_type in ['byte', 'int8', 'int16', 'int32', 'int64',\
-                      'char', 'uint8', 'uint16', 'uint32', 'uint64']:
+                      'uint8', 'uint16', 'uint32', 'uint64']:
         return '0'
     elif field_type in ['float32', 'float64']:
         return '0.0'
@@ -94,10 +101,16 @@ def primitive_default_value(field_type):
     elif field_type.endswith(']'): # array type
         base_type, is_array, array_len = parse_type(field_type)
         if array_len is None: #var-length
-            return ('[]%s{}' % base_type)
+            if primitive_type(base_type):
+                return ('[]%s{}' % base_type)
+            else:
+                return ('[]*%s{}' % base_type)
         else: # fixed-length, fill values
             def_val = primitive_default_value(base_type)
-            def_h = ('[%s]%s' % (array_len, base_type))
+            if primitive_type(base_type):
+                def_h = ('[%s]%s' % (array_len, base_type))
+            else:
+                def_h = ('[%s]*%s' % (array_len, base_type))
             return (def_h + '{' + ', '.join(itertools.repeat(def_val, array_len)) + '}')
     else:
         try:
@@ -277,16 +290,16 @@ class TimeDataType(PrimitiveDataType):
         self.nsec = PrimitiveDataType(self.cls, name+'.Go_nsec','uint32',4)
 
     def make_constructor(self, f, trailer):
-        if self.type == 'tinyros.Duration':
-            f.write('    new%s.Go_%s = tinyros.NewDuration()\n' % (self.cls, self.name))
+        if self.type == 'rostime.Duration':
+            f.write('    new%s.Go_%s = rostime.NewDuration()\n' % (self.cls, self.name))
         else:
-            f.write('    new%s.Go_%s = tinyros.NewTime()\n' % (self.cls, self.name))
+            f.write('    new%s.Go_%s = rostime.NewTime()\n' % (self.cls, self.name))
 
     def make_initializer(self, f, trailer):
-        if self.type == 'tinyros.Duration':
-            f.write('    self.Go_%s = tinyros.NewDuration()\n' % (self.name))
+        if self.type == 'rostime.Duration':
+            f.write('    self.Go_%s = rostime.NewDuration()\n' % (self.name))
         else:
-            f.write('    self.Go_%s = tinyros.NewTime()\n' % (self.name))
+            f.write('    self.Go_%s = rostime.NewTime()\n' % (self.name))
 
     def make_declaration(self, f):
         f.write('    Go_%s *%s `json:"%s"`\n' % (self.name, self.type, self.name) )
@@ -330,9 +343,15 @@ class ArrayDataType(PrimitiveDataType):
 
     def make_declaration(self, f):
         if self.size == None:
-            f.write('    Go_%s []%s `json:"%s"`\n' % (self.name, self.type, self.name))
+            if primitive_type(self.type):
+                f.write('    Go_%s []%s `json:"%s"`\n' % (self.name, self.type, self.name))
+            else:
+                f.write('    Go_%s []*%s `json:"%s"`\n' % (self.name, self.type, self.name))
         else:
-            f.write('    Go_%s [%s]%s `json:"%s"`\n' % (self.name, self.size, self.type, self.name))
+            if primitive_type(self.type):
+                f.write('    Go_%s [%s]%s `json:"%s"`\n' % (self.name, self.size, self.type, self.name))
+            else:
+                f.write('    Go_%s [%s]*%s `json:"%s"`\n' % (self.name, self.size, self.type, self.name))
 
     def serialize(self, f, header):
         c = self.cls1(self.cls, self.name+"[i]", self.type, self.bytes)
@@ -361,7 +380,23 @@ class ArrayDataType(PrimitiveDataType):
             f.write('%s    length_%s |= int(buff[offset + 2] & 0xFF) << (8 * 2)\n' % (header, self.name))
             f.write('%s    length_%s |= int(buff[offset + 3] & 0xFF) << (8 * 3)\n' % (header, self.name))
             f.write('%s    offset += 4\n' % header)
-            f.write('%s    self.Go_%s = make([]%s, length_%s, length_%s)\n' % (header, self.name, self.type, self.name, self.name))
+            if primitive_type(self.type):
+                f.write('%s    self.Go_%s = make([]%s, length_%s)\n' % (header, self.name, self.type, self.name))
+            else:
+                package = None
+                name = None
+                try:
+                    package, name = self.type.split(".")
+                except:
+                    package = None
+                    name = self.type
+                f.write('%s    self.Go_%s = make([]*%s, length_%s)\n' % (header, self.name, self.type, self.name))
+                f.write('%s    for i := 0; i < length_%s; i++ {\n' % (header, self.name))
+                if package != None:
+                    f.write('%s        self.Go_%s[i] = %s.New%s()\n' % (header, self.name, package, name))
+                else:
+                    f.write('%s        self.Go_%s[i] = New%s()\n' % (header, self.name, name))
+                f.write('%s    }\n' % header)
             f.write('%s    for i := 0; i < length_%s; i++ {\n' % (header, self.name))
             c.deserialize(f, header + '    ')
             f.write('%s    }\n' % header)
@@ -401,8 +436,8 @@ ROS_TO_EMBEDDED_TYPES = {
     'uint64'  :   ('uint64',          8, PrimitiveDataType, []),
     'float32' :   ('float32',             4, PrimitiveDataType, ['encoding/binary', 'math']),
     'float64' :   ('float64',            8, PrimitiveDataType, ['encoding/binary', 'math']),
-    'time'    :   ('tinyros.Time',         8, TimeDataType, ['tiny_ros/tinyros/time']),
-    'duration':   ('tinyros.Duration',     8, TimeDataType, ['tiny_ros/tinyros/time']),
+    'time'    :   ('rostime.Time',         8, TimeDataType, ['tiny_ros/tinyros/time']),
+    'duration':   ('rostime.Duration',     8, TimeDataType, ['tiny_ros/tinyros/time']),
     'string'  :   ('string',             0, StringDataType, []),
     'Header'  :   ('std_msgs.Header',  0, MessageDataType, ['tiny_ros/std_msgs'])
 }
@@ -538,10 +573,13 @@ class Message:
         f.write('\n')
 
     def _write_echo(self, f):
-        f.write('func (self *%s) Go_echo() (string) { return "" }\n' % (self.name))
+        f.write('func (self *%s) Go_echo() (string) { \n' % (self.name))
+        f.write('    data, _ := json.Marshal(self)\n')
+        f.write('    return string(data)\n')
+        f.write('}\n\n')
 
     def _write_std_includes(self, f):
-        f.write('')
+        f.write('    "encoding/json"\n')
 
     def _write_msg_includes(self,f):
         for i in self.includes:

@@ -69,7 +69,7 @@ public static class SetJointPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETJOINTPROPERTIES; }
     public java.lang.String getMD5(){ return "e9063603bda4e7bdd2b5530ad7705661"; }
     public long getID() { return this.__id__; }
@@ -141,7 +141,7 @@ public static class SetJointPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETJOINTPROPERTIES; }
     public java.lang.String getMD5(){ return "7e8650b70fd2dfc24b249dddf8f45cee"; }
     public long getID() { return this.__id__; }

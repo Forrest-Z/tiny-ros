@@ -111,7 +111,7 @@ static const char FRAMEGRAPH[] = "tf2_msgs/FrameGraph";
       arrToVar(length_frame_yaml, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_frame_yaml; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_frame_yaml-1]=0;
       this->frame_yaml = (char *)(inbuffer + offset-1);
@@ -131,7 +131,12 @@ static const char FRAMEGRAPH[] = "tf2_msgs/FrameGraph";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"frame_yaml\": \"";
+      std::size_t frame_yaml_pos = frame_yaml.find("\"");
+      while(frame_yaml_pos != std::string::npos){
+        frame_yaml.replace(frame_yaml_pos, 1,"\\\"");
+        frame_yaml_pos = frame_yaml.find("\"", frame_yaml_pos+2);
+      }
+      string_echo += "\"frame_yaml\":\"";
       string_echo += frame_yaml;
       string_echo += "\"";
       string_echo += "}";

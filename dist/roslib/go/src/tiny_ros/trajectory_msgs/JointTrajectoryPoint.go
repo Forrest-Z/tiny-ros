@@ -1,6 +1,7 @@
 package trajectory_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
     "tiny_ros/tinyros/time"
@@ -12,7 +13,7 @@ type JointTrajectoryPoint struct {
     Go_velocities []float64 `json:"velocities"`
     Go_accelerations []float64 `json:"accelerations"`
     Go_effort []float64 `json:"effort"`
-    Go_time_from_start *tinyros.Duration `json:"time_from_start"`
+    Go_time_from_start *rostime.Duration `json:"time_from_start"`
 }
 
 func NewJointTrajectoryPoint() (*JointTrajectoryPoint) {
@@ -21,7 +22,7 @@ func NewJointTrajectoryPoint() (*JointTrajectoryPoint) {
     newJointTrajectoryPoint.Go_velocities = []float64{}
     newJointTrajectoryPoint.Go_accelerations = []float64{}
     newJointTrajectoryPoint.Go_effort = []float64{}
-    newJointTrajectoryPoint.Go_time_from_start = tinyros.NewDuration()
+    newJointTrajectoryPoint.Go_time_from_start = rostime.NewDuration()
     return newJointTrajectoryPoint
 }
 
@@ -30,7 +31,7 @@ func (self *JointTrajectoryPoint) Go_initialize() {
     self.Go_velocities = []float64{}
     self.Go_accelerations = []float64{}
     self.Go_effort = []float64{}
-    self.Go_time_from_start = tinyros.NewDuration()
+    self.Go_time_from_start = rostime.NewDuration()
 }
 
 func (self *JointTrajectoryPoint) Go_serialize(buff []byte) (int) {
@@ -99,7 +100,7 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_positions |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_positions |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_positions = make([]float64, length_positions, length_positions)
+    self.Go_positions = make([]float64, length_positions)
     for i := 0; i < length_positions; i++ {
         bits_positionsi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_positions[i] = math.Float64frombits(bits_positionsi)
@@ -110,7 +111,7 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_velocities |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_velocities |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_velocities = make([]float64, length_velocities, length_velocities)
+    self.Go_velocities = make([]float64, length_velocities)
     for i := 0; i < length_velocities; i++ {
         bits_velocitiesi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_velocities[i] = math.Float64frombits(bits_velocitiesi)
@@ -121,7 +122,7 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_accelerations |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_accelerations |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_accelerations = make([]float64, length_accelerations, length_accelerations)
+    self.Go_accelerations = make([]float64, length_accelerations)
     for i := 0; i < length_accelerations; i++ {
         bits_accelerationsi := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_accelerations[i] = math.Float64frombits(bits_accelerationsi)
@@ -132,7 +133,7 @@ func (self *JointTrajectoryPoint) Go_deserialize(buff []byte) (int) {
     length_effort |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_effort |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_effort = make([]float64, length_effort, length_effort)
+    self.Go_effort = make([]float64, length_effort)
     for i := 0; i < length_effort; i++ {
         bits_efforti := binary.LittleEndian.Uint64(buff[offset:])
         self.Go_effort[i] = math.Float64frombits(bits_efforti)
@@ -178,7 +179,11 @@ func (self *JointTrajectoryPoint) Go_serializedLength() (int) {
     return length
 }
 
-func (self *JointTrajectoryPoint) Go_echo() (string) { return "" }
+func (self *JointTrajectoryPoint) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *JointTrajectoryPoint) Go_getType() (string) { return "trajectory_msgs/JointTrajectoryPoint" }
 func (self *JointTrajectoryPoint) Go_getMD5() (string) { return "38679319321341510f6fde7d7f745eb0" }
 func (self *JointTrajectoryPoint) Go_getID() (uint32) { return 0 }

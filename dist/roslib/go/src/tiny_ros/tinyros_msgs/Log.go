@@ -1,6 +1,7 @@
 package tinyros_msgs
 
 import (
+    "encoding/json"
 )
 
 func Go_ROSDEBUG() (uint8) { return 0 }
@@ -64,7 +65,11 @@ func (self *Log) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Log) Go_echo() (string) { return "" }
+func (self *Log) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Log) Go_getType() (string) { return "tinyros_msgs/Log" }
 func (self *Log) Go_getMD5() (string) { return "0bd74339b4d77cb15766d831a3d15eeb" }
 func (self *Log) Go_getID() (uint32) { return 0 }

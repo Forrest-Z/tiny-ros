@@ -148,7 +148,7 @@ public static class ApplyBodyWrenchRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return APPLYBODYWRENCH; }
     public java.lang.String getMD5(){ return "434adb4bdbb64c5610c7fadb31f0fa7d"; }
     public long getID() { return this.__id__; }
@@ -220,7 +220,7 @@ public static class ApplyBodyWrenchResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return APPLYBODYWRENCH; }
     public java.lang.String getMD5(){ return "f29b3c75e7d692065eda02aae6d3a3a0"; }
     public long getID() { return this.__id__; }

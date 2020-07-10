@@ -67,8 +67,8 @@ namespace rosgraph_msgs
     {
       std::string string_echo = "{";
       std::stringstream ss_clock;
-      ss_clock << "\"clock.sec\": " << clock.sec;
-      ss_clock << ", \"clock.nsec\": " << clock.nsec << "";
+      ss_clock << "\"clock\":{\"sec\":" << clock.sec;
+      ss_clock << ",\"nsec\":" << clock.nsec << "}";
       string_echo += ss_clock.str();
       string_echo += "}";
       return string_echo;

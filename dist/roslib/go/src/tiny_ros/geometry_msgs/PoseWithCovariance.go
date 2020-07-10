@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -54,7 +55,11 @@ func (self *PoseWithCovariance) Go_serializedLength() (int) {
     return length
 }
 
-func (self *PoseWithCovariance) Go_echo() (string) { return "" }
+func (self *PoseWithCovariance) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *PoseWithCovariance) Go_getType() (string) { return "geometry_msgs/PoseWithCovariance" }
 func (self *PoseWithCovariance) Go_getMD5() (string) { return "054c6283d50e78f8d9358aaaee5f4c1b" }
 func (self *PoseWithCovariance) Go_getID() (uint32) { return 0 }

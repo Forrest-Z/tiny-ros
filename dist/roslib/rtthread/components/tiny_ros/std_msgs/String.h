@@ -38,7 +38,7 @@ namespace std_msgs
       arrToVar(length_data, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_data; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_data-1]=0;
       this->data = (char *)(inbuffer + offset-1);

@@ -1,6 +1,7 @@
 package tf2_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
@@ -8,9 +9,9 @@ import (
 type LookupTransformGoal struct {
     Go_target_frame string `json:"target_frame"`
     Go_source_frame string `json:"source_frame"`
-    Go_source_time *tinyros.Time `json:"source_time"`
-    Go_timeout *tinyros.Duration `json:"timeout"`
-    Go_target_time *tinyros.Time `json:"target_time"`
+    Go_source_time *rostime.Time `json:"source_time"`
+    Go_timeout *rostime.Duration `json:"timeout"`
+    Go_target_time *rostime.Time `json:"target_time"`
     Go_fixed_frame string `json:"fixed_frame"`
     Go_advanced bool `json:"advanced"`
 }
@@ -19,9 +20,9 @@ func NewLookupTransformGoal() (*LookupTransformGoal) {
     newLookupTransformGoal := new(LookupTransformGoal)
     newLookupTransformGoal.Go_target_frame = ""
     newLookupTransformGoal.Go_source_frame = ""
-    newLookupTransformGoal.Go_source_time = tinyros.NewTime()
-    newLookupTransformGoal.Go_timeout = tinyros.NewDuration()
-    newLookupTransformGoal.Go_target_time = tinyros.NewTime()
+    newLookupTransformGoal.Go_source_time = rostime.NewTime()
+    newLookupTransformGoal.Go_timeout = rostime.NewDuration()
+    newLookupTransformGoal.Go_target_time = rostime.NewTime()
     newLookupTransformGoal.Go_fixed_frame = ""
     newLookupTransformGoal.Go_advanced = false
     return newLookupTransformGoal
@@ -30,9 +31,9 @@ func NewLookupTransformGoal() (*LookupTransformGoal) {
 func (self *LookupTransformGoal) Go_initialize() {
     self.Go_target_frame = ""
     self.Go_source_frame = ""
-    self.Go_source_time = tinyros.NewTime()
-    self.Go_timeout = tinyros.NewDuration()
-    self.Go_target_time = tinyros.NewTime()
+    self.Go_source_time = rostime.NewTime()
+    self.Go_timeout = rostime.NewDuration()
+    self.Go_target_time = rostime.NewTime()
     self.Go_fixed_frame = ""
     self.Go_advanced = false
 }
@@ -185,7 +186,11 @@ func (self *LookupTransformGoal) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LookupTransformGoal) Go_echo() (string) { return "" }
+func (self *LookupTransformGoal) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LookupTransformGoal) Go_getType() (string) { return "tf2_msgs/LookupTransformGoal" }
 func (self *LookupTransformGoal) Go_getMD5() (string) { return "677c84a912b788ccaaea5fbc38570182" }
 func (self *LookupTransformGoal) Go_getID() (uint32) { return 0 }

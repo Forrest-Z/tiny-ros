@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -43,7 +44,11 @@ func (self *TwistWithCovarianceStamped) Go_serializedLength() (int) {
     return length
 }
 
-func (self *TwistWithCovarianceStamped) Go_echo() (string) { return "" }
+func (self *TwistWithCovarianceStamped) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *TwistWithCovarianceStamped) Go_getType() (string) { return "geometry_msgs/TwistWithCovarianceStamped" }
 func (self *TwistWithCovarianceStamped) Go_getMD5() (string) { return "2cbcab62cac39de1d1d01785b99ba778" }
 func (self *TwistWithCovarianceStamped) Go_getID() (uint32) { return 0 }

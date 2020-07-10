@@ -55,36 +55,36 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->joint_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->joint_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->joint_names_length);
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_joint_namesi = this->joint_names[i].size();
-      varToArr(outbuffer + offset, length_joint_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->joint_names[i].c_str(), length_joint_namesi);
-      offset += length_joint_namesi;
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_joint_namesi = this->joint_names[i].size();
+        varToArr(outbuffer + offset, length_joint_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->joint_names[i].c_str(), length_joint_namesi);
+        offset += length_joint_namesi;
       }
       *(outbuffer + offset + 0) = (this->transforms_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->transforms_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->transforms_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->transforms_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->transforms[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->transforms[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->twist_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->twist_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->twist_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->twist_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->twist_length);
-      for( uint32_t i = 0; i < twist_length; i++){
-      offset += this->twist[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < twist_length; i++) {
+        offset += this->twist[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->wrench_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->wrench_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->wrench_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->wrench_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->wrench_length);
-      for( uint32_t i = 0; i < wrench_length; i++){
-      offset += this->wrench[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < wrench_length; i++) {
+        offset += this->wrench[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -101,16 +101,16 @@ namespace sensor_msgs
       if(joint_names_lengthT > joint_names_length)
         this->joint_names = (std::string*)realloc(this->joint_names, joint_names_lengthT * sizeof(std::string));
       joint_names_length = joint_names_lengthT;
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_st_joint_names;
-      arrToVar(length_st_joint_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_joint_names; ++k){
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_st_joint_names;
+        arrToVar(length_st_joint_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_joint_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_joint_names-1]=0;
-      this->st_joint_names = (char *)(inbuffer + offset-1);
-      offset += length_st_joint_names;
+        }
+        inbuffer[offset+length_st_joint_names-1]=0;
+        this->st_joint_names = (char *)(inbuffer + offset-1);
+        offset += length_st_joint_names;
         memcpy( &(this->joint_names[i]), &(this->st_joint_names), sizeof(std::string));
       }
       uint32_t transforms_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -121,8 +121,8 @@ namespace sensor_msgs
       if(transforms_lengthT > transforms_length)
         this->transforms = (geometry_msgs::Transform*)realloc(this->transforms, transforms_lengthT * sizeof(geometry_msgs::Transform));
       transforms_length = transforms_lengthT;
-      for( uint32_t i = 0; i < transforms_length; i++){
-      offset += this->st_transforms.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        offset += this->st_transforms.deserialize(inbuffer + offset);
         memcpy( &(this->transforms[i]), &(this->st_transforms), sizeof(geometry_msgs::Transform));
       }
       uint32_t twist_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -133,8 +133,8 @@ namespace sensor_msgs
       if(twist_lengthT > twist_length)
         this->twist = (geometry_msgs::Twist*)realloc(this->twist, twist_lengthT * sizeof(geometry_msgs::Twist));
       twist_length = twist_lengthT;
-      for( uint32_t i = 0; i < twist_length; i++){
-      offset += this->st_twist.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < twist_length; i++) {
+        offset += this->st_twist.deserialize(inbuffer + offset);
         memcpy( &(this->twist[i]), &(this->st_twist), sizeof(geometry_msgs::Twist));
       }
       uint32_t wrench_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -145,8 +145,8 @@ namespace sensor_msgs
       if(wrench_lengthT > wrench_length)
         this->wrench = (geometry_msgs::Wrench*)realloc(this->wrench, wrench_lengthT * sizeof(geometry_msgs::Wrench));
       wrench_length = wrench_lengthT;
-      for( uint32_t i = 0; i < wrench_length; i++){
-      offset += this->st_wrench.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < wrench_length; i++) {
+        offset += this->st_wrench.deserialize(inbuffer + offset);
         memcpy( &(this->wrench[i]), &(this->st_wrench), sizeof(geometry_msgs::Wrench));
       }
       return offset;
@@ -157,22 +157,22 @@ namespace sensor_msgs
       int length = 0;
       length += this->header.serializedLength();
       length += sizeof(this->joint_names_length);
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      uint32_t length_joint_namesi = this->joint_names[i].size();
-      length += 4;
-      length += length_joint_namesi;
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        uint32_t length_joint_namesi = this->joint_names[i].size();
+        length += 4;
+        length += length_joint_namesi;
       }
       length += sizeof(this->transforms_length);
-      for( uint32_t i = 0; i < transforms_length; i++){
-      length += this->transforms[i].serializedLength();
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        length += this->transforms[i].serializedLength();
       }
       length += sizeof(this->twist_length);
-      for( uint32_t i = 0; i < twist_length; i++){
-      length += this->twist[i].serializedLength();
+      for( uint32_t i = 0; i < twist_length; i++) {
+        length += this->twist[i].serializedLength();
       }
       length += sizeof(this->wrench_length);
-      for( uint32_t i = 0; i < wrench_length; i++){
-      length += this->wrench[i].serializedLength();
+      for( uint32_t i = 0; i < wrench_length; i++) {
+        length += this->wrench[i].serializedLength();
       }
       return length;
     }
@@ -180,65 +180,65 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "joint_names: [";
-      for( uint32_t i = 0; i < joint_names_length; i++){
-      if( i == (joint_names_length - 1)) {
-      string_echo += "\"joint_names[i]\": \"";
-      string_echo += joint_names[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"joint_names[i]\": \"";
-      string_echo += joint_names[i];
-      string_echo += "\", ";
+      string_echo += ",";
+      string_echo += "joint_names:[";
+      for( uint32_t i = 0; i < joint_names_length; i++) {
+        if( i == (joint_names_length - 1)) {
+          std::stringstream ss_joint_namesi; ss_joint_namesi << "\"";
+          string_echo += ss_joint_namesi.str();
+          std::size_t joint_namesi_pos = joint_names[i].find("\"");
+          while(joint_namesi_pos != std::string::npos){
+            joint_names[i].replace(joint_namesi_pos, 1,"\\\"");
+            joint_namesi_pos = joint_names[i].find("\"", joint_namesi_pos+2);
+          }
+          string_echo += joint_names[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_joint_namesi; ss_joint_namesi << "\"";
+          string_echo += ss_joint_namesi.str();
+          std::size_t joint_namesi_pos = joint_names[i].find("\"");
+          while(joint_namesi_pos != std::string::npos){
+            joint_names[i].replace(joint_namesi_pos, 1,"\\\"");
+            joint_namesi_pos = joint_names[i].find("\"", joint_namesi_pos+2);
+          }
+          string_echo += joint_names[i];
+          string_echo += "\",";
+        }
       }
+      string_echo += "],";
+      string_echo += "transforms:[";
+      for( uint32_t i = 0; i < transforms_length; i++) {
+        if( i == (transforms_length - 1)) {
+          string_echo += this->transforms[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->transforms[i].echo();
+          string_echo += ",";
+        }
       }
-      string_echo += "], ";
-      string_echo += "transforms: [";
-      for( uint32_t i = 0; i < transforms_length; i++){
-      if( i == (transforms_length - 1)) {
-      std::stringstream ss_transformsi; ss_transformsi << "{\"transforms" << i <<"\": {";
-      string_echo += ss_transformsi.str();
-      string_echo += this->transforms[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_transformsi; ss_transformsi << "{\"transforms" << i <<"\": {";
-      string_echo += ss_transformsi.str();
-      string_echo += this->transforms[i].echo();
-      string_echo += "}}, ";
+      string_echo += "],";
+      string_echo += "twist:[";
+      for( uint32_t i = 0; i < twist_length; i++) {
+        if( i == (twist_length - 1)) {
+          string_echo += this->twist[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->twist[i].echo();
+          string_echo += ",";
+        }
       }
-      }
-      string_echo += "], ";
-      string_echo += "twist: [";
-      for( uint32_t i = 0; i < twist_length; i++){
-      if( i == (twist_length - 1)) {
-      std::stringstream ss_twisti; ss_twisti << "{\"twist" << i <<"\": {";
-      string_echo += ss_twisti.str();
-      string_echo += this->twist[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_twisti; ss_twisti << "{\"twist" << i <<"\": {";
-      string_echo += ss_twisti.str();
-      string_echo += this->twist[i].echo();
-      string_echo += "}}, ";
-      }
-      }
-      string_echo += "], ";
-      string_echo += "wrench: [";
-      for( uint32_t i = 0; i < wrench_length; i++){
-      if( i == (wrench_length - 1)) {
-      std::stringstream ss_wrenchi; ss_wrenchi << "{\"wrench" << i <<"\": {";
-      string_echo += ss_wrenchi.str();
-      string_echo += this->wrench[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_wrenchi; ss_wrenchi << "{\"wrench" << i <<"\": {";
-      string_echo += ss_wrenchi.str();
-      string_echo += this->wrench[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "],";
+      string_echo += "wrench:[";
+      for( uint32_t i = 0; i < wrench_length; i++) {
+        if( i == (wrench_length - 1)) {
+          string_echo += this->wrench[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->wrench[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

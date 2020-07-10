@@ -32,7 +32,7 @@ public class Twist implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Twist"; }
     public java.lang.String getMD5(){ return "29e7e4839b73f684ad08b19dc12c9c70"; }
     public long getID() { return 0; }

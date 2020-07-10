@@ -43,7 +43,7 @@ public static class SetModelStateRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETMODELSTATE; }
     public java.lang.String getMD5(){ return "328e9e434938c39f3fd8e958ad8d6dab"; }
     public long getID() { return this.__id__; }
@@ -115,7 +115,7 @@ public static class SetModelStateResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETMODELSTATE; }
     public java.lang.String getMD5(){ return "7fe6c3a1ea4a4df9bf5b6858fd028ee6"; }
     public long getID() { return this.__id__; }

@@ -61,7 +61,7 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
       arrToVar(length_joint_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_joint_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_joint_name-1]=0;
       this->joint_name = (char *)(inbuffer + offset-1);
@@ -83,12 +83,17 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"joint_name\": \"";
+      std::size_t joint_name_pos = joint_name.find("\"");
+      while(joint_name_pos != std::string::npos){
+        joint_name.replace(joint_name_pos, 1,"\\\"");
+        joint_name_pos = joint_name.find("\"", joint_name_pos+2);
+      }
+      string_echo += "\"joint_name\":\"";
       string_echo += joint_name;
-      string_echo += "\", ";
-      string_echo += "\"ode_joint_config\": {";
+      string_echo += "\",";
+      string_echo += "\"ode_joint_config\":";
       string_echo += this->ode_joint_config.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }
@@ -162,7 +167,7 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -183,9 +188,14 @@ static const char SETJOINTPROPERTIES[] = "gazebo_msgs/SetJointProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

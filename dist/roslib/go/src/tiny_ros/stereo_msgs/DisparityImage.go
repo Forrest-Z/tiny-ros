@@ -1,6 +1,7 @@
 package stereo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/sensor_msgs"
     "encoding/binary"
@@ -102,7 +103,11 @@ func (self *DisparityImage) Go_serializedLength() (int) {
     return length
 }
 
-func (self *DisparityImage) Go_echo() (string) { return "" }
+func (self *DisparityImage) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *DisparityImage) Go_getType() (string) { return "stereo_msgs/DisparityImage" }
 func (self *DisparityImage) Go_getMD5() (string) { return "03545cef8df8d20bea21fdbbf9482b4b" }
 func (self *DisparityImage) Go_getID() (uint32) { return 0 }

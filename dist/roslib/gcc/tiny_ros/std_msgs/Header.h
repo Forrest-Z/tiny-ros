@@ -77,7 +77,7 @@ namespace std_msgs
       arrToVar(length_frame_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_frame_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_frame_id-1]=0;
       this->frame_id = (char *)(inbuffer + offset-1);
@@ -100,13 +100,18 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_seq; ss_seq << "\"seq\": " << seq <<", ";
+      std::stringstream ss_seq; ss_seq << "\"seq\":" << seq <<",";
       string_echo += ss_seq.str();
       std::stringstream ss_stamp;
-      ss_stamp << "\"stamp.sec\": " << stamp.sec;
-      ss_stamp << ", \"stamp.nsec\": " << stamp.nsec << ", ";
+      ss_stamp << "\"stamp\":{\"sec\":" << stamp.sec;
+      ss_stamp << ",\"nsec\":" << stamp.nsec << "},";
       string_echo += ss_stamp.str();
-      string_echo += "\"frame_id\": \"";
+      std::size_t frame_id_pos = frame_id.find("\"");
+      while(frame_id_pos != std::string::npos){
+        frame_id.replace(frame_id_pos, 1,"\\\"");
+        frame_id_pos = frame_id.find("\"", frame_id_pos+2);
+      }
+      string_echo += "\"frame_id\":\"";
       string_echo += frame_id;
       string_echo += "\"";
       string_echo += "}";

@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -62,7 +63,11 @@ func (self *Vector3) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Vector3) Go_echo() (string) { return "" }
+func (self *Vector3) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Vector3) Go_getType() (string) { return "geometry_msgs/Vector3" }
 func (self *Vector3) Go_getMD5() (string) { return "b5c8c5b484ec7d5e36a4d9de9124c561" }
 func (self *Vector3) Go_getID() (uint32) { return 0 }

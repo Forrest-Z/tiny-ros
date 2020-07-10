@@ -54,7 +54,7 @@ static const char BODYREQUEST[] = "gazebo_msgs/BodyRequest";
       arrToVar(length_body_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_body_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_body_name-1]=0;
       this->body_name = (char *)(inbuffer + offset-1);

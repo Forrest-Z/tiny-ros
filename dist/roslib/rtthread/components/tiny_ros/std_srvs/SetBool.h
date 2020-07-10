@@ -139,7 +139,7 @@ static const char SETBOOL[] = "std_srvs/SetBool";
       arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message-1]=0;
       this->message = (char *)(inbuffer + offset-1);

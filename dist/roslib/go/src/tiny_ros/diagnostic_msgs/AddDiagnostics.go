@@ -1,6 +1,7 @@
 package diagnostic_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -65,7 +66,11 @@ func (self *AddDiagnosticsRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *AddDiagnosticsRequest) Go_echo() (string) { return "" }
+func (self *AddDiagnosticsRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *AddDiagnosticsRequest) Go_getType() (string) { return "diagnostic_msgs/AddDiagnostics" }
 func (self *AddDiagnosticsRequest) Go_getMD5() (string) { return "005ba76b3cd04edebfe46acad928fbeb" }
 func (self *AddDiagnosticsRequest) Go_getID() (uint32) { return self.__id__ }
@@ -151,7 +156,11 @@ func (self *AddDiagnosticsResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *AddDiagnosticsResponse) Go_echo() (string) { return "" }
+func (self *AddDiagnosticsResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *AddDiagnosticsResponse) Go_getType() (string) { return "diagnostic_msgs/AddDiagnostics" }
 func (self *AddDiagnosticsResponse) Go_getMD5() (string) { return "9bd37b30a2340a31743d1e80a2c52ed0" }
 func (self *AddDiagnosticsResponse) Go_getID() (uint32) { return self.__id__ }

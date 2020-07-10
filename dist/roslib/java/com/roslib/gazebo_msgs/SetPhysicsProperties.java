@@ -96,7 +96,7 @@ public static class SetPhysicsPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETPHYSICSPROPERTIES; }
     public java.lang.String getMD5(){ return "373e5371b10119be0a008429a9660679"; }
     public long getID() { return this.__id__; }
@@ -168,7 +168,7 @@ public static class SetPhysicsPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETPHYSICSPROPERTIES; }
     public java.lang.String getMD5(){ return "5b1d14bf828ba119319cc03e2bb3473a"; }
     public long getID() { return this.__id__; }

@@ -37,16 +37,16 @@ namespace shape_msgs
       *(outbuffer + offset + 2) = (this->triangles_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->triangles_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->triangles_length);
-      for( uint32_t i = 0; i < triangles_length; i++){
-      offset += this->triangles[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < triangles_length; i++) {
+        offset += this->triangles[i].serialize(outbuffer + offset);
       }
       *(outbuffer + offset + 0) = (this->vertices_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->vertices_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->vertices_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->vertices_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->vertices_length);
-      for( uint32_t i = 0; i < vertices_length; i++){
-      offset += this->vertices[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < vertices_length; i++) {
+        offset += this->vertices[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -62,8 +62,8 @@ namespace shape_msgs
       if(triangles_lengthT > triangles_length)
         this->triangles = (shape_msgs::MeshTriangle*)realloc(this->triangles, triangles_lengthT * sizeof(shape_msgs::MeshTriangle));
       triangles_length = triangles_lengthT;
-      for( uint32_t i = 0; i < triangles_length; i++){
-      offset += this->st_triangles.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < triangles_length; i++) {
+        offset += this->st_triangles.deserialize(inbuffer + offset);
         memcpy( &(this->triangles[i]), &(this->st_triangles), sizeof(shape_msgs::MeshTriangle));
       }
       uint32_t vertices_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -74,8 +74,8 @@ namespace shape_msgs
       if(vertices_lengthT > vertices_length)
         this->vertices = (geometry_msgs::Point*)realloc(this->vertices, vertices_lengthT * sizeof(geometry_msgs::Point));
       vertices_length = vertices_lengthT;
-      for( uint32_t i = 0; i < vertices_length; i++){
-      offset += this->st_vertices.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < vertices_length; i++) {
+        offset += this->st_vertices.deserialize(inbuffer + offset);
         memcpy( &(this->vertices[i]), &(this->st_vertices), sizeof(geometry_msgs::Point));
       }
       return offset;
@@ -85,12 +85,12 @@ namespace shape_msgs
     {
       int length = 0;
       length += sizeof(this->triangles_length);
-      for( uint32_t i = 0; i < triangles_length; i++){
-      length += this->triangles[i].serializedLength();
+      for( uint32_t i = 0; i < triangles_length; i++) {
+        length += this->triangles[i].serializedLength();
       }
       length += sizeof(this->vertices_length);
-      for( uint32_t i = 0; i < vertices_length; i++){
-      length += this->vertices[i].serializedLength();
+      for( uint32_t i = 0; i < vertices_length; i++) {
+        length += this->vertices[i].serializedLength();
       }
       return length;
     }

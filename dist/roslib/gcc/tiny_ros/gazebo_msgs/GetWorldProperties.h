@@ -124,12 +124,12 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       *(outbuffer + offset + 2) = (this->model_names_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->model_names_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->model_names_length);
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_model_namesi = this->model_names[i].size();
-      varToArr(outbuffer + offset, length_model_namesi);
-      offset += 4;
-      memcpy(outbuffer + offset, this->model_names[i].c_str(), length_model_namesi);
-      offset += length_model_namesi;
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_model_namesi = this->model_names[i].size();
+        varToArr(outbuffer + offset, length_model_namesi);
+        offset += 4;
+        memcpy(outbuffer + offset, this->model_names[i].c_str(), length_model_namesi);
+        offset += length_model_namesi;
       }
       union {
         bool real;
@@ -184,16 +184,16 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       if(model_names_lengthT > model_names_length)
         this->model_names = (std::string*)realloc(this->model_names, model_names_lengthT * sizeof(std::string));
       model_names_length = model_names_lengthT;
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_st_model_names;
-      arrToVar(length_st_model_names, (inbuffer + offset));
-      offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_model_names; ++k){
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_st_model_names;
+        arrToVar(length_st_model_names, (inbuffer + offset));
+        offset += 4;
+        for(unsigned int k= offset; k< offset+length_st_model_names; ++k){
           inbuffer[k-1]=inbuffer[k];
-      }
-      inbuffer[offset+length_st_model_names-1]=0;
-      this->st_model_names = (char *)(inbuffer + offset-1);
-      offset += length_st_model_names;
+        }
+        inbuffer[offset+length_st_model_names-1]=0;
+        this->st_model_names = (char *)(inbuffer + offset-1);
+        offset += length_st_model_names;
         memcpy( &(this->model_names[i]), &(this->st_model_names), sizeof(std::string));
       }
       union {
@@ -216,7 +216,7 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       arrToVar(length_status_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_status_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_status_message-1]=0;
       this->status_message = (char *)(inbuffer + offset-1);
@@ -229,10 +229,10 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
       int length = 0;
       length += sizeof(this->sim_time);
       length += sizeof(this->model_names_length);
-      for( uint32_t i = 0; i < model_names_length; i++){
-      uint32_t length_model_namesi = this->model_names[i].size();
-      length += 4;
-      length += length_model_namesi;
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        uint32_t length_model_namesi = this->model_names[i].size();
+        length += 4;
+        length += length_model_namesi;
       }
       length += sizeof(this->rendering_enabled);
       length += sizeof(this->success);
@@ -245,26 +245,43 @@ static const char GETWORLDPROPERTIES[] = "gazebo_msgs/GetWorldProperties";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_sim_time; ss_sim_time << "\"sim_time\": " << sim_time <<", ";
+      std::stringstream ss_sim_time; ss_sim_time << "\"sim_time\":" << sim_time <<",";
       string_echo += ss_sim_time.str();
-      string_echo += "model_names: [";
-      for( uint32_t i = 0; i < model_names_length; i++){
-      if( i == (model_names_length - 1)) {
-      string_echo += "\"model_names[i]\": \"";
-      string_echo += model_names[i];
-      string_echo += "\"";
-      } else {
-      string_echo += "\"model_names[i]\": \"";
-      string_echo += model_names[i];
-      string_echo += "\", ";
+      string_echo += "model_names:[";
+      for( uint32_t i = 0; i < model_names_length; i++) {
+        if( i == (model_names_length - 1)) {
+          std::stringstream ss_model_namesi; ss_model_namesi << "\"";
+          string_echo += ss_model_namesi.str();
+          std::size_t model_namesi_pos = model_names[i].find("\"");
+          while(model_namesi_pos != std::string::npos){
+            model_names[i].replace(model_namesi_pos, 1,"\\\"");
+            model_namesi_pos = model_names[i].find("\"", model_namesi_pos+2);
+          }
+          string_echo += model_names[i];
+          string_echo += "\"";
+        } else {
+          std::stringstream ss_model_namesi; ss_model_namesi << "\"";
+          string_echo += ss_model_namesi.str();
+          std::size_t model_namesi_pos = model_names[i].find("\"");
+          while(model_namesi_pos != std::string::npos){
+            model_names[i].replace(model_namesi_pos, 1,"\\\"");
+            model_namesi_pos = model_names[i].find("\"", model_namesi_pos+2);
+          }
+          string_echo += model_names[i];
+          string_echo += "\",";
+        }
       }
-      }
-      string_echo += "], ";
-      std::stringstream ss_rendering_enabled; ss_rendering_enabled << "\"rendering_enabled\": " << rendering_enabled <<", ";
+      string_echo += "],";
+      std::stringstream ss_rendering_enabled; ss_rendering_enabled << "\"rendering_enabled\":" << rendering_enabled <<",";
       string_echo += ss_rendering_enabled.str();
-      std::stringstream ss_success; ss_success << "\"success\": " << success <<", ";
+      std::stringstream ss_success; ss_success << "\"success\":" << success <<",";
       string_echo += ss_success.str();
-      string_echo += "\"status_message\": \"";
+      std::size_t status_message_pos = status_message.find("\"");
+      while(status_message_pos != std::string::npos){
+        status_message.replace(status_message_pos, 1,"\\\"");
+        status_message_pos = status_message.find("\"", status_message_pos+2);
+      }
+      string_echo += "\"status_message\":\"";
       string_echo += status_message;
       string_echo += "\"";
       string_echo += "}";

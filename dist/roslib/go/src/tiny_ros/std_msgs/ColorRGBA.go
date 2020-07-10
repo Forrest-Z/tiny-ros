@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -72,7 +73,11 @@ func (self *ColorRGBA) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ColorRGBA) Go_echo() (string) { return "" }
+func (self *ColorRGBA) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ColorRGBA) Go_getType() (string) { return "std_msgs/ColorRGBA" }
 func (self *ColorRGBA) Go_getMD5() (string) { return "3c740aa311a337bfa4133c69405e0aed" }
 func (self *ColorRGBA) Go_getID() (uint32) { return 0 }

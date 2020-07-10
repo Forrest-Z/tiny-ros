@@ -1,6 +1,7 @@
 package map_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
 )
 
@@ -98,7 +99,7 @@ func (self *OccupancyGridUpdate) Go_deserialize(buff []byte) (int) {
     length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data = make([]int8, length_data, length_data)
+    self.Go_data = make([]int8, length_data)
     for i := 0; i < length_data; i++ {
         self.Go_data[i] = int8(buff[offset + 0] & 0xFF) << (8 * 0)
         offset += 1
@@ -121,7 +122,11 @@ func (self *OccupancyGridUpdate) Go_serializedLength() (int) {
     return length
 }
 
-func (self *OccupancyGridUpdate) Go_echo() (string) { return "" }
+func (self *OccupancyGridUpdate) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *OccupancyGridUpdate) Go_getType() (string) { return "map_msgs/OccupancyGridUpdate" }
 func (self *OccupancyGridUpdate) Go_getMD5() (string) { return "159b2d7856932f2e2cad9b082ed99ec2" }
 func (self *OccupancyGridUpdate) Go_getID() (uint32) { return 0 }

@@ -1,6 +1,7 @@
 package geometry_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -72,7 +73,11 @@ func (self *Quaternion) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Quaternion) Go_echo() (string) { return "" }
+func (self *Quaternion) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Quaternion) Go_getType() (string) { return "geometry_msgs/Quaternion" }
 func (self *Quaternion) Go_getMD5() (string) { return "175c1571887d10ebed42ba6c042ddd88" }
 func (self *Quaternion) Go_getID() (uint32) { return 0 }

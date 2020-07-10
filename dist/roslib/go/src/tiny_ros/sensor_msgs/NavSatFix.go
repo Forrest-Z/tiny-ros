@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "encoding/binary"
     "math"
@@ -103,7 +104,11 @@ func (self *NavSatFix) Go_serializedLength() (int) {
     return length
 }
 
-func (self *NavSatFix) Go_echo() (string) { return "" }
+func (self *NavSatFix) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *NavSatFix) Go_getType() (string) { return "sensor_msgs/NavSatFix" }
 func (self *NavSatFix) Go_getMD5() (string) { return "adc27ca9d8634ed087021b82f3c43576" }
 func (self *NavSatFix) Go_getID() (uint32) { return 0 }

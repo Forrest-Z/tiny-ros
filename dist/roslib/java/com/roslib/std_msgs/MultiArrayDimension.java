@@ -74,7 +74,7 @@ public class MultiArrayDimension implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/MultiArrayDimension"; }
     public java.lang.String getMD5(){ return "c2aacf83d49c7aa4a8504bd32158e990"; }
     public long getID() { return 0; }

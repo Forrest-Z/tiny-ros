@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -79,7 +80,11 @@ func (self *MultiArrayDimension) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MultiArrayDimension) Go_echo() (string) { return "" }
+func (self *MultiArrayDimension) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MultiArrayDimension) Go_getType() (string) { return "std_msgs/MultiArrayDimension" }
 func (self *MultiArrayDimension) Go_getMD5() (string) { return "c2aacf83d49c7aa4a8504bd32158e990" }
 func (self *MultiArrayDimension) Go_getID() (uint32) { return 0 }

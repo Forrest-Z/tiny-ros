@@ -48,7 +48,7 @@ public class TinyrosHello implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tinyros_hello/TinyrosHello"; }
     public java.lang.String getMD5(){ return "0c68e66a217802ad0c9f648b7a69d090"; }
     public long getID() { return 0; }

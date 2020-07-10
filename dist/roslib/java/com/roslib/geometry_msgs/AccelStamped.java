@@ -32,7 +32,7 @@ public class AccelStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/AccelStamped"; }
     public java.lang.String getMD5(){ return "fa35432963826361a1073b1df905a559"; }
     public long getID() { return 0; }

@@ -88,7 +88,7 @@ public static class SetJointTrajectoryRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETJOINTTRAJECTORY; }
     public java.lang.String getMD5(){ return "8230e1fcc0295d8d21fbd5df0ccb0af3"; }
     public long getID() { return this.__id__; }
@@ -160,7 +160,7 @@ public static class SetJointTrajectoryResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return SETJOINTTRAJECTORY; }
     public java.lang.String getMD5(){ return "2f5fe47400272efd54556969ffe63e7e"; }
     public long getID() { return this.__id__; }

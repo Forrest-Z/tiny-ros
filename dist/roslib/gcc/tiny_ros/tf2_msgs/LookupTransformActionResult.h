@@ -61,15 +61,15 @@ namespace tf2_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
-      string_echo += "\"status\": {";
+      string_echo += ",";
+      string_echo += "\"status\":";
       string_echo += this->status.echo();
-      string_echo += "}, ";
-      string_echo += "\"result\": {";
+      string_echo += ",";
+      string_echo += "\"result\":";
       string_echo += this->result.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

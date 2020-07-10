@@ -93,7 +93,7 @@ public class MapMetaData implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "nav_msgs/MapMetaData"; }
     public java.lang.String getMD5(){ return "328f5a1f2242fff4676d48189bd8b309"; }
     public long getID() { return 0; }

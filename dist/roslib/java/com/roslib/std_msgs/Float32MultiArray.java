@@ -20,13 +20,13 @@ public class Float32MultiArray implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_data >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_data >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_data; i++){
-        int bits_datai = Float.floatToRawIntBits(data[i]);
-        outbuffer[offset + 0] = (byte)((bits_datai >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_datai >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_datai >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_datai >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_data; i++) {
+            int bits_datai = Float.floatToRawIntBits(data[i]);
+            outbuffer[offset + 0] = (byte)((bits_datai >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_datai >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_datai >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_datai >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         return offset;
     }
@@ -42,14 +42,14 @@ public class Float32MultiArray implements com.roslib.ros.Msg {
         if(length_data > 0) {
             this.data = new float[length_data];
         }
-        for (int i = 0; i < length_data; i++){
-        int bits_datai = 0;
-        bits_datai |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_datai |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_datai |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_datai |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        this.data[i] = Float.intBitsToFloat(bits_datai);
-        offset += 4;
+        for (int i = 0; i < length_data; i++) {
+            int bits_datai = 0;
+            bits_datai |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_datai |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_datai |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_datai |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            this.data[i] = Float.intBitsToFloat(bits_datai);
+            offset += 4;
         }
         return offset;
     }
@@ -60,12 +60,12 @@ public class Float32MultiArray implements com.roslib.ros.Msg {
         length += 4;
         int length_data = this.data != null ? this.data.length : 0;
         for (int i = 0; i < length_data; i++) {
-        length += 4;
+            length += 4;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "std_msgs/Float32MultiArray"; }
     public java.lang.String getMD5(){ return "224f9a21761656b5f5da2b311973577f"; }
     public long getID() { return 0; }

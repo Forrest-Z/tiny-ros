@@ -64,7 +64,7 @@ public static class GetPlanRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPLAN; }
     public java.lang.String getMD5(){ return "557d5ea947f7761284cf7abef1cd7227"; }
     public long getID() { return this.__id__; }
@@ -108,7 +108,7 @@ public static class GetPlanResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPLAN; }
     public java.lang.String getMD5(){ return "67c62b8c931eabfe35c88aed4b8f1258"; }
     public long getID() { return this.__id__; }

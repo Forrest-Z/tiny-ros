@@ -139,11 +139,11 @@ namespace geometry_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_x; ss_x << "\"x\": " << x <<", ";
+      std::stringstream ss_x; ss_x << "\"x\":" << x <<",";
       string_echo += ss_x.str();
-      std::stringstream ss_y; ss_y << "\"y\": " << y <<", ";
+      std::stringstream ss_y; ss_y << "\"y\":" << y <<",";
       string_echo += ss_y.str();
-      std::stringstream ss_z; ss_z << "\"z\": " << z <<"";
+      std::stringstream ss_z; ss_z << "\"z\":" << z <<"";
       string_echo += ss_z.str();
       string_echo += "}";
       return string_echo;

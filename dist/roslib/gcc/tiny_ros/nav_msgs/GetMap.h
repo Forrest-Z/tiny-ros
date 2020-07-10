@@ -118,9 +118,9 @@ static const char GETMAP[] = "nav_msgs/GetMap";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"map\": {";
+      string_echo += "\"map\":";
       string_echo += this->map.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

@@ -38,7 +38,7 @@ public static class GetPhysicsPropertiesRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPHYSICSPROPERTIES; }
     public java.lang.String getMD5(){ return "cba4b83a6824644ef787d2ac8bb7aa60"; }
     public long getID() { return this.__id__; }
@@ -175,7 +175,7 @@ public static class GetPhysicsPropertiesResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETPHYSICSPROPERTIES; }
     public java.lang.String getMD5(){ return "8f17f751935ff418006bf6b24982cb08"; }
     public long getID() { return this.__id__; }

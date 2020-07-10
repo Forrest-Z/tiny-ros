@@ -1,24 +1,25 @@
 package actionlib_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/tinyros/time"
 )
 
 
 type GoalID struct {
-    Go_stamp *tinyros.Time `json:"stamp"`
+    Go_stamp *rostime.Time `json:"stamp"`
     Go_id string `json:"id"`
 }
 
 func NewGoalID() (*GoalID) {
     newGoalID := new(GoalID)
-    newGoalID.Go_stamp = tinyros.NewTime()
+    newGoalID.Go_stamp = rostime.NewTime()
     newGoalID.Go_id = ""
     return newGoalID
 }
 
 func (self *GoalID) Go_initialize() {
-    self.Go_stamp = tinyros.NewTime()
+    self.Go_stamp = rostime.NewTime()
     self.Go_id = ""
 }
 
@@ -77,7 +78,11 @@ func (self *GoalID) Go_serializedLength() (int) {
     return length
 }
 
-func (self *GoalID) Go_echo() (string) { return "" }
+func (self *GoalID) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *GoalID) Go_getType() (string) { return "actionlib_msgs/GoalID" }
 func (self *GoalID) Go_getMD5() (string) { return "a6cee90e5a185f4cb050de49bc4fa1f4" }
 func (self *GoalID) Go_getID() (uint32) { return 0 }

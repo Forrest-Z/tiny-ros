@@ -52,7 +52,7 @@ namespace tinyros_msgs
       arrToVar(length_msg, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_msg; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_msg-1]=0;
       this->msg = (char *)(inbuffer + offset-1);
@@ -73,9 +73,14 @@ namespace tinyros_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_level; ss_level << "\"level\": " << (uint16_t)level <<", ";
+      std::stringstream ss_level; ss_level << "\"level\":" << (uint16_t)level <<",";
       string_echo += ss_level.str();
-      string_echo += "\"msg\": \"";
+      std::size_t msg_pos = msg.find("\"");
+      while(msg_pos != std::string::npos){
+        msg.replace(msg_pos, 1,"\\\"");
+        msg_pos = msg.find("\"", msg_pos+2);
+      }
+      string_echo += "\"msg\":\"";
       string_echo += msg;
       string_echo += "\"";
       string_echo += "}";

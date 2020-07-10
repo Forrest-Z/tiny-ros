@@ -32,7 +32,7 @@ public class Pose implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Pose"; }
     public java.lang.String getMD5(){ return "0b42fb88be8cac0efa6e446e13befcae"; }
     public long getID() { return 0; }

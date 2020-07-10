@@ -38,7 +38,7 @@ public static class GetMapRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMAP; }
     public java.lang.String getMD5(){ return "8ea512c109a0b3a9eca8de407dd02d2a"; }
     public long getID() { return this.__id__; }
@@ -82,7 +82,7 @@ public static class GetMapResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return GETMAP; }
     public java.lang.String getMD5(){ return "5bf895a6cdaff312c69ca1cef20fed64"; }
     public long getID() { return this.__id__; }

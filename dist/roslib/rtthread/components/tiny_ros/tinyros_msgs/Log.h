@@ -50,7 +50,7 @@ namespace tinyros_msgs
       arrToVar(length_msg, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_msg; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_msg-1]=0;
       this->msg = (char *)(inbuffer + offset-1);

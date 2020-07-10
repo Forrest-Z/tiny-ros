@@ -1,6 +1,7 @@
 package std_msgs
 
 import (
+    "encoding/json"
     "encoding/binary"
     "math"
 )
@@ -48,7 +49,7 @@ func (self *Float32MultiArray) Go_deserialize(buff []byte) (int) {
     length_data |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_data |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_data = make([]float32, length_data, length_data)
+    self.Go_data = make([]float32, length_data)
     for i := 0; i < length_data; i++ {
         bits_datai := binary.LittleEndian.Uint32(buff[offset:])
         self.Go_data[i] = math.Float32frombits(bits_datai)
@@ -68,7 +69,11 @@ func (self *Float32MultiArray) Go_serializedLength() (int) {
     return length
 }
 
-func (self *Float32MultiArray) Go_echo() (string) { return "" }
+func (self *Float32MultiArray) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *Float32MultiArray) Go_getType() (string) { return "std_msgs/Float32MultiArray" }
 func (self *Float32MultiArray) Go_getMD5() (string) { return "224f9a21761656b5f5da2b311973577f" }
 func (self *Float32MultiArray) Go_getID() (uint32) { return 0 }

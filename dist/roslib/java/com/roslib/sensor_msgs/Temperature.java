@@ -75,7 +75,7 @@ public class Temperature implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/Temperature"; }
     public java.lang.String getMD5(){ return "898a0e5950c8e4073c0c3cf2d7e7bf26"; }
     public long getID() { return 0; }

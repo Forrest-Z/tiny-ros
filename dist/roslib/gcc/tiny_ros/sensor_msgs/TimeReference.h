@@ -70,7 +70,7 @@ namespace sensor_msgs
       arrToVar(length_source, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_source; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_source-1]=0;
       this->source = (char *)(inbuffer + offset-1);
@@ -93,14 +93,19 @@ namespace sensor_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"header\": {";
+      string_echo += "\"header\":";
       string_echo += this->header.echo();
-      string_echo += "}, ";
+      string_echo += ",";
       std::stringstream ss_time_ref;
-      ss_time_ref << "\"time_ref.sec\": " << time_ref.sec;
-      ss_time_ref << ", \"time_ref.nsec\": " << time_ref.nsec << ", ";
+      ss_time_ref << "\"time_ref\":{\"sec\":" << time_ref.sec;
+      ss_time_ref << ",\"nsec\":" << time_ref.nsec << "},";
       string_echo += ss_time_ref.str();
-      string_echo += "\"source\": \"";
+      std::size_t source_pos = source.find("\"");
+      while(source_pos != std::string::npos){
+        source.replace(source_pos, 1,"\\\"");
+        source_pos = source.find("\"", source_pos+2);
+      }
+      string_echo += "\"source\":\"";
       string_echo += source;
       string_echo += "\"";
       string_echo += "}";

@@ -1,6 +1,7 @@
 package nav_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
@@ -57,7 +58,11 @@ func (self *SetMapRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetMapRequest) Go_echo() (string) { return "" }
+func (self *SetMapRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetMapRequest) Go_getType() (string) { return "nav_msgs/SetMap" }
 func (self *SetMapRequest) Go_getMD5() (string) { return "946e1bd68c9db117a530a571e33d9e49" }
 func (self *SetMapRequest) Go_getID() (uint32) { return self.__id__ }
@@ -122,7 +127,11 @@ func (self *SetMapResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetMapResponse) Go_echo() (string) { return "" }
+func (self *SetMapResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetMapResponse) Go_getType() (string) { return "nav_msgs/SetMap" }
 func (self *SetMapResponse) Go_getMD5() (string) { return "1e32607e79013262dafbbac9044e9cda" }
 func (self *SetMapResponse) Go_getID() (uint32) { return self.__id__ }

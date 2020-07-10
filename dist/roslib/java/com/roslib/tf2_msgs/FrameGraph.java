@@ -38,7 +38,7 @@ public static class FrameGraphRequest implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return FRAMEGRAPH; }
     public java.lang.String getMD5(){ return "aa023d3c31410363e0583979223258c8"; }
     public long getID() { return this.__id__; }
@@ -103,7 +103,7 @@ public static class FrameGraphResponse implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType() { return FRAMEGRAPH; }
     public java.lang.String getMD5(){ return "97e361486f8cc8fb1a460cf17555126b"; }
     public long getID() { return this.__id__; }

@@ -61,7 +61,7 @@ namespace actionlib_msgs
       arrToVar(length_text, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_text; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_text-1]=0;
       this->text = (char *)(inbuffer + offset-1);

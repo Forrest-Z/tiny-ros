@@ -131,34 +131,34 @@ namespace sensor_msgs
       *(outbuffer + offset + 2) = (this->ranges_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->ranges_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_rangesi;
-      u_rangesi.real = this->ranges[i];
-      *(outbuffer + offset + 0) = (u_rangesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_rangesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_rangesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_rangesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->ranges[i]);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_rangesi;
+        u_rangesi.real = this->ranges[i];
+        *(outbuffer + offset + 0) = (u_rangesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_rangesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_rangesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_rangesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->ranges[i]);
       }
       *(outbuffer + offset + 0) = (this->intensities_length >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->intensities_length >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->intensities_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->intensities_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_intensitiesi;
-      u_intensitiesi.real = this->intensities[i];
-      *(outbuffer + offset + 0) = (u_intensitiesi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_intensitiesi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_intensitiesi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_intensitiesi.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->intensities[i]);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_intensitiesi;
+        u_intensitiesi.real = this->intensities[i];
+        *(outbuffer + offset + 0) = (u_intensitiesi.base >> (8 * 0)) & 0xFF;
+        *(outbuffer + offset + 1) = (u_intensitiesi.base >> (8 * 1)) & 0xFF;
+        *(outbuffer + offset + 2) = (u_intensitiesi.base >> (8 * 2)) & 0xFF;
+        *(outbuffer + offset + 3) = (u_intensitiesi.base >> (8 * 3)) & 0xFF;
+        offset += sizeof(this->intensities[i]);
       }
       return offset;
     }
@@ -252,18 +252,18 @@ namespace sensor_msgs
       if(ranges_lengthT > ranges_length)
         this->ranges = (float*)realloc(this->ranges, ranges_lengthT * sizeof(float));
       ranges_length = ranges_lengthT;
-      for( uint32_t i = 0; i < ranges_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_ranges;
-      u_st_ranges.base = 0;
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_ranges = u_st_ranges.real;
-      offset += sizeof(this->st_ranges);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_ranges;
+        u_st_ranges.base = 0;
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_ranges.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_ranges = u_st_ranges.real;
+        offset += sizeof(this->st_ranges);
         memcpy( &(this->ranges[i]), &(this->st_ranges), sizeof(float));
       }
       uint32_t intensities_lengthT = ((uint32_t) (*(inbuffer + offset))); 
@@ -274,18 +274,18 @@ namespace sensor_msgs
       if(intensities_lengthT > intensities_length)
         this->intensities = (float*)realloc(this->intensities, intensities_lengthT * sizeof(float));
       intensities_length = intensities_lengthT;
-      for( uint32_t i = 0; i < intensities_length; i++){
-      union {
-        float real;
-        uint32_t base;
-      } u_st_intensities;
-      u_st_intensities.base = 0;
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->st_intensities = u_st_intensities.real;
-      offset += sizeof(this->st_intensities);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        union {
+          float real;
+          uint32_t base;
+        } u_st_intensities;
+        u_st_intensities.base = 0;
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+        u_st_intensities.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+        this->st_intensities = u_st_intensities.real;
+        offset += sizeof(this->st_intensities);
         memcpy( &(this->intensities[i]), &(this->st_intensities), sizeof(float));
       }
       return offset;
@@ -303,12 +303,12 @@ namespace sensor_msgs
       length += sizeof(this->range_min);
       length += sizeof(this->range_max);
       length += sizeof(this->ranges_length);
-      for( uint32_t i = 0; i < ranges_length; i++){
-      length += sizeof(this->ranges[i]);
+      for( uint32_t i = 0; i < ranges_length; i++) {
+        length += sizeof(this->ranges[i]);
       }
       length += sizeof(this->intensities_length);
-      for( uint32_t i = 0; i < intensities_length; i++){
-      length += sizeof(this->intensities[i]);
+      for( uint32_t i = 0; i < intensities_length; i++) {
+        length += sizeof(this->intensities[i]);
       }
       return length;
     }

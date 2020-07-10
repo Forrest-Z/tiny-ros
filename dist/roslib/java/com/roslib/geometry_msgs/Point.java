@@ -94,7 +94,7 @@ public class Point implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/Point"; }
     public java.lang.String getMD5(){ return "f75eead1a8b17241f0c81a1de081b731"; }
     public long getID() { return 0; }

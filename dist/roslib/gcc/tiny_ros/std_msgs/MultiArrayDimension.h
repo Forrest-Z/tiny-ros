@@ -56,7 +56,7 @@ namespace std_msgs
       arrToVar(length_label, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_label; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_label-1]=0;
       this->label = (char *)(inbuffer + offset-1);
@@ -88,12 +88,17 @@ namespace std_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"label\": \"";
+      std::size_t label_pos = label.find("\"");
+      while(label_pos != std::string::npos){
+        label.replace(label_pos, 1,"\\\"");
+        label_pos = label.find("\"", label_pos+2);
+      }
+      string_echo += "\"label\":\"";
       string_echo += label;
-      string_echo += "\", ";
-      std::stringstream ss_size; ss_size << "\"size\": " << size <<", ";
+      string_echo += "\",";
+      std::stringstream ss_size; ss_size << "\"size\":" << size <<",";
       string_echo += ss_size.str();
-      std::stringstream ss_stride; ss_stride << "\"stride\": " << stride <<"";
+      std::stringstream ss_stride; ss_stride << "\"stride\":" << stride <<"";
       string_echo += ss_stride.str();
       string_echo += "}";
       return string_echo;

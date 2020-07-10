@@ -29,13 +29,13 @@ public class ChannelFloat32 implements com.roslib.ros.Msg {
         outbuffer[offset + 2] = (byte)((length_values >> (8 * 2)) & 0xFF);
         outbuffer[offset + 3] = (byte)((length_values >> (8 * 3)) & 0xFF);
         offset += 4;
-        for (int i = 0; i < length_values; i++){
-        int bits_valuesi = Float.floatToRawIntBits(values[i]);
-        outbuffer[offset + 0] = (byte)((bits_valuesi >> (8 * 0)) & 0xFF);
-        outbuffer[offset + 1] = (byte)((bits_valuesi >> (8 * 1)) & 0xFF);
-        outbuffer[offset + 2] = (byte)((bits_valuesi >> (8 * 2)) & 0xFF);
-        outbuffer[offset + 3] = (byte)((bits_valuesi >> (8 * 3)) & 0xFF);
-        offset += 4;
+        for (int i = 0; i < length_values; i++) {
+            int bits_valuesi = Float.floatToRawIntBits(values[i]);
+            outbuffer[offset + 0] = (byte)((bits_valuesi >> (8 * 0)) & 0xFF);
+            outbuffer[offset + 1] = (byte)((bits_valuesi >> (8 * 1)) & 0xFF);
+            outbuffer[offset + 2] = (byte)((bits_valuesi >> (8 * 2)) & 0xFF);
+            outbuffer[offset + 3] = (byte)((bits_valuesi >> (8 * 3)) & 0xFF);
+            offset += 4;
         }
         return offset;
     }
@@ -61,14 +61,14 @@ public class ChannelFloat32 implements com.roslib.ros.Msg {
         if(length_values > 0) {
             this.values = new float[length_values];
         }
-        for (int i = 0; i < length_values; i++){
-        int bits_valuesi = 0;
-        bits_valuesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
-        bits_valuesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
-        bits_valuesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
-        bits_valuesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
-        this.values[i] = Float.intBitsToFloat(bits_valuesi);
-        offset += 4;
+        for (int i = 0; i < length_values; i++) {
+            int bits_valuesi = 0;
+            bits_valuesi |= (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+            bits_valuesi |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+            bits_valuesi |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+            bits_valuesi |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+            this.values[i] = Float.intBitsToFloat(bits_valuesi);
+            offset += 4;
         }
         return offset;
     }
@@ -81,12 +81,12 @@ public class ChannelFloat32 implements com.roslib.ros.Msg {
         length += 4;
         int length_values = this.values != null ? this.values.length : 0;
         for (int i = 0; i < length_values; i++) {
-        length += 4;
+            length += 4;
         }
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "sensor_msgs/ChannelFloat32"; }
     public java.lang.String getMD5(){ return "c4cf01c81334c609dca1afd3a227daff"; }
     public long getID() { return 0; }

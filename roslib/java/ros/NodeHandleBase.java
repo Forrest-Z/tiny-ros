@@ -5,8 +5,8 @@ import com.roslib.tinyros_msgs.TopicInfo;
 public abstract class NodeHandleBase {
     protected static final int MAX_SUBSCRIBERS = 100;
     protected static final int MAX_PUBLISHERS = 100;
-    protected static final int INPUT_SIZE = 65*1024;
-    protected static final int OUTPUT_SIZE = 65*1024;
+    protected static final int INPUT_SIZE = 64*1024;
+    protected static final int OUTPUT_SIZE = 64*1024;
     protected static final int SPIN_OK = 0;
     protected static final int SPIN_ERR = -1;
     protected static final int PROTOCOL_VER = 0xb9;

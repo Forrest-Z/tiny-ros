@@ -44,8 +44,8 @@ static const char PROJECTEDMAPSINFO[] = "map_msgs/ProjectedMapsInfo";
       *(outbuffer + offset + 2) = (this->projected_maps_info_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->projected_maps_info_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->projected_maps_info_length);
-      for( uint32_t i = 0; i < projected_maps_info_length; i++){
-      offset += this->projected_maps_info[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < projected_maps_info_length; i++) {
+        offset += this->projected_maps_info[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -66,8 +66,8 @@ static const char PROJECTEDMAPSINFO[] = "map_msgs/ProjectedMapsInfo";
       if(projected_maps_info_lengthT > projected_maps_info_length)
         this->projected_maps_info = (map_msgs::ProjectedMapInfo*)realloc(this->projected_maps_info, projected_maps_info_lengthT * sizeof(map_msgs::ProjectedMapInfo));
       projected_maps_info_length = projected_maps_info_lengthT;
-      for( uint32_t i = 0; i < projected_maps_info_length; i++){
-      offset += this->st_projected_maps_info.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < projected_maps_info_length; i++) {
+        offset += this->st_projected_maps_info.deserialize(inbuffer + offset);
         memcpy( &(this->projected_maps_info[i]), &(this->st_projected_maps_info), sizeof(map_msgs::ProjectedMapInfo));
       }
       return offset;
@@ -77,8 +77,8 @@ static const char PROJECTEDMAPSINFO[] = "map_msgs/ProjectedMapsInfo";
     {
       int length = 0;
       length += sizeof(this->projected_maps_info_length);
-      for( uint32_t i = 0; i < projected_maps_info_length; i++){
-      length += this->projected_maps_info[i].serializedLength();
+      for( uint32_t i = 0; i < projected_maps_info_length; i++) {
+        length += this->projected_maps_info[i].serializedLength();
       }
       return length;
     }
@@ -86,19 +86,15 @@ static const char PROJECTEDMAPSINFO[] = "map_msgs/ProjectedMapsInfo";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "projected_maps_info: [";
-      for( uint32_t i = 0; i < projected_maps_info_length; i++){
-      if( i == (projected_maps_info_length - 1)) {
-      std::stringstream ss_projected_maps_infoi; ss_projected_maps_infoi << "{\"projected_maps_info" << i <<"\": {";
-      string_echo += ss_projected_maps_infoi.str();
-      string_echo += this->projected_maps_info[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_projected_maps_infoi; ss_projected_maps_infoi << "{\"projected_maps_info" << i <<"\": {";
-      string_echo += ss_projected_maps_infoi.str();
-      string_echo += this->projected_maps_info[i].echo();
-      string_echo += "}}, ";
-      }
+      string_echo += "projected_maps_info:[";
+      for( uint32_t i = 0; i < projected_maps_info_length; i++) {
+        if( i == (projected_maps_info_length - 1)) {
+          string_echo += this->projected_maps_info[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->projected_maps_info[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

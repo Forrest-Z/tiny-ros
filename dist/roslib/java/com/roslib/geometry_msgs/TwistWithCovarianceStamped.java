@@ -32,7 +32,7 @@ public class TwistWithCovarianceStamped implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "geometry_msgs/TwistWithCovarianceStamped"; }
     public java.lang.String getMD5(){ return "2cbcab62cac39de1d1d01785b99ba778"; }
     public long getID() { return 0; }

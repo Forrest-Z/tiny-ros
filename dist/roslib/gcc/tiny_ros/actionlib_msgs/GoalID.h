@@ -64,7 +64,7 @@ namespace actionlib_msgs
       arrToVar(length_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_id-1]=0;
       this->id = (char *)(inbuffer + offset-1);
@@ -87,10 +87,15 @@ namespace actionlib_msgs
     {
       std::string string_echo = "{";
       std::stringstream ss_stamp;
-      ss_stamp << "\"stamp.sec\": " << stamp.sec;
-      ss_stamp << ", \"stamp.nsec\": " << stamp.nsec << ", ";
+      ss_stamp << "\"stamp\":{\"sec\":" << stamp.sec;
+      ss_stamp << ",\"nsec\":" << stamp.nsec << "},";
       string_echo += ss_stamp.str();
-      string_echo += "\"id\": \"";
+      std::size_t id_pos = id.find("\"");
+      while(id_pos != std::string::npos){
+        id.replace(id_pos, 1,"\\\"");
+        id_pos = id.find("\"", id_pos+2);
+      }
+      string_echo += "\"id\":\"";
       string_echo += id;
       string_echo += "\"";
       string_echo += "}";

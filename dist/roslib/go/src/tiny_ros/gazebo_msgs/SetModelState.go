@@ -1,6 +1,7 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -50,7 +51,11 @@ func (self *SetModelStateRequest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetModelStateRequest) Go_echo() (string) { return "" }
+func (self *SetModelStateRequest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetModelStateRequest) Go_getType() (string) { return "gazebo_msgs/SetModelState" }
 func (self *SetModelStateRequest) Go_getMD5() (string) { return "328e9e434938c39f3fd8e958ad8d6dab" }
 func (self *SetModelStateRequest) Go_getID() (uint32) { return self.__id__ }
@@ -136,7 +141,11 @@ func (self *SetModelStateResponse) Go_serializedLength() (int) {
     return length
 }
 
-func (self *SetModelStateResponse) Go_echo() (string) { return "" }
+func (self *SetModelStateResponse) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *SetModelStateResponse) Go_getType() (string) { return "gazebo_msgs/SetModelState" }
 func (self *SetModelStateResponse) Go_getMD5() (string) { return "7fe6c3a1ea4a4df9bf5b6858fd028ee6" }
 func (self *SetModelStateResponse) Go_getID() (uint32) { return self.__id__ }

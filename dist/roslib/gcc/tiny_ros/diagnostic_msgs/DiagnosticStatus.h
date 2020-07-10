@@ -71,8 +71,8 @@ namespace diagnostic_msgs
       *(outbuffer + offset + 2) = (this->values_length >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->values_length >> (8 * 3)) & 0xFF;
       offset += sizeof(this->values_length);
-      for( uint32_t i = 0; i < values_length; i++){
-      offset += this->values[i].serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < values_length; i++) {
+        offset += this->values[i].serialize(outbuffer + offset);
       }
       return offset;
     }
@@ -92,7 +92,7 @@ namespace diagnostic_msgs
       arrToVar(length_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_name-1]=0;
       this->name = (char *)(inbuffer + offset-1);
@@ -101,7 +101,7 @@ namespace diagnostic_msgs
       arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_message-1]=0;
       this->message = (char *)(inbuffer + offset-1);
@@ -110,7 +110,7 @@ namespace diagnostic_msgs
       arrToVar(length_hardware_id, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_hardware_id; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_hardware_id-1]=0;
       this->hardware_id = (char *)(inbuffer + offset-1);
@@ -123,8 +123,8 @@ namespace diagnostic_msgs
       if(values_lengthT > values_length)
         this->values = (diagnostic_msgs::KeyValue*)realloc(this->values, values_lengthT * sizeof(diagnostic_msgs::KeyValue));
       values_length = values_lengthT;
-      for( uint32_t i = 0; i < values_length; i++){
-      offset += this->st_values.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < values_length; i++) {
+        offset += this->st_values.deserialize(inbuffer + offset);
         memcpy( &(this->values[i]), &(this->st_values), sizeof(diagnostic_msgs::KeyValue));
       }
       return offset;
@@ -144,8 +144,8 @@ namespace diagnostic_msgs
       length += 4;
       length += length_hardware_id;
       length += sizeof(this->values_length);
-      for( uint32_t i = 0; i < values_length; i++){
-      length += this->values[i].serializedLength();
+      for( uint32_t i = 0; i < values_length; i++) {
+        length += this->values[i].serializedLength();
       }
       return length;
     }
@@ -153,30 +153,41 @@ namespace diagnostic_msgs
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      std::stringstream ss_level; ss_level << "\"level\": " << (int16_t)level <<", ";
+      std::stringstream ss_level; ss_level << "\"level\":" << (int16_t)level <<",";
       string_echo += ss_level.str();
-      string_echo += "\"name\": \"";
-      string_echo += name;
-      string_echo += "\", ";
-      string_echo += "\"message\": \"";
-      string_echo += message;
-      string_echo += "\", ";
-      string_echo += "\"hardware_id\": \"";
-      string_echo += hardware_id;
-      string_echo += "\", ";
-      string_echo += "values: [";
-      for( uint32_t i = 0; i < values_length; i++){
-      if( i == (values_length - 1)) {
-      std::stringstream ss_valuesi; ss_valuesi << "{\"values" << i <<"\": {";
-      string_echo += ss_valuesi.str();
-      string_echo += this->values[i].echo();
-      string_echo += "}}";
-      } else {
-      std::stringstream ss_valuesi; ss_valuesi << "{\"values" << i <<"\": {";
-      string_echo += ss_valuesi.str();
-      string_echo += this->values[i].echo();
-      string_echo += "}}, ";
+      std::size_t name_pos = name.find("\"");
+      while(name_pos != std::string::npos){
+        name.replace(name_pos, 1,"\\\"");
+        name_pos = name.find("\"", name_pos+2);
       }
+      string_echo += "\"name\":\"";
+      string_echo += name;
+      string_echo += "\",";
+      std::size_t message_pos = message.find("\"");
+      while(message_pos != std::string::npos){
+        message.replace(message_pos, 1,"\\\"");
+        message_pos = message.find("\"", message_pos+2);
+      }
+      string_echo += "\"message\":\"";
+      string_echo += message;
+      string_echo += "\",";
+      std::size_t hardware_id_pos = hardware_id.find("\"");
+      while(hardware_id_pos != std::string::npos){
+        hardware_id.replace(hardware_id_pos, 1,"\\\"");
+        hardware_id_pos = hardware_id.find("\"", hardware_id_pos+2);
+      }
+      string_echo += "\"hardware_id\":\"";
+      string_echo += hardware_id;
+      string_echo += "\",";
+      string_echo += "values:[";
+      for( uint32_t i = 0; i < values_length; i++) {
+        if( i == (values_length - 1)) {
+          string_echo += this->values[i].echo();
+          string_echo += "";
+        } else {
+          string_echo += this->values[i].echo();
+          string_echo += ",";
+        }
       }
       string_echo += "]";
       string_echo += "}";

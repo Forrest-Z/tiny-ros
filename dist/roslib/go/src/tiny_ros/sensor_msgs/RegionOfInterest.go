@@ -1,6 +1,7 @@
 package sensor_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -102,7 +103,11 @@ func (self *RegionOfInterest) Go_serializedLength() (int) {
     return length
 }
 
-func (self *RegionOfInterest) Go_echo() (string) { return "" }
+func (self *RegionOfInterest) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *RegionOfInterest) Go_getType() (string) { return "sensor_msgs/RegionOfInterest" }
 func (self *RegionOfInterest) Go_getMD5() (string) { return "8370dc286f915405c906299aef5bb442" }
 func (self *RegionOfInterest) Go_getID() (uint32) { return 0 }

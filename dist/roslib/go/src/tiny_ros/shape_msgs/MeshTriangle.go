@@ -1,6 +1,7 @@
 package shape_msgs
 
 import (
+    "encoding/json"
 )
 
 
@@ -50,7 +51,11 @@ func (self *MeshTriangle) Go_serializedLength() (int) {
     return length
 }
 
-func (self *MeshTriangle) Go_echo() (string) { return "" }
+func (self *MeshTriangle) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *MeshTriangle) Go_getType() (string) { return "shape_msgs/MeshTriangle" }
 func (self *MeshTriangle) Go_getMD5() (string) { return "01020cfeb9ad7679dd18bbd7149962ba" }
 func (self *MeshTriangle) Go_getID() (uint32) { return 0 }

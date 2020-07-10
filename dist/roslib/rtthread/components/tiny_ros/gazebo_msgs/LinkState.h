@@ -56,7 +56,7 @@ namespace gazebo_msgs
       arrToVar(length_link_name, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_link_name; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_link_name-1]=0;
       this->link_name = (char *)(inbuffer + offset-1);
@@ -67,7 +67,7 @@ namespace gazebo_msgs
       arrToVar(length_reference_frame, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_reference_frame; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_reference_frame-1]=0;
       this->reference_frame = (char *)(inbuffer + offset-1);

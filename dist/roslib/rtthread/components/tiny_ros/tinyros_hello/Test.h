@@ -54,7 +54,7 @@ static const char TEST[] = "tinyros_hello/Test";
       arrToVar(length_input, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_input; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_input-1]=0;
       this->input = (char *)(inbuffer + offset-1);
@@ -122,7 +122,7 @@ static const char TEST[] = "tinyros_hello/Test";
       arrToVar(length_output, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_output; ++k){
-          inbuffer[k-1]=inbuffer[k];
+        inbuffer[k-1]=inbuffer[k];
       }
       inbuffer[offset+length_output-1]=0;
       this->output = (char *)(inbuffer + offset-1);

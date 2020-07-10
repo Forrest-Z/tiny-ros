@@ -75,7 +75,7 @@ public class ProjectedMap implements com.roslib.ros.Msg {
         return length;
     }
 
-    public java.lang.String echo(){ return ""; }
+    public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "map_msgs/ProjectedMap"; }
     public java.lang.String getMD5(){ return "cbd5598c259cc16f5aa07335587a7367"; }
     public long getID() { return 0; }

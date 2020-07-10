@@ -63,9 +63,9 @@ static const char SAVEMAP[] = "map_msgs/SaveMap";
     virtual std::string echo()
     {
       std::string string_echo = "{";
-      string_echo += "\"filename\": {";
+      string_echo += "\"filename\":";
       string_echo += this->filename.echo();
-      string_echo += "}";
+      string_echo += "";
       string_echo += "}";
       return string_echo;
     }

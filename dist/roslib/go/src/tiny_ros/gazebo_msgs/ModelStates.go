@@ -1,28 +1,29 @@
 package gazebo_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/geometry_msgs"
 )
 
 
 type ModelStates struct {
     Go_name []string `json:"name"`
-    Go_pose []geometry_msgs.Pose `json:"pose"`
-    Go_twist []geometry_msgs.Twist `json:"twist"`
+    Go_pose []*geometry_msgs.Pose `json:"pose"`
+    Go_twist []*geometry_msgs.Twist `json:"twist"`
 }
 
 func NewModelStates() (*ModelStates) {
     newModelStates := new(ModelStates)
     newModelStates.Go_name = []string{}
-    newModelStates.Go_pose = []geometry_msgs.Pose{}
-    newModelStates.Go_twist = []geometry_msgs.Twist{}
+    newModelStates.Go_pose = []*geometry_msgs.Pose{}
+    newModelStates.Go_twist = []*geometry_msgs.Twist{}
     return newModelStates
 }
 
 func (self *ModelStates) Go_initialize() {
     self.Go_name = []string{}
-    self.Go_pose = []geometry_msgs.Pose{}
-    self.Go_twist = []geometry_msgs.Twist{}
+    self.Go_pose = []*geometry_msgs.Pose{}
+    self.Go_twist = []*geometry_msgs.Twist{}
 }
 
 func (self *ModelStates) Go_serialize(buff []byte) (int) {
@@ -71,7 +72,7 @@ func (self *ModelStates) Go_deserialize(buff []byte) (int) {
     length_name |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_name |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_name = make([]string, length_name, length_name)
+    self.Go_name = make([]string, length_name)
     for i := 0; i < length_name; i++ {
         length_namei := int(buff[offset + 0] & 0xFF) << (8 * 0)
         length_namei |= int(buff[offset + 1] & 0xFF) << (8 * 1)
@@ -86,7 +87,10 @@ func (self *ModelStates) Go_deserialize(buff []byte) (int) {
     length_pose |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_pose |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_pose = make([]geometry_msgs.Pose, length_pose, length_pose)
+    self.Go_pose = make([]*geometry_msgs.Pose, length_pose)
+    for i := 0; i < length_pose; i++ {
+        self.Go_pose[i] = geometry_msgs.NewPose()
+    }
     for i := 0; i < length_pose; i++ {
         offset += self.Go_pose[i].Go_deserialize(buff[offset:])
     }
@@ -95,7 +99,10 @@ func (self *ModelStates) Go_deserialize(buff []byte) (int) {
     length_twist |= int(buff[offset + 2] & 0xFF) << (8 * 2)
     length_twist |= int(buff[offset + 3] & 0xFF) << (8 * 3)
     offset += 4
-    self.Go_twist = make([]geometry_msgs.Twist, length_twist, length_twist)
+    self.Go_twist = make([]*geometry_msgs.Twist, length_twist)
+    for i := 0; i < length_twist; i++ {
+        self.Go_twist[i] = geometry_msgs.NewTwist()
+    }
     for i := 0; i < length_twist; i++ {
         offset += self.Go_twist[i].Go_deserialize(buff[offset:])
     }
@@ -124,7 +131,11 @@ func (self *ModelStates) Go_serializedLength() (int) {
     return length
 }
 
-func (self *ModelStates) Go_echo() (string) { return "" }
+func (self *ModelStates) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *ModelStates) Go_getType() (string) { return "gazebo_msgs/ModelStates" }
 func (self *ModelStates) Go_getMD5() (string) { return "05074231128e3d50825a5f46d9217fda" }
 func (self *ModelStates) Go_getID() (uint32) { return 0 }

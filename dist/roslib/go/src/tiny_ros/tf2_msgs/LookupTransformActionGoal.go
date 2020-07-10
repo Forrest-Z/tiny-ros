@@ -1,6 +1,7 @@
 package tf2_msgs
 
 import (
+    "encoding/json"
     "tiny_ros/std_msgs"
     "tiny_ros/actionlib_msgs"
 )
@@ -50,7 +51,11 @@ func (self *LookupTransformActionGoal) Go_serializedLength() (int) {
     return length
 }
 
-func (self *LookupTransformActionGoal) Go_echo() (string) { return "" }
+func (self *LookupTransformActionGoal) Go_echo() (string) { 
+    data, _ := json.Marshal(self)
+    return string(data)
+}
+
 func (self *LookupTransformActionGoal) Go_getType() (string) { return "tf2_msgs/LookupTransformActionGoal" }
 func (self *LookupTransformActionGoal) Go_getMD5() (string) { return "b8a7d4ffa64f063b4df7b1dd3fc2bf79" }
 func (self *LookupTransformActionGoal) Go_getID() (uint32) { return 0 }
