@@ -156,7 +156,7 @@ template<typename MsgT>
 class EchoSubscriber: public tinyros::Subscriber_
 {
 public:
-MsgT msg;
+  MsgT msg;
   virtual void callback(unsigned char* data)
   {
     MsgT tmsg;
