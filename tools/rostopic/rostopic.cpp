@@ -195,14 +195,14 @@ int main(int argc, char **argv) {
           }
 
           file = argv[3];
-          tinyros::init(ip);
+          tinyros::init("tinyrostopic", ip);
           init_log_environment(file);
           rostopic_cmd_echo(argv[4]);
         } else {
           if (argc >= 4) {
             ip = argv[3];
           }
-          tinyros::init(ip);
+          tinyros::init("tinyrostopic", ip);
           init_log_environment(file);
           rostopic_cmd_echo(argv[2]);
         }
@@ -211,7 +211,7 @@ int main(int argc, char **argv) {
       if (argc >= 3) {
         ip = argv[2];
       }
-      tinyros::init(ip);
+      tinyros::init("tinyrostopic", ip);
       init_log_environment(file);
       rostopic_cmd_list();
     } else {

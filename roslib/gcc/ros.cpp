@@ -12,6 +12,7 @@
 #include "tiny_ros/ros/node_handle_udp.h"
 
 namespace tinyros {
+static std::string node_name_ = "";
 static std::string ip_addr_ = "127.0.0.1";
   
 //////////////////////////////////////////
@@ -24,7 +25,7 @@ static std::mutex main_loop_udp_mutex_;
 static void tinyros_main_loop(NodeHandleBase_ * p) {
   NodeHandleBase_ *pnh = p;
 retry:
-  pnh->initNode(ip_addr_);
+  pnh->initNode(node_name_, ip_addr_);
   while (pnh->ok()) {
     pnh->spin();
 #ifdef WIN32
@@ -75,10 +76,16 @@ NodeHandleUdp* udp() {
   return &g_nh;
 }
 
-void init(std::string ip_addr) {
+void init(std::string node_name, std::string ip_addr) {
   ip_addr_ = ip_addr;
+  node_name_ = node_name;
   tinyros::nh();
 }
 
+void logdebug(std::string msg) { nh()->log(tinyros_msgs::Log::ROSDEBUG, msg); }
+void loginfo(std::string msg) { nh()->log(tinyros_msgs::Log::ROSINFO, msg); }
+void logwarn(std::string msg) { nh()->log(tinyros_msgs::Log::ROSWARN, msg); }
+void logerror(std::string msg) { nh()->log(tinyros_msgs::Log::ROSERROR, msg); }
+void logfatal(std::string msg) { nh()->log(tinyros_msgs::Log::ROSFATAL, msg); }
 }
 

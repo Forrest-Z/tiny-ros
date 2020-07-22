@@ -15,7 +15,6 @@
 
 namespace tinyros
 {
-tinyros::string get_executable_name();
 void mtrace(int level, const char *chfr, ...);
 
 #define log_info(format, args...) tinyros::mtrace(tinyros_msgs::Log::ROSINFO, format, ##args)

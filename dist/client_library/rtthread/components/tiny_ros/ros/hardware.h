@@ -12,8 +12,13 @@
 #include <stdio.h>
 #include <rthw.h>
 #include <rtthread.h>
-#include "lwip/netdb.h"
-#include "lwip/sockets.h"
+#if defined(RT_USING_SAL)
+#include <netdb.h>
+#include <sys/socket.h>
+#else
+#include <lwip/netdb.h>
+#include <lwip/sockets.h>
+#endif /* RT_USING_SAL */
 #include "tiny_ros/ros/string.h"
 
 namespace tinyros {
@@ -33,15 +38,6 @@ public:
   bool init(tinyros::string portName) {
     this->close();
 
-    long int tcpPortNum;
-    const char* pName = portName.c_str();
-    const char* tcpPortNumString = strchr(pName, ':');
-    if (!tcpPortNumString) {
-      tcpPortNum = DEFAULT_PORTNUM;
-    } else {
-      tcpPortNum = strtol(tcpPortNumString + 1, NULL, 10);
-    }
-
     // Create the socket.
     sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd_ < 0) {
@@ -50,22 +46,18 @@ public:
     }
 
     int opt = 1;
-    struct linger so_linger;
-    so_linger.l_onoff = 1;
-    so_linger.l_linger = 0;
     setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, (const char *)&opt, sizeof(opt));
-    setsockopt(sockfd_, SOL_SOCKET, SO_LINGER, (const char *)&so_linger, sizeof(so_linger));
 
     struct hostent *host;
     struct sockaddr_in serv_addr;
-    host = gethostbyname(pName);
+    host = gethostbyname(portName.c_str());
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port =  htons(tcpPortNum);
+    serv_addr.sin_port =  htons(DEFAULT_PORTNUM);
     serv_addr.sin_addr = *((struct in_addr *)host->h_addr);
     memset(&(serv_addr.sin_zero), 0, sizeof(serv_addr.sin_zero));
     if (connect(sockfd_, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr)) < 0) {
       rt_kprintf("Hardware::init Couldn't connecting %d:%s\n", errno, strerror(errno));
-      lwip_close(sockfd_);
+      closesocket(sockfd_);
       sockfd_ = -1;
       return false;
     }
@@ -76,7 +68,7 @@ public:
 
   int read(uint8_t* data, int length) {
     if (connected_) {
-      int rv = lwip_read(sockfd_, data, length);
+      int rv = recv(sockfd_, data, length, 0);
       if (rv > 0) {
         return rv;
       } else if (rv == 0) {
@@ -99,7 +91,7 @@ public:
     if (connected_) {
       int rv, len = length, totalsent = 0;
       do {
-        rv = lwip_write(sockfd_, data + totalsent, len - totalsent);
+        rv = send(sockfd_, data + totalsent, len - totalsent, 0);
         if (rv > 0) {
           totalsent += rv;
         } else if (rv == 0) {
@@ -129,7 +121,7 @@ public:
   void close() {
     connected_ = false;
     if(sockfd_ > 0){
-      lwip_close(sockfd_);
+      closesocket(sockfd_);
       sockfd_ = -1;
     }
   }

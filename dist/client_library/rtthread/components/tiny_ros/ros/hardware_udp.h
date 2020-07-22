@@ -12,8 +12,13 @@
 #include <stdio.h>
 #include <rthw.h>
 #include <rtthread.h>
-#include "lwip/netdb.h"
-#include "lwip/sockets.h"
+#if defined(RT_USING_SAL)
+#include <netdb.h>
+#include <sys/socket.h>
+#else
+#include <lwip/netdb.h>
+#include <lwip/sockets.h>
+#endif /* RT_USING_SAL */
 #include "tiny_ros/ros/string.h"
 
 namespace tinyros {
@@ -38,11 +43,7 @@ public:
     }
     
     int opt = 1;
-    struct linger so_linger;
-    so_linger.l_onoff = 1;
-    so_linger.l_linger = 0;
     setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, (const char *)&opt, sizeof(opt));
-    setsockopt(sockfd_, SOL_SOCKET, SO_LINGER, (const char *)&so_linger, sizeof(so_linger));
 
     memset(&server_endpoint_, 0, sizeof(struct sockaddr_in));
     server_endpoint_.sin_family = AF_INET;
@@ -99,7 +100,7 @@ public:
     connected_ = false;
     sock_binded_ = false;
     if (sockfd_ > 0) {
-      lwip_close(sockfd_);
+      closesocket(sockfd_);
       sockfd_ = -1;
     }
   }

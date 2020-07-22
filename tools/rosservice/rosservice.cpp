@@ -11,11 +11,11 @@
 #include <thread>
 
 #define USAGE "\n\nUSAGE:\n" \
-              "       rosservice          //ros_ip: 127.0.0.1, no arguments\n" \
-              "       rosservice <ros_ip> //ros_ip: tiny-ros ip address\n"
+              "       tinyrosservice          //ros_ip: 127.0.0.1, no arguments\n" \
+              "       tinyrosservice <ros_ip> //ros_ip: tiny-ros ip address\n"
 
 static void threadCb(std::string ros_ip) { 
-  while(!tinyros::nh()->initNode(ros_ip)) {
+  while(!tinyros::nh()->initNode("tinyrosservice", ros_ip)) {
     sleep(1);
   }
   

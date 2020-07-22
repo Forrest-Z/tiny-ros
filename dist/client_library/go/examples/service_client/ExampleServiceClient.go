@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-    tinyros.Go_init("127.0.0.1")
+    tinyros.Go_init("GoExampleServiceClient", "127.0.0.1")
     
     client := tinyros.NewServiceClient("test_srv", tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
 

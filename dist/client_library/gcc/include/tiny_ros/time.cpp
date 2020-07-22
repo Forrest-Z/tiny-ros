@@ -19,6 +19,14 @@
 
 namespace tinyros
 {
+std::mutex Time::mutex_;
+
+int64_t Time::time_start_ = 0;
+
+int64_t Time::time_last_ = 0;
+
+int64_t Time::time_dds_ = 0;
+
 void normalizeSecNSec(uint32_t& sec, uint32_t& nsec)
 {
   uint32_t nsec_part = nsec % 1000000000UL;
@@ -68,6 +76,19 @@ Time& Time::operator -=(const Duration &rhs)
   return *this;
 }
 
+Time Time::dds() {
+  std::unique_lock<std::mutex> lock(Time::mutex_);
+  Time time = Time::now();
+  int64_t offset = (int64_t)(time.toMSec());
+  offset = offset > Time::time_start_ && Time::time_start_ > 0 ? offset - Time::time_start_ : 0;
+  time.sec = (uint32_t)(offset / 1000);
+  time.nsec = (uint32_t)((offset % 1000) * 1000000);
+  time.sec += (uint32_t)(Time::time_dds_ / 1000);
+  time.nsec += (uint32_t)((Time::time_dds_ % 1000) * 1000000);
+  normalizeSecNSec(time.sec, time.nsec);
+  return time;
+}
+
 Time Time::now()
 {
   Time time;
@@ -87,26 +108,25 @@ Time Time::now()
     static LARGE_INTEGER cpu_freq, init_cpu_time;
     static uint32_t start_sec = 0;
     static uint32_t start_nsec = 0;
-    if ( ( start_sec == 0 ) && ( start_nsec == 0 ) )
-      {
-        QueryPerformanceFrequency(&cpu_freq);
-        if (cpu_freq.QuadPart == 0) {
-          throw std::runtime_error("This windows platform does not support the high-performance timing api.");
-        }
-        QueryPerformanceCounter(&init_cpu_time);
-        FILETIME ft;
-        GetSystemTimeAsFileTime(&ft);
-        LARGE_INTEGER start_li;
-        start_li.LowPart = ft.dwLowDateTime;
-        start_li.HighPart = ft.dwHighDateTime;
+    if (( start_sec == 0 ) && ( start_nsec == 0)) {
+      QueryPerformanceFrequency(&cpu_freq);
+      if (cpu_freq.QuadPart == 0) {
+        throw std::runtime_error("This windows platform does not support the high-performance timing api.");
+      }
+      QueryPerformanceCounter(&init_cpu_time);
+      FILETIME ft;
+      GetSystemTimeAsFileTime(&ft);
+      LARGE_INTEGER start_li;
+      start_li.LowPart = ft.dwLowDateTime;
+      start_li.HighPart = ft.dwHighDateTime;
 #ifdef _MSC_VER
       start_li.QuadPart -= 116444736000000000Ui64;
 #else
       start_li.QuadPart -= 116444736000000000ULL;
 #endif
-        start_sec = (uint32_t)(start_li.QuadPart / 10000000);
-        start_nsec = (start_li.LowPart % 10000000) * 100;
-      }
+      start_sec = (uint32_t)(start_li.QuadPart / 10000000);
+      start_nsec = (start_li.LowPart % 10000000) * 100;
+    }
     LARGE_INTEGER cur_time;
     QueryPerformanceCounter(&cur_time);
     LARGE_INTEGER delta_cpu_time;

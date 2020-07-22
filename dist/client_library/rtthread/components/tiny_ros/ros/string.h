@@ -20,25 +20,26 @@ public:
   string() {
     length = 0;
     data = new char[1];
-    *data = '\0';
+    data[length] = '\0';
   }
 
   string(const char* str) {
     if (!str) {
       length = 0;
       data = new char[1];
-      *data = '\0';
     } else {
       length = strlen(str);
       data = new char[length + 1];
       strcpy(data, str);
     }
+    data[length] = '\0';
   }
 
   string(const string &str) {
     length = str.size();
     data = new char[length + 1];
     strcpy(data, str.c_str());
+    data[length] = '\0';
   }
 
   ~string() {
@@ -56,7 +57,7 @@ public:
     length = str.size();
     data = new char[length + 1];
     strcpy(data, str.c_str());
-
+    data[length] = '\0';
     return *this;
   }  
 
@@ -66,12 +67,12 @@ public:
     if (!str) {
       length = 0;
       data = new char[1];
-      *data = '\0';
     } else {
       length = strlen(str);
       data = new char[length + 1];
       strcpy(data, str);
     }
+    data[length] = '\0';
     return *this;
   }
 
@@ -81,6 +82,7 @@ public:
     newString.data = new char[newString.length + 1];
     strcpy(newString.data, data);
     strcat(newString.data, str.data);
+    data[length] = '\0';
     return newString;
   }
 
@@ -96,6 +98,7 @@ public:
       strcpy(newString.data, data);
       strcat(newString.data, str);
     }
+    data[length] = '\0';
     return newString;
   }
 
@@ -106,6 +109,7 @@ public:
     strcat(newdata, str.c_str());
     delete[] data;
     data = newdata;
+    data[length] = '\0';
     return *this;
   }
 
@@ -118,6 +122,7 @@ public:
       delete[] data;
       data = newdata;
     }
+    data[length] = '\0';
     return *this;
   }
 

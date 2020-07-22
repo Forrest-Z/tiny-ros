@@ -18,8 +18,8 @@
 #include <functional>
 #include <condition_variable>
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
+#include "tiny_ros/tinyros_msgs/SyncTime.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
-#include "tiny_ros/std_msgs/Time.h"
 #include "tiny_ros/std_msgs/String.h"
 #include "serialization.h"
 #include "topic_handlers.h"
@@ -45,7 +45,7 @@ namespace tinyros
 {
 #define TINYROS_LOG_TOPIC "tinyros_log_11315"
 
-#define REQUEST_TOPICS_TIMER (1000*1000)
+#define REQUEST_TOPICS_TIMER (1)
 
 #define REQUEST_TOPICS_ALIVE_TIME (15) // seconds
 
@@ -263,6 +263,10 @@ private:
           }
 
           if ((checksum % 256) == 255) {
+            if (topic <= tinyros_msgs::TopicInfo::ID_SESSION_ID) {
+              memset(message_in + index + bytes, 0, buffer_max - index - bytes);
+              bytes = buffer_max - index;
+            }
             tinyros::serialization::IStream stream(message_in + index, bytes);
             if (callbacks_.count(topic) == 1) {
               try {
@@ -397,6 +401,10 @@ private:
         } else if (mode == MODE_MSG_CHECKSUM) {
           mode = MODE_FIRST_FF;
           if ((checksum % 256) == 255) {
+            if (topic <= tinyros_msgs::TopicInfo::ID_SESSION_ID) {
+              memset(message_in + total_bytes, 0, buffer_max - total_bytes);
+              total_bytes = buffer_max;
+            }
             tinyros::serialization::IStream stream(message_in, total_bytes);
             if (callbacks_.count(topic) == 1) {
               try {
@@ -478,6 +486,9 @@ private:
   //// HELPERS ////
   void request_topics() {
     while(require_check_running_) {
+
+      handle_time_done();
+      
       if (!isudp_) {
         std::vector<uint8_t> message(0);
         write_message(message, tinyros_msgs::TopicInfo::ID_PUBLISHER);
@@ -487,7 +498,8 @@ private:
           PublisherPtr pub = pit->second;
           uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
           if ((now - pub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
-            spdlog_info("[{0}] Publisher remove(topic_id: {1}, topic_name: {2})", session_id_.c_str(), pub->topic_id_, pub->topic_name_.c_str());
+            spdlog_info("[{0}] Publisher remove(topic_id: {1}, topic_name: {2}, node_name: {3})", 
+              session_id_.c_str(), pub->topic_id_, pub->topic_name_.c_str(), pub->node_name_.c_str());
             callbacks_.erase(pit->first);
             publishers_.erase(pit++);
           } else {
@@ -500,7 +512,8 @@ private:
           SubscriberPtr sub = sit->second;
           uint64_t now = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
           if ((now - sub->alive_time_) > REQUEST_TOPICS_ALIVE_TIME) {
-            spdlog_info("[{0}] Subscriber remove(topic_id: {1}, topic_name: {2})", session_id_.c_str(), sub->topic_id_, sub->topic_name_.c_str());
+            spdlog_info("[{0}] Subscriber remove(topic_id: {1}, topic_name: {2}, node_name: {3})", 
+              session_id_.c_str(), sub->topic_id_, sub->topic_name_.c_str(), sub->node_name_.c_str());
             subscribers_.erase(sit++);
           } else {
             sit++;
@@ -508,7 +521,7 @@ private:
         }
       }
       
-      usleep(REQUEST_TOPICS_TIMER);
+      usleep(REQUEST_TOPICS_TIMER*1000*1000);
     }
   }
 
@@ -537,7 +550,8 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!publishers_.count(topic_info.topic_id)) {
-      spdlog_info("[{0}] setup_publisher(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_publisher(topic_id: {1}, topic_name: {2}, node_name: {3})",
+        session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
       PublisherPtr pub(new PublisherCore(topic_info));
       pub->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
       callbacks_[topic_info.topic_id] = std::bind(&PublisherCore::handle, pub, std::placeholders::_1);
@@ -566,7 +580,8 @@ private:
     tinyros_msgs::TopicInfo topic_info;
     tinyros::serialization::Serializer<tinyros_msgs::TopicInfo>::read(stream, topic_info);
     if (!subscribers_.count(topic_info.topic_id)) {
-      spdlog_info("[{0}] setup_subscriber(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_subscriber(topic_id: {1}, topic_name: {2}, node_name: {3})", 
+        session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
       SubscriberPtr sub(new SubscriberCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, topic_info.topic_id)));
       sub->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
       subscribers_[topic_info.topic_id] = sub;
@@ -596,7 +611,8 @@ private:
 
     std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
     if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
-      spdlog_info("[{0}] setup_service_server(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+      spdlog_info("[{0}] setup_service_server(topic_id: {1}, topic_name: {2}, node_name: {3})",
+        session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
       ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
       callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
       ServiceServerCore::services_[topic_info.topic_name] = srv;
@@ -616,7 +632,8 @@ private:
     std::unique_lock<std::mutex> lock(ServiceServerCore::services_mutex_);
     if (ServiceServerCore::services_.count(topic_info.topic_name)) {
       if (!services_client_.count(topic_info.topic_id)) {
-        spdlog_info("[{0}] setup_service_client(topic_id: {1}, topic_name: {2})", session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str());
+        spdlog_info("[{0}] setup_service_client(topic_id: {1}, topic_name: {2}, node_name: {3})", 
+          session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
         ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
         ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
         client->setTopicId(topic_info.topic_id);
@@ -659,14 +676,19 @@ private:
   }
 
   void handle_time(tinyros::serialization::IStream& stream) {
-    std_msgs::Time time;
+    handle_time_done();
+  }
+
+  void handle_time_done() {
+    tinyros_msgs::SyncTime time;
     time.data = tinyros::Time::now();
+    time.tick = REQUEST_TOPICS_TIMER*1000;
 
     size_t length = tinyros::serialization::serializationLength(time);
     std::vector<uint8_t> message(length);
 
     tinyros::serialization::OStream ostream(&message[0], length);
-    tinyros::serialization::Serializer<std_msgs::Time>::write(ostream, time);
+    tinyros::serialization::Serializer<tinyros_msgs::SyncTime>::write(ostream, time);
 
     write_message(message, tinyros_msgs::TopicInfo::ID_TIME);
   }

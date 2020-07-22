@@ -1,5 +1,6 @@
 import sys
 import time
+import threading
 import tinyros.Duration
 
 if sys.version > '3': 
@@ -7,6 +8,10 @@ if sys.version > '3':
 
 class Time(object):
     __slots__ = ['sec', 'nsec']
+    time_start = 0
+    time_dds = 0
+    time_last = 0
+    mutex = threading.Lock()
     def __init__(self, sec=0, nsec=0):
         self.sec = sec
         self.nsec = nsec
@@ -57,6 +62,21 @@ class Time(object):
         nsec = int((float_sec - sec) * 1000000000)
         return Time(sec, nsec)
     fromSec = staticmethod(fromSec)
+
+    def dds():
+        Time.mutex.acquire()
+        t = Time.now()
+        offset = long(t.toMSec());
+        offset = (offset - Time.time_start) if ((offset > Time.time_start) and (Time.time_start > 0)) else 0
+        t.sec = int(offset / 1000)
+        t.nsec = int((offset % 1000) * 1000000)
+        t.sec += int(Time.time_dds / 1000)
+        t.nsec += int((Time.time_dds % 1000) * 1000000)
+        t.sec += int(t.nsec / 1e9)
+        t.nsec = int(t.nsec % 1e9)
+        Time.mutex.release()
+        return t
+    dds = staticmethod(dds)
 
     def now():
         ticks = time.time()

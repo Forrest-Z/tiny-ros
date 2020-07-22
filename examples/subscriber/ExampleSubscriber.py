@@ -10,7 +10,7 @@ def subscriber_cb(received_msg):
     print('%s' % received_msg.hello)
 
 def main():
-    tinyros.init("127.0.0.1")
+    tinyros.init("PyExampleSubscriber", "127.0.0.1")
     if 1:
         tinyros.nh().subscribe(tinyros.Subscriber("tinyros_hello", subscriber_cb, tinyros_hello.msg.TinyrosHello))
     else:

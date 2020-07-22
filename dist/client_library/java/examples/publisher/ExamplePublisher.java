@@ -7,7 +7,7 @@ import com.roslib.tinyros_hello.TinyrosHello;
 public class ExamplePublisher {
 
     public static void main(String[] args) throws InterruptedException {
-        Tinyros.init("127.0.0.1");
+        Tinyros.init("JavaExamplePublisher", "127.0.0.1");
         
         Publisher<TinyrosHello> pub = new Publisher<TinyrosHello>("tinyros_hello", new TinyrosHello());
         

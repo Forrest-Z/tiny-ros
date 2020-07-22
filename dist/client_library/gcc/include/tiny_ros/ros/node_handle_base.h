@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include <mutex>
 #include <memory>
+#include "tiny_ros/ros/time.h"
+#include "tiny_ros/tinyros_msgs/SyncTime.h"
 
 namespace tinyros {
 const int MAX_SUBSCRIBERS = 100;
@@ -37,6 +39,8 @@ const uint8_t MODE_MSG_CHECKSUM   = 12;
 const int SPIN_OK = 0;
 const int SPIN_ERR = -1;
 
+const int SYNC_TIME_SCOPE = 10;  // milliseconds
+
 class SpinObject {
 public:
   uint32_t id;
@@ -47,17 +51,39 @@ public:
 
 class NodeHandleBase_
 {
+protected:
+  std::string ip_addr_;
+  std::string node_name_;
+
 public:
-  virtual bool initNode(std::string portName) { return false; }
+  virtual bool initNode(std::string node_name, std::string ip_addr) { return false; }
   virtual int publish(uint32_t id, const Msg* msg, bool islog = false) { return 0; }
   virtual int spin() { return -1; }
   virtual void exit() {}
   virtual bool ok() { return false; }
   virtual void spin_task(const std::shared_ptr<SpinObject> obj) {}
   virtual void keepalive() {}
+  virtual void sync_time(unsigned char* data) {
+     tinyros_msgs::SyncTime t;
+     t.deserialize(data);
+     int64_t now = (int64_t)(Time::now().toMSec());
+     std::unique_lock<std::mutex> lock(Time::mutex_);
+     int64_t scope = now - Time::time_last_ - t.tick;
+     if ((Time::time_start_ == 0) || (scope >= 0 && scope <= SYNC_TIME_SCOPE)) {
+        Time::time_dds_ = (int64_t)(t.data.toMSec());
+        Time::time_start_ = now;
+     }
+     Time::time_last_ = now;
+  }
 };
 
-void init(std::string ip_addr = "127.0.0.1");
+void init(std::string node_name, std::string ip_addr = "127.0.0.1");
+void logdebug(std::string msg);
+void loginfo(std::string msg);
+void logwarn(std::string msg);
+void logerror(std::string msg);
+void logfatal(std::string msg);
+
 }
 #endif
 

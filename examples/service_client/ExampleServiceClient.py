@@ -7,7 +7,7 @@ import tinyros
 import tinyros_hello.srv.Test
 
 def main():
-    tinyros.init("127.0.0.1")
+    tinyros.init("PyExampleServiceClient", "127.0.0.1")
     client = tinyros.ServiceClient("test_srv", tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response)
     tinyros.nh().serviceClient(client)
     while True:

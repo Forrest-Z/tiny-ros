@@ -15,14 +15,12 @@
 
 namespace tinyros
 {
-std::string get_executable_name();
 void mtrace(int level, const char *chfr, ...);
 
 #define log_info(format, ...) tinyros::mtrace(tinyros_msgs::Log::ROSINFO, format, ##__VA_ARGS__)
 #define log_warn(format, ...) tinyros::mtrace(tinyros_msgs::Log::ROSWARN, format, ##__VA_ARGS__)
 #define log_error(format, ...) tinyros::mtrace(tinyros_msgs::Log::ROSERROR, format, ##__VA_ARGS__)
 #define log_debug(format, ...) tinyros::mtrace(tinyros_msgs::Log::ROSDEBUG, format, ##__VA_ARGS__)
-#define log_diag(format, ...) tinyros::mtrace(tinyros_msgs::Log::ROSDIAG, format, ##__VA_ARGS__)
 
 #define LOG_ONCE_TIME_THROTTLE  1
 #define log_once_info(format, ...) { \

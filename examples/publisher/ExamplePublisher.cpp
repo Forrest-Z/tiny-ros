@@ -10,7 +10,7 @@
 #include "tiny_ros/tinyros_hello/TinyrosHello.h"
 
 int main (int argc, char *argv[]) {
-  tinyros::init("127.0.0.1");
+  tinyros::init("ExamplePublisher", "127.0.0.1");
   tinyros::Publisher hello_pub ("tinyros_hello", new tinyros_hello::TinyrosHello());
 #if 1
   tinyros::nh()->advertise(hello_pub);

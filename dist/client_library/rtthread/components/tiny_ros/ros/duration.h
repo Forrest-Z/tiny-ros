@@ -35,8 +35,8 @@ public:
   };
   void fromSec(double t)
   {
-    sec = (uint32_t) floor(t);
-    nsec = (uint32_t) round((t - sec) * 1e9);
+    sec = (uint32_t) t;
+    nsec = (uint32_t) ((t - sec) * 1e9);
   };
 
   Duration& operator+=(const Duration &rhs);

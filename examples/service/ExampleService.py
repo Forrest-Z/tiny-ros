@@ -10,7 +10,7 @@ def service_cb(req, res):
     res.output = "Hello, tiny-ros ^_^"
 
 def main():
-    tinyros.init("127.0.0.1")
+    tinyros.init("PyExampleService", "127.0.0.1")
     tinyros.nh().advertiseService(tinyros.ServiceServer("test_srv", service_cb, \
             tinyros_hello.srv.Test.Request, tinyros_hello.srv.Test.Response))
     while True:

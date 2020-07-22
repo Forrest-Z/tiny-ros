@@ -31,9 +31,6 @@ public class NodeHandle extends NodeHandleBase{
     private HardwareTCP loghd_;
     private boolean loghd_keepalive_;
 
-    private java.lang.String port_name_;
-
-
     private boolean topic_list_recieved;
     private java.lang.String topic_list;
 
@@ -78,7 +75,7 @@ public class NodeHandle extends NodeHandleBase{
 
         hardware_ = new HardwareTCP();
         loghd_ = new HardwareTCP();
-        port_name_ = "";
+        ip_addr_ = node_name_ = "";
         loghd_keepalive_ = false;
 
         spin_ = true;
@@ -94,11 +91,12 @@ public class NodeHandle extends NodeHandleBase{
     }
 
     @Override
-    public boolean initNode(java.lang.String portName) {
-        port_name_ = portName;
+    public boolean initNode(java.lang.String node_name, java.lang.String ip_addr) {
+        ip_addr_ = ip_addr;
+		node_name_ = node_name;
         com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
-        if (hardware_.init(port_name_)) {
-            msg.data = "Java";
+        if (hardware_.init(ip_addr_)) {
+            msg.data = node_name_;
             publish(TopicInfo.ID_SESSION_ID, msg);
         }
         if(!loghd_keepalive_) {
@@ -110,9 +108,9 @@ public class NodeHandle extends NodeHandleBase{
                         byte[] in = new byte[200];
                         while(loghd_keepalive_) {
                             if (!loghd_.connected()) {
-                                if (loghd_.init(port_name_)) {
+                                if (loghd_.init(ip_addr_)) {
                                     com.roslib.std_msgs.String msg = new com.roslib.std_msgs.String();
-                                    msg.data = "Java_log" ;
+                                    msg.data = node_name_ + "_log" ;
                                     publish(TopicInfo.ID_SESSION_ID, msg, true);
                                 }
                                 Thread.sleep(1000);
@@ -250,6 +248,8 @@ public class NodeHandle extends NodeHandleBase{
                                 subscribers[i].negotiated_ = ti.negotiated;
                             }
                         }
+                    } else if (topic == TopicInfo.ID_TIME) {
+                        syncTime(message_in);
                     } else {
                         SubscriberT sub = subscribers[topic - 100];
                         byte[] message = new byte[total_bytes];
@@ -462,20 +462,14 @@ public class NodeHandle extends NodeHandleBase{
         return service_list;
     }
 
-    private void log(int level, java.lang.String msg) {
+    public void log(int level, java.lang.String msg) {
         if (loghd_.connected()) {
             Log l = new Log();
             l.level = level;
-            l.msg = msg;
+            l.msg = "[" + node_name_ + "] " + msg;
             publish(TopicInfo.ID_LOG, l, true);
         }
     }
-
-    public void logdebug(java.lang.String msg) { log(Log.ROSDEBUG, msg); }
-    public void loginfo(java.lang.String msg) { log(Log.ROSINFO, msg); }
-    public void logwarn(java.lang.String msg) { log(Log.ROSWARN, msg); }
-    public void logerror(java.lang.String msg) { log(Log.ROSERROR, msg); }
-    public void logfatal(java.lang.String msg) { log(Log.ROSFATAL, msg);}
 
     @Override
     public void exit() {

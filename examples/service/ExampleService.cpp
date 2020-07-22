@@ -14,7 +14,7 @@ static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::
 }
 
 int main() {
-  tinyros::init("127.0.0.1");
+  tinyros::init("ExampleService", "127.0.0.1");
   tinyros::ServiceServer<tinyros_hello::Test::Request, tinyros_hello::Test::Response> server("test_srv", &service_cb);
   tinyros::nh()->advertiseService(server);
   while(true) {

@@ -2,9 +2,11 @@ package com.roslib.ros;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import com.roslib.tinyros_msgs.Log;
 
 public class Tinyros {
-    private static java.lang.String ipaddr_ = "127.0.0.1";
+    private static java.lang.String ip_addr_ = "127.0.0.1";
+    private static java.lang.String node_name_ = "";
     private static boolean main_loop_init_ = false;
     private static Lock main_loop_mutex_ = new ReentrantLock();
 
@@ -25,7 +27,7 @@ public class Tinyros {
         public void run() {
             while(nh_.spin_) {
                 if (!nh_.ok()) {
-                    nh_.initNode(Tinyros.ipaddr_);
+                    nh_.initNode(Tinyros.node_name_, Tinyros.ip_addr_);
                 }
                 if (nh_.ok()) {
                     nh_.spin();
@@ -39,12 +41,14 @@ public class Tinyros {
         }
     }
 
-    public static void init() {
+    public static void init(java.lang.String node_name) {
+        Tinyros.node_name_ = node_name;
         Tinyros.nh();
     }
 
-    public static void init(java.lang.String ipaddr) {
-        Tinyros.ipaddr_ = ipaddr;
+    public static void init(java.lang.String node_name, java.lang.String ip_addr) {
+        Tinyros.node_name_ = node_name;
+        Tinyros.ip_addr_ = ip_addr;
         Tinyros.nh();
     }
 
@@ -81,4 +85,10 @@ public class Tinyros {
         }
         return Tinyros.g_nh_udp_;
     }
+	
+	public static void logdebug(java.lang.String msg) { nh().log(Log.ROSDEBUG, msg); }
+    public static void loginfo(java.lang.String msg) { nh().log(Log.ROSINFO, msg); }
+    public static void logwarn(java.lang.String msg) { nh().log(Log.ROSWARN, msg); }
+    public static void logerror(java.lang.String msg) { nh().log(Log.ROSERROR, msg); }
+    public static void logfatal(java.lang.String msg) { nh().log(Log.ROSFATAL, msg); }
 }

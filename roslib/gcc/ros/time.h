@@ -13,6 +13,7 @@
 #include "tiny_ros/ros/duration.h"
 #include <math.h>
 #include <stdint.h>
+#include <mutex>
 
 namespace tinyros
 {
@@ -54,6 +55,11 @@ public:
   Time& operator +=(const Duration &rhs);
   Time& operator -=(const Duration &rhs);
 
+  static std::mutex mutex_;
+  static int64_t time_start_;
+  static int64_t time_last_;
+  static int64_t time_dds_;
+  static Time dds();
   static Time now();
   static void setNow(Time & new_now);
 };

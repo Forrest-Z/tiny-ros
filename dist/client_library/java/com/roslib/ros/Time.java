@@ -1,8 +1,13 @@
 package com.roslib.ros;
 
-import com.roslib.ros.Duration;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Time {
+    public static Lock lock = new ReentrantLock();
+    public static long time_start = 0;
+    public static long time_dds = 0;
+    public static long time_last = 0;
     public long sec;
     public long nsec;
 
@@ -19,6 +24,10 @@ public class Time {
 
     public double toSec() {
         return sec + 1e-9 * nsec;
+    }
+
+    public double toMSec() {
+        return sec * 1000 + 1e-6 * nsec;
     }
 
     public void fromSec(double t) {
@@ -52,6 +61,20 @@ public class Time {
             nsec -= 1000000000;
             sec += 1;
         }
+    }
+
+    public static Time dds() {
+        Time.lock.lock();
+        Time t = Time.now();
+        long offset = (long)t.toMSec();
+        offset = offset > Time.time_start && Time.time_start > 0 ? offset - Time.time_start : 0;
+        t.sec = offset / 1000;
+        t.nsec = (offset % 1000) * 1000000;
+        t.sec += Time.time_dds / 1000;
+        t.nsec += (Time.time_dds % 1000) * 1000000;
+        Time.normalizeSecNSec(t);
+        Time.lock.unlock();
+        return t;
     }
 
     public static Time now() {
@@ -105,3 +128,4 @@ public class Time {
         time.nsec = nsec_part;
     }
 }
+

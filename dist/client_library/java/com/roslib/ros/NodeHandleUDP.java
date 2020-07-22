@@ -48,7 +48,9 @@ public class NodeHandleUDP extends NodeHandleBase {
     }
 
     @Override
-    public boolean initNode(String portName) {
+    public boolean initNode(java.lang.String node_name, java.lang.String ip_addr) {
+        node_name_ = node_name;
+		ip_addr_ = ip_addr;
         if(!negotiate_keepalive_) {
             negotiate_keepalive_ = true;
             negotiate_thread_pool_.execute(new Runnable() {
@@ -65,7 +67,7 @@ public class NodeHandleUDP extends NodeHandleBase {
                 }
             });
         }
-        return hardware_.init(portName);
+        return hardware_.init(ip_addr_);
     }
 
     @Override

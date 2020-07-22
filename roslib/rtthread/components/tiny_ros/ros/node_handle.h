@@ -13,9 +13,7 @@
 #include <math.h>
 #include <queue>
 #include <rtthread.h>
-#include "tiny_ros/ros/time.h"
 #include "tiny_ros/ros/log.h"
-#include "tiny_ros/std_msgs/Time.h"
 #include "tiny_ros/std_msgs/String.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
@@ -31,7 +29,6 @@ using tinyros_msgs::TopicInfo;
 class NodeHandle : public NodeHandleBase_
 {
 public:
-  tinyros::string port_name_;
   Hardware hardware_;
 
   Hardware loghd_;
@@ -58,6 +55,7 @@ private:
     rt_mutex_init(&mutex_, "nh", RT_IPC_FLAG_FIFO);
     rt_mutex_init(&srv_id_mutex_, "srv", RT_IPC_FLAG_FIFO);
     rt_mutex_init(&main_loop_mutex_, "ml", RT_IPC_FLAG_FIFO);
+    rt_mutex_init(&sync_time_mutex_, "time", RT_IPC_FLAG_FIFO);
 
     for (unsigned int i = 0; i < MAX_PUBLISHERS; i++)
       publishers[i] = NULL;
@@ -73,25 +71,26 @@ public:
     rt_mutex_detach(&mutex_);
     rt_mutex_detach(&srv_id_mutex_);
     rt_mutex_detach(&main_loop_mutex_);
+    rt_mutex_detach(&sync_time_mutex_);
   }
 
-  virtual bool initNode(tinyros::string portName = "127.0.0.1") {
+  virtual bool initNode(tinyros::string node_name, tinyros::string ip_addr) {
     bytes_ = 0;
     index_ = 0;
     topic_ = 0;
     spin_ = true;
     mode_ = MODE_FIRST_FF;
-    port_name_ = portName;
+    ip_addr_ = ip_addr;
+    node_name_ = node_name;
 
     std_msgs::String msg;
-    if (hardware_.init(port_name_)) {
-      msg.data = get_executable_name();
+    if (hardware_.init(ip_addr_)) {
+      msg.data = node_name_;
       publish(TopicInfo::ID_SESSION_ID, &msg);
     }
 
     if (!loghd_keepalive_) {
-      rt_err_t result = RT_EOK;
-      result = rt_thread_init(&loghd_keepalive_thread_, "loghd", &NodeHandle::keepalive, this, &loghd_keepalive_stack_[0],
+      rt_err_t result = rt_thread_init(&loghd_keepalive_thread_, "loghd", &NodeHandle::keepalive, this, &loghd_keepalive_stack_[0],
           sizeof(loghd_keepalive_stack_), THREAD_LOG_KEEPALIVE_PRIORITY, THREAD_LOG_KEEPALIVE_TICK);
       RT_ASSERT(result == RT_EOK);
       result = rt_thread_startup(&loghd_keepalive_thread_);
@@ -107,10 +106,9 @@ public:
     NodeHandle *nh = (NodeHandle *)pthis;
     while(nh->loghd_keepalive_) {
       if (!nh->loghd_.connected()) {
-        if (nh->loghd_.init(nh->port_name_)) {
+        if (nh->loghd_.init(nh->ip_addr_)) {
           std_msgs::String msg;
-          tinyros::string process = get_executable_name();
-          msg.data = process + "_log";
+          msg.data = nh->node_name_ + "_log";
           nh->publish(TopicInfo::ID_SESSION_ID, &msg, true);
         }
         rt_thread_delay(1000);
@@ -256,6 +254,8 @@ public:
             msg.deserialize(message_in);
             service_list = msg.data;
             service_list_recieved = true;
+          } else if (topic_ == TopicInfo::ID_TIME) {
+            sync_time(message_in);
           } else if (topic_ == TopicInfo::ID_NEGOTIATED) {
             tinyros_msgs::TopicInfo ti;
             ti.deserialize(message_in);
@@ -365,6 +365,7 @@ public:
             rt_mutex_release(&mutex_);
             negotiateTopics(subscribers[i]);
             negotiateTopics(publishers[j]);
+            return true;
           }
         }
       }
@@ -380,6 +381,7 @@ public:
     ti.message_type = p->msg_->getType();
     ti.md5sum = p->msg_->getMD5();
     ti.buffer_size = OUTPUT_SIZE;
+    ti.node = node_name_;
     publish(p->getEndpointType(), &ti);
   }
 
@@ -390,6 +392,7 @@ public:
     ti.message_type = s->getMsgType();
     ti.md5sum = s->getMsgMD5();
     ti.buffer_size = INPUT_SIZE;
+    ti.node = node_name_;
     publish(s->getEndpointType(), &ti);
   }
 
@@ -453,23 +456,18 @@ public:
       return -2;
     }
   }
-
-private:
-  void log(char byte, const char* msg) {
+  
+  void log(char byte, tinyros::string msg) {
     if (loghd_.connected()) {
       tinyros_msgs::Log l;
       l.level = byte;
-      l.msg = msg;
+      l.msg = tinyros::string("[");
+      l.msg += node_name_;
+      l.msg += tinyros::string("] ");
+      l.msg += msg;
       publish(tinyros_msgs::TopicInfo::ID_LOG, &l, true);
     }
   }
-
-public:
-  virtual void logdebug(const char* msg) { log(tinyros_msgs::Log::ROSDEBUG, msg); }
-  virtual void loginfo(const char* msg) { log(tinyros_msgs::Log::ROSINFO, msg); }
-  virtual void logwarn(const char* msg) { log(tinyros_msgs::Log::ROSWARN, msg); }
-  virtual void logerror(const char* msg) { log(tinyros_msgs::Log::ROSERROR, msg); }
-  virtual void logfatal(const char* msg) { log(tinyros_msgs::Log::ROSFATAL, msg); }
 
 private:
   bool topic_list_recieved;

@@ -13,7 +13,7 @@ func subscriber_cb(msg tinyros.Msg) {
 }
 
 func main() {
-    tinyros.Go_init("127.0.0.1")
+    tinyros.Go_init("GoExampleSubscriber", "127.0.0.1")
 
     sub := tinyros.NewSubscriber("tinyros_hello", subscriber_cb, tinyros_hello.NewTinyrosHello())
 

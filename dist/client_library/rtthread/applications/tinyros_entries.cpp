@@ -13,7 +13,7 @@
 
 //////////////////////////////////////////////////////////
 void tinyros_example_publisher(void* parameter) {
-  tinyros::init("192.168.8.1");
+  tinyros::init("RT-Thread", "192.168.8.1");
   
   tinyros::Publisher hello_pub ("tinyros_hello", new tinyros_hello::TinyrosHello());
 #if 1
@@ -35,7 +35,7 @@ static void subscriber_cb(const tinyros_hello::TinyrosHello& received_msg) {
   rt_kprintf("%s\n", received_msg.hello.c_str());
 }
 extern "C" void tinyros_example_subscriber(void* parameter) {
-  tinyros::init("192.168.8.1");
+  tinyros::init("RT-Thread", "192.168.8.1");
   
   tinyros::Subscriber<tinyros_hello::TinyrosHello> sub("tinyros_hello", subscriber_cb);
 #if 1
@@ -53,7 +53,7 @@ static void service_cb(const tinyros_hello::Test::Request & req, tinyros_hello::
   res.output = "Hello, tiny-ros ^_^";
 }
 void tinyros_example_service(void* parameter) {
-  tinyros::init("192.168.8.1");
+  tinyros::init("RT-Thread", "192.168.8.1");
   
   tinyros::ServiceServer<tinyros_hello::Test::Request, tinyros_hello::Test::Response> server("test_srv", &service_cb);
   tinyros::nh()->advertiseService(server);
@@ -65,7 +65,7 @@ void tinyros_example_service(void* parameter) {
 
 //////////////////////////////////////////////////////////
 extern "C" void tinyros_example_service_client(void* parameter) {
-  tinyros::init("192.168.8.1");
+  tinyros::init("RT-Thread", "192.168.8.1");
   
   tinyros::ServiceClient<tinyros_hello::Test::Request, tinyros_hello::Test::Response> client("test_srv");
   tinyros::nh()->serviceClient(client);

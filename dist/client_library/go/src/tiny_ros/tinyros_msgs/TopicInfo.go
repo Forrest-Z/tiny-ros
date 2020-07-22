@@ -22,6 +22,7 @@ type TopicInfo struct {
     Go_md5sum string `json:"md5sum"`
     Go_buffer_size int32 `json:"buffer_size"`
     Go_negotiated bool `json:"negotiated"`
+    Go_node string `json:"node"`
 }
 
 func NewTopicInfo() (*TopicInfo) {
@@ -32,6 +33,7 @@ func NewTopicInfo() (*TopicInfo) {
     newTopicInfo.Go_md5sum = ""
     newTopicInfo.Go_buffer_size = 0
     newTopicInfo.Go_negotiated = false
+    newTopicInfo.Go_node = ""
     return newTopicInfo
 }
 
@@ -42,6 +44,7 @@ func (self *TopicInfo) Go_initialize() {
     self.Go_md5sum = ""
     self.Go_buffer_size = 0
     self.Go_negotiated = false
+    self.Go_node = ""
 }
 
 func (self *TopicInfo) Go_serialize(buff []byte) (int) {
@@ -86,6 +89,14 @@ func (self *TopicInfo) Go_serialize(buff []byte) (int) {
         buff[offset] = byte(0x00)
     }
     offset += 1
+    length_node := len(self.Go_node)
+    buff[offset + 0] = byte((length_node >> (8 * 0)) & 0xFF)
+    buff[offset + 1] = byte((length_node >> (8 * 1)) & 0xFF)
+    buff[offset + 2] = byte((length_node >> (8 * 2)) & 0xFF)
+    buff[offset + 3] = byte((length_node >> (8 * 3)) & 0xFF)
+    offset += 4
+    copy(buff[offset:(offset+length_node)], self.Go_node)
+    offset += length_node
     return offset
 }
 
@@ -128,6 +139,13 @@ func (self *TopicInfo) Go_deserialize(buff []byte) (int) {
         self.Go_negotiated = false
     }
     offset += 1
+    length_node := int(buff[offset + 0] & 0xFF) << (8 * 0)
+    length_node |= int(buff[offset + 1] & 0xFF) << (8 * 1)
+    length_node |= int(buff[offset + 2] & 0xFF) << (8 * 2)
+    length_node |= int(buff[offset + 3] & 0xFF) << (8 * 3)
+    offset += 4
+    self.Go_node = string(buff[offset:(offset+length_node)])
+    offset += length_node
     return offset
 }
 
@@ -145,6 +163,9 @@ func (self *TopicInfo) Go_serializedLength() (int) {
     length += length_md5sum
     length += 4
     length += 1
+    length_node := len(self.Go_node)
+    length += 4
+    length += length_node
     return length
 }
 
@@ -154,7 +175,7 @@ func (self *TopicInfo) Go_echo() (string) {
 }
 
 func (self *TopicInfo) Go_getType() (string) { return "tinyros_msgs/TopicInfo" }
-func (self *TopicInfo) Go_getMD5() (string) { return "a46a053b53f4cc6fca4b0329acf85d51" }
+func (self *TopicInfo) Go_getMD5() (string) { return "76d40676946fcde66f228def7575451a" }
 func (self *TopicInfo) Go_getID() (uint32) { return 0 }
 func (self *TopicInfo) Go_setID(id uint32) { }
 

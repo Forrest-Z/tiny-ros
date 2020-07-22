@@ -66,6 +66,7 @@ public:
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
+    node_name_ = topic_info.node;
     buffer_size_ = topic_info.buffer_size;
   }
 
@@ -90,6 +91,7 @@ public:
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
+  std::string node_name_;
   int32_t buffer_size_;
   uint64_t alive_time_;
   RostopicConnection connection_;
@@ -104,6 +106,7 @@ public:
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
+    node_name_ = topic_info.node;
     buffer_size_ = topic_info.buffer_size;
   }
 
@@ -125,6 +128,7 @@ public:
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
+  std::string node_name_;
   int32_t buffer_size_;
   uint64_t alive_time_;
   RostopicConnection connection_;
@@ -139,6 +143,7 @@ public:
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
+    node_name_ = topic_info.node;
     buffer_size_ = topic_info.buffer_size;
     signal_ = std::shared_ptr<Signal<std::vector<uint8_t>&> >(new Signal<std::vector<uint8_t>&>);
     destroy_signal_ = std::shared_ptr<Signal<std::string&> >(new Signal<std::string&>);
@@ -168,6 +173,7 @@ public:
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
+  std::string node_name_;
   int32_t buffer_size_;
 };
 std::mutex ServiceServerCore::services_mutex_;
@@ -182,6 +188,7 @@ public:
     topic_name_ = topic_info.topic_name;
     message_type_ = topic_info.message_type;
     md5sum_ = topic_info.md5sum;
+    node_name_ = topic_info.node;
     buffer_size_ = topic_info.buffer_size;
     signal_ = std::shared_ptr<Signal<std::vector<uint8_t>&> >(new Signal<std::vector<uint8_t>&>);
   }
@@ -211,6 +218,7 @@ public:
   std::string topic_name_;
   std::string message_type_;
   std::string md5sum_;
+  std::string node_name_;
   int32_t buffer_size_;
 };
 

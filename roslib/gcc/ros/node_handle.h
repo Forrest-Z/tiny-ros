@@ -15,8 +15,6 @@
 #include <memory>
 #include "tiny_ros/ros/log.h"
 #include "tiny_ros/ros/threadpool.h"
-#include "tiny_ros/ros/time.h"
-#include "tiny_ros/std_msgs/Time.h"
 #include "tiny_ros/std_msgs/String.h"
 #include "tiny_ros/tinyros_msgs/TopicInfo.h"
 #include "tiny_ros/tinyros_msgs/Log.h"
@@ -36,7 +34,6 @@ using tinyros_msgs::TopicInfo;
 class NodeHandle : public NodeHandleBase_
 {
 protected:
-  std::string port_name_;
   HardwareTcp hardware_;
   
   HardwareTcp loghd_;
@@ -76,10 +73,9 @@ private:
     uint8_t in[200];
     while(loghd_keepalive_) {
       if (!loghd_.connected()) {
-        if (loghd_.init(port_name_)) {
+        if (loghd_.init(ip_addr_)) {
           std_msgs::String msg;
-          std::string process = get_executable_name();
-          msg.data = process + "_log";
+          msg.data = node_name_ + "_log";
           publish(TopicInfo::ID_SESSION_ID, &msg, true);
         }
 #ifdef WIN32
@@ -115,17 +111,18 @@ public:
   }
 
   /* Start a named port, which may be network server IP, initialize buffers */
-  virtual bool initNode(std::string portName = "127.0.0.1") {
+  virtual bool initNode(std::string node_name, std::string ip_addr) {
     bytes_ = 0;
     index_ = 0;
     topic_ = 0;
     spin_ = true;
     mode_ = MODE_FIRST_FF;
-    port_name_ = portName;
+    ip_addr_ = ip_addr;
+    node_name_ = node_name;
 
     std_msgs::String msg;
-    if (hardware_.init(port_name_)) {
-      msg.data = get_executable_name();
+    if (hardware_.init(ip_addr_)) {
+      msg.data = node_name_;
       publish(TopicInfo::ID_SESSION_ID, &msg);
     }
 
@@ -277,6 +274,8 @@ public:
             msg.deserialize(message_in);
             service_list = msg.data;
             service_list_recieved = true;
+          } else if (topic_ == TopicInfo::ID_TIME) {
+            sync_time(message_in);
           } else if (topic_ == TopicInfo::ID_NEGOTIATED) {
             tinyros_msgs::TopicInfo ti;
             ti.deserialize(message_in);
@@ -419,6 +418,7 @@ public:
     ti.message_type = p->msg_->getType();
     ti.md5sum = p->msg_->getMD5();
     ti.buffer_size = OUTPUT_SIZE;
+    ti.node = node_name_;
     publish(p->getEndpointType(), &ti);
   }
   
@@ -429,6 +429,7 @@ public:
     ti.message_type = s->getMsgType();
     ti.md5sum = s->getMsgMD5();
     ti.buffer_size = INPUT_SIZE;
+    ti.node = node_name_;
     publish(s->getEndpointType(), &ti);
   }
 
@@ -489,22 +490,14 @@ public:
     }
   }
 
-private:
   void log(char byte, std::string msg) {
     if (loghd_.connected()) {
       tinyros_msgs::Log l;
       l.level = byte;
-      l.msg = msg;
+      l.msg = std::string("[") + node_name_ + std::string("] ") + msg;
       publish(tinyros_msgs::TopicInfo::ID_LOG, &l, true);
     }
   }
-
-public:
-  void logdebug(std::string msg) { log(tinyros_msgs::Log::ROSDEBUG, msg); }
-  void loginfo(std::string msg) { log(tinyros_msgs::Log::ROSINFO, msg); }
-  void logwarn(std::string msg) { log(tinyros_msgs::Log::ROSWARN, msg); }
-  void logerror(std::string msg) { log(tinyros_msgs::Log::ROSERROR, msg); }
-  void logfatal(std::string msg) { log(tinyros_msgs::Log::ROSFATAL, msg); }
 
   /*********************************************************************/
   private:

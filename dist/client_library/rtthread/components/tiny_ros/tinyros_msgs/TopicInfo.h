@@ -24,6 +24,8 @@ namespace tinyros_msgs
       _buffer_size_type buffer_size;
       typedef bool _negotiated_type;
       _negotiated_type negotiated;
+      typedef tinyros::string _node_type;
+      _node_type node;
       enum { ID_PUBLISHER = 0 };
       enum { ID_SUBSCRIBER = 1 };
       enum { ID_SERVICE_SERVER = 2 };
@@ -41,7 +43,8 @@ namespace tinyros_msgs
       message_type(""),
       md5sum(""),
       buffer_size(0),
-      negotiated(0)
+      negotiated(0),
+      node("")
     {
     }
 
@@ -85,6 +88,11 @@ namespace tinyros_msgs
       u_negotiated.real = this->negotiated;
       *(outbuffer + offset + 0) = (u_negotiated.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->negotiated);
+      uint32_t length_node = this->node.size();
+      varToArr(outbuffer + offset, length_node);
+      offset += 4;
+      memcpy(outbuffer + offset, this->node.c_str(), length_node);
+      offset += length_node;
       return offset;
     }
 
@@ -142,6 +150,15 @@ namespace tinyros_msgs
       u_negotiated.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
       this->negotiated = u_negotiated.real;
       offset += sizeof(this->negotiated);
+      uint32_t length_node;
+      arrToVar(length_node, (inbuffer + offset));
+      offset += 4;
+      for(unsigned int k= offset; k< offset+length_node; ++k){
+        inbuffer[k-1]=inbuffer[k];
+      }
+      inbuffer[offset+length_node-1]=0;
+      this->node = (char *)(inbuffer + offset-1);
+      offset += length_node;
       return offset;
     }
 
@@ -160,11 +177,14 @@ namespace tinyros_msgs
       length += length_md5sum;
       length += sizeof(this->buffer_size);
       length += sizeof(this->negotiated);
+      uint32_t length_node = this->node.size();
+      length += 4;
+      length += length_node;
       return length;
     }
 
     virtual tinyros::string getType(){ return "tinyros_msgs/TopicInfo"; }
-    virtual tinyros::string getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
+    virtual tinyros::string getMD5(){ return "76d40676946fcde66f228def7575451a"; }
 
   };
 

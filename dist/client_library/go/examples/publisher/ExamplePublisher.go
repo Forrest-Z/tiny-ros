@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-    tinyros.Go_init("127.0.0.1")
+    tinyros.Go_init("GoExamplePublisher", "127.0.0.1")
     
     pub := tinyros.NewPublisher("tinyros_hello", tinyros_hello.NewTinyrosHello())
     

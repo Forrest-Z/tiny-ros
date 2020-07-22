@@ -27,22 +27,22 @@ int main(void) {
   // }
 
   // {tinyros_example_publisher
-  publisher_thread_ = rt_thread_create("pub", tinyros_example_publisher, RT_NULL, 1024, 5, 20);
+  publisher_thread_ = rt_thread_create("pub", tinyros_example_publisher, RT_NULL, 4096, 20, 20);
   rt_thread_startup(publisher_thread_);
   // }
 
   // {tinyros_example_subscriber
-  subscriber_thread_ = rt_thread_create("sub", tinyros_example_subscriber, RT_NULL, 1024, 5, 20);
+  subscriber_thread_ = rt_thread_create("sub", tinyros_example_subscriber, RT_NULL, 4096, 21, 20);
   rt_thread_startup(subscriber_thread_);
   // }
 
   // {tinyros_example_service
-  service_thread_ = rt_thread_create("svc", tinyros_example_service, RT_NULL, 1024, 5, 20);
+  service_thread_ = rt_thread_create("svc", tinyros_example_service, RT_NULL, 4096, 22, 20);
   rt_thread_startup(service_thread_);
   // }
 
   // {tinyros_example_service_client
-  service_client_thread_ = rt_thread_create("svcclient", tinyros_example_service_client, RT_NULL, 1024, 5, 20);
+  service_client_thread_ = rt_thread_create("svcclient", tinyros_example_service_client, RT_NULL, 4096, 23, 20);
   rt_thread_startup(service_client_thread_);
   // }
   return 0;

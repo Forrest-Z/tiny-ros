@@ -12,7 +12,7 @@ func service_cb(req tinyros.Msg, resp tinyros.Msg) {
 }
 
 func main() {
-    tinyros.Go_init("127.0.0.1")
+    tinyros.Go_init("GoExampleService", "127.0.0.1")
     
     server := tinyros.NewServiceServer("test_srv", service_cb, tinyros_hello.NewTestRequest(), tinyros_hello.NewTestResponse())
 

@@ -47,6 +47,7 @@ private:
     ti.message_type = p->msg_->getType();
     ti.md5sum = p->msg_->getMD5();
     ti.buffer_size = OUTPUT_SIZE;
+    ti.node = node_name_;
     publish(p->getEndpointType(), &ti);
   }
 
@@ -57,6 +58,7 @@ private:
     ti.message_type = s->getMsgType();
     ti.md5sum = s->getMsgMD5();
     ti.buffer_size = INPUT_SIZE;
+    ti.node = node_name_;
     publish(s->getEndpointType(), &ti);
   }
 
@@ -120,10 +122,11 @@ public:
     }
   }
 
-  virtual bool initNode(tinyros::string ipaddr = "127.0.0.1") {
+  virtual bool initNode(tinyros::string node_name, tinyros::string ip_addr) {
+    ip_addr_ = ip_addr;
+    node_name_ = node_name;
     if(!negotiate_keepalive_) {
-      rt_err_t result = RT_EOK;
-      result = rt_thread_init(&negotiate_keepalive_thread_, "nego", &NodeHandleUdp::keepalive, this,
+      rt_err_t result = rt_thread_init(&negotiate_keepalive_thread_, "nego", &NodeHandleUdp::keepalive, this,
           &negotiate_keepalive_stack_[0], sizeof(negotiate_keepalive_stack_),
           THREAD_NEGOTIATE_KEEPALIVE_PRIORITY, THREAD_NEGOTIATE_KEEPALIVE_TICK);
       RT_ASSERT(result == RT_EOK);
@@ -132,7 +135,7 @@ public:
       negotiate_keepalive_ = true;
     }
 
-    return hardware_.init(ipaddr);
+    return hardware_.init(ip_addr_);
   }
 
   virtual void exit() {

@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
   }
 
   init_log_environment();
-  tinyros::init(ip);
+  tinyros::init("tinyrosconsole", ip);
   tinyros::nh()->subscribe(sub);
   while(1) sleep(10);
 }

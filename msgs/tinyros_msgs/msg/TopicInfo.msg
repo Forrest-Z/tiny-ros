@@ -23,3 +23,6 @@ string md5sum
 int32 buffer_size
 
 bool negotiated
+
+# node name
+string node

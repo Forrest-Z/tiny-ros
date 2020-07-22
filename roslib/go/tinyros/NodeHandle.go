@@ -7,6 +7,7 @@ import (
     "sync/atomic"
     "tiny_ros/std_msgs"
     "tiny_ros/tinyros_msgs"
+    "tiny_ros/tinyros/time"
 )
 
 var (
@@ -30,6 +31,8 @@ var (
     MODE_MESSAGE       int = 11
     MODE_MSG_CHECKSUM  int = 12
 
+    SYNC_TIME_SCOPE int64  = 10 // milliseconds
+
     TINYROS_LOG_TOPIC  string = "tinyros_log_11315"
 )
 
@@ -39,16 +42,18 @@ type SpinObject struct {
 }
 
 type NodeHandleBase interface {
-    initNode(portName string) (bool)
+    initNode(node_name, ip string) (bool)
     keepalive()
     publish(id uint32, msg Msg, islog bool) (int)
     spin() (int)
     exit()
     ok() (bool)
+    syncTime(data []byte)
 }
  
 type NodeHandle struct {
-    port_name_ string `json:"port_name"`
+    ip_addr_ string `json:"ip_addr"`
+    node_name_ string `json:"node_name"`
     spin_ bool `json:"spin"`
     keepalive_ bool `json:"keepalive"`
     hardware_ Hardware `json:"hardware"`
@@ -115,6 +120,7 @@ func (self *NodeHandle) negotiateTopics_p(p *Publisher) {
     ti.Go_message_type = p.msg_.Go_getType()
     ti.Go_md5sum = p.msg_.Go_getMD5()
     ti.Go_buffer_size = int32(OUTPUT_SIZE)
+    ti.Go_node = self.node_name_
     self.publish(p.Go_getEndpointType(), ti, false)
 }
   
@@ -125,6 +131,7 @@ func (self *NodeHandle) negotiateTopics_s(s Subscriber_) {
     ti.Go_message_type = s.Go_getMsgType()
     ti.Go_md5sum = s.Go_getMsgMD5()
     ti.Go_buffer_size = int32(INPUT_SIZE)
+    ti.Go_node = self.node_name_
     self.publish(s.Go_getEndpointType(), ti, false)
 }
 
@@ -141,6 +148,21 @@ func (self *NodeHandle) ok() (bool) {
     return self.hardware_.connected()
 }
 
+func (self *NodeHandle) syncTime(data []byte) {
+    t := tinyros_msgs.NewSyncTime()
+    t.Go_deserialize(data)
+    now := int64(rostime.TimeNow().Go_toMSec())
+    rostime.Go_time_mutex.Lock()
+    scope := now - rostime.Go_time_last - int64(t.Go_tick)
+    if (rostime.Go_time_start == 0) || (scope >= 0 && scope <= SYNC_TIME_SCOPE) {
+        rostime.Go_time_dds = int64(t.Go_data.Go_toMSec())
+        rostime.Go_time_start = now
+    }
+    rostime.Go_time_last = now
+    rostime.Go_time_mutex.Unlock()
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 // NodeHandleTCP
 
@@ -154,7 +176,8 @@ func NewNodeHandleTCP() (*NodeHandleTCP) {
     newNodeHandleTCP.loghd_ = NewHardwareTCP()
     newNodeHandleTCP.keepalive_ = false
     newNodeHandleTCP.spin_ = true
-    newNodeHandleTCP.port_name_ = ""
+    newNodeHandleTCP.ip_addr_ = ""
+    newNodeHandleTCP.node_name_ = ""
     newNodeHandleTCP.publishers_ = make(map[uint32]*Publisher)
     newNodeHandleTCP.subscribers_ = make(map[uint32]Subscriber_)
     newNodeHandleTCP.spin_thread_pool_ = NewThreadPool(3)
@@ -169,9 +192,9 @@ func (self *NodeHandleTCP) keepalive() {
     buff := make([]byte, 200)
     for self.keepalive_ {
         if !self.loghd_.connected() {
-            if self.loghd_.init(self.port_name_) {
+            if self.loghd_.init(self.ip_addr_) {
                 msg := std_msgs.NewString()
-                msg.Go_data = "GoApp_log"
+                msg.Go_data = self.node_name_ + "_log"
                 self.publish(tinyros_msgs.Go_ID_SESSION_ID(), msg, true)
             }
             time.Sleep(time.Second)
@@ -181,13 +204,14 @@ func (self *NodeHandleTCP) keepalive() {
     }
 }
 
-func (self *NodeHandleTCP) initNode(portName string) (bool) {
+func (self *NodeHandleTCP) initNode(node_name string, ip string) (bool) {
     self.spin_ = true
-    self.port_name_ = portName
+    self.ip_addr_ = ip
+    self.node_name_ = node_name
 
     msg := std_msgs.NewString()
-    if (self.hardware_.init(self.port_name_)) {
-        msg.Go_data = "GoApp"
+    if (self.hardware_.init(self.ip_addr_)) {
+        msg.Go_data = self.node_name_
         self.publish(tinyros_msgs.Go_ID_SESSION_ID(), msg, false)
     }
 
@@ -319,6 +343,8 @@ func (self *NodeHandleTCP) spin() (int) {
                             s.Go_setnegotiated(ti.Go_negotiated)
                         }
                     }
+                } else if topic == tinyros_msgs.Go_ID_TIME() {
+                    self.syncTime(self.message_in_)
                 } else {
                     s, ok := self.subscribers_[topic]
                     if ok {
@@ -427,33 +453,13 @@ func (self *NodeHandleTCP) Go_serviceClient(srv Subscriber_) (bool) {
     }
 }
 
-func (self *NodeHandleTCP) log(level uint8, msg string) {
+func (self *NodeHandleTCP) Go_log(level uint8, msg string) {
     if self.loghd_.connected() {
         l := tinyros_msgs.NewLog()
         l.Go_level = level
-        l.Go_msg = msg
+        l.Go_msg = "[" + self.node_name_ + "] " + msg
         self.publish(tinyros_msgs.Go_ID_LOG(), l, true)
     }
-}
-
-func (self *NodeHandleTCP) Go_logdebug(msg string) {
-    self.log(tinyros_msgs.Go_ROSDEBUG(), msg)
-}
-
-func (self *NodeHandleTCP) Go_loginfo(msg string) {
-    self.log(tinyros_msgs.Go_ROSINFO(), msg)
-}
-
-func (self *NodeHandleTCP) Go_logwarn(msg string) {
-    self.log(tinyros_msgs.Go_ROSWARN(), msg)
-}
-
-func (self *NodeHandleTCP) Go_logerror(msg string) {
-    self.log(tinyros_msgs.Go_ROSERROR(), msg)
-}
-
-func (self *NodeHandleTCP) Go_logfatal(msg string) {
-    self.log(tinyros_msgs.Go_ROSFATAL(), msg)
 }
   
 //////////////////////////////////////////////////////////////////////////////////////
@@ -469,7 +475,8 @@ func NewNodeHandleUDP() (*NodeHandleUDP) {
     newNodeHandleUDP.loghd_ = nil
     newNodeHandleUDP.keepalive_ = false
     newNodeHandleUDP.spin_ = true
-    newNodeHandleUDP.port_name_ = ""
+    newNodeHandleUDP.ip_addr_ = ""
+    newNodeHandleUDP.node_name_ = ""
     newNodeHandleUDP.publishers_ = make(map[uint32]*Publisher)
     newNodeHandleUDP.subscribers_ = make(map[uint32]Subscriber_)
     newNodeHandleUDP.spin_thread_pool_ = NewThreadPool(3)
@@ -487,10 +494,11 @@ func (self *NodeHandleUDP) keepalive() {
     }
 }
 
-func (self *NodeHandleUDP) initNode(portName string) (bool) {
+func (self *NodeHandleUDP) initNode(node_name string, ip string) (bool) {
     self.spin_ = true
-    self.port_name_ = portName
-    self.hardware_.init(self.port_name_)
+    self.ip_addr_ = ip
+    self.node_name_ = node_name
+    self.hardware_.init(self.ip_addr_)
     if !self.keepalive_ {
         self.keepalive_ = true
         go self.keepalive()
@@ -648,9 +656,11 @@ var (
     go_nh_mutex sync.Mutex
     go_udp_mutex sync.Mutex
     go_ipaddr string = "127.0.0.1"
+    go_node_name string = ""
 )
 
-func Go_init(ip ...string) {
+func Go_init(name string, ip ...string) {
+    go_node_name = name
     if len(ip) > 0 {
         go_ipaddr = ip[0]
     }
@@ -665,7 +675,7 @@ func Go_nh() (*NodeHandleTCP) {
             go func() {
                 for go_nh.spin_ {
                     if !go_nh.ok() {
-                        go_nh.initNode(go_ipaddr)
+                        go_nh.initNode(go_node_name, go_ipaddr)
                     }
                     if go_nh.ok() {
                         go_nh.spin()
@@ -688,7 +698,7 @@ func Go_udp() (*NodeHandleUDP) {
             go func() {
                 for go_udp.spin_ {
                     if !go_udp.ok() {
-                        go_udp.initNode(go_ipaddr)
+                        go_udp.initNode(go_node_name, go_ipaddr)
                     }
                     if go_udp.ok() {
                         go_udp.spin()
@@ -703,4 +713,22 @@ func Go_udp() (*NodeHandleUDP) {
     return go_udp
 }
 
+func Go_logdebug(msg string) {
+    Go_nh().Go_log(tinyros_msgs.Go_ROSDEBUG(), msg)
+}
 
+func Go_loginfo(msg string) {
+    Go_nh().Go_log(tinyros_msgs.Go_ROSINFO(), msg)
+}
+
+func Go_logwarn(msg string) {
+    Go_nh().Go_log(tinyros_msgs.Go_ROSWARN(), msg)
+}
+
+func Go_logerror(msg string) {
+    Go_nh().Go_log(tinyros_msgs.Go_ROSERROR(), msg)
+}
+
+func Go_logfatal(msg string) {
+    Go_nh().Go_log(tinyros_msgs.Go_ROSFATAL(), msg)
+}

@@ -7,7 +7,7 @@ import tinyros
 import tinyros_hello.msg.TinyrosHello
 
 def main():
-    tinyros.init("127.0.0.1")
+    tinyros.init("PyExamplePublisher", "127.0.0.1")
     pub = tinyros.Publisher("tinyros_hello", tinyros_hello.msg.TinyrosHello)
 
     if 1:

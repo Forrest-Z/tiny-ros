@@ -9,6 +9,7 @@ public class TopicInfo implements com.roslib.ros.Msg {
     public java.lang.String md5sum;
     public int buffer_size;
     public boolean negotiated;
+    public java.lang.String node;
     public static final long ID_PUBLISHER = (long)(0);
     public static final long ID_SUBSCRIBER = (long)(1);
     public static final long ID_SERVICE_SERVER = (long)(2);
@@ -27,6 +28,7 @@ public class TopicInfo implements com.roslib.ros.Msg {
         this.md5sum = "";
         this.buffer_size = 0;
         this.negotiated = false;
+        this.node = "";
     }
 
     public int serialize(byte[] outbuffer, int start) {
@@ -73,6 +75,16 @@ public class TopicInfo implements com.roslib.ros.Msg {
         offset += 4;
         outbuffer[offset] = (byte)((negotiated ? 0x01 : 0x00) & 0xFF);
         offset += 1;
+        int length_node = this.node.getBytes().length;
+        outbuffer[offset + 0] = (byte)((length_node >> (8 * 0)) & 0xFF);
+        outbuffer[offset + 1] = (byte)((length_node >> (8 * 1)) & 0xFF);
+        outbuffer[offset + 2] = (byte)((length_node >> (8 * 2)) & 0xFF);
+        outbuffer[offset + 3] = (byte)((length_node >> (8 * 3)) & 0xFF);
+        offset += 4;
+        for (int k=0; k<length_node; k++) {
+            outbuffer[offset + k] = (byte)((this.node.getBytes())[k] & 0xFF);
+        }
+        offset += length_node;
         return offset;
     }
 
@@ -123,6 +135,17 @@ public class TopicInfo implements com.roslib.ros.Msg {
         offset += 4;
         this.negotiated = (boolean)((inbuffer[offset] & 0xFF) != 0 ? true : false);
         offset += 1;
+        int length_node = (int)((inbuffer[offset + 0] & 0xFF) << (8 * 0));
+        length_node |= (int)((inbuffer[offset + 1] & 0xFF) << (8 * 1));
+        length_node |= (int)((inbuffer[offset + 2] & 0xFF) << (8 * 2));
+        length_node |= (int)((inbuffer[offset + 3] & 0xFF) << (8 * 3));
+        offset += 4;
+        byte[] bytes_node = new byte[length_node];
+        for(int k= 0; k< length_node; k++){
+            bytes_node[k] = (byte)(inbuffer[k + offset] & 0xFF);
+        }
+        this.node = new java.lang.String(bytes_node);
+        offset += length_node;
         return offset;
     }
 
@@ -140,12 +163,15 @@ public class TopicInfo implements com.roslib.ros.Msg {
         length += length_md5sum;
         length += 4;
         length += 1;
+        int length_node = this.node.getBytes().length;
+        length += 4;
+        length += length_node;
         return length;
     }
 
     public java.lang.String echo() { return ""; }
     public java.lang.String getType(){ return "tinyros_msgs/TopicInfo"; }
-    public java.lang.String getMD5(){ return "a46a053b53f4cc6fca4b0329acf85d51"; }
+    public java.lang.String getMD5(){ return "76d40676946fcde66f228def7575451a"; }
     public long getID() { return 0; }
     public void setID(long id) { }
 }

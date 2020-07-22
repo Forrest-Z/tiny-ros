@@ -31,15 +31,19 @@ class NodeHandleBase(object):
     MAX_PUBLISHERS  = 100
     INPUT_SIZE  = 64*1024
     OUTPUT_SIZE = 64*1024
+
+    SYNC_TIME_SCOPE = 10 # milliseconds
     
     global_ip_addr = "127.0.0.1"
+    
+    global_node_name = ""
     
     __slots__ = ['ip_', 'name_', 'spin_', 'publishers_', 'subscribers_', 'hardware_', 'loghd_', 'keepalive_', 'keepalive_thread_', 'mutex_']
     
     def __init__(self):
         signal.signal(signal.SIGINT, self.signal_handler)
         self.ip_ = NodeHandleBase.global_ip_addr
-        self.name_ = 'Python'
+        self.name_ = NodeHandleBase.global_node_name
         self.spin_ = True
         self.publishers_ = {}
         self.subscribers_ = {}
@@ -111,12 +115,25 @@ class NodeHandleBase(object):
         else:
             return -2
 
+    def syncTime(self, buff):
+        t = tinyros_msgs.msg.SyncTime()
+        t.deserialize(buff)
+        now = long(tinyros.Time.now().toMSec())
+        tinyros.Time.mutex.acquire()
+        scope = now - tinyros.Time.time_last - t.tick
+        if (tinyros.Time.time_start == 0) or (scope >= 0 and scope <= NodeHandleBase.SYNC_TIME_SCOPE):
+            tinyros.Time.time_dds = long(t.data.toMSec())
+            tinyros.Time.time_start = now
+        tinyros.Time.time_last = now
+        tinyros.Time.mutex.release()
+
     def negotiateTopics(self, t):
         ti = tinyros_msgs.msg.TopicInfo()
         ti.topic_id = t.id_
         ti.topic_name = t.topic_
         ti.message_type = t.getMsgType()
         ti.md5sum = t.getMsgMD5()
+        ti.node = self.name_
         if isinstance(t, tinyros.Publisher):
             ti.buffer_size = NodeHandleBase.OUTPUT_SIZE
         else:
@@ -172,9 +189,9 @@ class NodeHandle(NodeHandleBase):
         self.hardware_ = tinyros.Hardware()
         self.loghd_ = tinyros.Hardware()
         
-    def initNode(self, name = "", ip = "127.0.0.1"):
-        self.ip_ = ip
+    def initNode(self, name, ip):
         self.name_ = name
+        self.ip_ = ip
 
         if self.hardware_.init(self.ip_):
             msg = std_msgs.msg.String()
@@ -324,6 +341,8 @@ class NodeHandle(NodeHandleBase):
                             self.subscribers_[ti.topic_id].negotiated_ = ti.negotiated
                         except KeyError as ex: 
                             pass
+                    elif topic == tinyros_msgs.msg.TopicInfo.ID_TIME:
+                        self.syncTime(message_in)
                     else:
                         try:
                             obj = tinyros.SpinObject()
@@ -358,7 +377,6 @@ class NodeHandle(NodeHandleBase):
             self.publishers_[p.id_] = p
             self.mutex_.release()
             self.negotiateTopics(p);
-            self.logdebug("Publishers[%s] topic_id: %s, topic_name: %s" % (p.id_, p.id_, p.topic_))
             return True
         else:
             return False
@@ -372,7 +390,6 @@ class NodeHandle(NodeHandleBase):
             self.subscribers_[s.id_] = s
             self.mutex_.release()
             self.negotiateTopics(s)
-            self.logdebug("Subscribers[%s] topic_id: %s, topic_name: %s" % (s.id_, s.id_, s.topic_))
             return True
         else:
             return False
@@ -391,8 +408,6 @@ class NodeHandle(NodeHandleBase):
                 self.mutex_.release()
                 self.negotiateTopics(srv)
                 self.negotiateTopics(srv.pub_)
-                self.logdebug("advertiseService Subscribers[%s] topic_id: %s, topic_name: %s | Publishers[%s] topic_id: %s, topic_name: %s" % \
-                        (srv.id_, srv.id_, srv.topic_, srv.pub_.id_, srv.pub_.id_, srv.pub_.topic_))
                 return True
             else:
                 self.mutex_.release()
@@ -414,8 +429,6 @@ class NodeHandle(NodeHandleBase):
                 self.mutex_.release()
                 self.negotiateTopics(srv)
                 self.negotiateTopics(srv.pub_)
-                self.logdebug("serviceClient Subscribers[%s] topic_id: %s, topic_name: %s | Publishers[%s] topic_id: %s, topic_name: %s" % \
-                        (srv.id_, srv.id_, srv.topic_, srv.pub_.id_, srv.pub_.id_, srv.pub_.topic_))
                 return True
             else:
                 self.mutex_.release()
@@ -427,23 +440,8 @@ class NodeHandle(NodeHandleBase):
         if self.loghd_.connected():
             l = tinyros_msgs.msg.Log()
             l.level = level
-            l.msg = msg
+            l.msg = "[" + self.name_ + "] " + msg
             self.publish(tinyros_msgs.msg.TopicInfo.ID_LOG, l, True)
-            
-    def logdebug(self, msg):
-        self.log(tinyros_msgs.msg.Log.ROSDEBUG, msg)
-            
-    def logwarn(self, msg):
-        self.log(tinyros_msgs.msg.Log.ROSINFO, msg)
-            
-    def loginfo(self, msg):
-        self.log(tinyros_msgs.msg.Log.ROSWARN, msg)
-            
-    def logerror(self, msg):
-        self.log(tinyros_msgs.msg.Log.ROSERROR, msg)
-            
-    def logfatal(self, msg):
-        self.log(tinyros_msgs.msg.Log.ROSFATAL, msg)
 
     def getTopicList(self, timeout = 1000):
         msg = std_msgs.msg.String()
@@ -484,11 +482,13 @@ class NodeHandleUdp(NodeHandleBase):
         self.spin_thread_pool_ = tinyros.ThreadPool(3)
 
     def initNode(self, name, ip):
+        self.name_ = name
+        self.ip_ = ip
         if not self.keepalive_:
             self.keepalive_ = True
             self.keepalive_thread_ = threading.Thread(target=self.keepalive)
             self.keepalive_thread_.start()
-        return self.hardware_.init(ip)
+        return self.hardware_.init(self.ip_)
     
     def spin(self):
         struct_B = struct.Struct("<B")
@@ -586,7 +586,6 @@ class NodeHandleUdp(NodeHandleBase):
             self.publishers_[p.id_] = p
             self.mutex_.release()
             self.negotiateTopics(p);
-            tinyros.nh().logdebug("Publishers[%s] topic_id: %s, topic_name: %s" % (p.id_, p.id_, p.topic_))
             return True
         else:
             return False
@@ -600,7 +599,6 @@ class NodeHandleUdp(NodeHandleBase):
             self.subscribers_[s.id_] = s
             self.mutex_.release()
             self.negotiateTopics(s)
-            tinyros.nh().logdebug("Subscribers[%s] topic_id: %s, topic_name: %s" % (s.id_, s.id_, s.topic_))
             return True
         else:
             return False
@@ -616,7 +614,7 @@ def nh():
         NodeHandle.global_main_loop_mutex.acquire()
         if not NodeHandle.global_main_loop_init:
             thread = threading.Thread(target=NodeHandleBase.tinyros_main_loop, \
-                     args = ('Python', NodeHandle.global_nh, NodeHandleBase.global_ip_addr))
+                     args = (NodeHandleBase.global_node_name, NodeHandle.global_nh, NodeHandleBase.global_ip_addr))
             thread.start()
             time.sleep(0.2)
             NodeHandle.global_main_loop_init = True
@@ -628,14 +626,29 @@ def udp():
         NodeHandleUdp.global_main_loop_mutex.acquire()
         if not NodeHandleUdp.global_main_loop_init:
             thread = threading.Thread(target=NodeHandleBase.tinyros_main_loop, \
-                     args = ('Python', NodeHandleUdp.global_nh, NodeHandleBase.global_ip_addr))
+                     args = (NodeHandleBase.global_node_name, NodeHandleUdp.global_nh, NodeHandleBase.global_ip_addr))
             thread.start()
             time.sleep(0.2)
             NodeHandleUdp.global_main_loop_init = True
         NodeHandleUdp.global_main_loop_mutex.release()
     return NodeHandleUdp.global_nh
     
-def init(ip):
+def init(name, ip = "127.0.0.1"):
+    NodeHandleBase.global_node_name = name
     NodeHandleBase.global_ip_addr = ip
     tinyros.nh()
-    
+            
+def logdebug(msg):
+        nh().log(tinyros_msgs.msg.Log.ROSDEBUG, msg)
+            
+def logwarn(msg):
+    nh().log(tinyros_msgs.msg.Log.ROSINFO, msg)
+        
+def loginfo(msg):
+    nh().log(tinyros_msgs.msg.Log.ROSWARN, msg)
+        
+def logerror(msg):
+    nh().log(tinyros_msgs.msg.Log.ROSERROR, msg)
+        
+def logfatal(msg):
+    nh().log(tinyros_msgs.msg.Log.ROSFATAL, msg)

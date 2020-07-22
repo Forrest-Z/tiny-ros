@@ -8,7 +8,7 @@ import com.roslib.tinyros_hello.Test;
 
 public class ExampleService {
     public static void main(String[] args) throws InterruptedException {
-        Tinyros.init("127.0.0.1");
+        Tinyros.init("JavaExampleService", "127.0.0.1");
 
         ServiceServer<Test.TestRequest, Test.TestResponse> srv = new ServiceServer<Test.TestRequest, Test.TestResponse>
         ("test_srv", new CallbackSrvT() {

@@ -5,8 +5,8 @@ import tinyros
 import tinyros_msgs.msg
 
 class TopicInfo(tinyros.Message):
-    __slots__ = ['topic_id','topic_name','message_type','md5sum','buffer_size','negotiated']
-    _slot_types = ['uint32','string','string','string','int32','bool']
+    __slots__ = ['topic_id','topic_name','message_type','md5sum','buffer_size','negotiated','node']
+    _slot_types = ['uint32','string','string','string','int32','bool','string']
 
     ID_PUBLISHER = 0
     ID_SUBSCRIBER = 1
@@ -27,6 +27,7 @@ class TopicInfo(tinyros.Message):
         self.md5sum = ''
         self.buffer_size = 0
         self.negotiated = False
+        self.node = ''
 
     def serialize(self, buff):
         offset = 0
@@ -89,6 +90,20 @@ class TopicInfo(tinyros.Message):
             offset += 1
         except struct.error as ex:
             print('Unable to serialize messages: %s'%str(ex))
+        try:
+            _x = self.node
+            length = len(_x)
+            if python3 or type(_x) == unicode:
+                _x = _x.encode('utf-8')
+                length = len(_x)
+            if python3:
+                buff.write(struct.pack('<I%sB'%length, length, *_x))
+            else:
+                buff.write(struct.pack('<I%ss'%length, length, _x))
+            offset += 4
+            offset += length
+        except struct.error as ex:
+            print('Unable to serialize messages: %s'%str(ex))
         return offset
 
     def deserialize(self, buff):
@@ -141,6 +156,16 @@ class TopicInfo(tinyros.Message):
             offset += 1
         except struct.error as ex:
             print('Unable to deserialize messages: %s'%str(ex))
+        try:
+            (length_node,) = _struct_I.unpack(buff[offset:(offset + 4)])
+            offset += 4
+            if python3:
+                self.node = buff[offset:(offset + length_node)].decode('utf-8')
+            else:
+                self.node = buff[offset:(offset + length_node)]
+            offset += length_node
+        except struct.error as ex:
+            print('Unable to deserialize messages: %s'%str(ex))
         return offset
 
     def serializedLength(self):
@@ -169,6 +194,13 @@ class TopicInfo(tinyros.Message):
         length += md5sum_length
         length += 4
         length += 1
+        node_x = self.node
+        node_length = len(node_x)
+        if python3 or type(node_x) == unicode:
+            node_x = node_x.encode('utf-8')
+            node_length = len(node_x)
+        length += 4
+        length += node_length
         return length
 
     def echo(self):
@@ -184,7 +216,9 @@ class TopicInfo(tinyros.Message):
         string_echo += '"buffer_size": %s'%buffer_size
         string_echo += ', '
         string_echo += '"negotiated": %s'%negotiated
-        string_echo += ''
+        string_echo += ', '
+        string_echo += '"node": "%s"'%node
+        string_echo += '"'
         string_echo += '}'
         return string_echo
 
@@ -192,7 +226,7 @@ class TopicInfo(tinyros.Message):
         return "tinyros_msgs/TopicInfo"
 
     def getMD5(self):
-        return "a46a053b53f4cc6fca4b0329acf85d51"
+        return "76d40676946fcde66f228def7575451a"
 
 _struct_I = struct.Struct('<I')
 

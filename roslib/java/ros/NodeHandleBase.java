@@ -10,8 +10,11 @@ public abstract class NodeHandleBase {
     protected static final int SPIN_OK = 0;
     protected static final int SPIN_ERR = -1;
     protected static final int PROTOCOL_VER = 0xb9;
+    protected static final int SYNC_TIME_SCOPE = 10; // milliseconds
     protected boolean spin_ = true;
-    boolean initNode(java.lang.String portName) { return false; }
+    protected java.lang.String ip_addr_;
+    protected java.lang.String node_name_;
+    boolean initNode(java.lang.String node_name, java.lang.String ip_addr) { return false; }
     int publish(long id, com.roslib.ros.Msg msg, boolean islog) { return -1; }
     int publish(long id, com.roslib.ros.Msg msg) { return -1; }
     int spin() { return -1; }
@@ -25,6 +28,7 @@ public abstract class NodeHandleBase {
         ti.message_type = p.msg_.getType();
         ti.md5sum = p.msg_.getMD5();
         ti.buffer_size = OUTPUT_SIZE;
+        ti.node = node_name_;
         publish(p.getEndpointType(), ti);
     }
 
@@ -35,6 +39,22 @@ public abstract class NodeHandleBase {
         ti.message_type = s.getMsgType();
         ti.md5sum = s.getMsgMD5();
         ti.buffer_size = INPUT_SIZE;
+        ti.node = node_name_;
         publish(s.getEndpointType(), ti);
     }
+    
+    void syncTime(byte[] data) {
+        com.roslib.tinyros_msgs.SyncTime t = new com.roslib.tinyros_msgs.SyncTime();
+        t.deserialize(data, 0);
+        long now =  (long)Time.now().toMSec();
+        Time.lock.lock();
+        long scope = now - Time.time_last - t.tick;
+        if ((Time.time_start == 0) || (scope >=0 && scope <= SYNC_TIME_SCOPE)) {
+            Time.time_dds = (long)t.data.toMSec();
+            Time.time_start = now;
+        }
+        Time.time_last = now;
+        Time.lock.unlock();  
+    }
 }
+

@@ -41,8 +41,8 @@ public:
   };
   void fromSec(double t)
   {
-    sec = (uint32_t) floor(t);
-    nsec = (uint32_t) round((t - sec) * 1e9);
+    sec = (uint32_t)t;
+    nsec = (uint32_t)((t - sec) * 1e9);
   };
 
   uint32_t toNsec()
@@ -54,6 +54,10 @@ public:
   Time& operator +=(const Duration &rhs);
   Time& operator -=(const Duration &rhs);
 
+  static int64_t time_start_;
+  static int64_t time_last_;
+  static int64_t time_dds_;
+  static Time dds();
   static Time now();
   static void setNow(Time & new_now);
 };
