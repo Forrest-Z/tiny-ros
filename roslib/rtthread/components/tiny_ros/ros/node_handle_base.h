@@ -16,7 +16,7 @@
 
 namespace tinyros {
 
-#define TINYROS_LOG_TOPIC "tinyros_log_11315"
+#define TINYROS_LOG_TOPIC "/tinyrosout"
 
 const int THREAD_MAIN_LOOP_PRIORITY   = 15;
 const int THREAD_MAIN_LOOP_TICK       = 40;

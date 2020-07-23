@@ -25,7 +25,7 @@
 #include "tiny_ros/ros/service_server.h"
 #include "tiny_ros/ros/service_client.h"
 
-#define TINYROS_LOG_TOPIC "tinyros_log_11315"
+#define TINYROS_LOG_TOPIC "/tinyrosout"
 
 namespace tinyros
 {

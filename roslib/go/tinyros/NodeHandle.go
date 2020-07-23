@@ -33,7 +33,7 @@ var (
 
     SYNC_TIME_SCOPE int64  = 10 // milliseconds
 
-    TINYROS_LOG_TOPIC  string = "tinyros_log_11315"
+    TINYROS_LOG_TOPIC  string = "/tinyrosout"
 )
 
 type SpinObject struct {

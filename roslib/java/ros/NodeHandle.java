@@ -25,7 +25,7 @@ public class NodeHandle extends NodeHandleBase{
     private static final int MODE_TOPIC_H1       = 10;
     private static final int MODE_MESSAGE        = 11;
     private static final int MODE_MSG_CHECKSUM   = 12;
-    private static java.lang.String TINYROS_LOG_TOPIC = "tinyros_log_11315";
+    private static java.lang.String TINYROS_LOG_TOPIC = "/tinyrosout";
 
     private HardwareTCP hardware_;
     private HardwareTCP loghd_;

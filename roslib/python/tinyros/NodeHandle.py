@@ -26,7 +26,7 @@ class SpinObject(object):
 
 class NodeHandleBase(object):
     PROTOCOL_VER        = 0xb9
-    TINYROS_LOG_TOPIC   = 'tinyros_log_11315'
+    TINYROS_LOG_TOPIC   = '/tinyrosout'
     MAX_SUBSCRIBERS = 100
     MAX_PUBLISHERS  = 100
     INPUT_SIZE  = 64*1024
