@@ -640,11 +640,11 @@ def init(name, ip = "127.0.0.1"):
             
 def logdebug(msg):
         nh().log(tinyros_msgs.msg.Log.ROSDEBUG, msg)
-            
-def logwarn(msg):
-    nh().log(tinyros_msgs.msg.Log.ROSINFO, msg)
         
 def loginfo(msg):
+    nh().log(tinyros_msgs.msg.Log.ROSINFO, msg)
+            
+def logwarn(msg):
     nh().log(tinyros_msgs.msg.Log.ROSWARN, msg)
         
 def logerror(msg):
