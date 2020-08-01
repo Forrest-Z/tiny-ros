@@ -131,6 +131,7 @@ static void init_log_environment() {
   if (log_sink != nullptr) {
     log_sink->set_level(spdlog::level::trace);
     auto logger = std::make_shared<spdlog::logger>("logger", log_sink);
+    logger->set_level(spdlog::level::trace);
     logger->flush_on(spdlog::level::trace);
     logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
     spdlog::register_logger(logger);

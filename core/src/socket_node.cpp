@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
   rotating_file_sink->set_level(spdlog::level::trace);
   spdlog::sinks_init_list sinks = {rotating_file_sink, stdout_sink};
   auto logger = std::make_shared<spdlog::logger>("logger", sinks);
+  logger->set_level(spdlog::level::trace);
   logger->flush_on(spdlog::level::trace);
   logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
   spdlog::register_logger(logger);
