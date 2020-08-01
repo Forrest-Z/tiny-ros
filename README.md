@@ -99,7 +99,7 @@ public class ExamplePublisher {
         
         while(true) {
             TinyrosHello msg = new TinyrosHello();
-            msg.hello = "UDP: Hello, tiny-ros ^_^";
+            msg.hello = "Hello, tiny-ros ^_^";
             pub.publish(msg);
             Thread.sleep(1000);
         }

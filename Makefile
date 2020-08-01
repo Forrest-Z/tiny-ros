@@ -21,7 +21,9 @@ target:
 	@rm -rf ${BASEDIR}/build/output/bin/python-packages
 	@cp -rf $(BASEDIR)/build/output/client_library/python ${BASEDIR}/build/output/bin/python-packages
 	@cd $(BASEDIR)/build/CMake; cmake $(BASEDIR); make
-	@rm -rf $(BASEDIR)/dist/client_library; cp -a $(BASEDIR)/build/output/client_library $(BASEDIR)/dist
+	@rm -rf $(BASEDIR)/dist/client_library
+	@cp -a $(BASEDIR)/build/output/client_library $(BASEDIR)/dist
+	@cp -a $(BASEDIR)/build/output/bin/*.exe $(BASEDIR)/dist/cygwin32
 	
 clean:
 	@if [ -d $(BASEDIR)/build ]; then \
