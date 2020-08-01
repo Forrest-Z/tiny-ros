@@ -23,7 +23,6 @@
 #include "tiny_ros/std_msgs/String.h"
 #include "serialization.h"
 #include "topic_handlers.h"
-#include "serialization.h"
 #include "tcp_stream.h"
 
 namespace tinyros
@@ -263,7 +262,7 @@ private:
           }
 
           if ((checksum % 256) == 255) {
-            if (topic <= tinyros_msgs::TopicInfo::ID_SESSION_ID) {
+            if (topic < tinyros_msgs::TopicInfo::ID_ROSTOPIC_REQUEST) {
               memset(message_in + index + bytes, 0, buffer_max - index - bytes);
               bytes = buffer_max - index;
             }
@@ -401,7 +400,7 @@ private:
         } else if (mode == MODE_MSG_CHECKSUM) {
           mode = MODE_FIRST_FF;
           if ((checksum % 256) == 255) {
-            if (topic <= tinyros_msgs::TopicInfo::ID_SESSION_ID) {
+            if (topic < tinyros_msgs::TopicInfo::ID_ROSTOPIC_REQUEST) {
               memset(message_in + total_bytes, 0, buffer_max - total_bytes);
               total_bytes = buffer_max;
             }
@@ -450,6 +449,28 @@ private:
     msg_checksum = 255 - (checksum(checksum_stream) + checksum(topic_id));
 
     memcpy(stream.advance(message.size()), &message[0], message.size());
+    stream << msg_checksum;
+
+    std::unique_lock<std::mutex> lock(async_write_mutex_);
+    async_write_buffers_.push_back(buffer_ptr);
+    async_write_cond_.notify_one();
+  }
+
+  void write_message_stream(tinyros::serialization::IStream& message, const uint32_t topic_id) {
+    if (!is_active()) return;
+    
+    uint8_t msg_checksum;
+    uint8_t overhead_bytes = 12;
+    uint32_t length = overhead_bytes + message.getLength();
+    BufferPtr buffer_ptr(new Buffer(length));
+
+    tinyros::serialization::OStream stream(&buffer_ptr->at(0), buffer_ptr->size());
+    uint8_t msg_len_checksum = 255 - checksum((uint32_t)message.getLength());
+
+    stream << (uint16_t)0xb9ff << (uint32_t)message.getLength() << msg_len_checksum << topic_id;
+    msg_checksum = 255 - (checksum(message) + checksum(topic_id));
+
+    memcpy(stream.advance(message.getLength()), message.getData(), message.getLength());
     stream << msg_checksum;
 
     std::unique_lock<std::mutex> lock(async_write_mutex_);
@@ -582,7 +603,7 @@ private:
     if (!subscribers_.count(topic_info.topic_id)) {
       spdlog_info("[{0}] setup_subscriber(topic_id: {1}, topic_name: {2}, node_name: {3})", 
         session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
-      SubscriberPtr sub(new SubscriberCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, topic_info.topic_id)));
+      SubscriberPtr sub(new SubscriberCore(topic_info, std::bind(&Session::write_message_stream, this, std::placeholders::_1, topic_info.topic_id)));
       sub->alive_time_ = std::chrono::system_clock::now().time_since_epoch().count() * 1e-9;
       subscribers_[topic_info.topic_id] = sub;
 
@@ -613,7 +634,7 @@ private:
     if (!ServiceServerCore::services_.count(topic_info.topic_name)) {
       spdlog_info("[{0}] setup_service_server(topic_id: {1}, topic_name: {2}, node_name: {3})",
         session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
-      ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
+      ServiceServerPtr srv(new ServiceServerCore(topic_info, std::bind(&Session::write_message_stream, this, std::placeholders::_1, std::placeholders::_2)));
       callbacks_[topic_info.topic_id] = std::bind(&ServiceServerCore::handle, srv, std::placeholders::_1);
       ServiceServerCore::services_[topic_info.topic_name] = srv;
       ServiceServerCore::services_[topic_info.topic_name]->setTopicId(topic_info.topic_id);
@@ -635,7 +656,7 @@ private:
         spdlog_info("[{0}] setup_service_client(topic_id: {1}, topic_name: {2}, node_name: {3})", 
           session_id_.c_str(), topic_info.topic_id, topic_info.topic_name.c_str(), topic_info.node.c_str());
         ServiceServerPtr service = ServiceServerCore::services_[topic_info.topic_name];
-        ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message, this, std::placeholders::_1, std::placeholders::_2)));
+        ServiceClientPtr client(new ServiceClientCore(topic_info, std::bind(&Session::write_message_stream, this, std::placeholders::_1, std::placeholders::_2)));
         client->setTopicId(topic_info.topic_id);
         client->client_connection_ = client->signal_->connect(std::bind(&ServiceServerCore::callback, service, std::placeholders::_1));
         client->service_connection_ = service->signal_->connect(std::bind(&ServiceClientCore::callback, client, std::placeholders::_1));
@@ -667,11 +688,8 @@ private:
   }
 
   void handle_log(tinyros::serialization::IStream& stream) {
-    uint32_t length = stream.getLength();
-    std::vector<uint8_t> message(length);
-    memcpy(&message[0], stream.getData(), length);
     if (Rostopic::topics_.count(TINYROS_LOG_TOPIC)) {
-      Rostopic::topics_[TINYROS_LOG_TOPIC]->signal_->emit(message);
+      Rostopic::topics_[TINYROS_LOG_TOPIC]->signal_->emit(stream);
     }
   }
 
