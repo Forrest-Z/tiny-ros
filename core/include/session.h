@@ -27,6 +27,12 @@
 
 namespace tinyros
 {
+enum StreamType : int {
+  TCP_STREAM = 0,
+  UDP_STREAM = 1,
+  WEB_STREAM = 2
+};
+
 template<typename Socket>
 class Session;
 typedef std::shared_ptr<Session<TcpStream> > SessionPtr;
@@ -58,14 +64,14 @@ class Session
 public:
   std::string session_id_;
   
-  Session(Socket& socket, bool isudp = false)
+  Session(Socket& socket, tinyros::StreamType type)
     : socket_(socket)
     , active_(false)
-    , isudp_(isudp)
+    , stream_type_(type)
     , message_in_thread_(nullptr)
     , message_write_thread_(nullptr)
   {
-    if (isudp) {
+    if (type == UDP_STREAM) {
       session_id_ = "session_udp";
     }
   }
@@ -100,9 +106,9 @@ public:
  
     message_write_thread_ = new std::thread(std::bind(&Session::write_completion_cb, this));
     require_check_thread_ = new std::thread(std::bind(&Session::request_topics, this));
-    if (isudp_) {
+    if (stream_type_ == tinyros::UDP_STREAM) {
       message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync_udp, this));
-    } else {
+    } else if (stream_type_ == tinyros::TCP_STREAM) {
       message_in_thread_ = new std::thread(std::bind(&Session::read_message_sync, this));
     }
   }
@@ -185,19 +191,21 @@ public:
       services_client_.clear();
       spdlog_warn("[{0}] {1} services clear end.", session_id_.c_str(), __FUNCTION__);
     }
-    
-    // Close the socket.
-    spdlog_warn("[{0}] {1} Close the socket begin.", session_id_.c_str(), __FUNCTION__);
-    socket_.close();
-    spdlog_warn("[{0}] {1} Close the socket end.", session_id_.c_str(), __FUNCTION__);
+
+    if (stream_type_ != tinyros::WEB_STREAM) {
+      // Close the socket.
+      spdlog_warn("[{0}] {1} Close the socket begin.", session_id_.c_str(), __FUNCTION__);
+      socket_.close();
+      spdlog_warn("[{0}] {1} Close the socket end.", session_id_.c_str(), __FUNCTION__);
+    }
     
     spdlog_warn("[{0}] {1} end.", session_id_.c_str(), __FUNCTION__);
     
     std::unique_lock<std::mutex> sessions_lock(TcpServer_::sessions_mutex_);
     SessionPtr session_ptr = nullptr;
-    if (TcpServer_::sessions_.count(socket_.sock_fd_) == 1) {
-      session_ptr = TcpServer_::sessions_[socket_.sock_fd_];
-      TcpServer_::sessions_.erase(socket_.sock_fd_);
+    if (TcpServer_::sessions_.count(socket_.getFd()) == 1) {
+      session_ptr = TcpServer_::sessions_[socket_.getFd()];
+      TcpServer_::sessions_.erase(socket_.getFd());
     }
   }
 
@@ -206,81 +214,88 @@ public:
     return active_;
   }
 
+  void consume_message(uint8_t* data, int length) {
+    uint8_t* message_in = data;
+    int rv = length;
+    
+    if (buffer_max >= rv && rv > 0)  {
+      uint32_t topic = 0;
+      int bytes = 0, index= 0, checksum = 0;
+      do {
+        index = 0;
+        if (message_in[index++] != 0xff) {
+          break;
+        }
+
+        if (message_in[index++] != 0xb9) {
+          break;
+        }
+
+        bytes = message_in[index];
+        bytes += message_in[index + 1] << 8;
+        bytes += message_in[index + 2] << 16;
+        bytes += message_in[index + 3] << 24;
+        checksum = message_in[index];
+        checksum += message_in[index + 1];
+        checksum += message_in[index + 2];
+        checksum += message_in[index + 3];
+        checksum += message_in[index + 4];
+        index += 5;
+        
+        if((checksum % 256) != 255) {
+          break;
+        }
+
+        topic = message_in[index];
+        topic += message_in[index + 1] << 8;
+        topic += message_in[index + 2] << 16;
+        topic += message_in[index + 3] << 24;
+        checksum = message_in[index];
+        checksum += message_in[index + 1];
+        checksum += message_in[index + 2];
+        checksum += message_in[index + 3];
+        index += 4;
+
+        if (buffer_max < (index + bytes + 1)) {
+          break;
+        }
+
+        if(bytes > 0) {
+          for (int32_t i=0; i < bytes + 1; i++) {
+            checksum += message_in[index + i];
+          }
+        } else {
+          checksum += message_in[index];
+        }
+
+        if ((checksum % 256) == 255) {
+          if (topic < tinyros_msgs::TopicInfo::ID_ROSTOPIC_REQUEST) {
+            memset(message_in + index + bytes, 0, buffer_max - index - bytes);
+            bytes = buffer_max - index;
+          }
+          tinyros::serialization::IStream stream(message_in + index, bytes);
+          if (callbacks_.count(topic) == 1) {
+            try {
+              callbacks_[topic](stream);
+            } catch(tinyros::serialization::StreamOverrunException e) {
+            }
+          } else {
+            spdlog_warn("[{0}] {1} Received message with unrecognized topicId ({2}).", session_id_.c_str(), __FUNCTION__, topic);
+          }
+        } else {
+          spdlog_warn("[{0}] {1} Rejecting message on topicId({2}), bytes({3}) with bad checksum.", 
+            session_id_.c_str(), __FUNCTION__, topic, bytes);
+        }
+      } while(0);
+    }
+  }
+
 private:
   void read_message_sync_udp() {
     uint8_t *message_in = (uint8_t*)calloc(buffer_max, sizeof(uint8_t));
     while (is_active()) {
       int32_t rv = socket_.read_some(message_in, buffer_max, session_id_);
-      if (buffer_max >= rv && rv > 0)  {
-        uint32_t topic = 0;
-        int bytes = 0, index= 0, checksum = 0;
-        do {
-          index = 0;
-          if (message_in[index++] != 0xff) {
-            break;
-          }
-
-          if (message_in[index++] != 0xb9) {
-            break;
-          }
-
-          bytes = message_in[index];
-          bytes += message_in[index + 1] << 8;
-          bytes += message_in[index + 2] << 16;
-          bytes += message_in[index + 3] << 24;
-          checksum = message_in[index];
-          checksum += message_in[index + 1];
-          checksum += message_in[index + 2];
-          checksum += message_in[index + 3];
-          checksum += message_in[index + 4];
-          index += 5;
-          
-          if((checksum % 256) != 255) {
-            break;
-          }
-
-          topic = message_in[index];
-          topic += message_in[index + 1] << 8;
-          topic += message_in[index + 2] << 16;
-          topic += message_in[index + 3] << 24;
-          checksum = message_in[index];
-          checksum += message_in[index + 1];
-          checksum += message_in[index + 2];
-          checksum += message_in[index + 3];
-          index += 4;
-
-          if (buffer_max < (index + bytes + 1)) {
-            break;
-          }
-
-          if(bytes > 0) {
-            for (int32_t i=0; i < bytes + 1; i++) {
-              checksum += message_in[index + i];
-            }
-          } else {
-            checksum += message_in[index];
-          }
-
-          if ((checksum % 256) == 255) {
-            if (topic < tinyros_msgs::TopicInfo::ID_ROSTOPIC_REQUEST) {
-              memset(message_in + index + bytes, 0, buffer_max - index - bytes);
-              bytes = buffer_max - index;
-            }
-            tinyros::serialization::IStream stream(message_in + index, bytes);
-            if (callbacks_.count(topic) == 1) {
-              try {
-                callbacks_[topic](stream);
-              } catch(tinyros::serialization::StreamOverrunException e) {
-              }
-            } else {
-              spdlog_warn("[{0}] {1} Received message with unrecognized topicId ({2}).", session_id_.c_str(), __FUNCTION__, topic);
-            }
-          } else {
-            spdlog_warn("[{0}] {1} Rejecting message on topicId({2}), bytes({3}) with bad checksum.", 
-              session_id_.c_str(), __FUNCTION__, topic, bytes);
-          }
-        } while(0);
-      }
+      consume_message(message_in, rv);
     }
 
     if (message_in) {
@@ -510,7 +525,7 @@ private:
 
       handle_time_done();
       
-      if (!isudp_) {
+      if (stream_type_ != tinyros::UDP_STREAM) {
         std::vector<uint8_t> message(0);
         write_message(message, tinyros_msgs::TopicInfo::ID_PUBLISHER);
       } else {
@@ -712,7 +727,7 @@ private:
   }
 
   void handle_negotiated(const tinyros_msgs::TopicInfo& topic_info) {
-    if (!isudp_) {
+    if (stream_type_ != tinyros::UDP_STREAM) {
       size_t length = tinyros::serialization::serializationLength(topic_info);
       std::vector<uint8_t> message(length);
 
@@ -772,7 +787,7 @@ private:
   std::mutex active_mutex_;
   bool active_;
 
-  bool isudp_;
+  tinyros::StreamType stream_type_;
 
   std::map<uint32_t, std::function<void(tinyros::serialization::IStream&)> > callbacks_;
   std::map<uint32_t, PublisherPtr> publishers_;

@@ -69,6 +69,8 @@ public:
       return 0;
     }
   }
+
+  int getFd() { return sock_fd_; }
   
   void close() {
     ::close(sock_fd_);

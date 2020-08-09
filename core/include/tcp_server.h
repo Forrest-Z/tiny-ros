@@ -64,7 +64,7 @@ public:
       
       std::unique_lock<std::mutex> sessions_lock(TcpServer::sessions_mutex_);
       TcpStream stream(connect_fd);
-      TcpServer::sessions_[connect_fd] = SessionPtr(new Session<TcpStream>(stream));
+      TcpServer::sessions_[connect_fd] = SessionPtr(new Session<TcpStream>(stream, tinyros::TCP_STREAM));
       TcpServer::sessions_[connect_fd]->start();
     }
   }

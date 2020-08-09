@@ -8,9 +8,12 @@ add_definitions(-DSPDLOG_COMPILED_LIB)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/spdlog/src SPDLOG_SRC_LIST)
 
+aux_source_directory(${PROJECT_SOURCE_DIR}/uWebSockets UWS_SRC_LIST)
+
 include_directories(
   ${OUTPUT_PATHS}/client_library/gcc/include
   ${PROJECT_SOURCE_DIR}/spdlog/include
+  ${PROJECT_SOURCE_DIR}/uWebSockets
 )
 
 add_subdirectory(core)

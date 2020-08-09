@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <script type='text/javascript' src='tiny-ros/build/output/client_library/js/ros/NodeHandle.js'></script>
+  <script type='text/javascript' src='tiny-ros/build/output/client_library/js/ros/Publisher.js'></script>
+  <script type='text/javascript' src='tiny-ros/build/output/client_library/js/tinyros_hello/TinyrosHello.js'></script>
+  <script type="text/javascript">
+    window.nh = ros.NodeHandle();
+    window.pub = ros.Publisher("tinyros_hello", tinyros_hello.TinyrosHello);
+    window.nh.advertise(window.pub);
+    window.nh.initNode("webclient");
+  </script>
+  <script type="text/javascript">
+    function WebSocketTest() {
+      var msg = tinyros_hello.TinyrosHello();
+      msg.hello = "Hello, tiny-ros ^_^ ";
+      window.pub.publish(msg);
+    }
+  </script>
+        
+   </head>
+   <body>
+   
+      <div id="sse">
+         <a href="javascript:WebSocketTest()">WebSocket Send</a>
+      </div>
+      
+   </body>
+</html>

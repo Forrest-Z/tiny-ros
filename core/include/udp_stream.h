@@ -85,6 +85,8 @@ public:
     }
   }
 
+  int getFd() { return sock_fd_; }
+
   int sock_fd_;
   struct sockaddr_in server_endpoint_;
   struct sockaddr_in client_endpoint_;

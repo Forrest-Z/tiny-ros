@@ -19,7 +19,7 @@
 
 static void udp_service_run(int server_port, int client_port) {
   tinyros::UdpStream stream;
-  tinyros::Session<tinyros::UdpStream> new_session(stream, true);
+  tinyros::Session<tinyros::UdpStream> new_session(stream, tinyros::UDP_STREAM);
   while (1) {
     if (!new_session.is_active()) {
       if (new_session.socket().open(server_port, client_port, new_session.session_id_)) {
@@ -30,6 +30,41 @@ static void udp_service_run(int server_port, int client_port) {
   }
 }
 
+#ifdef WITH_WEBSOCKETS
+#include "uWS.h"
+static void web_service_run(int web_server_port) {
+  try {
+    uWS::Server server(web_server_port);
+    
+    server.onConnection([](uWS::WebSocket socket) {
+      tinyros::Session<uWS::WebSocket>* session = new tinyros::Session<uWS::WebSocket>(socket, tinyros::WEB_STREAM);
+      socket.setData(session);
+      session->start();
+    });
+
+    server.onMessage([](uWS::WebSocket socket, char *message, std::size_t length, uWS::OpCode opCode) {
+      void *session = socket.getData();
+      if (session && opCode == uWS::BINARY) {
+        ((tinyros::Session<uWS::WebSocket>*)session)->consume_message((uint8_t*)message, (int)length);
+      }
+    });
+    
+    server.onDisconnection([](uWS::WebSocket socket, int code, char *message, std::size_t length) {
+      void *session = socket.getData();
+      if (session) {
+        ((tinyros::Session<uWS::WebSocket>*)session)->stop();
+        socket.setData(nullptr);
+        delete ((tinyros::Session<uWS::WebSocket>*)session);
+      }
+    });
+    
+    server.run();
+  } catch (...) {
+    spdlog_error("web_service_run error: {0}(errno: {1})", strerror(errno), errno);
+  }
+}
+#endif
+
 int main(int argc, char* argv[]) {
 #ifdef __linux__
   signal(SIGPIPE, SIG_IGN);
@@ -38,6 +73,7 @@ int main(int argc, char* argv[]) {
   int tcp_server_port = 11315;
   int udp_server_port = 11316;
   int udp_client_port = 11317;
+  int web_server_port = 11318;
 
   auto stdout_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
   auto rotating_file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>
@@ -53,6 +89,11 @@ int main(int argc, char* argv[]) {
 
   std::thread tidudp(std::bind(udp_service_run, udp_server_port, udp_client_port));
   tidudp.detach();
+
+#ifdef WITH_WEBSOCKETS
+  std::thread tidws(std::bind(web_service_run, web_server_port));
+  tidws.detach();
+#endif
 
   tinyros::TcpServer tcp_server(tcp_server_port);
   tcp_server.start_accept();
