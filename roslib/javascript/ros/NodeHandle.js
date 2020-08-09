@@ -34,7 +34,7 @@ function NodeHandle() {
     this.node_name = "";
     this.hardware = null;
     this.ssl = false;
-    this.ok = false;
+    this.connected = false;
     this.reconnect = false;
     this.publishers = new Map();
     this.subscribers = new Map();
@@ -42,10 +42,10 @@ function NodeHandle() {
 
 NodeHandle.prototype.onopen = function(evt) {
     var msg = std_msgs.String();
-    msg.data = this.node_name;
-    this.publish(tinyros_msgs.TopicInfo().ID_SESSION_ID, msg);
-    this.negotiateTopics();
-    this.ok = true;
+    msg.data = this.nh.node_name;
+    this.nh.publish(tinyros_msgs.TopicInfo().ID_SESSION_ID, msg);
+    this.nh.negotiateTopics();
+    this.nh.connected = true;
 };
 
 NodeHandle.prototype.onmessage = function(evt) {
@@ -102,10 +102,10 @@ NodeHandle.prototype.onmessage = function(evt) {
             if ((checksum % 256) === 255) {
                 var TopicInfo = tinyros_msgs.TopicInfo();
                 if (topic === TopicInfo.ID_PUBLISHER) {
-                    this.negotiateTopics();
+                    this.nh.negotiateTopics();
                 } else {
-                    if(this.subscribers.has(topic)) {
-                        this.subscribers.get(topic).callback(message_in, index);
+                    if(this.nh.subscribers.has(topic)) {
+                        this.nh.subscribers.get(topic).callback(message_in, index);
                     }
                 }
             }
@@ -115,41 +115,45 @@ NodeHandle.prototype.onmessage = function(evt) {
 
 NodeHandle.prototype.onerror = function(evt) {
     console.log("WebSocket onerror!");
-    this.ok = false;
-    if (this.reconnect) return;
-    this.reconnect = true;
+    this.nh.connected = false;
+    if (this.nh.reconnect) return;
+    this.nh.reconnect = true;
     setTimeout(function() {
-        if (this.ssl) {
-            this.hardware = new WebSocket("wss://" + this.ip_addr + ":" + WS_PORT_NUM);
+        if (this.nh.ssl) {
+            this.nh.hardware = new WebSocket("wss://" + this.nh.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware.nh = this.nh;
         } else {
-            this.hardware = new WebSocket("ws://" + this.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware = new WebSocket("ws://" + this.nh.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware.nh = this.nh;
         }
-        this.hardware.binaryType = "arraybuffer";
-        this.hardware.onopen = this.onopen;
-        this.hardware.onmessage = this.onmessage;
-        this.hardware.onclose = this.onclose;
-        this.hardware.onerror = this.onerror;
-        this.reconnect = false;
+        this.nh.hardware.binaryType = "arraybuffer";
+        this.nh.hardware.onopen = this.nh.onopen;
+        this.nh.hardware.onmessage = this.nh.onmessage;
+        this.nh.hardware.onclose = this.nh.onclose;
+        this.nh.hardware.onerror = this.nh.onerror;
+        this.nh.reconnect = false;
     }, 1000);
 };
 
 NodeHandle.prototype.onclose = function(evt) {
     console.log("WebSocket colosed->" + evt.code + ":" + evt.reason);
-    this.ok = false;
-    if (this.reconnect) return;
-    this.reconnect = true;
+    this.nh.connected = false;
+    if (this.nh.reconnect) return;
+    this.nh.reconnect = true;
     setTimeout(function() {
-        if (this.ssl) {
-            this.hardware = new WebSocket("wss://" + this.ip_addr + ":" + WS_PORT_NUM);
+        if (this.nh.ssl) {
+            this.nh.hardware = new WebSocket("wss://" + this.nh.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware.nh = this.nh;
         } else {
-            this.hardware = new WebSocket("ws://" + this.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware = new WebSocket("ws://" + this.nh.ip_addr + ":" + WS_PORT_NUM);
+            this.nh.hardware.nh = this.nh;
         }
-        this.hardware.binaryType = "arraybuffer";
-        this.hardware.onopen = this.onopen;
-        this.hardware.onmessage = this.onmessage;
-        this.hardware.onclose = this.onclose;
-        this.hardware.onerror = this.onerror;
-        this.reconnect = false;
+        this.nh.hardware.binaryType = "arraybuffer";
+        this.nh.hardware.onopen = this.nh.onopen;
+        this.nh.hardware.onmessage = this.nh.onmessage;
+        this.nh.hardware.onclose = this.nh.onclose;
+        this.nh.hardware.onerror = this.nh.onerror;
+        this.nh.reconnect = false;
     }, 1000);
 };
 
@@ -167,8 +171,10 @@ NodeHandle.prototype.initNode = function(node_name, ip_addr, ssl) {
     
     if (this.ssl) {
         this.hardware = new WebSocket("wss://" + this.ip_addr + ":" + WS_PORT_NUM);
+        this.hardware.nh = this;
     } else {
         this.hardware = new WebSocket("ws://" + this.ip_addr + ":" + WS_PORT_NUM);
+        this.hardware.nh = this;
     }
     
     this.hardware.binaryType = "arraybuffer";
@@ -179,8 +185,8 @@ NodeHandle.prototype.initNode = function(node_name, ip_addr, ssl) {
 };
 
 NodeHandle.prototype.publish = function(id, msg) {
-    if (this.hardware === null) {
-        console.log("NodeHandle.publish: hardware(null)");
+    if (!this.ok()) {
+        console.log("NodeHandle.publish: !ok()");
         return -1;
     }
     
@@ -261,16 +267,16 @@ NodeHandle.prototype.negotiateTopicsS = function(s) {
 };
 
 NodeHandle.prototype.negotiateTopics = function() {
-    this.publishers.forEach((key, value, map) => {
+    for (var value of this.publishers.values()) {
         this.negotiateTopicsP(value);
-    });
-    this.subscribers.forEach((key, value, map) => {
+    }
+    for (var value of this.subscribers.values()) {
         this.negotiateTopicsS(value);
-    });
+    }
 };
 
 NodeHandle.prototype.ok = function() {
-    return this.ok;
+    return this.connected;
 };
 
 NodeHandle.prototype.log = function(level, msg) {
