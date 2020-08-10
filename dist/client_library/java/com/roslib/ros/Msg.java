@@ -1,11 +1,3 @@
-/*
- * File      : Msg.java
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-11-27     Pinkie.Fu    initial version
- */
 package com.roslib.ros;
 
 /* Base Message Type */

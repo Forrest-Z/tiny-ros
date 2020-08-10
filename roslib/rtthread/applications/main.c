@@ -1,11 +1,3 @@
-/*
- * File      : main.c
- * This file is part of tinyros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-01-22     Pinkie.Fu    initial version
- */
 #include <rtthread.h>
 #include <lwip/sys.h>
 #include <lwip/api.h>

@@ -1,5 +1,5 @@
 # tiny-ros
-微小分布式操作系统，支持Windows、Linux、MacOS、Android、MCU RTThread或无操作系统。分布式应用的开发支持C/C++、Java、Python、Go编程语言。
+微小分布式操作系统，支持Windows、Linux、MacOS、Android、MCU RTThread或无操作系统。分布式应用的开发支持C/C++、Java、Python、Go、JavaScript编程语言。
 
 ![](doc/tinyros.png)
 ![](doc/demo.gif)
@@ -14,6 +14,8 @@
 
 3、使用C ++ 11编译器
 
+4、依赖：libssl-devel(1.0.x)、zlib-devel(1.x)、libuv-devel(1.x)
+
 ```
 $ git clone https://github.com/tinyros/tiny-ros.git
 $ cd tiny-ros && make
@@ -25,15 +27,13 @@ make clean清除项目，通过make重新编译安装。编译完成后目标文
 
 ## 支持平台
 
-Tinyros分布式操作系统提供由C/C++、Java、Python、Go语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
+Tinyros分布式操作系统提供由C/C++、Java、Python、Go、JavaScript语言实现的分布式应用开发库，基于此库实现的分布式应用可以运行下列平台：
 
 - Windows (msvc 2013+,  cygwin, Qt msvc2013+)
 - Linux, FreeBSD, OpenBSD, Solaris
 - macOS (clang 3.5+)
 - MCU RTThread （RT-Thread v4.0.2+, LwIP 2.0.2+, C++ features）
 - Android
-
-
 
 ## 特点
 
@@ -44,7 +44,8 @@ Tinyros分布式操作系统提供由C/C++、Java、Python、Go语言实现的�
 - tinyrostopic：提供list、echo命令行工具可以查看运行中的主题列表、查看指定主题的消息并录包
 - tinyrosconsole：Tinyros日志系统，可以把打印信息显示在屏幕、指定文件或者目录中
 - tinyrosservice：可以查看系统中运行的服务
-- 支持TCP、UDP通信
+- 支持TCP、UDP、Websocket通信
+- 支持前端分布式节点开发：HTML5/JavaScript
 
 
 
@@ -162,6 +163,35 @@ func main() {
         time.Sleep(1 * time.Second)
     }
 }
+```
+
+#### 5、HTML5/JavaScript：ExamplePublisher
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
+    <script type='text/javascript' src='./../../tinyros/Publisher.js'></script>
+    <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
+    <script type="text/javascript">
+      tinyros.init("JsExamplePublisher", "127.0.0.1");
+      var count = 0;
+      var msg = tinyros_hello.TinyrosHello();
+      var pub = tinyros.Publisher("tinyros_hello", tinyros_hello.TinyrosHello);
+      tinyros.nh().advertise(pub);
+      (function publish() {
+        msg.hello = (count++) + ": Hello, tiny-ros ^_^";
+        pub.publish(msg);
+        document.write("JsExamplePublisher ->> " + msg.hello + "<br>");
+        setTimeout(publish, 1000);
+      })();
+    </script>
+  </body>
+</html>
 ```
 
 
@@ -286,6 +316,30 @@ func main() {
         time.Sleep(10 * time.Second)
     }
 }
+```
+
+#### 5、HTML5/JavaScript：ExampleSubscriber
+
+```
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
+    <script type='text/javascript' src='./../../tinyros/Subscriber.js'></script>
+    <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
+    <script type="text/javascript">
+      tinyros.init("JsExampleSubscriber", "127.0.0.1");
+      var sub = tinyros.Subscriber("tinyros_hello", tinyros_hello.TinyrosHello, 
+      (msg) => {
+        document.write("JsExampleSubscriber ->> " + msg.hello + "<br>");
+      });
+      tinyros.nh().subscribe(sub);
+    </script>
+  </body>
+</html>
 ```
 
 

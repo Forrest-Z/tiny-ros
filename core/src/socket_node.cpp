@@ -1,11 +1,3 @@
-/*
- * File      : socket_node.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-02-09     Pinkie.Fu    initial version
- */
 #include <signal.h>
 #include "udp_stream.h"
 #include "tcp_server.h"
@@ -30,7 +22,7 @@ static void udp_service_run(int server_port, int client_port) {
   }
 }
 
-#ifdef WITH_WEBSOCKETS
+#ifdef TINYROS_WITH_WEBSOCKETS
 #include "uWS.h"
 static void web_service_run(int web_server_port) {
   try {
@@ -90,7 +82,7 @@ int main(int argc, char* argv[]) {
   std::thread tidudp(std::bind(udp_service_run, udp_server_port, udp_client_port));
   tidudp.detach();
 
-#ifdef WITH_WEBSOCKETS
+#ifdef TINYROS_WITH_WEBSOCKETS
   std::thread tidws(std::bind(web_service_run, web_server_port));
   tidws.detach();
 #endif

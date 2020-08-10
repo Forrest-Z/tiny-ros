@@ -1,11 +1,3 @@
-/*
- * File      : ros.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
 #include "tiny_ros/ros/node_handle.h"
 #include "tiny_ros/ros/node_handle_udp.h"
 namespace tinyros {

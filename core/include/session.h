@@ -1,12 +1,3 @@
-/*
- * File      : session.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-03     Pinkie.Fu    initial version
- */
-
 #ifndef TINY_ROS_SERVER_SESSION_H
 #define TINY_ROS_SERVER_SESSION_H
 #include <map>
@@ -71,7 +62,7 @@ public:
     , message_in_thread_(nullptr)
     , message_write_thread_(nullptr)
   {
-    if (type == UDP_STREAM) {
+    if (type == tinyros::UDP_STREAM) {
       session_id_ = "session_udp";
     }
   }

@@ -1,12 +1,3 @@
-/*
- * File      : time.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-
 #include "tiny_ros/ros/time.h"
 #include <limits.h>
 #include <stdexcept>

@@ -4,10 +4,10 @@ set(EXECUTABLE_OUTPUT_PATH ${OUTPUT_PATHS}/bin)
 aux_source_directory(src SRC_LIST)
 include_directories(include)
 
-option(WITH_WEBSOCKETS "WebSockets support? ON/OFF" ON)
+option(TINYROS_WITH_WEBSOCKETS "WebSockets support?(ON/OFF)" ON)
 
-IF (WITH_WEBSOCKETS)
-  add_definitions("-DWITH_WEBSOCKETS")
+IF (TINYROS_WITH_WEBSOCKETS)
+  add_definitions("-DTINYROS_WITH_WEBSOCKETS")
   add_executable(tinyrosdds
     ${UWS_SRC_LIST}
     ${SPDLOG_SRC_LIST}
@@ -34,7 +34,7 @@ IF (WITH_WEBSOCKETS)
       libcrypto.so
     )
   ENDIF()
-ELSE (WITH_WEBSOCKETS)
+ELSE (TINYROS_WITH_WEBSOCKETS)
   add_executable(tinyrosdds
     ${SPDLOG_SRC_LIST}
     ${ROSLIB_PATHS}/time.cpp
@@ -52,6 +52,6 @@ ELSE (WITH_WEBSOCKETS)
       libpthread.so
     )
   ENDIF()
-ENDIF (WITH_WEBSOCKETS)
+ENDIF (TINYROS_WITH_WEBSOCKETS)
 
 

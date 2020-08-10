@@ -1,12 +1,3 @@
-/*
- * File      : tinyros_entries.h
- * This file is part of tinyros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-01-22     Pinkie.Fu    initial version
- */
-
 #ifndef _TINYROS_ENTRIES_H_
 #define _TINYROS_ENTRIES_H_
 #include <stdint.h>

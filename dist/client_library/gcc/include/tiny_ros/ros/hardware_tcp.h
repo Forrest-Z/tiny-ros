@@ -1,11 +1,3 @@
-/*
- * File      : hardware_tcp.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
 #ifndef TINYROS_HARDWARE_TCP_H_
 #define TINYROS_HARDWARE_TCP_H_
 #include <stdint.h>

@@ -1,12 +1,3 @@
-/*
- * File      : tcp_server.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-02-09     Pinkie.Fu    initial version
- */
-
 #ifndef TINY_ROS_TCP_SERVER_H
 #define TINY_ROS_TCP_SERVER_H
 #include <iostream>

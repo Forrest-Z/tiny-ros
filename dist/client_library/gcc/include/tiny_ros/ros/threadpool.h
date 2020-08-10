@@ -1,12 +1,3 @@
-/*
- * File      : threadpool.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2020-04-11     Pinkie.Fu    initial version
- */
-
 #ifndef TINYROS_THREADPOOL_H_
 #define TINYROS_THREADPOOL_H_
 #include <stdint.h>

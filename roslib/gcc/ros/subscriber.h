@@ -1,12 +1,3 @@
-/*
- * File      : subscriber.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-
 #ifndef TINYROS_SUBSCRIBER_H_
 #define TINYROS_SUBSCRIBER_H_
 

@@ -1,12 +1,3 @@
-/*
- * File      : log.cpp
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-
 #include <stdarg.h>
 #include "tiny_ros/ros.h"
 #include "tiny_ros/ros/log.h"

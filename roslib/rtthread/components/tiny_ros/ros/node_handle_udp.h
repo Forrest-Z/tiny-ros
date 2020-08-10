@@ -1,12 +1,3 @@
-/*
- * File      : node_handle_udp.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-
 #ifndef TINYROS_NODE_HANDLE_UDP_H_
 #define TINYROS_NODE_HANDLE_UDP_H_
 #include <map>

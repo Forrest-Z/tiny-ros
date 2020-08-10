@@ -1,11 +1,3 @@
-/*
- * File      : tinyros_entries.cpp
- * This file is part of tinyros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-01-22     Pinkie.Fu    initial version
- */
 #include "tinyros_entries.h"
 #include "tiny_ros/ros.h"
 #include "tiny_ros/tinyros_hello/Test.h"

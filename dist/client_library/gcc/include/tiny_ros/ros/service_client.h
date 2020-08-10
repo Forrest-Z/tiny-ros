@@ -1,12 +1,3 @@
-/*
- * File      : service_client.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-24     Pinkie.Fu    initial version
- */
-
 #ifndef _TINYROS_SERVICE_CLIENT_H_
 #define _TINYROS_SERVICE_CLIENT_H_
 #include <stdint.h>

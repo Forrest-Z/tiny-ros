@@ -354,8 +354,8 @@ ROS_TO_EMBEDDED_TYPES = {
     'uint64'  :   ('uint64',          8, PrimitiveDataType, []),
     'float32' :   ('float32',         4, PrimitiveDataType, []),
     'float64' :   ('float64',         8, PrimitiveDataType, []),
-    'time'    :   ('ros.Time',         8, TimeDataType, ['ros/Time']),
-    'duration':   ('ros.Duration',     8, TimeDataType, ['ros/Duration']),
+    'time'    :   ('tinyros.Time',         8, TimeDataType, ['tinyros/Time']),
+    'duration':   ('tinyros.Duration',     8, TimeDataType, ['tinyros/Duration']),
     'string'  :   ('string',           0, StringDataType, []),
     'Header'  :   ('std_msgs.Header',   0, MessageDataType, ['std_msgs/Header'])
 }
@@ -722,14 +722,13 @@ def messages_generate(path):
     print('\n')
 
 def roslib_copy_roslib_files(path):
-    if not os.path.exists(path+"ros"):
-        os.makedirs(path+"ros")
-    files = ['ros/Time.js',
-             'ros/Duration.js',
-             'ros/NodeHandle.js',
-             'ros/Publisher.js',
-             'ros/ros.js',
-             'ros/Subscriber.js']
+    if not os.path.exists(path+"tinyros"):
+        os.makedirs(path+"tinyros")
+    files = ['tinyros/Time.js',
+             'tinyros/Duration.js',
+             'tinyros/tinyros.js',
+             'tinyros/Publisher.js',
+             'tinyros/Subscriber.js']
 
     mydir = sys.argv[3] + "/roslib/javascript/"
     for f in files:
@@ -743,6 +742,18 @@ def roslib_copy_roslib_files(path):
             if file_md5 != tmp_file_md5:
                 shutil.copy(mydir+f, path+f)
 
+def roslib_copy_examples_files(path):
+    if not os.path.exists(path+"examples/publisher"):
+        os.makedirs(path+"examples/publisher")
+    if not os.path.exists(path+"examples/subscriber"):
+        os.makedirs(path+"examples/subscriber")
+    files = ['examples/publisher/ExamplePublisher.html',
+             'examples/subscriber/ExampleSubscriber.html']
+
+    mydir = sys.argv[3] + "/"
+    for f in files:
+        shutil.copy(mydir+f, path+f)
+
 # Enforce correct inputs
 if (len(sys.argv) < 3):
     print(__usage__)
@@ -755,6 +766,7 @@ if path[-1] == "/":
 print("\nExporting to %s" % path)
 
 roslib_copy_roslib_files(path+"/")
+roslib_copy_examples_files(path+"/")
 messages_generate(path+"/")
 if os.path.exists(sys.argv[1] + "/build/CMake/javascript_msgs"):
     shutil.rmtree(sys.argv[1] + "/build/CMake/javascript_msgs")

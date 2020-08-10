@@ -1,12 +1,3 @@
-/*
- * File      : serialization.h
- * This file is part of tiny_ros
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-04-03     Pinkie.Fu    initial version
- */
-
 #ifndef TINY_ROS_SERIALIZATION_H
 #define TINY_ROS_SERIALIZATION_H
 #include "exception.h"

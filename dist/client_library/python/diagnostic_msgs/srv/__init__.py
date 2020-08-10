@@ -1,2 +1,2 @@
-from .AddDiagnostics import *
 from .SelfTest import *
+from .AddDiagnostics import *
