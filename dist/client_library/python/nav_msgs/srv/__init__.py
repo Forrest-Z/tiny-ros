@@ -1,3 +1,3 @@
-from .SetMap import *
 from .GetMap import *
 from .GetPlan import *
+from .SetMap import *
