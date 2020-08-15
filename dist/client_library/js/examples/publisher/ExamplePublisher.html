@@ -5,7 +5,6 @@
   </head>
   <body>
     <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
-    <script type='text/javascript' src='./../../tinyros/Publisher.js'></script>
     <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
     <script type="text/javascript">
       tinyros.init("JsExamplePublisher", "127.0.0.1");
@@ -14,9 +13,9 @@
       var pub = tinyros.Publisher("tinyros_hello", tinyros_hello.TinyrosHello);
       tinyros.nh().advertise(pub);
       (function publish() {
-        msg.hello = (count++) + ": Hello, tiny-ros ^_^";
+        msg.hello = "Hello, tiny-ros ^_^";
         pub.publish(msg);
-        document.write("JsExamplePublisher ->> " + msg.hello + "<br>");
+        document.body.innerHTML = "JsExamplePublisher <<-" + (count++) + "->> " + msg.hello;
         setTimeout(publish, 1000);
       })();
     </script>

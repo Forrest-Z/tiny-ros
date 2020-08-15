@@ -50,14 +50,9 @@ public:
     bool operator<(const WebSocket &other) const {return p < other.p;}
 
     // with tinyros
-    int write_some(uint8_t* data, int length, const std::string& session_id) {
-      send((char*)data, length, BINARY);
-      return length;
-    }
-    int read_some(uint8_t* data, int length, const std::string& session_id) {
-      return 0;
-    }
-    int getFd() { return -1; }
+    int write_some(uint8_t* data, int length, const std::string& session_id);
+    int read_some(uint8_t* data, int length, const std::string& session_id) ;
+    int getFd();
 };
 
 }

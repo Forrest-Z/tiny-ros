@@ -73,7 +73,7 @@ struct SocketData {
     void *data = nullptr;
     SSL *ssl = nullptr;
     PerMessageDeflate *pmd = nullptr;
-    std::string buffer, controlBuffer;
+    std::string buffer, controlBuffer, session_id;
 };
 
 }

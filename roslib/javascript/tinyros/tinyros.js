@@ -1,7 +1,10 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f();}else if(typeof define==="function"&&define.amd){define([],f);}else{var g;if(typeof window!=="undefined"){g=window;}else if(typeof global!=="undefined"){g=global;}else if(typeof self!=="undefined"){g=self;}else{g=this;}if(typeof g.tinyros==="undefined"){g.tinyros={};}var o=f();g.tinyros.nh=o.nh;g.tinyros.init=o.init;g.tinyros.logdebug=o.logdebug;g.tinyros.loginfo=o.loginfo;g.tinyros.logwarn=o.logwarn;g.tinyros.logerror=o.logerror;g.tinyros.logfatal=o.logfatal;}})(function(){var define,module,exports;'use strict';
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f();}else if(typeof define==="function"&&define.amd){define([],f);}else{var g;if(typeof window!=="undefined"){g=window;}else if(typeof global!=="undefined"){g=global;}else if(typeof self!=="undefined"){g=self;}else{g=this;}if(typeof g.tinyros==="undefined"){g.tinyros={};}if(typeof g.tinyros.nh==="undefined"){var o=f();g.tinyros.nh=o.nh;g.tinyros.init=o.init;g.tinyros.logdebug=o.logdebug;g.tinyros.loginfo=o.loginfo;g.tinyros.logwarn=o.logwarn;g.tinyros.logerror=o.logerror;g.tinyros.logfatal=o.logfatal;}}})(function(){var define,module,exports;'use strict';
 const _CURRENT_PATH_ = document.currentScript.src.substring(0, document.currentScript.src.lastIndexOf("/"));
 const _ROOT_PATH_ = _CURRENT_PATH_.substring(0, _CURRENT_PATH_.lastIndexOf("/"));
 document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros/Time.js'></script>");
+document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros/Duration.js'></script>");
+document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros/Publisher.js'></script>");
+document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros/Subscriber.js'></script>");
 document.write("<script language=javascript src='"+_ROOT_PATH_+"/std_msgs/String.js'></script>");
 document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros_msgs/TopicInfo.js'></script>");
 document.write("<script language=javascript src='"+_ROOT_PATH_+"/tinyros_msgs/Log.js'></script>");

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <openssl/ssl.h>
+#include "common.h"
 
 namespace uWS {
 
@@ -181,6 +182,7 @@ void WebSocket::onReadable(uv_poll_t *p, int status, int events)
 
     // this one is not needed, read will do this!
     if (status < 0) {
+        spdlog_error("[{0}] {1} WebSocket.close(1006): status < 0.", socketData->session_id.c_str(), __FUNCTION__);
         WebSocket(p).close(true, 1006);
         return;
     }
@@ -204,8 +206,11 @@ void WebSocket::onReadable(uv_poll_t *p, int status, int events)
             if (!std::get<0>(closeFrame)) {
                 std::get<0>(closeFrame) = 1006;
             }
+            spdlog_error("[{0}] {1} WebSocket.close({2}): have a close frame in our buffer.", 
+              socketData->session_id.c_str(), __FUNCTION__, std::get<0>(closeFrame));
             WebSocket(p).close(true, std::get<0>(closeFrame), std::get<1>(closeFrame), std::get<2>(closeFrame));
         } else {
+            spdlog_error("[{0}] {1} WebSocket.close(1006): {2}({3}).", socketData->session_id.c_str(), __FUNCTION__, strerror(errno), errno);
             WebSocket(p).close(true, 1006);
         }
         return;
@@ -444,6 +449,8 @@ void WebSocket::write(char *data, size_t length, bool transferOwnership, void(*c
 
                 // handle all poll errors with forced disconnection
                 if (status < 0) {
+                    spdlog_error("[{0}] {1} WebSocket.close(1006): {2}({3}).", 
+                      ((SocketData *) handle->data)->session_id.c_str(), __FUNCTION__, strerror(errno), errno);
                     WebSocket(handle).close(true, 1006);
                     return;
                 }
@@ -522,5 +529,18 @@ void WebSocket::write(char *data, size_t length, bool transferOwnership, void(*c
         }
     }
 }
+
+// with tinyros
+int WebSocket::write_some(uint8_t* data, int length, const std::string& session_id) {
+  if (((SocketData *) p->data)->session_id.empty()) {
+    ((SocketData *) p->data)->session_id = session_id;
+  }
+  send((char*)data, length, BINARY);
+  return length;
+}
+int WebSocket::read_some(uint8_t* data, int length, const std::string& session_id) {
+  return 0;
+}
+int WebSocket::getFd() { return -1; }
 
 }

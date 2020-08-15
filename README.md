@@ -14,7 +14,9 @@
 
 3、使用C ++ 11编译器
 
-4、依赖：libssl-devel(1.0.x)、zlib-devel(1.x)、libuv-devel(1.x)
+4、默认开启支持Websocket（依赖：libuv 1.x, OpenSSL 1.0.x, zlib 1.x）
+
+**（注：可以进入 "{SOURCE_DIR}/core/CMakeLists.txt" 选择开启/关闭Websocket支持）**
 
 ```
 $ git clone https://github.com/tinyros/tiny-ros.git
@@ -175,7 +177,6 @@ func main() {
   </head>
   <body>
     <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
-    <script type='text/javascript' src='./../../tinyros/Publisher.js'></script>
     <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
     <script type="text/javascript">
       tinyros.init("JsExamplePublisher", "127.0.0.1");
@@ -184,9 +185,9 @@ func main() {
       var pub = tinyros.Publisher("tinyros_hello", tinyros_hello.TinyrosHello);
       tinyros.nh().advertise(pub);
       (function publish() {
-        msg.hello = (count++) + ": Hello, tiny-ros ^_^";
+        msg.hello = "Hello, tiny-ros ^_^";
         pub.publish(msg);
-        document.write("JsExamplePublisher ->> " + msg.hello + "<br>");
+        document.body.innerHTML = "JsExamplePublisher <<-" + (count++) + "->> " + msg.hello;
         setTimeout(publish, 1000);
       })();
     </script>
@@ -320,7 +321,7 @@ func main() {
 
 #### 5、HTML5/JavaScript：ExampleSubscriber
 
-```
+```html
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -328,13 +329,12 @@ func main() {
   </head>
   <body>
     <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
-    <script type='text/javascript' src='./../../tinyros/Subscriber.js'></script>
     <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
     <script type="text/javascript">
       tinyros.init("JsExampleSubscriber", "127.0.0.1");
-      var sub = tinyros.Subscriber("tinyros_hello", tinyros_hello.TinyrosHello, 
-      (msg) => {
-        document.write("JsExampleSubscriber ->> " + msg.hello + "<br>");
+      var count = 0;
+      var sub = tinyros.Subscriber("tinyros_hello", tinyros_hello.TinyrosHello, (msg) => {
+        document.body.innerHTML = "JsExampleSubscriber <<-" + (count++) + "->> " + msg.hello;
       });
       tinyros.nh().subscribe(sub);
     </script>

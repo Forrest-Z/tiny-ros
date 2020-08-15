@@ -5,12 +5,12 @@
   </head>
   <body>
     <script type='text/javascript' src='./../../tinyros/tinyros.js'></script>
-    <script type='text/javascript' src='./../../tinyros/Subscriber.js'></script>
     <script type='text/javascript' src='./../../tinyros_hello/TinyrosHello.js'></script>
     <script type="text/javascript">
       tinyros.init("JsExampleSubscriber", "127.0.0.1");
+      var count = 0;
       var sub = tinyros.Subscriber("tinyros_hello", tinyros_hello.TinyrosHello, (msg) => {
-        document.write("JsExampleSubscriber ->> " + msg.hello + "<br>");
+        document.body.innerHTML = "JsExampleSubscriber <<-" + (count++) + "->> " + msg.hello;
       });
       tinyros.nh().subscribe(sub);
     </script>

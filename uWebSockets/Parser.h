@@ -5,6 +5,7 @@
 #include "UTF8.h"
 #include "Network.h"
 #include <uv.h>
+#include "common.h"
 
 #define STRICT
 
@@ -163,12 +164,14 @@ public:
     #ifdef STRICT
                 // invalid reserved bits
                 if ((rsv1(frame) && !socketData->pmd) || rsv2(frame) || rsv3(frame)) {
+                    spdlog_error("[{0}] {1} WebSocket.close(1006): invalid reserved bits.", socketData->session_id.c_str(), __FUNCTION__);
                     WebSocket(p).close(true, 1006);
                     return;
                 }
 
                 // invalid opcodes
                 if ((opCode(frame) > 2 && opCode(frame) < 8) || opCode(frame) > 10) {
+                    spdlog_error("[{0}] {1} WebSocket.close(1006): invalid opcodes.", socketData->session_id.c_str(), __FUNCTION__);
                     WebSocket(p).close(true, 1006);
                     return;
                 }
@@ -185,12 +188,15 @@ public:
     #ifdef STRICT
                     // Case 5.18
                     if (socketData->opStack == 0 && !lastFin && fin(frame)) {
+                        spdlog_error("[{0}] {1} WebSocket.close(1006): Case 5.18.", socketData->session_id.c_str(), __FUNCTION__);
                         WebSocket(p).close(true, 1006);
                         return;
                     }
 
                     // control frames cannot be fragmented or long
                     if (opCode(frame) > 2 && (!fin(frame) || payloadLength(frame) > 125)) {
+                        spdlog_error("[{0}] {1} WebSocket.close(1006): control frames cannot be fragmented or long.", 
+                          socketData->session_id.c_str(), __FUNCTION__);
                         WebSocket(p).close(true, 1006);
                         return;
                     }
@@ -198,6 +204,8 @@ public:
                 } else {
                     // continuation frame must have a opcode prior!
                     if (socketData->opStack == -1) {
+                        spdlog_error("[{0}] {1} WebSocket.close(1006): continuation frame must have a opcode prior.", 
+                          socketData->session_id.c_str(), __FUNCTION__);
                         WebSocket(p).close(true, 1006);
                         return;
                     }
